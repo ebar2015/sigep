@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/dialogTemplate.xhtml">
+	<ui:param name="pageTitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_PLANTILLA_XML_AGREGAR_PARAMETRO']}" />
+
+	<ui:define name="main">
+		<p:importConstants type="co.gov.dafp.sigep2.util.xml.elemento.TipoCargue"
+			var="PFTipoCargue" />
+		<h:panelGroup id="agregarDetalleDialog">
+			<p:panelGrid columns="6"
+				columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1"
+				layout="grid" styleClass="ui-panelgrid-blank">
+				<p:outputLabel for="nombre"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LLAVE']}" />
+				<p:inputText id="nombre"
+					placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LLAVE']}"
+					value="#{plantillaBean.parametroSeleccionado.nombre}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="nombre" display="icon" />
+
+				<p:outputLabel for="tipoDato"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}" />
+				<p:selectOneMenu id="tipoDato" filter="true" required="true"
+					filterMatchMode="contains"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}"
+					value="#{plantillaBean.parametroSeleccionado.tipoDato}" var="t"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+						noSelectionOption="true" itemValue="${titles['TTL_SELECT']}" />
+					<f:selectItems var="#{tipoDato}" value="#{tiposDato}"
+						itemLabel="#{tipoDato.value()}" itemValue="#{tipoDato}" />
+					<p:column>
+						<h:outputText value="#{t.value()}" />
+					</p:column>
+					<p:clientValidator />
+				</p:selectOneMenu>
+				<p:message for="tipoDato" display="icon" />
+
+				<p:outputLabel for="etiquetaColumna"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA']}"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+				<p:inputText id="etiquetaColumna"
+					placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA']}"
+					value="#{plantillaBean.parametroSeleccionado.etiquetaColumna}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="etiquetaColumna" display="icon"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+
+				<p:outputLabel for="requerido"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+				<p:selectBooleanCheckbox id="requerido"
+					value="#{plantillaBean.parametroSeleccionado.requerido}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+				<p:message for="requerido" display="icon"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+
+				<p:outputLabel for="sentencia"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SENTENCIA']}"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+				<p:inputTextarea id="sentencia"
+					placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SENTENCIA']}"
+					value="#{plantillaBean.parametroSeleccionado.sentencia}"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}">
+				</p:inputTextarea>
+				<p:message for="sentencia" display="icon"
+					rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+			</p:panelGrid>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton icon="ui-icon-plus" title="${titles['TTL_OK']}"
+			value="${titles['TTL_OK']}" process="@this agregarDetalleDialog"
+			update="agregarDetalleDialog"
+			actionListener="#{plantillaBean.seleccionarParametroDialogo}" />
+	</ui:define>
+</ui:composition>

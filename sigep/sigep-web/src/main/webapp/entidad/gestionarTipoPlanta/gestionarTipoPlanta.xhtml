@@ -1,0 +1,1373 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.org/ui" 
+	template="/resources/template/basicTemplate.xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.LBL_GESTIONAR_TIPOS_PLANTA}" />
+	
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<h2>
+					<p:outputLabel value="• ${titles['LBL_GESTIONAR_TIPOS_PLANTA']} •" styleClass="page-subtitle" />
+				</h2>
+			</div>
+		</div>
+		<div style="margin-bottom: 30px!important; padding: 5px 15px 10px 15px!important; background-color: #fff; text-transform: capitalize;     box-shadow: 8px 8px 5px #ddd">
+			<div class="row" style="margin-top: 5px !important; margin-bottom: 5px !important;">
+				<div class="col-md-12">
+					<h4 style="border-bottom: 1px solid #bbb;" >
+						<p:outputLabel value="${titles['LBL_INFORMACION_DE_LA_ENTIDAD']}" styleClass="page-subtitle" />
+					</h4>
+				</div>
+			</div>
+			<div id="infoEntidad" class="row" style="margin-bottom: 10px !important; padding-top: 20px!important">
+				<div class="col-md-4 col-sm-4 col-xs-4" >
+					<p:outputLabel value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}" 
+						style="display: block!important; font-weight: 600!important; font-family: Arial,sans-serif!important; 
+						text-transform: capitalize;" styleClass="log-label form-label-formularios">
+					</p:outputLabel>
+					<p:outputLabel value="#{gestionarPlantaBean.entProceso.nombreEntidad}" 
+						styleClass="log-label form-label-formularios"/>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<p:outputLabel value="${titles['TTL_NIT']}" style="display: block!important;
+					 	font-weight: 600!important; font-family: Arial,sans-serif!important; 
+					 	text-transform: capitalize;" styleClass="log-label form-label-formularios">
+					</p:outputLabel>
+					<p:outputLabel value="#{gestionarPlantaBean.entProceso.nit}" style="display: block!important"
+					 styleClass="log-label form-label-formularios"/>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-4">
+					<p:outputLabel value="${titles['TTL_CODIGO_DANE']}" style="display: block!important; 
+						font-weight: 600!important; font-family: Arial,sans-serif!important;
+						text-transform: capitalize;" styleClass="log-label form-label-formularios" >
+					</p:outputLabel>
+					<p:outputLabel value="#{gestionarPlantaBean.entProceso.codigoDane}" 
+						styleClass="log-label form-label-formularios"/>
+				</div>
+			</div>
+		</div>	
+		<h:form id="frmGestionarPlanta" style="background-color: #fff!important; padding-left:25px!important;padding-right:25px!important">
+			<p:panel id="filtrosTabla" style="margin-left: 20px!important; margin-right:20px!important;" visible="#{not gestionarPlantaBean.estadoSecCreacion}">
+				<div class="row" style="margin-top: 30px !important; margin-bottom: 10px !important;">
+					<div class="col-md-12" align="center">
+						<h4><p:outputLabel value="${titles['LBL_BUSQUEDA_PLANTA_POR_FILTROS']}" styleClass="page-subtitle" /></h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['TTL_GESTION_PLANTA_TIP_NORMA']}" styleClass="log-label form-label-formularios">
+							</p:outputLabel>
+							<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_GESTION_PLANTA_TIP_NORMA']}" 
+								styleClass="form-control-form-act-usua" value="#{gestionarPlantaBean.entidadPlantaPersonal.codTipoNorma}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getTipoNorma()}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['TTL_GESTION_PLANTA_FECHA_NORMA']}" 
+								styleClass="log-label form-label-formularios" for="txtFechaNormaFiltro" />
+							<p:calendar id="txtFechaNormaFiltro" navigator="true" mask="true" 
+								yearRange="#{rangoAnios}" value="#{gestionarPlantaBean.entidadPlantaPersonal.fechaNorma}"
+								mode="popup" placeholder="${titles['LBL_FORMATO_FECHA']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}" pattern="#{fechaFormato}"
+								locale="#{lenguajeBean.localeCode}" effect="slideDown" 
+								title="${titles['TTL_INGRESE']} ${titles['TTL_GESTION_PLANTA_FECHA_NORMA']} ${titles['TTL_TIPO_ALFANUMERICO']}">
+							</p:calendar>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" styleClass="log-label form-label-formularios"/>
+							<p:inputText id="numeroNormaFiltro" title="${titles['TTL_INGRESE']} ${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" 
+								 class="form-control-acti-usua" value="#{gestionarPlantaBean.entidadPlantaPersonal.numeroNorma}"
+								 onkeypress="return numbervalida(event)">
+							</p:inputText>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['LBL_TIPO_DE_PLANTA']}" styleClass="log-label form-label-formularios">
+							</p:outputLabel>
+							<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_DE_PLANTA']}" 
+								styleClass="form-control-form-act-usua" value="#{gestionarPlantaBean.entidadPlantaPersonal.codTipoPlanta}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tipoPlanta}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 30px !important; margin-bottom: 10px !important;">
+					<div class="col-md-12 text-center">
+						<p:commandButton value="${titles['BTN_CT_BUSCAR']}" styleClass="btn btn-primary" 
+							actionListener="#{gestionarPlantaBean.mostrarTablaPlantasPersonal()}" 
+							process="frmGestionarPlanta" update="frmGestionarPlanta">
+						</p:commandButton>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 text-right">
+						<p:commandButton value="${titles['TTL_CREAR_PLANTA']}" id="botonCrearPlanta" 
+							styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle" process="@this" 
+							style="padding-right: 0px!important;" 
+							update="formCreacion:pnlInfoPlanta, formCreacion:pnlTablaCargos, frmGestionarPlanta:filtrosTabla,
+									formCreacion:panelBotones formCreacion:pnlTablaUTL"
+							actionListener="#{gestionarPlantaBean.crearPlanta()}"
+							disabled="#{gestionarPlantaBean.flgisRolSoloConsulta}" />
+					</div>
+				</div>
+				<div class="row" style="display: block !important;" >
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<p:dataTable id="tablaResultadosBusqueda" var="planta" value="#{gestionarPlantaBean.resultadosPlanta}"
+							paginator="true" reflow="true" 
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}" 
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column headerText="${titles['TTL_GESTION_PLANTA_CODIGO']}" style="word-wrap: break-word!important;text-align:center!important"
+								sortBy="#{planta.codEntidadPlanta}">
+								<h:outputText value="#{planta.codEntidadPlanta}" style="display: inline-block; margin-right: 5px;"/>
+							</p:column>
+							
+							<p:column headerText="${titles['TTL_GESTION_PLANTA_NOMBRE']}" style="word-wrap: break-word!important;"
+								sortBy="#{planta.nombrePlanta}">
+								<h:outputText value="#{planta.nombrePlanta}"/>
+							</p:column>
+							
+							<p:column headerText="${titles['LBL_CLASE_PLANTA']}" style="word-wrap: break-word!important;"
+								sortBy="#{planta.nombreClasePlanta}">
+								<h:outputText value="#{planta.nombreClasePlanta}"/>
+							</p:column>
+						
+							<p:column headerText="${titles['LBL_CLASIFICACION_PLANTA']}" style="word-wrap: break-word!important;text-align:center!important"
+								sortBy="#{planta.nombreClasificacionPlanta}">
+								<h:outputText value="#{planta.nombreClasificacionPlanta}"/>
+							</p:column>
+							
+							<p:column headerText="${titles['LBL_TIPO_DE_NORMA']}" style="word-wrap: break-word!important;text-align:center!important"
+								sortBy="#{planta.nombreTipoNorma}">
+								<h:outputText value="#{planta.nombreTipoNorma != null ? planta.nombreTipoNorma : 'N/A' }"/>
+							</p:column>
+							
+							<p:column headerText="#{titles.LBL_ACCIONES}" style="word-wrap: break-word!important;text-align:center!important">
+								<p:commandButton id="btnVer" title="#{titles.TTL_CONSULT}" icon="icon-view" 
+									styleClass="icon-btn" process="@this" update="frmGestionarPlanta formCreacion"
+									actionListener="#{gestionarPlantaBean.consultarPlanta(planta)}">
+								</p:commandButton>
+								<p:commandButton id="btnAct" title="#{titles.TTL_MODIFY}" icon="icon-edit" 
+									styleClass="icon-btn" process="@this" update="frmGestionarPlanta formCreacion"
+									actionListener="#{gestionarPlantaBean.modificarPlanta(planta)}" 
+									disabled="#{gestionarPlantaBean.flgisRolSoloConsulta}">
+								</p:commandButton>
+								<p:commandButton id="btnElim" title="#{titles.TTL_DELETE}" icon="icon-delete" 
+									styleClass="icon-btn" process="@this" update="frmGestionarPlanta formCreacion" 
+									actionListener="#{gestionarPlantaBean.eliminarPlanta(planta)}"
+									disabled="#{gestionarPlantaBean.flgisRolSoloConsulta}">
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px !important; margin-bottom: 20px !important;">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+						<p:commandButton process="@this" value="${titles['LBL_REGRESAR']}" 
+							styleClass="btn btn-primary" onclick="window.location.href='../gestionarEntidad.xhtml';">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+		<!-- ************************************************************************** fin de sección de plantas *************************************************************************************************************** -->
+		<h:form id="formCreacion" style="background-color: #fff!important; padding-left:25px!important;padding-right:25px!important">
+			<p:panel id="pnlInfoPlanta" visible="#{gestionarPlantaBean.estadoSecCreacion}" >
+				<div class="row" style="margin-top: 30px !important; margin-bottom: 10px !important;">
+					<div class="col-md-12">
+						<h4><p:outputLabel value="${titles['LBL_INFORMACION_PLANTA']}" styleClass="page-subtitle" /></h4>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 10px !important;">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_ENTIDAD_PLANTA_NOMBRE']}"  for="nombrePlanta" styleClass="log-label form-label-formularios display-block" />
+						<p:inputText id="nombrePlanta"
+							styleClass="form-control-acti-usua form-control"  
+							style="width:100%" maxlength="100"
+							disabled="#{gestionarPlantaBean.soloLectura}"
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{gestionarPlantaBean.plantaSeleccionada.nombrePlanta}">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="nombrePlanta" display="text" />
+					</div>
+				
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_GESTION_PLANTA_CLAS_PLA']}" 
+							styleClass="log-label form-label-formularios" for="clasePlanta" />
+						<p:selectOneMenu id="clasePlanta" disabled="#{gestionarPlantaBean.soloLectura}" 
+							title="${titles['TTL_SELECT']} ${titles['TTL_GESTION_PLANTA_CLAS_PLA']}"
+							styleClass="form-control-form-act-usua" value="#{gestionarPlantaBean.plantaSeleccionada.codClasePlanta}"
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							filter="true" filterMatchMode ="contains">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getClasePlanta()}" />
+							<p:ajax process="@this" event="change" update="cldFechaFin lblFechaFin"  listener="#{gestionarPlantaBean.validarFechaFin()}"/>
+						</p:selectOneMenu>
+						<p:message for="clasePlanta" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_CLASIFICACION_PLANTA_GESTION']}" 
+							styleClass="log-label form-label-formularios" for="clasificacionPlanta" />
+						<p:selectOneMenu id="clasificacionPlanta" title="${titles['TTL_SELECT']}" 
+							styleClass="form-control-form-act-usua" value="#{gestionarPlantaBean.plantaSeleccionada.codClasificacionPlanta}"
+							required="true" disabled="#{gestionarPlantaBean.soloLectura}" 
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							filter="true" filterMatchMode ="contains">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getClasificacionPlanta()}" />
+							<p:ajax process="@this" event="change" update = " @this, panelClasificacionPlanta, pnlTablaCargos,  pnlTablaUTL " 
+								listener="#{gestionarPlantaBean.validarPlantaUTL()}"/>
+						</p:selectOneMenu>
+						<p:message for="clasificacionPlanta" display="text" />
+						
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 10px !important;">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_GESTION_PLANTA_TIP_NORMA']}" 
+							styleClass="log-label form-label-formularios" for="tipoNorma" />
+						<p:selectOneMenu id="tipoNorma" disabled="#{gestionarPlantaBean.soloLectura}"
+							title="${titles['TTL_SELECT']}" styleClass="form-control-form-act-usua"
+							value="#{gestionarPlantaBean.norma.codTipoNorma}"
+							filter="true" filterMatchMode ="contains">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getTipoNorma()}" />
+							<p:ajax event="change" process="@this"/>
+						</p:selectOneMenu>
+					</div>
+				
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_GESTION_PLANTA_FECHA_NORMA']}" 
+							styleClass="log-label form-label-formularios " for="txtFechaNorma" />
+						<p:calendar id="txtFechaNorma" navigator="true" mask="true" pattern="#{fechaFormato}"
+							yearRange="#{rangoAnios}" value="#{gestionarPlantaBean.norma.fechaNorma}" 
+							mode="popup" placeholder="${titles['LBL_FORMATO_FECHA']}"
+							disabled="#{gestionarPlantaBean.soloLectura}" 
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}" 
+							locale="#{lenguajeBean.localeCode}" effect="slideDown"
+							title="${titles['TTL_INGRESE']} ${titles['TTL_GESTION_PLANTA_FECHA_NORMA']} ${titles['TTL_TIPO_ALFANUMERICO']}">
+							<p:ajax event="dateSelect" process="@this" />
+							<p:ajax event="change" process="@this" />
+						</p:calendar>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" 
+							styleClass="log-label form-label-formularios " for="numeroNorma" />
+						<p:autoComplete id="numeroNorma"
+								dropdown="true"
+								value="#{gestionarPlantaBean.normaSeleccionada}"
+								converter="normaBdConverter" var="normSelect"
+								itemLabel="#{normSelect.numeroNorma}" itemValue="#{normSelect}"
+								completeMethod="#{gestionarPlantaBean.completeMethodNorma}"
+								valueChangeListener="#{gestionarPlantaBean.vclNorma}"
+								minQueryLength="1" maxResults="20"
+								onkeypress="return numbervalida(event)"
+								disabled="#{gestionarPlantaBean.soloLectura}">
+						</p:autoComplete>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}" 
+							styleClass="log-label form-label-formularios" for="txtJustifi" />
+						<p:inputTextarea id="txtJustifi" rows="1" cols="50" 
+							disabled="#{gestionarPlantaBean.soloLectura}" minQueryLength="4"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+							value="#{gestionarPlantaBean.plantaSeleccionada.justificacion}" queryDelay="750" >
+							<p:ajax update="txtJustifi" ></p:ajax>
+						</p:inputTextarea>
+						<p:message for="txtJustifi" display="text" />
+					</div>
+				
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_FECHA_INICIO_2']}" styleClass="log-label form-label-formularios display-block" for="cldFechaIni" />
+						<p:calendar id="cldFechaIni" disabled="#{gestionarPlantaBean.soloLectura}" 
+							navigator="true" mask="true" yearRange="#{rangoAnios}" 
+							value="#{gestionarPlantaBean.plantaSeleccionada.fechaInicio}"
+							mode="popup" placeholder="${titles['LBL_FORMATO_FECHA']}" 
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}" 
+							locale="#{lenguajeBean.localeCode}" effect="slideDown" title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_INICIO']}" 
+							pattern="#{fechaFormato}">
+							<p:ajax event="dateSelect" update="cldFechaFin" />
+							<p:ajax event="change" update="cldFechaFin" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="cldFechaIni" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel  id = "lblFechaFin" value="${titles['LBL_TABLA_FECHA_FIN']}" styleClass="log-label form-label-formularios display-block" for="cldFechaFin" />
+						<p:calendar id="cldFechaFin"
+							navigator="true" mask="true" yearRange="#{rangoAnios}"
+							value="#{gestionarPlantaBean.plantaSeleccionada.fechaFin}" mode="popup" 
+							placeholder="${titles['LBL_FORMATO_FECHA']}" 
+							required="#{gestionarPlantaBean.blnFechaFinObligatoria}"  requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							disabled="#{gestionarPlantaBean.soloLectura}" mindate="#{fechaSistema}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}" locale="#{lenguajeBean.localeCode}" 
+							effect="slideDown" title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_FIN']}" pattern="#{fechaFormato}">
+							<f:attribute name="startDate" value="#{gestionarPlantaBean.plantaSeleccionada.fechaInicio}" />
+							<f:attribute name="startDateName" value="${titles['LBL_FECHA_INICIO_2']}" />
+							<f:attribute name="endDateName" value="${titles['LBL_TABLA_FECHA_FIN']}" />
+							<f:validator validatorId="dateRangeValidator" />
+							<p:ajax event="dateSelect" process="@this"/>
+						</p:calendar>
+						<p:message for="cldFechaFin" display="text" />
+					</div>
+				</div>
+			<p:outputPanel id="panelClasificacionPlanta">
+				<p:panel id="subPanelNomenclatura" rendered="#{not gestionarPlantaBean.blnPlantaUtl}">
+					<div class="row" style="margin-bottom: 40px !important; margin-top: 10px!important" >
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NOMENCLATURA']}" styleClass="log-label form-label-formularios display-block" for="nomenclaturaPlanta" />
+							<h:selectOneMenu id="nomenclaturaPlanta" disabled="#{gestionarPlantaBean.bloqueoNomenclatura}" 
+								title="${titles['TTL_SELECT']} " styleClass="form-control-form-act-usua"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gestionarPlantaBean.plantaSeleccionada.codNomenclatura}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getNomenclaturaEntidad(gestionarPlantaBean.codEntidadProceso)}" />
+								<p:ajax process="@this" event="change" update="tablaCrecionCargos tablaImpresionCargos" 
+									listener="#{gestionarPlantaBean.cargarDenominacionDetalle}"/>
+							</h:selectOneMenu>
+							<p:message for="nomenclaturaPlanta" display="text" />
+						</div>
+						<div class="col-md-4"/>
+						<div class="col-md-4"/>
+					</div>
+				</p:panel>
+				<p:panel id="subPanelUTL" rendered="#{gestionarPlantaBean.blnPlantaUtl}">
+					<div class="row" style="margin-bottom: 40px !important; margin-top: 10px!important" >
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NUMERO_BOLSAS_UTL']}"
+								for="numeroBolsasUTL" styleClass="log-label form-label-formularios" />
+							<p:inputText  id="numeroBolsasUTL"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_NUMERO_BOLSAS_UTL']} ${titles['TTL_TIPO_NUMERICO']}"
+								disabled="#{gestionarPlantaBean.soloLectura}"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_MAYOR_UNO']}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gestionarPlantaBean.plantaSeleccionada.cantidadBolsasUTL}"
+								maxlength= "5"
+								onkeypress="return numbervalida(event)">
+								<f:validator validatorId="numberValidator" />
+							</p:inputText>
+							<p:message for="numeroBolsasUTL" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_SALARIOS_MENSUALES']}"
+								for="numeroSalariosMinimos" styleClass="log-label form-label-formularios" />
+							<p:inputNumber id="numeroSalariosMinimos"
+								title="${titles['LBL_SALARIOS_MENSUALES']} ${titles['TTL_TIPO_NUMERICO']}"
+								disabled="true"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								style="border-radius:0px 3px 3px 0px!important;"
+								value = "#{gestionarPlantaBean.varSalariosMinimos}">
+							</p:inputNumber>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_SALARIOS_AUTORIZADOS']}"
+								for="numeroSalariosAutorizados" styleClass="log-label form-label-formularios" />
+							<p:inputNumber id="numeroSalariosAutorizados"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_SALARIOS_AUTORIZADOS']} ${titles['TTL_TIPO_NUMERICO']}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gestionarPlantaBean.plantaSeleccionada.cantidadSalariosUTL}"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_MAYOR_UNO']}"
+								disabled="#{gestionarPlantaBean.soloLectura}"
+								decimalSeparator="."
+								thousandSeparator=""
+								decimalPlaces="2">
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="1.0" maximum="999999" />
+								<p:ajax update="montoMaximo  tablaCrecionPlantaUTL" process= "@this" 
+									listener="#{gestionarPlantaBean.calcularMontoMaximoUTL()}"/>
+							</p:inputNumber>
+							<p:message for="numeroSalariosAutorizados" display="text" />
+						</div>
+					</div>
+					<div class="row" style="margin-bottom: 40px !important; margin-top: 10px!important" >
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MONTO_MAXIMO']}"
+								for="montoMaximo" styleClass="log-label form-label-formularios" />
+							<p:inputNumber id="montoMaximo"
+								title="${titles['LBL_MONTO_MAXIMO']} ${titles['TTL_TIPO_NUMERICO']}"
+								disabled="true"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value = "#{gestionarPlantaBean.varMontoMaximo}">
+							</p:inputNumber>
+						</div>
+						<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_NUMERO_COLABORADORES_UTL']}"
+								for="numeroMaximoColaboradores" styleClass="log-label form-label-formularios" />
+							<p:inputText  id="numeroMaximoColaboradores"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_NUMERO_COLABORADORES_UTL']} ${titles['TTL_TIPO_NUMERICO']}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gestionarPlantaBean.plantaSeleccionada.cantidadColaboradoresUTL}"
+								maxlength= "5"
+								disabled="#{gestionarPlantaBean.soloLectura}"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_MAYOR_UNO']}"
+								onkeypress="return numbervalida(event)">
+								<f:validator validatorId="numberValidator" />
+							</p:inputText >
+							<p:message for="numeroMaximoColaboradores" display="text" />
+						</div>
+						<div class="col-md-4"/>
+					</div>
+				</p:panel>
+			</p:outputPanel>				
+		</p:panel>
+		
+		<!-- **************************************************** tabla utl *******************************************************************************************-->
+		<p:panel id="pnlTablaUTL" visible="#{gestionarPlantaBean.estadoSecCreacion and gestionarPlantaBean.blnPlantaUtl}">
+			<div class="row" style="margin-bottom: 10px !important;">
+				<div class="col-md-12 text-right">
+					<p:commandButton id="generarBolsaUTLs" 
+						value="${titles['TTL_CREAR_PLANTA_UTL']}" disabled="#{gestionarPlantaBean.soloLectura}"
+						styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle"
+						process="@this formCreacion:pnlInfoPlanta" style="margin-right: 0%!important; padding-right: 0px!important" 
+						update="formCreacion:pnlTablaUTL, formCreacion:pnlInfoPlanta @widgetVar(wdgtUtlMontoMaximo)"
+						actionListener="#{gestionarPlantaBean.validarUTL()}"/>
+				</div>
+			</div>
+			<div class="row" align="right">
+				<div class="col-md-12">
+					<label class="form-label-formularios">* ${titles['TTL_SELECT']} ${titles['LBL_NOMBRE_RESPONSABLE_PLANTA']} en la columna definida</label>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-12">
+					<p:dataTable id="tablaCrecionPlantaUTL"  widgetVar="tablaCrecionPlantaUTL"
+						var="plantaUtl" value="#{gestionarPlantaBean.listaResponsablesUTL}"
+						editable="#{not gestionarPlantaBean.soloLectura}" 
+						paginator="true" rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						editMode="cell"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						reflow="true">
+						<p:ajax event="cellEdit" listener="#{gestionarPlantaBean.celdaEditada}" />
+						<p:column headerText="${titles['LBL_NOMBRE_RESPONSABLE_PLANTA']}" style="word-wrap: break-word!important;text-align:center!important"
+							sortBy="#{plantaUtl.codPersona}" id="tblNombreResponsable">
+							<p:cellEditor>
+								<f:facet name="output">
+									<div class="row">
+										<h:outputText value="#{plantaUtl.codPersona}" converter="personaIDConverter" />
+									</div>
+								</f:facet>
+								<f:facet name="input" >
+									<h:selectOneMenu value="#{plantaUtl.codPersona}" style="max-height: 50px!important;
+										color: #000!important;"  styleClass="form-control-form-act-usua filter"
+										 filterMatchMode="contains" filter="true">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+										<f:selectItems value="#{webUtils.getPersonasVinculadasEntidad(gestionarPlantaBean.codEntidadProceso)}" />
+			                            <p:ajax event="change" process="@this" update ="tablaCrecionPlantaUTL" 
+			                            	listener="#{gestionarPlantaBean.validarDuplicidadResponsable(plantaUtl)}" />
+									</h:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="word-wrap: break-word!important;">
+							<f:facet name="header"><h:outputText value="${titles['LBL_CARGOS_ASIGNADOS']}" /></f:facet>
+							<h:outputText value="#{gestionarPlantaBean.plantaSeleccionada.cantidadColaboradoresUTL}" />
+						</p:column>
+						
+						<p:column sortBy="#{gestionarPlantaBean.calcularCargosDisponibles(plantaUtl.cargosOcupados)}" style="word-wrap: break-word!important;">
+							<f:facet name="header"><h:outputText value="${titles['LBL_CARGOS_DISPONIBLES']}" /></f:facet>
+							<h:outputText value="#{gestionarPlantaBean.calcularCargosDisponibles(plantaUtl.cargosOcupados)}" />
+						</p:column>
+						
+						<p:column  style="word-wrap: break-word!important;">
+							<f:facet name="header"><h:outputText value="${titles['LBL_MONTO_ASIGNADO']}" /></f:facet>
+							<h:outputText value="#{gestionarPlantaBean.varMontoMaximo}">
+								<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+							</h:outputText>
+						</p:column>
+						<p:column sortBy="#{gestionarPlantaBean.calcularMontoDisponible(plantaUtl.salarioGastado)}" style="word-wrap: break-word!important;">
+							<f:facet name="header"><h:outputText value="${titles['LBL_MONTO_DISPONIBLE']}" /></f:facet>
+							<h:outputText value="#{gestionarPlantaBean.calcularMontoDisponible(plantaUtl.salarioGastado)}">
+								<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+							</h:outputText>
+						</p:column>
+					
+						<p:column headerText="#{titles.LBL_ACCIONES}" style="word-wrap: break-word!important;text-align:center!important">
+							<p:commandButton id="btnVerUTL" title="#{titles.BTN_VER}" icon="icon-view" 
+								styleClass="icon-btn" 
+								process="@this" update="@widgetVar(wdgtVerDetalleVinculados)"
+								actionListener="#{gestionarPlantaBean.cargaPersonasVinculadasUTL(plantaUtl)}" >
+							</p:commandButton>
+	
+							<p:commandButton id="btnEliminarUTL" title="#{titles.TTL_DELETE}" icon="icon-delete" 
+								styleClass="icon-btn" disabled="#{gestionarPlantaBean.soloLectura}"
+								actionListener="#{gestionarPlantaBean.eliminarPlantaResponsableUTL(plantaUtl)}"
+								update = "formCreacion:pnlTablaUTL, formCreacion:subPanelUTL">
+							</p:commandButton>
+							
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			
+			<!-- ************************** tabla de impresión UTL *************************************************** -->
+				<p:dataTable id="tablaImpresionCargosUtl" var="cargoUtl" 
+						value="#{gestionarPlantaBean.listaResponsablesUTL}" 
+						style="display:none!important" 
+						visible="false" emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+						<f:facet name="header" align="center">
+							<h:outputText value="PLANTA: #{gestionarPlantaBean.plantaSeleccionada.nombrePlanta}" />
+						</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_NOMBRE_RESPONSABLE_PLANTA']}" />
+							</f:facet>
+							<h:outputText value="#{cargoUtl.codPersona}" converter="personaIDConverter"/>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_CARGOS_ASIGNADOS']}" />
+							</f:facet>
+							<h:outputText value="#{gestionarPlantaBean.plantaSeleccionada.cantidadColaboradoresUTL}" />
+						</p:column>
+				      	<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_CARGOS_DISPONIBLES']}" />
+							</f:facet>
+							<h:outputText value="#{gestionarPlantaBean.calcularCargosDisponibles(cargoUtl.cargosOcupados)}" />
+						</p:column>
+				        <p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_MONTO_ASIGNADO']}" />
+							</f:facet>
+							<h:outputText value="#{gestionarPlantaBean.varMontoMaximo}" />
+						</p:column>
+				        <p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_MONTO_DISPONIBLE']}" />
+							</f:facet>
+							<h:outputText value="#{gestionarPlantaBean.calcularMontoDisponible(cargoUtl.salarioGastado)}" />
+						</p:column>	        
+					</p:dataTable> 
+				
+			
+			<!-- ************************** Fin de tabla de impresión *************************************************** -->
+			
+		</p:panel>
+		<!-- **************************************************** fin tabla utl *******************************************************************************************-->
+		
+			<p:panel id="pnlTablaCargos" visible="#{gestionarPlantaBean.estadoSecCreacion and not gestionarPlantaBean.blnPlantaUtl}">
+				<div class="row" style="margin-bottom: 10px !important;">
+					<div class="col-md-12 text-right">
+						<p:commandButton id="crearCargoDenom" 
+							value="${titles['TTL_AGREGAR_DENOMINACION_PLANTA']}" disabled="#{gestionarPlantaBean.soloLectura}"
+							styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle"
+							process="@this" style="margin-right: 0%!important; padding-right: 0px!important" 
+							update="formCreacion:tablaCrecionCargos" 
+							actionListener="#{gestionarPlantaBean.agregarCargoTabla()}" />
+					</div>
+				</div>
+				<!-- **************************************************** tabla cargos *******************************************************************************************-->
+				<div class="row">
+					<div class="col-md-12">
+					<div id="panel-scroll-plantas" style="width: 100%!important; overflow-x: scroll!important;">
+							<p:dataTable id="tablaCrecionCargos" var="cargo" value="#{gestionarPlantaBean.resultadosCargos}"
+								style="width: 2600px;" editable="#{not gestionarPlantaBean.soloLectura}" 
+								editMode="cell" widgetVar="tablaCrecionCargos"  emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								paginator="true" rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}" reflow="true"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+								<p:column headerText="${titles['LBL_NIVEL']}" style="word-wrap: break-word!important;text-align:center!important"
+										sortBy="#{cargo.nombreNivel}" filterBy="#{cargo.nombreNivel}" filterMatchMode="contains">
+									<p:cellEditor>
+										<f:facet name="output">
+											<div class="row text-center">
+												<h:outputText value="#{gestionarPlantaBean.obtenerParametrica(cargo.codNivelCargo)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input" >
+											<h:selectOneMenu value="#{cargo.codNivelCargo}" style="max-height: 50px!important;
+												color: #000!important;"  styleClass="form-control-form-act-usua filter">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+												<f:selectItems value="#{gestionarPlantaBean.lstNivel}" />
+												<p:ajax event="change" update="selectDenominacion selectCodigo selectGrado @this" process="@this" 
+													listener="#{gestionarPlantaBean.restablecerSelecciones(cargo, 1)}" >
+												</p:ajax>
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['TTL_DENOMINACION_ENTIDAD']}" style="word-wrap: break-word!important;" 
+										sortBy="#{cargo.nombreCargo}" filterBy="#{cargo.nombreCargo}" filterMatchMode="contains">
+									<p:cellEditor id= "selectDenominacion">
+										<f:facet name="output">
+											<div class="row">
+												<h:outputText  value="#{gestionarPlantaBean.obtenerDenominacion(cargo.codDenominacion)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu  value="#{cargo.codDenominacion}" style="max-height: 50px!important;
+												color: #000!important;" styleClass="form-control-form-act-usua filter">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+												<f:selectItems value="#{webUtils.getDenominacionesNomenclaturaEntidad(cargo.codNivelCargo,gestionarPlantaBean.plantaSeleccionada.codNomenclatura)}" />
+												<p:ajax event="change" update="selectCodigo selectGrado @this" process="@this" 
+													listener="#{gestionarPlantaBean.restablecerSelecciones(cargo, 2)}" >
+												</p:ajax>
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_CODIGO']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.nombreCodigo}" filterBy="#{cargo.nombreCodigo}" filterMatchMode="contains">
+									<p:cellEditor id= "selectCodigo">
+										<f:facet name="output">
+											<div class="row">
+												<h:outputText value="#{gestionarPlantaBean.obtenerParametrica(cargo.codCodigo)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu  value="#{cargo.codCodigo}" style="max-height: 50px!important;
+												color: #000!important;" styleClass="form-control-form-act-usua filter filter">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+												<f:selectItems value="#{gestionarPlantaBean.configurarListaCodigos(cargo.codNivelCargo, cargo.codDenominacion)}" />
+												<p:ajax event="change" update="selectGrado @this" process="@this" 
+													listener="#{gestionarPlantaBean.restablecerSelecciones(cargo, 3)}" >
+												</p:ajax>
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_GRADO']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.nombreGrado}" filterBy="#{cargo.nombreGrado}" filterMatchMode="contains">
+									<p:cellEditor id= "selectGrado">
+										<f:facet name="output">
+											<div class="row">
+												<h:outputText value="#{gestionarPlantaBean.obtenerParametrica(cargo.codGrado)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu  value="#{cargo.codGrado}" style="max-height: 50px!important;
+												color: #000!important;" styleClass="form-control-form-act-usua filter filter">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+												<f:selectItems value="#{gestionarPlantaBean.configurarListaGrados(cargo.codNivelCargo, cargo.codDenominacion, cargo.codCodigo)}" />
+												<p:ajax event="change" process="@this" update="@this "/>
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_TIPO_DE_PLANTA']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.nombreTipoPlanta}" filterBy="#{cargo.nombreTipoPlanta}" filterMatchMode="contains">
+									<p:cellEditor>
+										<f:facet name="output">
+											<div class="row">
+												<h:outputText value="#{gestionarPlantaBean.obtenerParametrica(cargo.codTipoPlanta)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu value="#{cargo.codTipoPlanta}" style="max-height: 50px!important;
+												color: #000!important;" styleClass="form-control-form-act-usua filter" >
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}"/>
+												<f:selectItems value="#{webUtils.getTipoPlanta()}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+												<p:ajax event="change" process="@this" update="@this"/>
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_CT_DEPENDENCIA']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.nombreDependencia}" filterBy="#{cargo.nombreDependencia}" filterMatchMode="contains">
+									<p:cellEditor>
+										<f:facet name="output">
+											<div class="row">
+												<h:outputText value="#{gestionarPlantaBean.obtenerNombreDependencia(cargo.codDependenciaEntidad)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu value="#{cargo.codDependenciaEntidad}" style="max-height: 50px!important;
+												color: #000!important;" styleClass="form-control-form-act-usua filter">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{gestionarPlantaBean.lstDependencias}"
+													var="man" itemLabel="#{man}" itemValue="#{man}" />
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['TTL_NATURALEZA_EMPLEO']}" style="word-wrap: break-word!important;text-align:center!important" 
+									sortBy="#{cargo.nombreNaturalezaEmpleo}" filterBy="#{cargo.nombreNaturalezaEmpleo}" filterMatchMode="contains">
+									<p:cellEditor>
+										<f:facet name="output">
+											<div class="row">
+												<h:outputText value="#{gestionarPlantaBean.obtenerParametrica(cargo.codNaturalezaEmpleo)}" />
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu value="#{cargo.codNaturalezaEmpleo}" style="max-height: 50px!important;
+												color: #000!important;" styleClass="form-control-form-act-usua filter">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+												<f:selectItems value="#{webUtils.getNaturalezaEmpleo()}" />
+
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_NUMERO_CARGOS']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.cantidadCargo}" filterBy="#{cargo.cantidadCargo}" filterMatchMode="contains">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cargo.cantidadCargo}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText id="modelInput" value="#{cargo.cantidadCargo}" onkeypress="return numbervalida(event)" 
+												process="@this" update="tablaCrecionCargos"
+												styleClass="form-control-acti-usua form-control filter" style="width:100%" >
+												<p:ajax event="change" actionListener="#{gestionarPlantaBean.validarAprobacionPresupuestal(cargo)}"
+													update="cargosPresupuestales" >
+												</p:ajax>
+											</p:inputText>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_NUMERO_CARGOS_PRESUPUESTO']}" 
+									style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.cantidadCargoApropiacionPresupuestal}" filterBy="#{cargo.cantidadCargoApropiacionPresupuestal}" filterMatchMode="contains">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cargo.cantidadCargoApropiacionPresupuestal}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{cargo.cantidadCargoApropiacionPresupuestal}" id="cargosPresupuestales"
+												onkeypress="return numbervalida(event)" 
+												styleClass="form-control-acti-usua form-control filter" style="width:100%" >
+												<p:ajax process="@this" event="blur" update="tablaCrecionCargos" 
+													actionListener="#{gestionarPlantaBean.validarAprobacionPresupuestal(cargo)}">
+												</p:ajax>
+											</p:inputText>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['TTL_DATOS_GERENCIA_PUBLICA']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.flgGerenciaPublica}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cargo.flgGerenciaPublica ? titles.TTL_YES : titles.TTL_NO }" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectBooleanCheckbox value="#{cargo.flgGerenciaPublica}" >
+												<p:ajax event="change" update="@this" process="@this" listener="#{gestionarPlantaBean.setValorObjeto(cargo)}"/>
+												<p:ajax event="change" update="@widgetVar(tablaCrecionCargos)" />
+											</p:selectBooleanCheckbox>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_REPRESENTANTE_EMPLEO']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.flgRepresentanteEmpleo}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cargo.flgRepresentanteEmpleo ? titles.TTL_YES : titles.TTL_NO }" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectBooleanCheckbox value="#{cargo.flgRepresentanteEmpleo}">
+												<p:ajax event="change" update="@this" process="@this" listener="#{gestionarPlantaBean.setValorObjeto(cargo)}"/>
+												<p:ajax event="change" update="@widgetVar(tablaCrecionCargos)" />
+											</p:selectBooleanCheckbox>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="${titles['LBL_EXPUESTO_POLITICAMENTE']}" style="word-wrap: break-word!important;text-align:center!important"
+									sortBy="#{cargo.flgIsExpuestoPoliticamente}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cargo.flgIsExpuestoPoliticamente ? titles.TTL_YES : titles.TTL_NO }" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectBooleanCheckbox value="#{cargo.flgIsExpuestoPoliticamente}">
+												<p:ajax event="change" update="@this" process="@this" listener="#{gestionarPlantaBean.setValorObjeto(cargo)}"/>
+												<p:ajax event="change" update="@widgetVar(tablaCrecionCargos)"/>
+											</p:selectBooleanCheckbox>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="#{titles.LBL_ACCIONES}" style="word-wrap: break-word!important;text-align:center!important">
+									<p:commandButton id="btnElimCargo" title="#{titles.TTL_DELETE}" icon="icon-delete" 
+										styleClass="icon-btn" disabled="#{gestionarPlantaBean.soloLectura}" process="@this tablaCrecionCargos"
+										update="tablaCrecionCargos" actionListener="#{gestionarPlantaBean.eliminarCargoPlanta(cargo)}">
+									</p:commandButton>
+									<p:commandButton icon="icon-edit" title="#{titles.TTL_MODIFY}" 
+										disabled="#{gestionarPlantaBean.soloLectura}" 
+										type="button" styleClass="icon-btn" onclick="editarCeldas(this);">
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<!-- ************************************************************************************ tabla de modificacion ************************************************************************************************* -->
+					<p:dataTable id="tablaImpresionCargos" var="cargo" 
+						value="#{gestionarPlantaBean.resultadosCargos}" 
+						style="display:none!important" 
+						visible="false" emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+						<f:facet name="header" align="center" > <h:outputText value="Detalle de planta: #{gestionarPlantaBean.plantaSeleccionada.nombrePlanta} " /></f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_NIVEL']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreNivel}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['TTL_DENOMINACION_ENTIDAD']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreDenominacion}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_CODIGO']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreCodigo}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_GRADO']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreGrado}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_TIPO_DE_PLANTA']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreTipoPlanta}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_CT_DEPENDENCIA']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreDependencia}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['TTL_NATURALEZA_EMPLEO']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.nombreNaturalezaEmpleo}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_NUMERO_CARGOS']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.cantidadCargo}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_NUMERO_CARGOS_PRESUPUESTO']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.cantidadCargoApropiacionPresupuestal}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['TTL_DATOS_GERENCIA_PUBLICA']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.flgGerenciaPublica == false ? 'No' : 'Si'}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_REPRESENTANTE_EMPLEO']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.flgRepresentanteEmpleo == false ? 'No' : 'Si'}" />
+						</p:column>	
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="${titles['LBL_EXPUESTO_POLITICAMENTE']}" />
+							</f:facet>
+							<h:outputText value="#{cargo.flgIsExpuestoPoliticamente == false ? 'No' : 'Si'}" />
+						</p:column>	
+						
+					</p:dataTable>
+				</div>
+			</p:panel>
+			<p:outputPanel id= "panelBotones">
+				<p:panel id="PanelCrearPlanta" widgetVar="SubPanelCrearPlanta" rendered="#{!gestionarPlantaBean.soloLectura and gestionarPlantaBean.estadoSecCreacion}">
+					<div class="row" style="margin-bottom: 30px !important;">
+						<div class="col-md-4 text-center" style="margin-bottom: 10px;" >
+							<p:commandButton value="${titles['TTL_ENTIDAD_PLANTA_GUARDADO_PARCIAL']}" 
+								disabled="#{gestionarPlantaBean.soloLectura 
+									or (gestionarPlantaBean.plantaSeleccionada.flgGuardadoParcial != null 
+										and  gestionarPlantaBean.plantaSeleccionada.flgGuardadoParcial == 0 ? true : false)}" 
+								actionListener="#{gestionarPlantaBean.guardarPlanta('1')}" 
+								update="tablaCrecionCargos formCreacion frmGestionarPlanta ,@widgetVar(wdgtUtlMontoMaximo)"
+								process="@this pnlInfoPlanta formCreacion"
+								styleClass="btn btn-secondary" style="width: 12.3em!important;">
+							</p:commandButton>
+						</div>
+						
+						<div class="col-md-4 text-center" style="margin-bottom: 10px;">
+							<p:commandButton value="${titles['TTL_GUARDADO_DEFINITIVO']}" 
+								disabled="#{gestionarPlantaBean.soloLectura}"
+								actionListener="#{gestionarPlantaBean.guardarPlanta('0')}"
+								update="tablaCrecionCargos formCreacion frmGestionarPlanta @widgetVar(wdgtUtlMontoMaximo)" 
+								process="@this pnlInfoPlanta formCreacion" 
+								styleClass="btn btn-primary" style="width: 12.3em!important;">
+							</p:commandButton>
+						</div>
+							
+						<div class="col-md-4 text-center">
+							<p:commandButton value="${titles['TTL_CANCEL']}" styleClass="btn btn-default" 
+								style="width: 12.3em!important;" update="frmGestionarPlanta formCreacion formCreacion:pnlInfoPlanta" 
+								process="@this" actionListener="#{gestionarPlantaBean.regresarPaso()}">
+							</p:commandButton>
+						</div>
+					</div>
+				</p:panel>
+				<p:panel id="PanelConsultarPlanta" widgetVar="SubPanelConsultarPlanta" rendered="#{gestionarPlantaBean.soloLectura and gestionarPlantaBean.estadoSecCreacion}">
+					<div class="row" style="margin-bottom: 30px !important;">
+						<div class="col-md-3" style="padding-left: 5% !important;">
+							<p:commandButton id="btnExportarPlanta" value="${titles['TTL_EXPORTAR_EXCEL_PLANTA']}" styleClass="btn btn-primary" ajax="false">
+								<pe:exporter type="xlsx" 
+									target="#{gestionarPlantaBean.strTargetExportar}"
+									fileName="DetallesPlanta#{fechaSistemaString}" 
+									cellFontSize="12" cellFontStyle="NORMAL" 
+									facetFontSize="12" facetFontStyle="BOLD"
+									postProcessor="#{gestionarPlantaBean.postProcessXLSX}">
+				  				</pe:exporter>  
+							</p:commandButton>
+						</div>
+						<div class="col-md-3" style="padding-left: 5% !important;">
+							<p:commandButton value="${titles['TTL_GUARDAR_PDF']}" styleClass="btn btn-primary" ajax="false">
+								<pe:exporter type="pdf" target="#{gestionarPlantaBean.strTargetExportar}" 
+									fileName="DetallesPlanta#{fechaSistemaString}" 
+									orientation="Landscape" cellFontSize="11" 
+									cellFontStyle="NORMAL" facetFontSize="11" 
+									facetFontStyle="BOLD">
+				  				</pe:exporter>  
+							</p:commandButton>
+						</div>
+						<div class="col-md-3" style="padding-left: 5% !important;">
+							<p:commandButton value="${titles['TTL_PRINT']}" styleClass="btn btn-primary" ajax="false" type="button">
+								<p:printer target="formCreacion" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-3" style="padding-left: 5% !important;">
+							<p:commandButton value="${titles['TTL_CANCEL']}" styleClass="btn btn-default" 
+								update="frmGestionarPlanta formCreacion" process="@this" 
+								actionListener="#{gestionarPlantaBean.regresarPaso()}"/>
+						</div>
+					</div>
+				</p:panel>
+				
+			</p:outputPanel>
+		</h:form>
+		<h:form id="formDialogos" style="background-color: #fff!important; padding-left:25px!important;padding-right:25px!important">
+			<div class="modal fade" id="dlgElimina" role="dialog" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h5>
+										<p:outputLabel style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+									</h5>
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_YES']}" styleClass="btn btn-primary" 
+										onclick="$('#dlgElimina').modal('hide')" 
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3">
+									<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" onclick="$('#dlgElimina').modal('hide')" />
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="dialogConfirmElimTipoPlanta" role="dialog" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<div class="modal-header" align="center">
+							<h4 class="modal-title" style="font-size: 2em !important;">•#{titles.TTL_ELIMINAR_PLANTA} •</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<h5>
+										<p:outputLabel value="${titles['LBL_ELIMIAR_PLANTA_PERSONAL_CONFIRMACION']}" 
+											style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+									</h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_YES']}" process="@this" 
+											update="frmGestionarPlanta,panelTableDesvinPlantPers,panelTableEliminarPlantaUTL " 
+											actionListener="#{gestionarPlantaBean.verificaPlantaEliminar()}"
+											onclick="$('#dialogConfirmElimTipoPlanta').modal('hide');" styleClass="btn btn-primary" 
+											style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" 
+											onclick="$('#dialogConfirmElimTipoPlanta').modal('hide');"
+											style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="dialogElimEntidadCargoP" class="modal fade col-md-10" align="center" data-backdrop="static" data-keyboard="false">
+				<div class="row row-background-white modal-dialog modal-dialog-2">
+					<div class="col-md-12">
+						<br></br>
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel value="${titles['LBL_ELIMIAR_PLANTA_VINCULADA_CONFIRMACION']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_YES']}" process="@this" update="frmGestionarPlanta" actionListener="#{gestionarPlantaBean.desvinAutomaticaEntCargoP()}" styleClass="btn btn-primary" onclick="$('#dialogElimEntidadCargoP').modal('hide');" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" onclick="$('#dialogElimEntidadCargoP').modal('hide');" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+							</div>
+
+						</div>
+						<p:panel id="panelTableDesvinPlantPers" widgetVar="panelTableDesvinPlantPers" style="background: transparent;">
+							<p:dataTable id="tablaDesvinculaciones" lazy="true" var="personaVinculada" paginator="true"  reflow="true" emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+								rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}" value="#{gestionarPlantaBean.listPersVinc}">
+								<p:column headerText="#{titles.TTL_NICK_NAME}" sortBy="#{personaVinculada.numeroIdentificacion}">
+									<h:outputText value="#{personaVinculada.numeroIdentificacion}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_NOMBRES']}" sortBy="#{personaVinculada.primerNombre}">
+									<h:outputText value="#{personaVinculada.primerNombre} #{personaVinculada.segundoNombre} " />
+								</p:column>
+								<p:column headerText="${titles['TTL_APELLIDOS']}" sortBy="#{personaVinculada.primerApellido}">
+									<h:outputText value="#{personaVinculada.primerApellido} #{personaVinculada.segundoApellido}" />
+								</p:column>
+								<p:column headerText="${titles['LBL_CARGO']}" sortBy="#{personaVinculada.nombreCargo}">
+									<h:outputText value="#{personaVinculada.nombreCargo}" />
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+
+			<!-- Eliminar Cargos Asociados a la Planta -->
+
+			<div class="modal fade" id="dialogConfirmElimCargoPlanta" role="dialog" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<div class="modal-header" align="center">
+							<h4 class="modal-title" style="font-size: 2em !important;">•#{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ELIMINAR} •</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<h5><p:outputLabel value="${messages['MSG_PLANTA_ELIMINAR_DENOMINACION_PLANTA']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" /></h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_YES']}" process="@this" update="formCreacion panelTableDesvinPlantPersCargo" actionListener="#{gestionarPlantaBean.verificaCargoEliminar()}" styleClass="btn btn-primary"
+											onclick="$('#dialogConfirmElimCargoPlanta').modal('hide');" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" onclick="$('#dialogConfirmElimCargoPlanta').modal('hide');" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="dialogElimCargoPlanta" class="modal fade col-md-10" role="dialog" align="center">
+				<div class="row row-background-white modal-dialog modal-dialog-2">
+					<div class="col-md-12">
+						<br></br>
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel value="El Cargo tiene vinculadas las siguientes personas, ¿desea eliminar el cargo y hacer desvinculacion automática?" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_YES']}" process="@this" 
+										actionListener="#{gestionarPlantaBean.desvinAutomaticaCargoPlanta()}" 
+										onclick="$('#dialogElimCargoPlanta').modal('hide');"
+										styleClass="btn btn-primary" 
+										style="padding-left:45%!important; padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" 
+										type="button" onclick="$('#dialogElimCargoPlanta').modal('hide');" 
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+							</div>
+						</div>
+						<p:panel id="panelTableDesvinPlantPersCargo" widgetVar="panelTableDesvinPlantPersCargo" style="background: transparent;">
+							<p:dataTable id="tablaDesvinculacionesCargo" lazy="true" var="listPersVinCargo" 
+								paginator="true"  reflow="true" emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+								rows="#{paginatorSize}"
+							    rowsPerPageTemplate="#{paginatorsSize}"
+							    value="#{gestionarPlantaBean.listPersVincCargo}">
+								<p:column headerText="${titles['TTL_IDENTIFICACION']}">
+									<h:outputText value="#{listPersVinCargo.numeroIdentificacion}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_NOMBRES']}">
+									<h:outputText value="#{listPersVinCargo.primerNombre} #{listPersVinCargo.segundoNombre}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_APELLIDOS']}">
+									<h:outputText value="#{listPersVinCargo.primerApellido} #{listPersVinCargo.segundoApellido}" />
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+			<!-- *************************ELIMINAR PLANTA UTL*********************************************** -->
+				<div id="dialogEliminarPlantaUTL" class="modal fade col-md-10" align="center" data-backdrop="static" data-keyboard="false">
+				<div class="row row-background-white modal-dialog modal-dialog-2">
+					<div class="col-md-12">
+						<br></br>
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5><p:outputLabel value="${messages['MSG_PLANTA_ELIMINACION_UTL']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" /></h5>
+							</div>
+						</div>
+						<p:panel id="panelTableEliminarPlantaUTL" widgetVar="panelTableEliminarPlantaUTL" style="background: transparent;">
+							<p:dataTable id="tablaEliminarPlantaUTL" lazy="true" var="personaVinculadaUtl" paginator="true"  
+								reflow="true" emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+								rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}" value="#{gestionarPlantaBean.lstVinculacionUTL}">
+								<p:column headerText="${titles['TTL_NOMBRE_UTL']}">
+									<h:outputText value="#{personaVinculadaUtl.codPersonaResponsable}" converter="personaIDConverter"  />
+								</p:column>
+								<p:column headerText="#{titles.LBL_PERSONA_VINCULADA_UTL}" >
+									<h:outputText value="#{personaVinculadaUtl.codPersonaVinculada}" converter="personaIDConverter" />
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="row" align="center">
+						<div class="col-md-12" align="center">
+							<p:commandButton value="${titles.TTL_OK}" process="@this"
+								styleClass="btn btn-primary" style="margin-top: 1.3em"
+								onclick="PF('panelTableEliminarPlantaUTL').hide()"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- *************************TERMINA EL ELIMINAR PLANTA UTL*************************************************************** -->
+		</h:form>
+		
+		<!-- ******************************** DIALOGO PARA LA OPCION VERRRRRRRRR****************** -->
+		<p:dialog widgetVar="wdgtVerDetalleVinculados" width="680px"
+			id="detalleVinculados" modal="true" draggable="false" closable="false" height="450"
+			resizable="false" responsive="true" header="• ${titles.LBL_PERSONA_VINCULADA_UTL} •" >
+			<br />
+			<div class="row">
+			<br />
+				<div class="col-md-12" align="center">
+					<p:scrollPanel style="width: 100%" id="panelScrollDetalleVinculacion">
+						<p:dataTable
+							value="#{gestionarPlantaBean.listaPersonasVinculadasUTL}"
+							var="personaVinculadaUTL"
+							paginator="true"
+							rows="#{paginatorSize}"  style="width: 600px"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column headerText="${titles.TTL_TIPO_DOCUMENTO}">
+								<h:outputText value="#{personaVinculadaUTL.nombreTipoDocumento}"/>
+							</p:column>
+							
+							<p:column headerText="${titles.TTL_NUM_DOCUMENTO}">
+								<h:outputText value="#{personaVinculadaUTL.numeroIdentificacion}"/>
+							</p:column>
+							
+							<p:column headerText="${titles.TTL_NOMBRE_COMPLETO}">
+								<h:outputText value="#{personaVinculadaUTL.nombrePersona}" />
+							</p:column>
+		
+							<p:column headerText="${titles.LBL_NOMENCLATURA_ASIGNACION}">
+								<h:outputText value="#{personaVinculadaUTL.salario}">
+									<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:scrollPanel>
+				</div>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles.TTL_OK}" process="@this"
+						styleClass="btn btn-primary" style="margin-top: 1.3em"
+						onclick="PF('wdgtVerDetalleVinculados').hide()"/>
+				</div>
+			</div>
+		</p:dialog>
+		<!-- ******************************** FIN DIALOGO PARA LA OPCION VERRRRRRRRR****************** -->
+		
+		<!-- ******************************** DIALOGO CUANDO EXCEDE EL TOPE MAXIMO DE PLANTAS****************** -->
+		<p:dialog widgetVar="wdgtUtlMontoMaximo" width="680px"
+			id="utlMontoMaximo" modal="true" draggable="false" closable="false" height="450"
+			resizable="false" responsive="true" header="• ${titles.LBL_UTL_CON_VINCULACIONES} •" >
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="#{gestionarPlantaBean.lblMensajeCargosVinculacion}" styleClass="advisor" />
+				</div>
+			</div>
+			<div class="row">
+			<br />
+				<div class="col-md-12" align="center">
+					<p:scrollPanel style="width: 100%" id="panelScrollDetalleUtl">
+						<p:dataTable
+							value="#{gestionarPlantaBean.listaUTLExcedenCargos}"
+							var="utlExceden"
+							paginator="true"
+							rows="#{paginatorSize}"  style="width: 600px"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column headerText="${titles.LBL_NOMBRE_RESPONSABLE_PLANTA}">
+								<h:outputText value="#{utlExceden.nombreResponsable}"/>
+							</p:column>
+							
+							<p:column headerText="${titles.LBL_CARGOS_ASIGNADOS}">
+								<h:outputText value="#{utlExceden.cargosOcupados}"/>
+							</p:column>
+							
+							<p:column headerText="${titles.LBL_MONTO_GASTADO}">
+								<h:outputText value="#{utlExceden.salarioGastado}">
+									<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+							
+						</p:dataTable>
+					</p:scrollPanel>
+				</div>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles.TTL_OK}" process="@this"
+						styleClass="btn btn-primary" style="margin-top: 1.3em"
+						onclick="PF('wdgtUtlMontoMaximo').hide()"/>
+				</div>
+			</div>
+		</p:dialog>
+		<!-- ******************************** FIN DIALOGO CUANDO EXCEDE EL TOPE MAXIMO DE PLANTAS****************** -->
+			
+		<script type="text/javascript">
+			function resaltarCelda(){
+				try{
+					var v = document.getElementById("formCreacion:tablaCrecionCargos");
+					v = v.getElementsByTagName("table");
+					v = (((v[0].childNodes)[1].childNodes)[0].childNodes);
+					v[0].classList.add("ui-state-highlight");
+					v[0].classList.add("ui-cell-editing");
+					v = ((v[0].childNodes)[0].childNodes)
+					v[1].setAttribute("style", "display: block");
+					v[0].setAttribute("style", "display: none");
+					v = v[1].childNodes[0];
+					v.classList.add("ui-state-hover");
+					v.classList.add("ui-state-focus");
+				}
+				catch(ex){
+					console.log("Todavía no existen elementos");
+				}
+			}
+			
+			function restaurarCeldas(celda){
+				removerEdiciones();
+			}
+			
+			function removerEdiciones(){
+				$('tr').removeClass("ui-state-highlight");
+				$('tr').removeClass("ui-cell-editing");
+				$('td').removeClass("ui-state-highlight");
+				$('td').removeClass("ui-cell-editing");
+				$('input').removeClass("ui-state-hover");
+				$('input').removeClass("ui-state-focus");
+				$('.ui-cell-editor-input').css("display" , "none");
+				$('.ui-cell-editor-output').css("display" , "block");
+				$('.ui-cell-editor-output').removeClass("ui-state-highlight");
+			}
+				
+			function editarCeldas(celda){
+				try{
+					removerEdiciones();
+					var v = celda.parentNode.parentNode;
+					v = v.childNodes;
+					v[0].classList.add("ui-state-highlight");
+					v[0].classList.add("ui-cell-editing");
+					v = ((v[0].childNodes)[0].childNodes)
+					v[1].setAttribute("style", "display: block");
+					v[0].setAttribute("style", "display: none");
+					v = v[1].childNodes[0];
+					v.classList.add("ui-state-hover");
+					v.classList.add("ui-state-focus");
+				}
+				catch(ex){
+					console.log("Todavía no existen elementos");
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,256 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="pnlGerenciaPublicaPublicaciones">
+			<div class="col-md-12 row row-background-white">
+		<div id="btnDivNuevoPublicacion" align="right">
+				<p:commandButton id="cbNuevoPublicacion" value="${titles['LBL_NUEVA_PUBLICACION']}"
+								 update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida"
+					             icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					             actionListener="#{gerenciaPublicaHVBean.nuevoPublicacion()}"
+					             process="@this" immediate="true"
+					             onclick="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPublicacionNuevo';"
+					             oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPublicacionNuevo';
+					                         oncomplete=datosModificados(1);"
+					                         rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					<p:resetInput  target="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPublicacionNuevo" />
+				</p:commandButton>
+		</div>
+		<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">		
+			<p:dataTable id="tblPublicaciones" 
+	             paginator="true"
+	             reflow="true"
+	             rows="#{paginatorSize}"
+				 rowsPerPageTemplate="#{paginatorsSize}"
+	             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+	             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	             var="publicacion" 
+	             value="#{gerenciaPublicaHVBean.lstPublicaciones}"
+	             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+	 			
+	 			<p:column sortBy="#{publicacion.codTipoPublicacion}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_TIPO_DE_PUBLICACION']}" /></f:facet>
+					<h:outputText value="#{publicacion.codTipoPublicacion}" converter="parametricaBgDecimalConverter"/>
+				</p:column>
+	 		
+	 			<p:column sortBy="#{publicacion.nombrePublicacion}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_NOMBRE_PUBLICACION']}" /></f:facet>
+					<h:outputText value="#{publicacion.nombrePublicacion}"/>
+				</p:column>
+						
+				<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"  style="opacity: 1!important; text-align:center!important;">
+					<p:commandButton id="idModificarPublicacion" title="${titles['TTL_EDIT']}"
+						             icon="icon-edit" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.modificarPublicacion(publicacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPublicacionNuevo"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+						             oncomplete="datosModificados(1);">
+					</p:commandButton>	
+					<p:commandButton id="idConsultarPublicacion" title="${titles['TTL_CONSULT']}"
+						             icon="icon-view" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.consultarPublicacion(publicacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPublicacionNuevo">
+					</p:commandButton>	
+					<p:commandButton id="idEliminarPublicacion" title="${titles['TTL_DELETE']}"
+						             icon="icon-delete" styleClass="icon-btn"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						 <p:ajax process="@this" listener="#{gerenciaPublicaHVBean.solicitarConfirmacionEliminarPublicacion(publicacion)}" 
+										update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaPublicaciones"	 />									     
+					</p:commandButton>								             
+				</p:column>						
+			</p:dataTable>
+		</div>
+		</div>
+		<br/>
+		
+		<h:panelGroup id="pnlPublicacionNuevo">
+			<p:panel id="pnlFrmPublicacion" rendered="#{gerenciaPublicaHVBean.flgHabilitaPanelPublicacion}"
+					 class="col-md-12 row row-background-white" style="margin-top: 3.3em!important;" >			
+				<p:spacer height="2" style="padding-top: 3em!important;" />
+				<hr class="hr-style hr-style-two" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_ADD_PUBLICACION']}
+				</span> 
+				<div class="row">
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>	
+					</div>								
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_ARTICULO']}:"
+									for="somCodTipoArticulo" styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="somCodTipoArticulo"
+									title="#{titles.TTL_SELECT} #{titles.LBL_ARTICULO}"
+									value="#{gerenciaPublicaHVBean.publicacionProcesar.codTipoArticulo}"
+									styleClass="form-control-form-act-usua"
+									disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}"
+									onchange="datosModificados(1);">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.tipoArticulo}" />
+								</h:selectOneMenu>
+	
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_NOMBRE_ARTICULO']}:"
+									for="txtNombreArticulo"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="txtNombreArticulo" maxlength="#{maxNumeros.gpPuTammaxNombrearticulo}"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ARTICULO} #{titles['TTL_TIPO_ALFANUMERICO']}"
+									styleClass="form-control-acti-usua form-control"
+									value="#{gerenciaPublicaHVBean.publicacionProcesar.nombreArticulo}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}"
+									onchange="datosModificados(1);">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpPuTammaxNombrearticulo}" name="maxLength" />
+									<f:validator validatorId="maxByteLengthValidator" />	
+								</p:inputText>
+								<p:message for="txtNombreArticulo" display="text" />
+							</div>	
+							<div class="col-md-4 media-txt-1">
+								<p:outputLabel
+									value="${titles['LBL_LIBRO_RESULTADO_INVESTIGACION']}:"
+									styleClass="log-label form-label-formularios" for="somcodTipoPublicacion" />
+								<h:selectOneMenu id="somcodTipoPublicacion"
+									title="#{titles.TTL_SELECT} #{titles.LBL_LIBRO_RESULTADO_INVESTIGACION}"
+									disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}"
+									value="#{gerenciaPublicaHVBean.publicacionProcesar.codTipoPublicacion}"
+									styleClass="form-control-form-act-usua"
+									onchange="datosModificados(1);">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.libroResultadoInvestigacion}" />
+								</h:selectOneMenu>
+							</div>												
+						</div>
+					</div>				
+				</div>
+				<br/>
+				<div class="row">
+						<div class="col-md-12">
+
+							<div class="col-md-4 media-txt-1">
+								<p:outputLabel value="${titles['LBL_NOMBRE_LIBRO']}:"
+									for="txtNombreLibro"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="txtNombreLibro" required="true" maxlength="#{maxNumeros.gpPuTammaxNombrelibro}"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_LIBRO} #{titles['TTL_TIPO_ALFANUMERICO']}"
+									styleClass="form-control-acti-usua form-control"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									value="#{gerenciaPublicaHVBean.publicacionProcesar.nombreLibro}"
+									disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}"
+									onchange="datosModificados(1);">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpPuTammaxNombrelibro}" name="maxLength" />
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="txtNombreLibro" display="text" />
+							</div>
+							<div class="col-md-4 media-txt-2">
+								<p:outputLabel
+									value="${titles['LBL_TIPOS_PRODUCCION_BIBLIOGRAFICA']}:"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="somcodOtroTipoPublicacion"
+									title="#{titles.TTL_SELECT} #{titles.LBL_TIPOS_PRODUCCION_BIBLIOGRAFICA}"
+									value="#{gerenciaPublicaHVBean.publicacionProcesar.codOtroTipoPublicacion}"
+									disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}"
+									styleClass="form-control-form-act-usua"
+									onchange="datosModificados(1);">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems
+										value="#{webUtils.demasTiposProduccionBiblografica}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-4 media-txt-2">
+								<p:outputLabel value="${titles['LBL_NOMBRE_PUBLICACION']}:"
+									for="txtNombrePublicacion"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="txtNombrePublicacion" maxlength="#{maxNumeros.gpPuTammaxNombrepublicacion}"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_PUBLICACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+									styleClass="form-control-acti-usua form-control" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									value="#{gerenciaPublicaHVBean.publicacionProcesar.nombrePublicacion}"
+									disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}"
+									onchange="datosModificados(1);">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpPuTammaxNombrepublicacion}" name="maxLength" />
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="txtNombrePublicacion" display="text" />
+							</div>							
+						</div>
+					</div>
+					<div class="row" align="center">
+						<BR /><BR />
+						<div class="col-md-4 media-btn-gerencia"></div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton id="btnGuardarPublicacion" value="${titles['TTL_SAVE']}"
+												process="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"
+												update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida
+												        frmPrincipal:informacionPersonalUsuario"
+												styleClass="btn btn-primary"
+												style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+												oncomplete="datosModificados(0);"
+												actionListener="#{gerenciaPublicaHVBean.guardarGerenciaPublica()}"
+												disabled="#{gerenciaPublicaHVBean.flgPublicacionEsConsulta}">
+							</p:commandButton>	
+						</div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+								styleClass="btn btn-default"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								action="#{gerenciaPublicaHVBean.solicitarConfirmacionCancelarPublicacion()}"
+								update="dlgConfirmarAccionGerenciaPublicaPublicaciones"
+								>
+							</p:commandButton>
+						</div>
+					</div>
+			</p:panel>
+		</h:panelGroup>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionGerenciaPublicaPublicaciones" id="dlgConfirmarAccionGerenciaPublicaPublicaciones" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{gerenciaPublicaHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{gerenciaPublicaHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionGerenciaPublicaPublicaciones').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionGerenciaPublicaPublicaciones').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>			
+	</p:panel>
+</ui:composition>
+
+

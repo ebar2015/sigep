@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/template/basicTemplate.xhtml">
+	<f:metadata>
+		<f:viewParam name="recursoId" value="#{contratacionesBean.recursoId}" />
+	</f:metadata>
+	<ui:param name="pageTitle" value="${titles['TTL_CONTRATOS']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_GESTIONARCONTRATOS']}" />
+
+	<ui:define name="content">
+		<div class="row" style="background-color: transparent;">
+			<div class="col-md-12" align="center"></div>
+			<h:form id="frContrataciones">
+
+				<p:tabView id="viewTabContrataciones" dynamic="true"
+					styleClass="tabs-contratacion"
+					style="background-color: transparent;"
+					tabindex="#{contratacionesBean.intIndextab}">
+
+					<p:tab id="tabContratacionesPrincipal" title=""
+						rendered="#{contratacionesBean.lbIsTabBuscar}">
+						<ui:include src="frmCtsBuscarContrato.xhtml" />
+					</p:tab>
+					<p:tab id="tabContratacionesContrato" title=""
+						rendered="#{contratacionesBean.lbIsTabContrato}">
+						<ui:include src="frmCtsRegistrarContrato.xhtml" />
+					</p:tab>
+
+					<p:tab id="tabContratacionesAdicion" title=""
+						rendered="#{contratacionesBean.lbIsTabAdicion}">
+						<ui:include src="frmCtsRegistrarAdicion.xhtml" />
+					</p:tab>
+					<p:tab id="tabContratacionesProrroga" title=""
+						rendered="#{contratacionesBean.lbIsTabProrroga}">
+						<ui:include src="frmCtsRegistrarProrroga.xhtml" />
+					</p:tab>
+					<p:tab id="tabContratacionesAlcance" title=""
+						rendered="#{contratacionesBean.lbIsTabAlcance}">
+						<ui:include src="frmCtsRegistrarAlcance.xhtml" />
+					</p:tab>
+					<p:tab id="tabContratacionesSuspension" title=""
+						rendered="#{contratacionesBean.lbIsTabSuspension}">
+						<ui:include src="frmCtsRegistrarSuspension.xhtml" />
+					</p:tab>
+					<p:tab id="tabContratacionesTerminacion" title=""
+						rendered="#{contratacionesBean.lbIsTabTerminacion}">
+						<ui:include src="frmCtsRegistrarTerminacion.xhtml" />
+					</p:tab>
+
+					<p:tab id="tabContratacionesPrAdAl" title=""
+						rendered="#{contratacionesBean.lbIsTabAdPrAl}">
+						<ui:include src="frmCtsRegistrarPrAdAl.xhtml" />
+					</p:tab>
+
+					<p:tab id="tabContratacionesCesion" title=""
+						rendered="#{contratacionesBean.lbIsTabCesion}">
+						<ui:include src="frmCtsRegistrarCesion.xhtml" />
+					</p:tab>
+
+					<p:tab id="tabContratacionesConsulta" title=""
+						rendered="#{contratacionesBean.lbIsTabConsultar}">
+						<ui:include src="frmCtsConsultarContrato.xhtml" />
+					</p:tab>
+
+
+				</p:tabView>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

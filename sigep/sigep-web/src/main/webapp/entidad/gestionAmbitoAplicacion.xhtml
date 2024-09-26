@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/template/basicTemplate.xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TTL_GESTIONAR_AMBITO_POLITICAS}" />
+	
+	
+	<ui:define name="content">
+		<h:form id="frmGestionAmbitoAplicacion">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2>
+						<p:outputLabel value="#{titles.TTL_GESTIONAR_AMBITO_POLITICAS}"
+							styleClass="page-subtitle" />
+					</h2>
+				</div>
+			</div>
+			<br />
+			<ui:include src="ambitoAplicacion/asignarPoliticas.xhtml" />
+			<ui:include src="ambitoAplicacion/tablaEntidades.xhtml" />
+			<ui:include src="ambitoAplicacion/botonesGeneralesAmbito.xhtml" />
+			<ui:include src="ambitoAplicacion/dialogos.xhtml" />
+		</h:form>
+	</ui:define>
+</ui:composition>

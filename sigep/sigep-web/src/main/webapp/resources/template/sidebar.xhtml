@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:x_rt="http://java.sun.com/jstl/xml_rt"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt"
+	xmlns:x="http://java.sun.com/jsp/jstl/xml"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+<script>
+	//<![CDATA[
+            function showBtn() {
+              var btn = document.getElementById("btnside");
+              var sidemenu = document.getElementById("mySidenav");
+              var content = document.getElementById("j_idt95");
+                if (btn !== null && sidemenu !== null) {
+                      if (screen.width < 1000 ) {
+                          btn.style.display = "block";
+                          sidemenu.style.display = "none";
+                          if (content !== null) {
+                          content.style.marginTop = '5rem';
+                          content.style.overflow = 'auto';
+                          }
+                        } else {
+                          btn.style.display = "none";
+                            if (content !== null) {
+                          sidemenu.style.display = "block";
+                      content.style.overflow = 'inherit';
+                            }
+                        }
+                }
+            }
+            function openSideBar() {
+              var x = document.getElementById("mySidenav");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+            }
+            window.addEventListener("resize", function () {
+              showBtn();
+            });
+            $(window).on('load', function () {
+              showBtn();
+            });
+            function contains(itemLabel, filterValue) {
+				return itemLabel.includes(filterValue) || specialCharacters(itemLabel).includes(filterValue);
+			}
+			
+            function specialCharacters(input) {
+
+                var c = input.toLowerCase();
+                c = c.replace(new RegExp("[àáâãäå]", 'g'), "a");
+                c = c.replace(new RegExp("æ", 'g'), "ae");
+                c = c.replace(new RegExp("ç", 'g'), "c");
+                c = c.replace(new RegExp("[èéêë]", 'g'), "e");
+                c = c.replace(new RegExp("[ìíîï]", 'g'), "i");
+                c = c.replace(new RegExp("[òóôõö]", 'g'), "o");
+                c = c.replace(new RegExp("œ", 'g'), "oe");
+                c = c.replace(new RegExp("[ùúûü]", 'g'), "u");
+                c = c.replace(new RegExp("[ýÿ]", 'g'), "y");
+                return c;
+            }
+            //]]>
+      </script>
+<div
+	style="float: right; height: 0; z-index: 9999999; padding: 1rem; margin-bottom: 3rem;">
+
+	<div id="btnside">
+		<p:graphicImage dir="resources" height="24" width="24"
+			onclick="openSideBar()" name="images/menuResponsive.png"
+			title="Flickr" alt="Flickr" />
+	</div>
+</div>
+<!-- Sidebar -->
+<h:form id="frmSidebar">
+	<div id="mySidenav" class="sidebar-nuevo">
+		<div class="row sidebar-color">
+			<div class="col-md-12 sec-title" style="text-align: left;">
+				<img src="../resources/images/male-user.png" height="16" width="16"
+					style="margin-right: 0.5em;" /> ${titles['TTL_USER']}
+			</div>
+			<hr class="hr-style" style="margin-top: 28px; margin-bottom: 12px;" />
+			<div class="col-md-12" align="center" style="margin-bottom: 3%;">
+				<h:graphicImage url="#{tarjetaPersonaBean.persona.imagenUsuario}"
+					height="95" width="95" style="border-radius:75px;">
+				</h:graphicImage>
+			</div>
+			<div class="col-md-12"
+				style="text-align: center; margin-bottom: 2px;">
+				<h:outputLabel
+					style="font-size: 1.4em; font-weight: 500; word-spacing: 1px;"
+					value="#{sesionBean.usuarioSesion.nombrePersona}" />
+			</div>
+		</div>
+		<p:spacer height="1" />
+		<div class="row">
+			<div class="col-md-12 sec-title">${titles['TTL_SIDEBAR_ENTIDADES']}</div>
+		</div>
+
+		<ui:insert name="mainDataUser" />
+		<div class="row">
+
+			<p:spacer height="1" />
+			<div class="col-md-12" id="entidadSide">
+				<p:selectOneMenu converter="entidadConverter" var="t"
+					value="#{sesionBean.entidadUsuario}" required="true" filter="true"
+					filterFunction="contains"  filterMatchMode="custom"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+					styleClass="form-control-form-act-usua side" id="somEntidadesusuarioSideBar">
+					<f:selectItem itemLabel="Seleccione Entidad" itemValue="#{null}"
+						itemDisabled="true" />
+					<f:selectItems value="#{entidadesUsuario}" var="entidad"
+						itemLabel="#{entidad.codigoSigep.concat(' - ').concat(entidad.nombreEntidad)}"
+						itemValue="#{entidad}" style="text-align:center;" />
+					<p:column style="width:0%;">
+						<h:outputText value="#{t.codigoSigep}" style="color:#2A89B5;" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{t.nombreEntidad}"
+							style="text-transform: uppercase;" />
+					</p:column>
+					<p:ajax process="@this" event="change"
+						listener="#{sesionBean.setCambioEntidadSideBar()}"
+						update="@this,@widgetVar(wvMenu),@widgetVar(wvMenuR),@widgetVar(wvToolTipRoles)" />
+				</p:selectOneMenu>
+			</div>
+		</div>
+		<p:spacer height="1" />
+		<div class="row">
+			<div class="col-md-12 sec-title">
+
+				${titles['TTL_SIDEBAR_OTRAS_OPCIONES']}</div>
+		</div>
+		<p:spacer height="1" />
+		<div class="row">
+
+			<div class="col-md-12">
+				<ul style="list-style: none; padding-left: 0; text-align: center">
+
+					<li class="btn-list"><a href="javascript:void(0);"
+						style="color: #265377;">${titles['TTL_SIDEBAR_FAQ']} </a></li>
+					<li class="btn-list"><a href="javascript:void(0);"
+						style="color: #265377;">${titles['TTL_SIDEBAR_MANUAL_USUARIO']}</a></li>
+
+				</ul>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 sec-title">${titles['TTL_SIDEBAR_VIDEO_TUTORIAL']}</div>
+		</div>
+		<div class="row">
+			<div clasS="col-md-12">
+				<p:commandLink id="clAbrirVideoSideBar"
+					action="#{sesionBean.abrirVideoTutorial()}"
+					oncomplete="PF('dlgVideoSideBar').show();" update="dlgVideoSideBar">
+					<p:graphicImage dir="resources" style="video-tutorial"
+						name="images/video-side.png" title="Video Tutorial"
+						alt="Video Tutorial" />
+				</p:commandLink>
+				<p:dialog header="Video Tutorial" widgetVar="dlgVideoSideBar"
+					id="dlgVideoSideBar" width="520" height="420">
+					<iframe id="ytplayer" type="text/html" width="100%" height="100%"
+						src="#{sesionBean.videoTutorial}" frameborder="0" />
+					<!-- 
+			    			  <video controls="true">
+							  		<source src="#{sesionBean.videoTutorial}" type="video/mp4"/>
+							  </video> 
+							   -->
+				</p:dialog>
+			</div>
+		</div>
+	</div>
+</h:form>
+<!-- /Sidebar -->
+</html>

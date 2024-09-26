@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• ${titles['TTL_TAB_CT_REGISTRAR_SUSPENSION']} •"
+						styleClass="page-subtitle"
+						style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+	
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" /> 
+	
+	<br /><br />	
+
+	<p:panel id="idpnContratacionesTbRegistrarSuspensionCto" style="background: transparent !important;">
+		<p:panel id="frmSuspensionContrato" style="background: transparent !important;">
+	   		<div class="row row-background-white">
+	   			<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">
+					#{contratacionesBean.strLabelFormularioSuspension}
+				</span> <br /> <br />
+	      		<div class="row">
+	      			<div class="col-md-12">
+	      				<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_INI_SUSPENSION_2']}:"  rendered="#{contratacionesBean.lbSuspension}"
+								styleClass="log-label form-label-formularios" for="idCTFechaIniSuspension"/>
+							<p:calendar mask="true" 
+							
+							    title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_INI_SUSPENSION_2']} ${titles['TTL_TIPO_FECHA']}"
+								id="idCTFechaIniSuspension"
+								navigator="true"
+								yearRange="c-100:c+100"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaInicioModificacion}"
+								pattern="#{fechaFormato}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}" rendered="#{contratacionesBean.lbSuspension}" 
+								readonlyInput="true">
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+							<p:message for="idCTFechaIniSuspension" display="text" />
+						</div>	
+						<div class="col-md-4">
+							<p:outputLabel value="#{contratacionesBean.strLabelFechaDefFrmSuspension}"     
+								styleClass="log-label form-label-formularios" for="idCTFechaFinSuspension"/>
+							<p:calendar mask="true" 
+							    title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_FIN_SUSPENSION']} ${titles['TTL_TIPO_FECHA']} "
+								id="idCTFechaFinSuspension"
+								navigator="true"
+								yearRange="c-100:c+100"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaFinModificacion}"
+								pattern="#{fechaFormato}" 
+								required="#{contratacionesBean.lbSuspension}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}"
+								readonlyInput="true"
+								disabled="#{not contratacionesBean.lbSuspension}"
+								readonly="#{not contratacionesBean.lbSuspension}">
+								<p:ajax event="dateSelect" update="frContrataciones:viewTabContrataciones"></p:ajax>
+								<f:attribute name="startDateName" value="${titles['LBL_CT_FECHA_INI_SUSPENSION']}" />
+								<f:attribute name="endDateName" value="${titles['LBL_CT_FECHA_FIN_SUSPENSION']}" />								
+								<f:attribute name="startDate" value="#{contratacionesBean.modificacionContrato.fechaInicioModificacion}"></f:attribute>
+								<f:validator validatorId="dateRangeValidator"></f:validator>
+							</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+							<p:message for="idCTFechaFinSuspension" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_SUSPENSION_2']}:" 
+								styleClass="log-label form-label-formularios" rendered="#{contratacionesBean.lbSuspension}" for="idCTFechaAutSuspension"/>
+							<p:calendar mask="true" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_AUT_SUSPENSION']} ${titles['TTL_TIPO_FECHA']}"
+								id="idCTFechaAutSuspension"
+																navigator="true"
+								yearRange="c-100:c+100"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaAutorizacionModificacion}"
+								pattern="#{fechaFormato}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}" rendered="#{contratacionesBean.lbSuspension}"
+								readonlyInput="true">
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+							<p:message for="idCTFechaAutSuspension" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">	
+					<div class="col-md-12">
+     					<div class="col-md-12">
+    						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}:" 
+    							styleClass="log-label form-label-formularios" for="idCTJustificacionSuspension"/>
+    						<p:inputTextarea id="idCTJustificacionSuspension" rows="3" cols="32"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								counterTemplate="Quedan {0} caracteres." autoResize="false" maxlength="800"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+								value="#{contratacionesBean.modificacionContrato.justificacionModificacion}">
+							</p:inputTextarea>
+							<p:message for="idCTJustificacionSuspension" display="text" />
+	    				</div>
+	      			</div>
+	      		</div>
+				<br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="#{contratacionesBean.strNombreBotonSuspension}" id="idBtGuardarSuspensionContrato" 
+	                        styleClass="btn btn-primary"
+	                        style="font-size:1.5em!important; padding-top:0!important;" 
+	                        process="@this frmSuspensionContrato"
+	          	 			action="#{contratacionesBean.persist()}"
+	                 		update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['BTN_CT_VOLVER']}" id="idBtRegresarSuspension" 
+	                        styleClass="btn btn-default"
+	                        style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" 
+	                        process="@this"
+	                        action="#{contratacionesBean.regresarBusqueda()}"
+	                		update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>	
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+			<br />
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" style="margin-left: 24%; width: 75.5%; margin-top: 1em;" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379;">${titles['TTL_REGISTRO_CONTRATO_MODIFICACIONES']}</span> 
+				<br /> <br />
+			<div class="row row-background-white">
+				<br /><br />		
+				<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable
+						id="dataTableSuspensionContrato"
+						
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						
+						var="dataTableModificacionAdicion"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						value="#{contratacionesBean.lstModificacionesContrato}">
+						<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nombreTipoModificacionContrato}"/>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+							style="word-wrap: break-word!important; text-align: center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.audFechaActualizacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_FECHA_FIN_CONTRATO']}"
+							style="word-wrap: break-word!important; text-align: center!important;">
+							<h:outputText value="#{contratacionesBean.contrato.fechaFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_FECHA_INI_SUSPENSION']}"
+							style="word-wrap: break-word!important; text-align: center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaInicioModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_FECHA_FIN_SUSPENSION']}"
+							style="word-wrap: break-word!important; text-align: center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaFinModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_FECHA_AUT_SUSPENSION']}"
+							style="word-wrap: break-word!important; text-align: center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaAutorizacionModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_JUSTIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.justificacionModificacion}"/>
+						</p:column>																		
+					</p:dataTable>
+				</div>							
+			</div>
+			
+			<p:dialog header="• ${messages['DLG_CT_MENSAJE_IMPORTANTE']} •" widgetVar="dlgSuspensionContrato_01" id="dlgSuspensionContrato_01" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;">
+					<h5>#{contratacionesBean.strMsgMensajesvalidacionesProrroga}</h5>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						onclick="PF('dlgSuspensionContrato_01').hide();">
+					</p:commandButton>
+				</div>
+				<br />
+			</p:dialog>	
+			
+			<p:dialog header="• ${messages['DLG_CT_MENSAJE_IMPORTANTE']} •" widgetVar="dlgRegistroSuspensionGuardar" id="dlgRegistroSuspensionGuardar" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center>
+						<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['LBL_REGRESAR']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						action="#{contratacionesBean.regresarBusqueda()}"
+	   		   			update="frContrataciones:viewTabContrataciones"
+	   		    		onclick="PF('dlgRegistroSuspensionGuardar').hide();" />
+				</div>
+				<br />
+			</p:dialog>								
+			
+		</p:panel>
+	</p:panel>
+	
+</ui:composition>

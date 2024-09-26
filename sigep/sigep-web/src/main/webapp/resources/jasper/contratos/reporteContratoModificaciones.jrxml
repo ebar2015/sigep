@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteContratoModificaciones" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="985c1cce-924d-435e-ba03-8154a5e17c02">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sigep"/>
+	<parameter name="P_CODIGO_CONTRATO" class="java.lang.String"/>
+	<parameter name="P_SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select p.nombre_parametro, 
+       mc.JUSTIFICACION_MODIFICACION,
+       mc.FECHA_AUTORIZACION_MODIFICACION
+from   modificacion_contrato mc, 
+       contrato c,
+       parametrica p
+where  mc.cod_contrato = c.cod_contrato
+  and  mc.COD_TIPO_MODIFICACION_CONTRATO = p.COD_TABLA_PARAMETRICA
+  AND mc.cod_contrato =  $P{P_CODIGO_CONTRATO}
+  order by mc.COD_MODIFICACION_CONTRATO desc]]>
+	</queryString>
+	<field name="NOMBRE_PARAMETRO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE_PARAMETRO"/>
+	</field>
+	<field name="JUSTIFICACION_MODIFICACION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="JUSTIFICACION_MODIFICACION"/>
+	</field>
+	<field name="FECHA_AUTORIZACION_MODIFICACION" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="FECHA_AUTORIZACION_MODIFICACION"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="35" width="200" height="30" uuid="97b452b5-b693-4b24-9fdb-6232a7897913"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Tipo de Modificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="35" width="200" height="30" uuid="81fe26b6-29eb-4354-98eb-c962ea6eaf71"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Justificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="35" width="155" height="30" uuid="c0c4d217-1482-49df-a69e-107a7ebc515d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="5" width="400" height="30" uuid="69f1ebf1-cc75-46ae-8479-f4fe37ef5264"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modificaciones al contrato]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="200" height="30" uuid="d2d2c4a0-0522-482f-beb1-b71f8b265d21">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="93489d46-dd89-4824-a72e-a29fe83f37e3"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_PARAMETRO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="200" y="0" width="200" height="30" uuid="bb76d9ce-ff10-4aa8-9449-018eda00981c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e3324922-5448-4a3f-bd63-47cbbc28ec20"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{JUSTIFICACION_MODIFICACION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="400" y="0" width="155" height="30" uuid="21b6908a-6604-4f29-80b7-dfe7e90fd1ec">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bfce875-0e33-49e2-8394-31c5ec0666e5"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{FECHA_AUTORIZACION_MODIFICACION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

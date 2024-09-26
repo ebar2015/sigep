@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{terceroBean.terceroVO.id}' />
+		<f:viewParam name="dialog" value='#{terceroBean.dialog}' />
+		<f:event type="preRenderView" listener='#{terceroBean.retrieve}' />
+		<f:event type="preRenderView" listener='#{terceroBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_TRANSVERSAL_TERCEROS']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_TERCEROS_EDITAR']}" />
+
+	<f:event listener="#{terceroBean.validateForm}" type="postValidate" />
+	<ui:define name="main">
+		<p:panelGrid columns="6"
+			columnClasses="ui-grid-col-3,ui-grid-col-6,ui-grid-col-3,ui-grid-col-3,ui-grid-col-6,ui-grid-col-3"
+			layout="grid" styleClass="ui-panelgrid-blank">
+
+			<p:outputLabel for="listaNit" value="${titles['TTL_SELECT']}" />
+			<p:selectOneMenu id="listaNit" filter="true"
+				filterMatchMode="contains"
+				value="#{terceroBean.terceroSeleccionado}"
+				converter="terceroConverter" var="t">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{terceros}" var="tercero"
+					itemLabel="#{tercero.nit.concat('-').concat(tercero.digitoVerificacion)}"
+					itemValue="#{tercero}" />
+				<p:column>
+					<h:outputText
+						value="#{t.nit.concat('-').concat(t.digitoVerificacion)}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{t.razonSocial}" />
+				</p:column>
+				<p:ajax process="@this" update="contains"
+					listener="#{terceroBean.cargarTercero}" />
+			</p:selectOneMenu>
+			<p:message for="listaNit" display="icon" />
+
+			<h:outputText />
+			<h:outputText />
+			<h:outputText />
+
+			<p:outputLabel for="nit"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_NIT']}" />
+			<p:inputNumber id="nit"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_NIT']}"
+				value="#{terceroBean.terceroVO.nit}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				decimalPlaces="0" decimalSeparator="" thousandSeparator=","
+				minValue="0" maxValue="9999999999">
+				<p:clientValidator />
+				<p:ajax process="@this" update="@this digitoVerificacion"
+					listener="#{terceroBean.verificarNitVsDigitoVerificacion}" />
+			</p:inputNumber>
+			<p:message for="nit" display="icon" />
+
+			<p:outputLabel for="digitoVerificacion"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_DIGITO_VERIFICACION']}" />
+			<p:inputNumber id="digitoVerificacion" readonly="true"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_DIGITO_VERIFICACION']}"
+				value="#{terceroBean.terceroVO.digitoVerificacion}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				decimalPlaces="0" decimalSeparator="" thousandSeparator=""
+				minValue="0" maxValue="9">
+				<p:clientValidator />
+				<p:ajax process="@this" update="@this"
+					listener="#{terceroBean.verificarNitVsDigitoVerificacion}" />
+			</p:inputNumber>
+			<p:message for="digitoVerificacion" display="icon" />
+
+			<p:outputLabel for="razonSocial"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_RAZON_SOCIAL']}" />
+			<p:inputText id="razonSocial"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_RAZON_SOCIAL']}"
+				value="#{terceroBean.terceroVO.razonSocial}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="razonSocial" display="icon" />
+
+			<p:outputLabel for="tipoEntidadId"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_TIPO_ENTIDAD']}" />
+			<p:selectOneMenu id="tipoEntidadId" filter="true"
+				filterMatchMode="contains"
+				value="#{terceroBean.terceroVO.tipoEntidadId}"
+				converter="tipoEntidadConverter" var="t">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{tiposEntidad}" var="tipoEntidad"
+					itemLabel="#{tipoEntidad.sigla}" itemValue="#{tipoEntidad}" />
+				<p:column>
+					<h:outputText value="#{t.sigla}" />
+				</p:column>
+			</p:selectOneMenu>
+			<p:message for="tipoEntidadId" display="icon" />
+
+			<p:outputLabel for="direccion"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_DIRECCION']}" />
+			<p:inputText id="direccion"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_DIRECCION']}"
+				value="#{terceroBean.terceroVO.direccion}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="direccion" display="icon" />
+
+			<p:outputLabel for="telefono"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_TELEFONO']}" />
+			<p:inputNumber id="telefono"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_TELEFONO']}"
+				value="#{terceroBean.terceroVO.telefono}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				decimalPlaces="0" decimalSeparator="" thousandSeparator=""
+				minValue="1" maxValue="9999999999">
+				<p:clientValidator />
+			</p:inputNumber>
+			<p:message for="telefono" display="icon" />
+
+			<p:outputLabel for="correoElectronico"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_EMAIL']}" />
+			<p:inputText id="correoElectronico"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_EMAIL']}"
+				value="#{terceroBean.terceroVO.correoElectronico}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:validator validatorId="emailValidator" />
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="correoElectronico" display="icon" />
+
+			<p:outputLabel for="sitioWeb"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_WEB']}" />
+			<p:inputText id="sitioWeb"
+				placeholder="${titles['LBL_TRANSVERSAL_TERCEROS_WEB']}"
+				value="#{terceroBean.terceroVO.sitioWeb}">
+				<p:ajax process="@this" update="@this browser" />
+				<f:validator validatorId="webSiteValidator"
+					disabled="#{empty terceroBean.terceroVO.sitioWeb}" />
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="sitioWeb" display="icon" />
+
+			<p:outputLabel for="estado"
+				value="${titles['LBL_TRANSVERSAL_TERCEROS_ESTADO']}" />
+			<p:selectBooleanCheckbox id="estado"
+				title="${titles['LBL_TRANSVERSAL_TERCEROS_ESTADO']}"
+				value="#{terceroBean.terceroVO.estado}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:selectBooleanCheckbox>
+			<p:message for="estado" display="icon" />
+
+			<h:outputText />
+			<p:link id="browser" value="#{terceroBean.terceroVO.sitioWeb}"
+				href="#{terceroBean.terceroVO.sitioWeb}" target="_blank" />
+			<h:outputText />
+		</p:panelGrid>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton value="${titles['TTL_EDIT']}" icon="ui-icon-disk"
+			process="@this contains" update="contains"
+			action="#{terceroBean.update}" />
+	</ui:define>
+	<ui:define name="restablecer">
+		<p:commandButton value="${titles['TTL_RESET']}"
+			icon="ui-icon-arrowreturnthick-1-w" process="@this"
+			update="@this contains" actionListener="#{terceroBean.init()}">
+			<p:ajax resetValues="true" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

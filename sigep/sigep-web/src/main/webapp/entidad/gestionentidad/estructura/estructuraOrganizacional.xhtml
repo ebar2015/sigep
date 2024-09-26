@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="es" lang="es" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" template="/resources/template/basicTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TTL_ESTRUCTURA_ORGANIZACIONAL}" />
+
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2>
+					<p:outputLabel value="#{titles.TTL_ESTRUCTURA_ORGANIZACIONAL}"
+						styleClass="page-subtitle" />
+				</h2>
+			</div>
+		</div>
+		<script type="text/javascript">
+		//<![CDATA[
+			function ocultarTabs(){
+				var element = document.getElementById('tabViewEstructuraGrupo').childNodes[0].childNodes;
+				for(i = 0; i < 2; i++){
+					element[i].classList.add('no-display');
+					element[i].classList.remove('ui-state-default');
+					element[i].classList.remove('ui-corner-top');
+				}
+			}
+			
+			function mostrarTabs(){
+				var element = document.getElementById('tabViewEstructuraGrupo').childNodes[0].childNodes;
+				for(i = 0; i < 2; i++){
+					element[i].classList.remove('no-display');
+					element[i].classList.add('ui-state-default');
+					element[i].classList.add('ui-corner-top');
+				}
+			}
+			//]]>
+		</script>
+		<div class="row" style="background-color: transparent;">
+			<p:outputPanel id="oPanelEstructuraOrganizacional">
+				<p:tabView id="tabViewEstructuraGrupo" style="background-color: transparent;" activeIndex="#{estructuraOrganizacionalBean.tabindex}" >
+					
+					<p:tab id="tabEstructura" title="#{titles.TTL_ESTRUCTURA}">
+						<p:outputPanel id="panelTabEstructura">
+							<p:panel >
+								<ui:include src="estructura.xhtml" />
+							</p:panel>
+						</p:outputPanel>
+					</p:tab>
+					<p:tab id="tabGrupoTrabajo" title="#{titles.TTL_GRUPOS_INTERNOS_TRABAJO}" >
+						<p:outputPanel id="panelGrupoTrabajo">
+							<p:panel id="pnlTabGrupos">
+								<ui:include src="guposTrabajo.xhtml" />
+							</p:panel>
+						</p:outputPanel>
+					</p:tab>
+					
+				</p:tabView>
+			</p:outputPanel>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

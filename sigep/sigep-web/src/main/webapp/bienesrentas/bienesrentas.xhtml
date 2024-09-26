@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.org/ui"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:pe="http://primefaces.org/ui/extensions" 
+xmlns:c="http://java.sun.com/jsp/jstl/core" 
+template="/resources/template/basicTemplate.xhtml">
+<f:metadata>
+	<f:viewParam
+			name="recursoId"
+			value="#{bienesRentasBean.recursoId}" />
+</f:metadata>
+	<ui:param name="pageTitle" value="${titles['TTL_MENU_IP']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_MIDECLARACIONEHISTORICODEBIENESYRENTAS']}" />
+	<ui:define name="content">
+		<div class="row" style="background-color: transparent;">
+			<p:outputPanel id="panelTabView">
+				<p:tabView id="tabViewBienesRentas" dynamic="true" activeIndex="#{bienesRentasBean.indexTab}" tabindex="#{bienesRentasBean.indexTab}" style="background-color: transparent;" styleClass="tabs-byr">
+					<p:ajax event="tabChange" update="tabViewBienesRentas" listener="#{bienesRentasBean.onChangeTabVisible}" />
+					<p:tab id="tabDomicilio" title="${titles['TTL_BR_TAP_DATOS_DOMICILIO']}" disabled="#{bienesRentasBean.habilitadoDatosDomicilio}">
+						<ui:include src="datosDomicilio.xhtml" />
+					</p:tab>
+					<p:tab id="tabConjugue" title="${titles['TTL_BR_TAP_CONSANGUINIDAD_CONYUGUES']}" disabled="#{bienesRentasBean.habilitadoConsanguinidadConjugues}">
+						<ui:include src="parientesConyugues.xhtml" />
+					</p:tab>
+					<p:tab id="tabIngresoRenta" disabled="#{bienesRentasBean.habilitadoTabIngresoLaboral}" title="${titles['TTL_BR_TAP_INGRESOS_RENTAS']}">
+						<ui:include src="ingresosRentas.xhtml" />
+					</p:tab>
+					<p:tab id="tabOtroIngreso" disabled="#{bienesRentasBean.habilitadoTabOtrosIngresos}" title="${titles['TTL_BR_TAP_OTROS_INGRESOS_RENTAS']}">
+						<ui:include src="otrosIngresosRentas.xhtml" />
+					</p:tab>
+					<p:tab id="tabCuentas" disabled ="#{bienesRentasBean.habilitadoCuentas}" title="${titles['TTL_BR_TAP_CUENTAS']}">
+						<ui:include src="cuentasCorrientesAhorros.xhtml" />
+					</p:tab>
+					<p:tab id="tabPatrimonio" disabled="#{bienesRentasBean.habilitadoBienePatrimoniales}" title="${titles['TTL_BR_TAP_BIENES_PATRIMONIALES']}">
+						<ui:include src="bienesPatrimoniales.xhtml" />
+					</p:tab>
+					<p:tab id="tabActividadEconomica" disabled="#{bienesRentasBean.habilitadoTabActividadEconomica}" title="${titles['TTL_BR_TAP_ACTIVIDAD_ECONOMICA_PRIV']}">
+						<ui:include src="actividadEconomica.xhtml" />
+					</p:tab>
+					<p:tab id="tabObligacionesAcreencias" disabled="#{bienesRentasBean.habilitadoTabAcreenciasObligaciones}" title="${titles['TTL_BR_TAP_ACREECNCIAS_OBLIGACIONES']}">
+						<ui:include src="acreenciasObligaciones.xhtml" />
+					</p:tab>
+					<p:tab id="tabJuntas" disabled="#{bienesRentasBean.habilitadoParticipacionJuntas}" title="${titles['TTL_BR_TAP_PARTICIPACION_JUNTAS']}">
+						<ui:include src="participacionJuntas.xhtml" />
+					</p:tab>
+				</p:tabView>
+				<!-- Dialogo Guardar Definitivo Bienes y Rentas -->
+				<div class="modal fade" id="dlgConfirmDef" role="dialog" data-backdrop="static" data-keyboard="false">
+					<div class="modal-dialog modal-dialog-2" style="top: 10%; width: 80%;">
+						<div class="modal-content">
+					        <div class="modal-body">
+								<h5>
+									<p:outputLabel value="#{bienesRentasBean.messageEncabezadoGuadarDefinitivo}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+								<p:panel id="panelDiaVisualizar" style="background: transparent!important;">
+									<c:if test="#{bienesRentasBean.mostrarPDF()==null}">
+						                <p:outputLabel value="Sin soporte" styleClass="log-label form-label-formularios" />
+						            </c:if>
+						            <c:if test="#{bienesRentasBean.mostrarPDF()!=null}">
+						                <pe:documentViewer height="400" id="pdfVisualizer" value="#{bienesRentasBean.mostrarPDF()}" />
+						            </c:if>
+						        </p:panel>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row text-center">
+								<div class="col-md-4"></div>
+								<div class="col-md-2">
+									<p:commandButton title="#{bienesRentasBean.btnGuardadoDefinitivoMensaje}" value="${titles['TTL_YES']}" 
+									process="@this" update="tabViewBienesRentas" 
+									actionListener="#{bienesRentasBean.guardadoDefinitivo()}"
+										styleClass="btn btn-primary" onclick="$('#dlgConfirmDef').modal('hide');" />
+								</div>
+								<div class="col-md-2">
+									<p:commandButton value="${titles['TTL_NO']}" process="@this" update="panelTabView" styleClass="btn btn-default" onclick="$('#dlgConfirmDef').modal('hide');" actionListener="#{bienesRentasBean.cancelarDef()}" />
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+							<br />
+						</div>
+					</div>
+				</div>
+						<!-- Fin Dialogo Guardar Definitivo Bienes y Rentas -->
+				</p:outputPanel>
+				</div>
+				<div class="modal fade" id="dialogErrorGenerarPdf" role="dialog" data-backdrop="static" data-keyboard="false">
+					<div class="modal-dialog modal-dialog-2" style="top: 18%; width: 55%;">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12" align="center">
+										<h5>
+											<p:outputLabel value="Error" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+										</h5>
+									</div>
+								</div>
+								<hr class="hr-style-modales" />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4"></div>
+										<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+											<p:commandButton value="${titles['TTL_TO_CONTINUE']}" type="button" onclick="$('#dialogErrorGenerarPdf').modal('hide');" styleClass="btn btn-primary"
+												style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+											</p:commandButton>
+										</div>
+										<div class="col-md-4"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		<script type="text/javascript">
+            function mostrarMensajePDFerror() {
+                $('#dialogErrorGenerarPdf').modal({ backdrop : 'static', keyboard : false });
+            }
+        </script>
+        <script>
+			function reemplazarTexto(){
+				try{
+					document.getElementsByClassName("swal2-confirm")[0].innerText = "${titles['TTL_OK']}";
+				}catch(error){
+					
+				}
+			}
+		</script>
+		<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-11142030-3"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-11142030-3');
+		</script>
+		<p:ajaxStatus oncomplete="reemplazarTexto()" />
+	</ui:define>
+</ui:composition>

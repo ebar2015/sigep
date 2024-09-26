@@ -1,0 +1,335 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_SITUACION_AD']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.TTL_SITUACIONADMIN} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="NombreSituacionAdministrativa" maxlength="255"
+						placeholder="${titles['TTL_SITUACIONADMIN_NOMBRE']}"
+						title="${titles['TTL_INGRESE']} ${titles['TTL_SITUACIONADMIN_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						completeMethod="#{situacionAdministrativaBean.listaSituacionAdministrativa}"
+						value="#{situacionAdministrativaBean.nombreSituacionAdministrativa}">
+						<p:ajax event="itemSelect" listener="#{situacionAdministrativaBean.filtrarSituacionAdministrativa()}"
+							update ="dataTableSituacionAdministrativaes"/>
+					</p:autoComplete>
+					<p:message for="NombreSituacionAdministrativa" display="text" />
+				</div>
+				<div class="col-md-1 btn-search" style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonBuscarParametro" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{situacionAdministrativaBean.filtrarSituacionAdministrativa()}"
+						process="@this NombreSituacionAdministrativa"
+						update="NombreSituacionAdministrativa dataTableSituacionAdministrativaes" />
+				</div>
+				<div class="col-md-4"/>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+		<p:spacer height="4" />
+		<span class="span-style">#{titles.TTL_SITUACIONADMIN}</span> <br /> <br />
+		<hr class="hr-style hr-style-two" />
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarSituacionAdministrativa"
+					value="${titles['LBL_ADD_NEW']}" icon="fa fa-fw fa-plus-circle"
+					process="@this" styleClass="btn btn-transparent"
+					actionListener="#{situacionAdministrativaBean.nuevaSituacionAdministrativa()}"
+					immediate="true"
+					update="panelSituacionAdministrativa"
+					oncomplete="window.location.href='#frmPrincipal:panelSituacionAdministrativa';">
+					<p:resetInput target="frmPrincipal:panelSituacionAdministrativa" />
+				</p:commandButton>
+			</div>
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"/>
+			</div>
+		</div>
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTableSituacionAdministrativaes" paginator="true" reflow="true"
+				rowIndexVar="rowIndex"
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				value="#{situacionAdministrativaBean.lstSituacionAdministrativa}"
+				var="dataSituacionAdministrativa"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				<p:column headerText="${titles['TTL_SITUACIONADMIN_NOMBRE']}" 
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataSituacionAdministrativa.nombreSituacion}"
+					filterBy="#{dataSituacionAdministrativa.nombreSituacion}"  filterMatchMode="contains">
+					<h:outputText value="#{dataSituacionAdministrativa.nombreSituacion}" />
+				</p:column>
+				
+				<p:column headerText="${titles['TTL_SITUACIONADMIN_DESCRIPCION']}" 
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataSituacionAdministrativa.descripcion}"
+					filterBy="#{dataSituacionAdministrativa.descripcion}"  filterMatchMode="contains">
+					<h:outputText value="#{dataSituacionAdministrativa.descripcion}" />
+				</p:column>
+
+				<p:column headerText="#{titles.TTL_ACTIVO}" 
+					style="word-wrap: break-word!important;text-align: center!important;"
+					sortBy="#{dataSituacionAdministrativa.flgActivo}">
+					<p:selectBooleanCheckbox
+						value="#{dataSituacionAdministrativa.flgActivo == 1 ? true : false}" disabled="true" />
+				</p:column>
+				
+				<p:column headerText="${titles['LBL_ACCIONES']}" style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					
+					<p:commandButton id="btnEditarSituacionAdministrativa"
+						title="${titles['TTL_EDIT']}" icon="icon-edit"
+						styleClass="icon-btn btn-view-data" 
+						immediate="true"
+						process="@this"
+						update="frmPrincipal:panelSituacionAdministrativa"
+						oncomplete="window.location.href='#frmPrincipal:panelSituacionAdministrativa';"
+						actionListener="#{situacionAdministrativaBean.modificarSituacionAdministrativa(dataSituacionAdministrativa)}">
+					</p:commandButton>
+										
+					<p:commandButton id="btnConsultarSituacionAdministrativa"
+						title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:panelSituacionAdministrativa"
+						oncomplete="window.location.href='#frmPrincipal:panelSituacionAdministrativa';"
+						actionListener="#{situacionAdministrativaBean.consultarSituacionAdministrativa(dataSituacionAdministrativa)}">
+					</p:commandButton>
+					
+					<p:commandButton id="btnEliminarSituacionAdministrativa"
+						title="${titles['BTN_ELIMINAR']}" icon="icon-delete" process="@this"
+						styleClass="icon-btn" rendered="false">
+						 <p:ajax process="@this" listener="#{situacionAdministrativaBean.solicitarConfirmacionEliminarSituacionAdministrativa(dataSituacionAdministrativa)}"/>	
+					</p:commandButton>
+					
+				</p:column>
+			</p:dataTable>
+		</div>
+
+	</div>
+	<br />
+	<p:outputPanel id="panelSituacionAdministrativa">
+		<p:panel id="subpanelSituacionAdministrativa"
+			widgetVar="subpanelSituacionAdministrativa"
+			rendered="#{situacionAdministrativaBean.habilitaFormulario}">
+			<div class="row row-background-white">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<c:if test="#{!situacionAdministrativaBean.lbEsConsulta and !situacionAdministrativaBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_AGREGAR_SITUACIONADMIN']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"/>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{!situacionAdministrativaBean.lbEsConsulta and situacionAdministrativaBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_MODIFICAR_SITUACIONADMIN']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"/>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{situacionAdministrativaBean.lbEsConsulta and !situacionAdministrativaBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_SITUACIONADMIN']}
+					</span> 
+					<br /><br /><br />
+				</c:if>
+				<p:panel>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['TTL_SITUACIONADMIN_NOMBRE']}"
+									styleClass="log-label form-label-formularios" for="IdSituacionAdministrativa" />
+								<p:inputText id="IdSituacionAdministrativa" required="true" disabled="#{situacionAdministrativaBean.lbEsConsulta}"
+								           requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" maxlength="254"
+											value="#{situacionAdministrativaBean.situacionAdministrativaSeleccionada.nombreSituacion}"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_SITUACIONADMIN_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}" >
+								<f:validator validatorId="textAlfanumericoTildeValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="IdSituacionAdministrativa" display="text" />
+							</div>
+							
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['TTL_SITUACIONADMIN_DESCRIPCION']}"
+									styleClass="log-label form-label-formularios" for="nombreSituacionAdministrativa"/>
+								<p:inputText id="nombreSituacionAdministrativa" required="true" disabled="#{situacionAdministrativaBean.lbEsConsulta}"
+											requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" maxlength="254"
+											value="#{situacionAdministrativaBean.situacionAdministrativaSeleccionada.descripcion}"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_SITUACIONADMIN_DESCRIPCION']} ${titles['TTL_TIPO_ALFANUMERICO']}" >
+											<f:validator validatorId="textAlfanumericoTildeValidator" />
+											<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="nombreSituacionAdministrativa" display="text" />
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoSituacionAdm"
+									styleClass="log-label form-label-formularios" />
+								<br />
+								<p:selectBooleanCheckbox required="true" id="activoSituacionAdm"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									disabled="#{situacionAdministrativaBean.lbEsConsulta}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+									value="#{situacionAdministrativaBean.blnFlgActivo}">
+								</p:selectBooleanCheckbox>
+								<p:message for="activoSituacionAdm" display="text" />
+
+							</div>
+						</div>
+						</div>
+	
+				</p:panel>
+				<div class="row" align="center" style="margin-top:4.3em!important">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="idpanelGuardarSituacionAdministrativa"
+							style="padding: 0%;">
+							<c:if test="#{!situacionAdministrativaBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_SAVE']}"
+									process="frmPrincipal:panelSituacionAdministrativa"
+									update="panelSituacionAdministrativa dataTableSituacionAdministrativaes"
+									actionListener="#{situacionAdministrativaBean.guardarSituacionAdministrativa()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+							<c:if test="#{situacionAdministrativaBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_OK']}"
+									process="frmPrincipal:panelSituacionAdministrativa"
+									update="panelSituacionAdministrativa dataTableSituacionAdministrativaes"
+									actionListener="#{situacionAdministrativaBean.aceptarConsulta()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+						</p:panel>
+					</div>
+					
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-default btn-update-disable"
+							process="@this" immediate="true"
+							rendered="#{!situacionAdministrativaBean.lbEsConsulta}"
+							style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; 
+							font-size:1.5em!important; padding-top:0!important;"
+							onclick="PF('dlg2').show();" >
+							<p:resetInput target="frmPrincipal:panelSituacionAdministrativa" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	
+	
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlg2" modal="true" minHeight="300"
+			  draggable="false"  closable="false"  appendTo="@(body)">
+    	<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+			<center><h5>#{situacionAdministrativaBean.strMensajeConfirmacion}</h5></center>
+		</div>
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+			    <p:commandButton value="${titles['LBL_SI']}"
+			    		process="@this" 
+					    styleClass="btn btn-primary"
+					    actionListener="#{situacionAdministrativaBean.accionConfirmada()}"
+					    style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+					    onclick="PF('dlg2').hide();"
+					    update="frmPrincipal:panelSituacionAdministrativa frmPrincipal:dataTableSituacionAdministrativaes"/>
+	        	</div>
+	        	<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="${titles['LBL_NO']}"
+					styleClass="btn btn-default"
+					onclick="PF('dlg2').hide();">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"/>
+			</div>
+	</p:dialog> 
+
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgEliminarnSituacionAdministrativa"
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+				<center><h5>#{situacionAdministrativaBean.strMensajeConfirmacionEliminacion}</h5></center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+				    <p:commandButton value="${titles['LBL_SI']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+						action="#{situacionAdministrativaBean.accionConfirmada()}"
+		  		    	onclick="PF('dlgEliminarnSituacionAdministrativa').hide();"
+		  		    	update="frmPrincipal:panelSituacionAdministrativa frmPrincipal:dataTableSituacionAdministrativaes"/>
+		        	</div>
+		        	<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['LBL_NO']}"
+						process="@this" 
+						styleClass="btn btn-default"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+		                onclick="PF('dlgEliminarnSituacionAdministrativa').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>	
+	</ui:define>
+</ui:composition>

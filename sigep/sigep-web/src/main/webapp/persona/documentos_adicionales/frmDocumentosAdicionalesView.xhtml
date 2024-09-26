@@ -1,0 +1,216 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<div class="row row-background-white">
+		<br />
+		<div class="col-md-12" style="text-align: right;">
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"> </label>
+			</div>
+		</div>
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTableDocumentosAdicionales" paginator="true" reflow="true"
+				rowIndexVar="rowIndex" 							
+				rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+				value="#{documentosAdicionalesHVBean.lstDocumentosAdicionales}"
+				var="dataDocumentoAdicional"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				<p:column headerText="Tipo Documento"
+					style="word-wrap: break-word!important;">
+					<h:outputText value="#{dataDocumentoAdicional.nombretipo}" />
+				</p:column>
+				<p:column headerText="Descripción"
+					style="word-wrap: break-word!important;">
+					<h:outputText value="#{dataDocumentoAdicional.descripciontipo}" />
+				</p:column>
+				<p:column headerText="${titles['LBL_ACCIONES']}"
+					style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					<p:commandButton id="btnEditarDocumentoAdicionalHV"
+						title="Editar" icon="icon-edit" disabled="true"
+						styleClass="icon-btn btn-view-data">
+					</p:commandButton>					
+					
+					<p:commandButton id="btnConsultarDocumentoAdicionalHV"
+						title="Ver detalle" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales frmPrincipal:tabHojaDeVida:documentosAdjuntosAdicionalesHV"
+						actionListener="#{documentosAdicionalesHVBean.consultarDocumentoAdicional(dataDocumentoAdicional)}">
+					</p:commandButton>
+					<p:commandButton id="btnEliminarDocumentoAdicionalHV" disabled="true"
+						title="${titles['BTN_ELIMINAR']}" icon="icon-delete">	
+					</p:commandButton>
+					<p:commandButton id="btnVerDocumentosAdicionalHV"
+						title="Ver Documentos Adjuntos" icon="icon-open-folder"
+						styleClass="icon-btn" disabled="true"
+						onclick="#{dataDocumentoAdicional.urlDocumentoAdicional}">
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+	<br />
+	<p:outputPanel id="panelDocumentosAdicionales">
+		<p:panel id="subPanelDocumentosAdicionales"
+			widgetVar="subPanelDocumentosAdicionales"
+			rendered="#{documentosAdicionalesHVBean.habilitaFormulario}">
+			<div class="row row-background-white">
+				<div class="col-md-12" align="center" style="margin-top: 0.8%;">
+					<h5 style="font-size: 17px !important;">
+						<p:outputLabel
+							value="${titles['TTL_DOCUMENTOS_ADICIONALES']}"
+							styleClass="page-subtitle"
+							style="color: #2A89B5!important; font-weight: normal!important;" />
+					</h5>
+				</div>
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_AGREGAR_DOC_ADICIONAL']}</span> <br /> <br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<br />
+				<p:panel>
+					<br />
+					<br />
+					<hr class="hr-style" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<p:outputLabel value="${titles['TTL_ADICIONAL_TIPO_DOCUMENTO']}"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="tipDocAdic" disabled="true"
+									required="true"
+									value="#{documentosAdicionalesHVBean.tipoDocumentoAdicional}"
+									requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+									title="${titles['TTL_SELECT']} ${titles['LBL_TABLA_NIVEL_EDUCATIVO']}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.lstDocumentosAdicionales}" />
+									<p:ajax event="change"  listener="#{documentosAdicionalesHVBean.leerDescripcion(this.value)}" process="@this" update="descipciontipo"/>
+								</h:selectOneMenu>
+								<p:message for="tipDocAdic" value="#{documentosAdicionalesHVBean.descripciontipo}"/>
+							</div>
+							<div class="col-md-3">
+								<p:outputLabel value="${titles['LBL_PARAMETRICA_DESCRIPCION']}"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="descipciontipo" 
+											readonly="true"
+											value="#{documentosAdicionalesHVBean.descripciontipo}" ></p:inputText>
+							</div>
+							<div class="col-md-3" style="top:2.3em!important">
+								
+								
+							</div>
+							<div class="col-md-1 vista-media"
+								style="padding-top: 2% !important;">
+								<p:commandButton
+									title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']}"
+									id="idBtnVerDocumentoAdicional" icon="icon-view"
+									styleClass="icon-btn" process="@this"
+									update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales frmPrincipal:tabHojaDeVida:panelDiaVisualizarDocumentoAdicionalHV"
+									onclick="PF('documentosAdjuntosAdicionalesHV').show()" />
+							</div>
+						</div>
+					</div>
+					<!-- Modal para ver los archivos adjuntos-->
+	
+				</p:panel>
+				<div class="row" align="center" style="margin-top:4.3em!important">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="idpanelGuardarDocumentoAdicional"
+							style="padding: 0%;">
+							<p:commandButton value="${titles['TTL_OK']}"
+									process="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales"
+									update="panelDocumentosAdicionales dataTableDocumentosAdicionales"
+									actionListener="#{documentosAdicionalesHVBean.aceptarConsulta()}"
+									styleClass="btn btn-primary" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	
+	
+	
+	<p:dialog header="${titles['TTL_DOCUMENTO_ADJUNTO']}"
+		widgetVar="documentosAdjuntosAdicionalesHV" id="documentosAdjuntosAdicionalesHV" >
+		
+				<div align="center">
+						<c:if test="#{documentosAdicionalesHVBean.rutaArchivo==null}">
+							<h:outputLabel value="${titles['LBL_SIN_SOPORTE']}"
+								class="form-label-formularios" />
+						</c:if>
+						<c:if test="#{documentosAdicionalesHVBean.rutaArchivo!=null}">
+							<iframe src ="#{documentosAdicionalesHVBean.rutaArchivo}" width='600' height='400'></iframe> 								
+						</c:if>
+				</div>
+				<div class="modal-footer">
+					<p:commandButton value="${titles['TTL_CLOSE']}"
+						styleClass="btn btn-default" process="@this"
+						style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+						onclick="PF('documentosAdjuntosAdicionalesHV').hide()" />
+				</div>
+		
+	</p:dialog>
+	
+	<div id="documentosAdjuntosAdicionalesHV1" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="z-index:1!important;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+				</div>
+
+				<div class="modal-body" align="center">
+					<p:panel id="panelDiaVisualizarDocumentoAdicionalHV"
+						style="background: transparent!important;">
+						<c:if test="#{documentosAdicionalesHVBean.rutaArchivo==null}">
+							<h:outputLabel value="${titles['LBL_SIN_SOPORTE']}"
+								class="form-label-formularios" />
+						</c:if>
+						<c:if test="#{documentosAdicionalesHVBean.rutaArchivo!=null}">
+							<iframe src ="#{documentosAdicionalesHVBean.rutaArchivo}" width='600' height='400'></iframe> 								
+						</c:if>
+					</p:panel>
+				</div>
+				<div class="modal-footer">
+					<p:commandButton value="${titles['TTL_CLOSE']}"
+						styleClass="btn btn-default" process="@this"
+						style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+						onclick="$('#documentosAdjuntosAdicionalesHV').modal('hide')" />
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</ui:composition>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/basicTemplate.xhtml">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.LBL_NOMENCLATURA_Y_ESCALA}" />
+
+<ui:define name="content">
+	<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_NOMENCLATURA_Y_ESCALA} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+
+	<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+		<div class="col-md-12">
+		  <div class="col-md-4"></div>
+			<div class="col-md-5">
+				<p:commandButton id="btnEquivalenciaNomenclatura"
+					widgetVar="wvBtnEquivalenciaNomenclatura"
+					process="@this"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_NOMENCLATURA_EQUIVALENCIA}"
+					rendered="false">
+				</p:commandButton>
+			</div>
+       
+			<div class="col-md-3">
+				<p:commandButton value="${titles['LBL_ADD_NOMENCLATURA']}"
+					id="btnEntCrearNomenclatura" widgetVar="wvBtnCrearNomenclatura" 
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent agregar_mover" 
+					actionListener="#{gestionarNomenclaturaEscalaBean.abrirPanelCrearNomenclatura()}"
+					rendered="#{gestionarNomenclaturaEscalaBean.blnPermisoNomenclatura}"
+					process="@this"
+					onstart="PF('dlgCargaNomenclatura').show()"
+                    onsuccess="PF('dlgCargaNomenclatura').hide()"
+					update="formCrearNomenclatura:panelFormularioNomenclatura panelMensaje
+						formCrearNomenclatura:dtDenominacionesNomenclatura"
+                    onclick="window.location.href='#crearNomenclaturaPanel'"
+                    oncomplete="window.location.href='#crearNomenclaturaPanel'">
+				</p:commandButton>
+			</div>
+		</div>
+		<!-- Tabla de nomenclaturas -->
+		<ui:include src="tablaNomenclaturas.xhtml" />
+	</div>
+	<ui:include src="frmModales.xhtml" />
+    <p:panel id="crearNomenclaturaPanel"> <ui:include src="frmCrearNomenclatura.xhtml" /> </p:panel>
+	<ui:include src="frmNomenclaturaBase.xhtml" />
+	<ui:include src="frmCrearDenominacion.xhtml" />
+	<br /><br />
+	<div class="col-md-12" align="center" style="margin-bottom: 4% !important;">
+		<p:commandButton styleClass="btn btn-primary" id="terminar"
+			style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+			value="${titles.LBL_ENTIDAD_TERMINAR}" process="@this"
+			onclick="window.location.assign('../../gestionarEntidad.xhtml?faces-redirect=true')" />
+			<p:tooltip for="terminar" value="${titles.TTL_ENTIDAD_TERMINAR}" position="top" />
+	</div>
+	<p:dialog widgetVar="dlgCargaNomenclatura" modal="true" draggable="false"
+     	closable="false" resizable="false" showHeader="false"
+        style="width:auto;height:auto">
+        <img src="../../../resources/images/loading.gif" alt="" height="45" width="70"/>
+    </p:dialog>
+	</ui:define>
+</ui:composition>

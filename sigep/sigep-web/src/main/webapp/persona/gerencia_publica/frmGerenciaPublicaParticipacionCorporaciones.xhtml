@@ -1,0 +1,199 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="pnlGerenciaPublicaParticipacionCorporaciones">
+	<div class="col-md-12 row row-background-white">
+		<div id="btnDivNuevoParticipacionCorporacion" align="right">
+				<p:commandButton id="cbNuevoParticipacionCorporacion" value="${titles['LBL_NUEVO_PARTICIPACION_CORPORACION']}"
+								 update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida"
+					             icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					             actionListener="#{gerenciaPublicaHVBean.nuevoParticipacionCorporacion()}"
+					             process="@this" immediate="true"
+					             onclick="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionCorporacionNuevo';"					             
+					             oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionCorporacionNuevo';
+					                         oncomplete=datosModificados(1);"
+					             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					<p:resetInput  target="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionCorporacionNuevo" />
+				</p:commandButton>
+		</div>	
+		<br />
+		<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">			
+			<p:dataTable id="tblParticipacionCorporacion" 
+	             paginator="true"
+	             reflow="true"
+	             rows="#{paginatorSize}"
+				 rowsPerPageTemplate="#{paginatorsSize}"
+	             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+	             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	             var="participacion" 
+	             value="#{gerenciaPublicaHVBean.lstParticipacionCorporaciones}"
+	             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+			 	
+			 	<p:column sortBy="#{participacion.nombreInstitucion}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_NOMBRE_CORPORACION']}" /></f:facet>
+					<h:outputText value="#{participacion.nombreInstitucion}"/>
+				</p:column>
+			 	
+			 	<p:column sortBy="#{participacion.nombreRazonSocialInstitucion}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}" /></f:facet>
+					<h:outputText value="#{participacion.nombreRazonSocialInstitucion}"/>
+				</p:column>
+				
+				<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"  style="opacity: 1!important; text-align:center!important;">
+					<p:commandButton id="idModificarParticipacionProyectos" title="${titles['TTL_EDIT']}"
+						             icon="icon-edit" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.modificarParticipacionCorporacion(participacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionCorporacionNuevo"
+						            rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+						             oncomplete="datosModificados(1);">
+					</p:commandButton>	
+					<p:commandButton id="idConsultarParticipacionProyectos" title="${titles['TTL_CONSULT']}"
+						             icon="icon-view" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.consultarParticipacionCorporacion(participacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionCorporacionNuevo"
+						             >
+					</p:commandButton>	
+					<p:commandButton id="idEliminarParticipacionProyectos" title="${titles['TTL_DELETE']}"
+						             icon="icon-delete" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.solicitarConfirmacionEliminarParticipacionCorporacion(participacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaParticipacionCor"
+						            rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+							 
+					</p:commandButton>								             
+				</p:column>					
+			</p:dataTable>	
+		</div>
+		</div>	
+		<h:panelGroup id="pnlParticipacionCorporacionNuevo">
+			<p:panel id="pnlFrmlParticipacionCorporacion"  rendered="#{gerenciaPublicaHVBean.flgHabilitaPanelParticipacionCorporacion}"
+					 class="col-md-12 row row-background-white" style="margin-top: 3.3em!important;" >
+				<p:spacer height="2" style="padding-top: 3em!important;"/>
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_ADD_PARTICIPACION_CORPORACION']}</span> 
+				
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="txtNomCoorporacion"
+								value="${titles['LBL_NOMBRE_COORPORACION_SOCIEDAD']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNomCoorporacion" maxlength="#{maxNumeros.gpPcTammaxNombrecorporacion}"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_COORPORACION_SOCIEDAD} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								required="true" styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaHVBean.participacionCorporacionProcesar.nombreEntidadOrganizacion}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionCorporacionEsConsulta}"
+								onchange="datosModificados(1);">
+								<f:attribute value="1" name="minLength" />
+								<f:attribute value="#{maxNumeros.gpPcTammaxNombrecorporacion}" name="maxLength" />
+							</p:inputText>
+							<p:message for="txtNomCoorporacion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_RAZON_SOCIAL_INSTITUCION']}:"
+								for="txtRazonSocial"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtRazonSocial"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_RAZON_SOCIAL_INSTITUCION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								required="true" maxlength="999"
+								value="#{gerenciaPublicaHVBean.participacionCorporacionProcesar.nombreRazonSocialInstitucion}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionCorporacionEsConsulta}"
+								onchange="datosModificados(1);">
+								<f:attribute value="1" name="minLength" />
+								<f:attribute value="#{maxNumeros.gpPcTammaxNombrerazonsocial}" name="maxLength" />
+							</p:inputText>
+							<p:message for="txtRazonSocial" display="text" />
+						</div>	
+						<div class="col-md-4">
+							<p:outputLabel for="txtNomEntidadOrganizacion"
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNomEntidadOrganizacion" maxlength="#{maxNumeros.gpPcTammaxNombreentidad}"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaHVBean.participacionCorporacionProcesar.nombreInstitucion}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionCorporacionEsConsulta}"
+								onchange="datosModificados(1);">
+								<f:attribute value="1" name="minLength" />
+								<f:attribute value="#{maxNumeros.gpPcTammaxNombreentidad}" name="maxLength" />
+							</p:inputText>
+							<p:message for="txtNomEntidadOrganizacion" display="text" />
+						</div>	
+					</div>									
+				</div>
+
+				<div class="row" align="center">
+					<br /><br />
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton id="btnGuardarParticipacionCorporacion" value="${titles['TTL_SAVE']}"
+											process="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"
+											update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida
+											        frmPrincipal:informacionPersonalUsuario"
+											styleClass="btn btn-primary"
+											style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+											oncomplete="datosModificados(0);"
+											actionListener="#{gerenciaPublicaHVBean.guardarGerenciaPublica()}"
+											disabled="#{gerenciaPublicaHVBean.flgParticipacionCorporacionEsConsulta}">
+						</p:commandButton>							
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+							action="#{gerenciaPublicaHVBean.solicitarConfirmacionCancelarParticipacionCorporacion()}"
+								update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaParticipacionCor"
+							>
+						</p:commandButton>
+					</div>
+				</div>							
+			</p:panel>
+		</h:panelGroup>					
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionGerenciaPublicaParticipacionCor" id="dlgConfirmarAccionGerenciaPublicaParticipacionCor" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{gerenciaPublicaHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{gerenciaPublicaHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionGerenciaPublicaParticipacionCor').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionGerenciaPublicaParticipacionCor').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>			
+	</p:panel>
+</ui:composition>

@@ -1,0 +1,361 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<div class="row row-background-white" style="padding-top: 2em;">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel for="somOrden" value="#{titles.LBL_ORDEN}:"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="somOrden" class="form-select-ent"
+				 	filter="true"
+					required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+					value="#{creacionEntidadBean.entidadN.codOrden}"
+					title="${titles['TTL_SELECT']} ${titles['LBL_ORDEN']}">
+					<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+					<f:selectItems value="#{webUtils.tipoOrdenTerritorial}" />
+					<p:ajax event="valueChange" 
+						listener="#{creacionEntidadBean.somOrdenListener}" update="somSubOrden somCategoriaDnp" />
+					<p:ajax event="valueChange"
+						listener="#{creacionEntidadBean.somCategoriaListener}" update="somCategoriaEnt" />
+					<p:ajax event="valueChange" listener="#{creacionEntidadBean.checkEjecutivaAndNacional()}"
+								update=":tabViewCrearEntidad:formularioCrearEntidad:departamentoEntidad :tabViewCrearEntidad:formularioCrearEntidad:municipioEntidad" 
+								disabled="#{esGuardado==true ? false : true}"/>	
+				</p:selectOneMenu>
+				<p:message for="somOrden" display="text" />
+			</div>
+			<div class="col-md-6">
+				<p:outputPanel autoUpdate="true">
+					<p:outputLabel for="somSector1"
+						value="#{titles.LBL_SECTOR_ADMINISTRATIVO}"
+						styleClass="log-label form-label-formularios" />
+					<p:selectOneMenu id="somSector1"
+					 	filter="true"
+						value="#{creacionEntidadBean.entidadN.codSectorAdministrativo}"
+						styleClass="form-control-form-act-usua" scrollable="true" scrollHeight="100"
+						title="${titles['TTL_SELECT']} ${titles['LBL_SECTOR_ADMINISTRATIVO']}"
+						required="#{not creacionEntidadBean.estadoSubOrden}"
+						requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+						<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+						<f:selectItems value="#{webUtils.tipoSectorAdministrativo}" />
+						<p:ajax event="valueChange" update="somSector1" />
+					</p:selectOneMenu>
+					<p:message for="somSector1" />
+				</p:outputPanel>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel value="#{titles.LBL_SUBORDEN}:" for="somSubOrden"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="somSubOrden"
+				 	filter="true"
+					styleClass="form-control-form-act-usua"
+					disabled="#{not creacionEntidadBean.estadoSubOrden}"
+					value="#{creacionEntidadBean.entidadN.codSuborden}" required="true"
+					requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+					class="form-select-ent"
+					title="${titles['TTL_SELECT']} ${titles['LBL_SUBORDEN']}">
+					<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+					<f:selectItems value="#{webUtils.tipoSubordenEntidad}" />
+				</p:selectOneMenu>
+				<p:message for="somSubOrden" display="text" />
+			</div>
+			<div class="col-md-6">
+				<p:outputPanel id="panelAdscrita">
+					<p:outputLabel for="sbbAdscrita"
+						value="#{titles.LBL_ADSCRITA_VINCULADA}"
+						styleClass="log-label form-label-formularios" />
+					<p:selectOneMenu id="sbbAdscrita"
+						filter="true"
+						value="#{creacionEntidadBean.entidadN.codTipoAdscripcion}"
+						required="#{creacionEntidadBean.requerido}"
+						requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+						scrollable="true" scrollHeight="100"
+						title="${titles['TTL_SELECT']} ${titles['LBL_ADSCRITA_VINCULADA']}">
+						<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+						<f:selectItems value="#{webUtils.lstAdscVinculada}" />
+						<p:ajax process="@this"
+							update="@widgetVar(wvPnNombreAdscrita) @widgetVar(wvPnNombreAdscrita1) somPersoneriaJuridica"
+							listener="#{creacionEntidadBean.sbbEntidadAdscritaListener()}" />
+					</p:selectOneMenu>
+					<p:message for="sbbAdscrita" />
+				</p:outputPanel>
+			</div>
+		</div>
+	</div>
+	<br />
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:spacer />
+			</div>
+			<div class="col-md-6">
+				<p:panel widgetVar="wvPnNombreAdscrita"
+					visible="#{creacionEntidadBean.adscrito}" style="border: none">
+					<p:outputLabel value="#{titles.LBL_NOMBRE_ENTIDAD_ADSCRITA}"
+						styleClass="log-label form-label-formularios"
+						for="acNombreEntidadAdscrita" />
+					<p:autoComplete id="acNombreEntidadAdscrita"
+						value="#{creacionEntidadBean.entidadAdscritaSeleccionada}"
+						converter="entidadBdConverter" var="entAdsc"
+						completeMethod="#{creacionEntidadBean.acNombreAdscritaListener}"
+						minQueryLength="3" forceSelection="true"
+						required="#{creacionEntidadBean.adscrito}"
+						requiredMessage="${messages.DLG_VALOR_REQUERIDO}"
+						itemLabel="#{entAdsc.nombreEntidad}" itemValue="#{entAdsc}"
+						maxResults="20" maxlength="255"
+						title="${titles['TTL_SELECT']} ${titles['LBL_NOMBRE_ENTIDAD_ADSCRITA']}">
+						<p:ajax process="@this" update="@this" event="itemSelect"
+							listener="#{creacionEntidadBean.acNombreAdscritaSelectListener}" />
+						<p:ajax process="@this" update="@this" event="itemUnselect"
+							listener="#{creacionEntidadBean.acNombreAdscritaUnselectListener}" />
+					</p:autoComplete>
+					<p:message for="acNombreEntidadAdscrita" display="text" />
+				</p:panel>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel for="somCategoriaEnt"
+					value="#{titles.LBL_CATEGORIA}:"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="somCategoriaEnt"
+					disabled="#{not creacionEntidadBean.estadoCategoria}"
+					value="#{creacionEntidadBean.entidadN.codCategoria}"
+					class="form-select-ent"
+					 filter="true"
+					title="${titles['TTL_SELECT']} ${titles['LBL_CATEGORIA']}">
+					<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+					<f:selectItems value="#{webUtils.tipoCategoriaEntidad}" />
+					<p:ajax process="@this" update="somCategoriaDnp"
+						listener="#{creacionEntidadBean.somCategoriaEntidadListener()}" />
+				</p:selectOneMenu>
+			</div>
+			<div class="col-md-6">
+				<p:outputPanel id="panelClasificacionOrganica">
+					<p:panel
+						rendered="#{!creacionEntidadBean.blnEntidadPrivFuncPublic}">
+						<p:outputLabel for="somTipoEntidad"
+							value="#{titles.TTL_TIPO_ENTIDAD}:"
+							styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu disabled="#{!creacionEntidadBean.adminfun}"
+							id="somTipoEntidad"
+							filter="true"
+							value="#{creacionEntidadBean.entidadN.codTipoEntidad}"
+							class="form-select-ent"
+							title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_ENTIDAD']}">
+							<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+							<f:selectItems value="#{webUtils.tiposEntidad}" />
+							<p:ajax process="@this" update="panelAdscrita"
+								listener="#{creacionEntidadBean.tipoEntidadListener()}" />
+						</p:selectOneMenu>
+					</p:panel>
+
+					<p:panel rendered="#{creacionEntidadBean.blnEntidadPrivFuncPublic}">
+						<p:outputLabel value="${titles['TTL_TIPO_ENTIDAD']}:"
+							for="clasificacionOrganicaEPFP"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="clasificacionOrganicaEPFP"
+							value="#{creacionEntidadBean.strClasificacionOrganicaPriv}"
+							readonly="true"
+							title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_ORGANICA']}" />
+					</p:panel>
+				</p:outputPanel>
+				<p:message for="somTipoEntidad" />
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel for="somCategoriaDnp"
+					value="#{titles.LBL_CATEGORIA_DNP}:"
+					styleClass="log-label form-label-formularios" />
+				<p:inputText id="somCategoriaDnp"
+							value="#{creacionEntidadBean.strCodigoDNP}"
+							disabled="true"
+							title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_ORGANICA']}" />
+			</div>
+			<div class="col-md-6">
+				<p:outputLabel for="sbbEntidadPostConflicto"
+					rendered="#{creacionEntidadBean.mostrarOcultarEntidadPostconflicto}"
+					value="#{titles.LBL_ENTIDAD_POSCONFLICTO}:"
+					styleClass="log-label form-label-formularios" />
+
+				<p:selectOneMenu id="sbbEntidadPostConflicto"
+					styleClass="form-control-form-act-usua"
+					value="#{creacionEntidadBean.entidadN.entidadPostconfilcto}"
+					class="form-select-ent"
+					filter="true"
+					rendered="#{creacionEntidadBean.mostrarOcultarEntidadPostconflicto}"
+					title="${titles['TTL_SELECT']} ${titles['LBL_ENTIDAD_POSCONFLICTO']}">
+					<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+					<f:selectItems value="#{webUtils.getEntidadPostConflicto()}" />
+				</p:selectOneMenu>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel for="somPersoneriaJuridica"
+					value="#{titles.LBL_PERSONERIA_JURIDICA}:"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="somPersoneriaJuridica"
+					filter="true"
+					value="#{creacionEntidadBean.entidadN.personeriaJuridica}"
+					class="form-select-ent"
+					title="${titles['TTL_SELECT']} ${titles['LBL_PERSONERIA_JURIDICA']}">
+					<f:selectItem itemValue="1" itemLabel="#{titles.LBL_SI}" />
+					<f:selectItem itemValue="0" itemLabel="#{titles.LBL_NO}" />
+					<p:ajax process="@this" event="change" />
+				</p:selectOneMenu>
+			</div>
+			<div class="col-md-6">
+				<p:outputLabel for="somPatrimonioPropio"
+					value="#{titles.LBL_PATRIMONIO_PROPIO}:"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="somPatrimonioPropio" class="form-select-ent"
+					filter="true"
+					value="#{creacionEntidadBean.entidadN.patrimonioPropio}"
+					title="${titles['TTL_SELECT']} ${titles['LBL_PATRIMONIO_PROPIO']}">
+					<f:selectItem itemValue="#{titles.LBL_SI}" itemLabel="#{titles.LBL_SI}" />
+					<f:selectItem itemValue="#{titles.LBL_NO}" itemLabel="#{titles.LBL_NO}" />
+					<p:ajax process="@this" event="change" />
+				</p:selectOneMenu>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6" style="margin-top: 20px!important;" >
+				<p:outputLabel for="smmSistemaSCarrera"
+					value="#{titles.LBL_SISTEMA_S_CARRERA}:"
+					styleClass="log-label form-label-formularios" />
+				<p:scrollPanel  mode="native" style="height:150px">
+					<p:selectManyCheckbox  
+						styleClass="many-check"
+						columns="1"
+						layout="pageDirection"
+						showCheckbox="true" scrollHeight="100" 
+						disabled="#{creacionEntidadBean.cehckSistemaSCarrera}" 
+						id="smmSistemaSCarrera" 
+						valueChangeListener="#{creacionEntidadBean.actualizarSistemaRegimenEliminado}"
+						value="#{creacionEntidadBean.codigosSistemaCarreraSeleccionados}" 
+						title="${titles['TTL_SELECT']} ${titles['LBL_SISTEMA_S_CARRERA']}">
+						<p:ajax event="valueChange" process="@this"/>
+						<f:selectItems value="#{webUtils.tipoSistemaCarrera}" />
+					</p:selectManyCheckbox>
+				</p:scrollPanel>
+				<div class="col-md-12" style="padding-left: 12px;margin-top: 3px;">
+					<p:selectBooleanCheckbox
+						value="#{creacionEntidadBean.noAplicaSistemaCarrera}">
+						<p:ajax update="smmSistemaSCarrera" listener="#{creacionEntidadBean.deshabilitarSistemaSCarrera}" />
+					</p:selectBooleanCheckbox>
+					<p:outputLabel value="#{titles.TTL_GI_TABLERO_CEP_NO_APLICA}"
+						styleClass="label-no-aplica" />
+				</div>
+			</div>
+			<div class="col-md-6" style="margin-top: 20px!important">
+				<p:outputLabel for="smAutonomia" value="#{titles.LBL_AUTONOMIA}:"
+					styleClass="log-label form-label-formularios" />
+				<p:scrollPanel  mode="native" style="height:150px">
+					<p:selectManyCheckbox 
+						styleClass="many-check"
+						columns="1"
+						layout="pageDirection"
+						id="smAutonomia" value="#{creacionEntidadBean.ltsAutonomia}"
+						title="${titles['TTL_SELECT']} ${titles['LBL_AUTONOMIA']}">
+						<f:selectItems value="#{webUtils.tiposAutonomia}" />
+						<p:ajax process="@this" update="smAutonomia"
+							listener="#{creacionEntidadBean.autonomiaListener(this.value)}" />
+					</p:selectManyCheckbox>
+				</p:scrollPanel>
+			</div>
+		</div>
+	</div>
+
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel for="smmRegimenSalarial"
+					value="#{titles.LBL_REGIMEN_SALARIAL}"
+					styleClass="log-label form-label-formularios" />
+				<p:scrollPanel  mode="native" style="height:150px">	
+					<p:selectManyCheckbox id="smmRegimenSalarial" 
+						styleClass="many-check"
+						columns="1"
+						layout="pageDirection"
+						scrollHeight="100" valueChangeListener="#{creacionEntidadBean.actualizarSistemaRegimenEliminado}"
+						value="#{creacionEntidadBean.codigosEscalaSalarialSeleccionados}"
+						title="${titles['TTL_SELECT']} ${titles['LBL_REGIMEN_SALARIAL']}">
+						<p:ajax event="valueChange" process="@this"/>
+						<f:selectItems value="#{webUtils.regimenSalarial}" />
+					</p:selectManyCheckbox>
+				</p:scrollPanel>
+			
+			</div>
+			<div class="col-md-6">
+				<p:outputLabel for="smmNaturalezaEmpleo"
+					value="#{titles.LBL_NATURAEZA_S_DE_EMPLEOS}"
+					styleClass="log-label form-label-formularios" />
+				<p:scrollPanel  mode="native" style="height:150px">	
+					<p:selectManyCheckbox id="smmNaturalezaEmpleo" 
+						styleClass="many-check"
+						columns="1"
+						layout="pageDirection"
+						valueChangeListener="#{creacionEntidadBean.actualizarSistemaRegimenEliminado}"
+						value="#{creacionEntidadBean.codigosNaturalezaEmpleoSeleccionados}"
+						title="${titles['TTL_SELECT']} ${titles['LBL_NATURAEZA_S_DE_EMPLEOS']}">
+						<p:ajax event="valueChange" process="@this"/>
+						<f:selectItems value="#{webUtils.naturalezaEmpleo}" />
+					</p:selectManyCheckbox>
+				</p:scrollPanel>
+			</div>
+		</div>
+	</div>
+	<br /> <br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<p:outputLabel value="#{titles.TTL_ESTADO_ENTIDAD}:"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="droEstadoentidad" class="form-select-ent"
+					filter="true"
+					value="#{creacionEntidadBean.entidadN.codEstadoEntidad}" disabled="#{creacionEntidadBean.estadoEntidadRol}"
+					title="${titles['TTL_SELECT']} ${titles['TTL_ESTADO_ENTIDAD']}">
+					<f:selectItems value="#{webUtils.lstMaestroEstadosEntidad}" />
+					<p:ajax process="@this" event="change" />
+				</p:selectOneMenu>
+			</div>
+			<div class="col-md-6">
+				<p:outputLabel value="#{titles.TTL_ESTADO_GESTION_ENTIDAD}:"
+					styleClass="log-label form-label-formularios" />
+				<p:selectOneMenu id="droSubEstadoentidad" class="form-select-ent"
+					filter="true"
+					value="#{creacionEntidadBean.entidadN.codSubestadoEntidad}" disabled="#{creacionEntidadBean.estadoEntidadRol}"
+					title="${titles['TTL_SELECT']} ${titles['TTL_ESTADO_GESTION_ENTIDAD']}">
+					<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+					<f:selectItems value="#{webUtils.lstSubEstadoentidad}" />
+					<p:ajax process="@this" event="change" />
+				</p:selectOneMenu>
+			</div>
+		</div>
+	</div>
+
+</div>
+</html>
+

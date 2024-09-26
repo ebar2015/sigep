@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{consultarDetalleAuditoriaConfBean.id}' />
+		<f:viewParam name="dialog"
+			value='#{consultarDetalleAuditoriaConfBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{consultarDetalleAuditoriaConfBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_ADMIN_SISTEMA_BREADCRUMB']}" />
+	<ui:param name="pageSubtitle" value="Auditoría" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_AUDITORIA_CONSULTAR_DETALLE']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<p:outputPanel id="panelbuscaDetalle">
+			<p:panel id="hijopanelbuscaDetalle">
+				<div class="row row-background-white">
+					<br />
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['LBL_FILTROS']} </span> <br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+							<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_TIPO_REGISTRO']}:"
+									for="accionesAuditoria"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="accionesAuditoria" required="true"
+									value="#{consultarDetalleAuditoriaConfBean.tipoAccion.id}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_REGISTRO']}"
+									styleClass="form-control-form-act-usua" filter="false"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+									<f:selectItem itemValue="#{null}"
+										itemLabel="${titles['TTL_SELECT']}" />
+									<f:selectItems value="#{webUtils.accionesAuditoria}" />
+									<f:selectItem itemValue="0"
+										itemLabel="${titles['TTL_SELECT_ALL_ACTIONS']}" />
+								</h:selectOneMenu>
+								<p:message for="accionesAuditoria" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_FECHA_INICIAL']}:"
+									for="calendarioInicio"
+									styleClass="log-label form-label-formularios" />
+								<p:calendar pattern="dd/MM/yyyy"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									maxdate="#{fechaSistema}" id="calendarioInicio"
+									effect="slideDown" locale="#{lenguajeBean.localeCode}"
+									title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_INICIO']}"
+									icon="fa fa-calendar" navigator="true"
+									value="#{consultarDetalleAuditoriaConfBean.objetoAuditoria.fechaIni}"
+									mask="true" yearRange="#{rangoAnios}" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+									<p:ajax event="dateSelect" update="calendarioFin" />
+								</p:calendar>
+								<p:message for="calendarioInicio" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}:"
+									styleClass="log-label form-label-formularios"
+									for="calendarioFin" />
+								<p:calendar id="calendarioFin" pattern="dd/MM/yyyy"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_FIN_2']}"
+									maxdate="#{fechaSistema}" effect="slideDown"
+									locale="#{lenguajeBean.localeCode}"
+									value="#{consultarDetalleAuditoriaConfBean.objetoAuditoria.fechaFin}"
+									icon="fa fa-calendar" mask="true" yearRange="#{rangoAnios}"
+									required="true" navigator="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+									<f:attribute name="startDateName"
+										value="${titles['LBL_FECHA_INICIO']}" />
+									<f:attribute name="endDateName"
+										value="${titles['LBL_FECHA_FIN_2']}" />
+									<f:attribute name="startDate"
+										value="#{consultarDetalleAuditoriaConfBean.objetoAuditoria.fechaIni}" />
+									<f:validator validatorId="dateRangeValidator" />
+								</p:calendar>
+								<p:message for="calendarioFin" display="text" />
+							</div>
+						</div>
+					</div>
+
+					<br /> <br />
+
+					<div class="row" align="center">
+						<div class="col-md-5"></div>
+						<div class="col-md-2" style="margin-bottom: 1%;">
+							<p:commandButton value="${titles['TTL_SEARCH']}"
+								styleClass="btn btn-primary"
+								style="padding-left:15%!important; padding-right:15%!important; font-size:1.5em!important; padding-top:0!important;"
+								actionListener="#{consultarDetalleAuditoriaConfBean.mostrarTablaDetalle}"
+								update="hijopanelbuscaDetalle, panelresultadoBusqueda"
+								process="hijopanelbuscaDetalle" />
+						</div>
+						<div class="col-md-5"></div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+
+		<div class="row" id="mensaje">
+			<div class="col-md-12">
+				<p:messages id="messages1" autoUpdate="true" showDetail="true"
+					closable="true" globalOnly="true"
+					style="text-align:center;font-size:1em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0;" />
+			</div>
+		</div>
+
+		<br />
+		<br />
+
+		<p:outputPanel id="panelresultadoBusqueda">
+			<p:panel id="hijopanelresultadoBusqueda">
+				<div class="row row-background-white">
+					<br />
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_AUDITORIA_INFO_DETALLE']}</span> <br /> <br />
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="accionAuditoria" var="variable"
+							value="#{consultarDetalleAuditoriaConfBean.auditorias}"
+							paginator="true"  reflow="true" lazy="true"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						    paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						 	rowIndexVar="rowIndex" 
+						 	rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}">
+							<p:column headerText="${titles['TTL_TIPO_REGISTRO']}"  sortBy="#{variable.nombreParametro}"
+								style="word-wrap: break-word!important">
+								<h:outputText value="#{variable.nombreParametro}" />
+							</p:column>							
+							<!-- 
+							<p:column headerText="${titles['TTL_NOMBRE_TABLA']}"  sortBy="#{variable.nombreTabla}"
+								style="word-wrap: break-word!important">
+								<h:outputText value="#{variable.nombreTabla}" />
+							</p:column>
+							 
+							<p:column headerText="${titles['TTL_AUDITORIA_NOM_CAMPO']}"  sortBy="#{variable.nombreCampo}"
+								style="word-wrap: break-word!important"
+								visible="#{!consultarDetalleAuditoriaConfBean.flgEsAuditoriaConsulta}">
+								<h:outputText value="#{variable.nombreCampo}" />
+							</p:column>
+							-->
+							<p:column headerText="${titles['TTL_AUDITORIA_DATO_ANTERIOR']}" sortBy="#{variable.valorAnterior}"
+								style="word-wrap: break-word!important"
+								visible="#{!consultarDetalleAuditoriaConfBean.flgEsAuditoriaConsulta}">
+								<h:outputText value="#{variable.valorAnterior}" />
+							</p:column>
+							<p:column headerText="${titles['TTL_AUDITORIA_DATO_ACTUAL']}"	sortBy="#{variable.valorNuevo}"
+								style="word-wrap: break-word!important"
+								visible="#{!consultarDetalleAuditoriaConfBean.flgEsAuditoriaConsulta}">
+								<h:outputText value="#{variable.valorNuevo}" />
+							</p:column>
+							<p:column headerText="${titles['TTL_AUDITORIA_NOMBRE_USUARIO']}" sortBy="#{variable.nombrePersona}"
+								style="word-wrap: break-word!important; text-align: center;">
+								<h:outputText value="#{variable.nombreTipoIdentificacion} #{variable.numeroIdentificacion}" />
+							</p:column>	
+							<p:column headerText="${titles['TTL_AUDITORIA_NOMBRE_ROL']}" sortBy="#{variable.nombrePersona}"
+								style="word-wrap: break-word!important; text-align: center;">
+								<h:outputText value="#{variable.nombreRol}" />
+							</p:column>														
+
+							<p:column headerText="${titles['TTL_AUDITORIA_FECHA_ACTUALIZACION']}" sortBy="#{variable.fechaActualiza}"
+								style="word-wrap: break-word!important; text-align: center;">
+								<h:outputText value="#{variable.fechaActualiza}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+					<div class="col-md-12 text-center" style="margin-top: 15px!important" >
+						<p:commandButton process="@this" value="${titles['LBL_REGRESAR']}" styleClass="btn btn-primary" onclick="window.location.href='consultarAuditoriaConfiguracion.xhtml';">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>

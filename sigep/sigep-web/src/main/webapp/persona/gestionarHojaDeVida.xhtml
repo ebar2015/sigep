@@ -1,0 +1,321 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+		
+	<f:metadata>
+		<f:viewParam name="id" value="#{gestionarHojaDeVidaBean.id}" />
+		<f:viewParam name="recursoId"
+			value="#{gestionarHojaDeVidaBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{gestionarHojaDeVidaBean.dialog}" />
+		<f:event listener="#{gestionarHojaDeVidaBean.retrieve}" type="preRenderView" />
+	</f:metadata>
+	
+	<ui:param name="pageTitle" value="${titles['TTL_INFORMACION_PERSONAL']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_HOJA_CONSULT']}" />
+	
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_HOJA_CONSULT']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<!-- Formulario -->
+		<h:form id="formges">
+			<div class="row">
+				<div class="panel-body form-horizontal row-background-white col-md-12">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<p:outputLabel value="${titles['TXT_FILTROS']}"
+								styleClass="advisor" />
+						</div>
+					</div>
+					<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel for="tDocumento"
+									styleClass="log-label form-label-formularios"
+									value="${titles['TTL_TIPO_DOCUMENTO']}:" />
+								<h:selectOneMenu id="tDocumento" widgetVar="tDocumento"
+									title="#{titles.TTL_SELECT} #{titles.TTL_TIPO_DOCUMENTO}"
+									converter="tipoDocumentoConverter"
+									value="#{gestionarHojaDeVidaBean.personaFilter.tipoIdentificacionId}"
+									var="t" filter="false" filterMatchMode="contains"
+									styleClass="form-control-form-act-usua"
+									style="width:90%!important;">
+									<f:selectItem itemValue="#{null}"
+										itemLabel="${titles['TTL_SELECT']}" />
+									<f:selectItems value="#{tiposDocumentoEntidad}" var="tipoDoc"
+										itemLabel="#{tipoDoc.descripcion}" itemValue="#{tipoDoc}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel for="numeroDocumento"
+									styleClass="log-label form-label-formularios"
+									value="${titles['TTL_NUM_DOCUMENTO']}:" />
+								<p:inputText id="numeroDocumento" class="form-control-acti-usua"
+									title="#{titles.TTL_INGRESAR} #{titles.TTL_NUM_DOCUMENTO}"
+									style="width:90%!important;" maxlength="12"
+									autocomplete="off" onkeypress="return numbervalidaTipoDoc(event)"
+									value="#{gestionarHojaDeVidaBean.personaFilter.numeroIdentificacion}" />
+								<p:message for="numeroDocumento" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel for="nombreApellido"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_NOMBRE_APELLIDO']}:" />
+								<p:inputText id="nombreApellido" class="form-control-acti-usua"
+									title="#{titles.TTP_NOMBRE_APELLIDO}"
+									autocomplete="off" style="width:90%!important;"
+									value="#{gestionarHojaDeVidaBean.personaFilter.primerNombre}"/>
+							</div>
+						</div>
+					</div>
+					<c:if test="#{gestionarHojaDeVidaBean.flgTipoAsociacion==true}">
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p:outputLabel for="tAsociacion"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_TIPO_ACTIVACION']}:" />
+									<h:selectOneMenu id="tAsociacion" filter="false"
+										title="#{titles.TTL_SELECT} #{titles.LBL_TIPO_ACTIVACION}"
+										required="false"
+										value="#{gestionarHojaDeVidaBean.tipoAsociacionV.id}"
+										filterMatchMode="contains"
+										styleClass="form-control-form-act-usua"
+										style="width:90%!important;">
+										<f:selectItem itemValue="0" itemLabel="${titles['TTL_SELECT']}" />
+										<f:selectItems value="#{webUtils.tiposAsociacion}" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+					</c:if>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-5"></div>
+						<div class="col-md-2">
+							<p:commandButton id="btnBuscarGestionarHV" disabled="#{gestionarHojaDeVidaBean.btnBuscarGestionarHVDeshabilitado}"
+								update="frmPrincipal:panelTableHV" process="formges"
+								title="#{gestionarHojaDeVidaBean.btnBuscarGestionarHVMensaje}"
+								value="#{titles.TTL_SEARCH}"
+								actionListener="#{gestionarHojaDeVidaBean.printTable()}"
+								styleClass="btn btn-primary"
+								oncomplete="window.location.href='#frmPrincipal:panelTableHV'"
+								style="font-size: 1.5em!important; padding-left:18%!important; padding-right:18%!important;margin-bottom:5%!important; opacity:1!important;" />
+							<p:defaultCommand target="btnBuscarGestionarHV" />
+						</div>
+						<div class="col-md-5"></div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+		<!-- DataTable  -->
+		<br />
+		<p:spacer height="2" />
+		<hr
+			style="display: block; margin-top: 0.5em; margin-bottom: -1.4em; margin-left: auto; margin-right: 0%; border-style: inset; border-width: 1px; border-color: #fff; width: 75.5%;" />
+		<span class="span-style" style="background: transparent;"> #{titles.TTL_RESULTADO_BUSQUEDA} </span>
+		<br /> <br />
+		<div class="col-md-12" style="padding-left: 0% !important; padding-right: 0% !important;">
+			<p:panel id="panelTableHV" widgetVar="panelTableHV"
+				style="background: transparent;">
+				<p:dataTable lazy="true" 
+				             var="dataHV" 
+				             paginator="true" 
+				             rows="#{paginatorSize}"
+							 reflow="true"
+							 emptyMessage="${messages['MSG_TABLA_GESTIONARHV_SIN_REGRISTRO']}"
+		 		 			 rowsPerPageTemplate="#{paginatorsSize}"
+				 			 currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							 value="#{gestionarHojaDeVidaBean.listaPersonasConHV}">
+					
+					 <p:column sortBy="#{dataHV.tipoIdentificacionId.descripcion}"  headerText="#{titles.TTL_TIPO_DOCUMENTO}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{dataHV.tipoIdentificacionId.descripcion}" />
+					</p:column>
+					
+					 <p:column sortBy="#{dataHV.numeroIdentificacion}"  headerText="#{titles.TTL_NUM_DOCUMENTO}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{dataHV.numeroIdentificacion}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataHV.primerNombre}"  headerText="#{titles.LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{dataHV.primerNombre}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataHV.segundoNombre}"  headerText="#{titles.LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{dataHV.segundoNombre}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataHV.primerApellido}"  headerText="#{titles.LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{dataHV.primerApellido}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataHV.segundoApellido}"  headerText="#{titles.LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{dataHV.segundoApellido}" />
+					</p:column>
+					
+					<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1% !important;">
+						<p:commandButton id="btnVerDetalleGestionarHV" disabled="#{gestionarHojaDeVidaBean.btnVerDetalleGestionarHVDeshabilitado}" 
+							title="#{gestionarHojaDeVidaBean.btnVerDetalleGestionarHVMensaje}" icon="icon-view"
+							styleClass="icon-btn" process="@this"
+							action="#{gestionarHojaDeVidaBean.redireccionDetalle()}">
+							<f:setPropertyActionListener value="#{dataHV}"
+								target="#{gestionarHojaDeVidaBean.persona}" />
+						</p:commandButton>
+						<c:if test="#{gestionarHojaDeVidaBean.flgEditarHv==true}">
+							<p:commandButton id="btnEditarGestionarHV" disabled="#{gestionarHojaDeVidaBean.btnEditarGestionarHVDeshabilitado}" 
+								title="#{gestionarHojaDeVidaBean.btnEditarGestionarHVMensaje}" icon="icon-edit"
+								styleClass="icon-btn" process="@this"
+								action="#{gestionarHojaDeVidaBean.redireccionActualizar()}">
+								<f:setPropertyActionListener value="#{dataHV}"
+									target="#{gestionarHojaDeVidaBean.persona}" />
+							</p:commandButton>
+						</c:if>
+						<c:if test="#{gestionarHojaDeVidaBean.flgAprobarHv==true}">
+							<p:commandButton id="btnVerificarAprobarGestionarHV" disabled="#{gestionarHojaDeVidaBean.btnVerificarAprobarGestionarHVDeshabilitado}"
+								title="#{gestionarHojaDeVidaBean.btnVerificarAprobarGestionarHVMensaje}" icon="icon-check"
+								styleClass="icon-btn" process="@this"
+								update="frmPrincipal:verificarHojaVidaDialog"
+								action="#{gestionarHojaDeVidaBean.redireccionAprobar}"
+								>
+								<f:setPropertyActionListener value="#{dataHV}"
+									target="#{gestionarHojaDeVidaBean.persona}" />
+							</p:commandButton>
+						</c:if>
+						<c:if test="#{gestionarHojaDeVidaBean.flgEliminarHv==true}" >
+							<p:commandButton id="btnEliminarGestionarHV" disabled="#{gestionarHojaDeVidaBean.btnEliminarGestionarHVDeshabilitado}"
+								title="#{gestionarHojaDeVidaBean.btnEliminarGestionarHVMensaje}" 
+								icon="icon-delete" 
+								styleClass="icon-btn"
+								process="@this"
+								update="frmPrincipal:panelDatosPersonalesConfirmacion"
+								action="#{gestionarHojaDeVidaBean.cargarDialogEliminarHV}"
+								>
+								<f:setPropertyActionListener value="#{dataHV}" 
+									target="#{gestionarHojaDeVidaBean.persona}"
+									 />
+							</p:commandButton>
+						</c:if>
+						<p:commandButton id="btnEvaluacionDesempenoGestionarHV" disabled="#{gestionarHojaDeVidaBean.btnEvaluacionDesempenoGestionarHVDeshabilitado}"
+							title="#{gestionarHojaDeVidaBean.btnEvaluacionDesempenoGestionarHVMensaje}"
+							icon="icon-check-list" styleClass="icon-btn" process="@this"
+							action="#{gestionarHojaDeVidaBean.redireccionEvaluacion}">
+							<f:setPropertyActionListener value="#{dataHV}"
+								target="#{gestionarHojaDeVidaBean.persona}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</div>
+		
+		<!-- Dialogo Eliminar Hoja de Vida -->
+		<p:dialog header="• ${titles['LBL_ELIMINAR_HV']} •" id="eliminarHojaVidaDialog" minHeight="300"
+			widgetVar="eliminarHojaVidaDialog" modal="true" resizable="false" closeOnEscape="false"
+			draggable="false" closable="false" responsive="true">
+			<p:panel id="panelDatosPersonalesConfirmacion" style="background: transparent !important;">
+				<div class="row" align="justify">
+					<div class="col-md-12" style="margin-top: 3%; margin-bottom: 3%;">
+						<p:outputLabel for="dpJustificacionModificacion" id = "subir-asterisco"
+							value="#{gestionarHojaDeVidaBean.msnVerificacion}"
+							styleClass="log-label form-label-formularios"
+							style="margin-bottom: 3%;" />
+						<p:inputTextarea rows="4" cols="25"
+							id="dpJustificacionModificacion" maxlength="900"
+							value="#{gestionarHojaDeVidaBean.justificarEliminacion}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-acti-usua form-control"
+							style="resize: none;overflow-x: hidden;word-wrap: break-word!important;" />
+						<p:message for="dpJustificacionModificacion" display="text" />
+					</div>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnConfirmarDatosPersonales"
+							value="${titles['TTL_TO_CONTINUE']}"
+							actionListener="#{gestionarHojaDeVidaBean.eliminarHojaVida}"
+							process="panelDatosPersonalesConfirmacion"
+							update="panelDatosPersonalesConfirmacion panelTableHV"
+							styleClass="btn btn-primary" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton id="btnCancelarDatosPersonales"
+							value="${titles['TTL_CANCEL']}"
+							onclick="PF('eliminarHojaVidaDialog').hide();" process="@this"
+							update="@this" styleClass="btn btn-default" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+			</p:panel>
+		</p:dialog>
+		
+		<!-- Dialogo Verificar / Aprobar Hoja de Vida -->
+		<p:dialog id="verificarHojaVidaDialog" responsive="true"
+			header="• ${titles['TTL_APROBAR_HV']} •" modal="true"
+			resizable="false" widgetVar="verificarHojaVidaDialog" height="*"
+			width="800" draggable="false" closable="false">
+			<div class="row">
+				<div class="col-md-12" style="margin-top: 2%; margin-bottom: 2%;">
+					<p:outputLabel for="msnVerificacion"
+						value="#{gestionarHojaDeVidaBean.msnVerificacion}"
+						styleClass="form-label-formularios" style="font-size: 1.2em!important; text-align: center!important;" />
+				</div>
+				
+				<hr class="hr-style-modales" style="margin-bottom: 10px!important;" />
+				
+				<div class="col-md-12">
+					<p:selectOneRadio id="msnVerificacion" class="form-label-formularios" 
+						style="font-size: 1em!important;"
+						value="#{gestionarHojaDeVidaBean.validacionVerificacion}">
+						<f:selectItems value="#{gestionarHojaDeVidaBean.listAprobacion}" />
+					</p:selectOneRadio>
+				</div>
+			</div>
+			<div class="row" align="center" style="margin-top: 6%!important;">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 3%;">
+					<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+						actionListener="#{gestionarHojaDeVidaBean.validRedireccionAprobar}"
+						process="verificarHojaVidaDialog" update="@this"
+						style="padding-left:12%!important;padding-right:12%!important; font-size:1.4em!important; padding-top:0!important;"
+						styleClass="btn btn-primary" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 3%;">
+					<p:commandButton value="${titles['TTL_CANCEL']}"
+						onclick="PF('verificarHojaVidaDialog').hide();"
+						style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.4em!important; padding-top:0!important;"
+						styleClass="btn btn-default" />
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

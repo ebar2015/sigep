@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{plantillaBean.id}' />
+		<f:viewParam name="recursoId" value='#{plantillaBean.recursoId}' />
+		<f:viewParam name="mallaReporte"
+			value='#{plantillaBean.reporteSeleccionado.id}' />
+		<f:viewParam name="valorMalla"
+			value='#{plantillaBean.columnaSeleccionada.id}' />
+		<f:viewParam name="dialog" value='#{plantillaBean.dialog}' />
+		<f:event type="preRenderView" listener='#{plantillaBean.showDialog}' />
+		<f:event type="preRenderView" listener='#{plantillaBean.retrieve}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="#{titles.TTL_SUB_TRANSVERSAL_PLANTILLA_XML_AGREGAR_COLUMNA.concat(plantillaBean.reporteSeleccionado.nombre)}" />
+
+	<p:importConstants
+		type="co.gov.dafp.sigep2.util.xml.reporte.config.TipoDato"
+		var="PFTipoDato" />
+
+	<ui:define name="main">
+		<p:importConstants
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.TipoDato"
+			var="PFTipoDato" />
+
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• #{titles.TTL_SUB_TRANSVERSAL_PLANTILLA_XML_AGREGAR_COLUMNA.concat(' ').concat(plantillaBean.reporteSeleccionado.nombre)} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+		<!-- Formulario -->
+		<div class="panel-body form-horizontal cuadrito col-md-8">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="columnaMalla"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}" />
+						<p:selectOneMenu id="columnaMalla"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}"
+							value="#{plantillaBean.idColumna}"
+							required="#{plantillaBean.idColumna ne null}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua" filter="true"
+							filterMatchMode="contains">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								noSelectionOption="true" itemValue="#{null}" />
+							<f:selectItems var="columna"
+								value="#{plantillaBean.reporteSeleccionado.columna}"
+								itemLabel="#{columna.etiquetaColumna}" itemValue="#{columna.id}" />
+							<p:ajax process="@this" update="@this,contains"
+								listener="#{plantillaBean.seleccionarColumna}" />
+						</p:selectOneMenu>
+						<p:message for="columnaMalla" display="text" />
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="id" value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ORDEN']}" />
+						<h:outputText id="id"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ORDEN']}"
+							value="#{plantillaBean.columnaSeleccionada.id}"
+							styleClass="log-label form-label form-control" />
+						<p:message for="id" display="text" />
+					</div>
+					<div class="col-md-6">
+						<h:outputText />
+						<h:outputText />
+						<h:outputText />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="descripcion"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}" />
+						<p:inputText id="descripcion"
+							placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{plantillaBean.columnaSeleccionada.descripcion}">
+						</p:inputText>
+						<p:message for="descripcion" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="etiquetaColumna"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA_COLUMNA']}" />
+						<p:inputText id="etiquetaColumna"
+							placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA_COLUMNA']}"
+							value="#{plantillaBean.columnaSeleccionada.etiquetaColumna}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+						</p:inputText>
+						<p:message for="etiquetaColumna" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="nombreColumna"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}" />
+						<p:selectOneMenu id="nombreColumna"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}"
+							value="#{plantillaBean.columnaSeleccionada.nombreColumna}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua" filter="true"
+							filterMatchMode="contains">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								noSelectionOption="true" itemValue="#{null}" />
+							<f:selectItems var="columna"
+								value="#{plantillaBean.listaColumnaTablaGestionInformacion}"
+								itemLabel="#{columna.nombre}" itemValue="#{columna.nombre}" />
+						</p:selectOneMenu>
+						<p:message for="nombreColumna" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="tipoDato"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}" />
+						<h:selectOneMenu id="tipoDato"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}"
+							value="#{plantillaBean.columnaSeleccionada.tipoDato}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								noSelectionOption="true" itemValue="#{null}" />
+							<f:selectItems var="tipoDato" value="#{tiposDatoReporte}"
+								itemLabel="${titles[tipoDato.value()]}" itemValue="#{tipoDato}" />
+							<p:ajax process="@this" update="@this,panelSentencia" />
+						</h:selectOneMenu>
+						<p:message for="tipoDato" display="text" />
+					</div>
+					<h:panelGroup id="panelSentencia"
+						rendered="#{plantillaBean.columnaSeleccionada.tipoDato eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY}">
+						<div class="col-md-6" />
+						<div class="col-md-12">
+							<p:outputLabel styleClass="log-label form-label-formularios"
+								for="sentencia"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SQL']}" />
+							<p:inputTextarea id="sentencia"
+								placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SQL']}"
+								value="#{plantillaBean.columnaSeleccionada.sentencia}" rows="3"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+							<p:message for="sentencia" display="text" />
+						</div>
+					</h:panelGroup>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="valorPorDefecto"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALOR_DEFECTO']}" />
+						<p:inputText id="valorPorDefecto"
+							placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALOR_DEFECTO']}"
+							value="#{plantillaBean.columnaSeleccionada.valorPorDefecto}">
+						</p:inputText>
+						<p:message for="valorPorDefecto" display="text" />
+					</div>
+					<div class="col-md-12">
+						<p:selectBooleanCheckbox id="requerido"
+							itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+							value="#{plantillaBean.columnaSeleccionada.requerido}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+						</p:selectBooleanCheckbox>
+						<p:message for="requerido" display="text" />
+					</div>
+					<div class="col-md-12">
+						<p:selectBooleanCheckbox id="agrupamiento"
+							itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_AGRUPAR']}"
+							value="#{plantillaBean.columnaSeleccionada.agrupamiento}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+						<p:message for="agrupamiento" display="text" />
+					</div>
+					<div class="col-md-12">
+						<p:selectBooleanCheckbox id="totalizado"
+							itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TOTALIZADO']}"
+							value="#{plantillaBean.columnaSeleccionada.totalizado}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+						<p:message for="totalizado" display="text" />
+					</div>
+					<div class="col-md-12">
+						<p:selectBooleanCheckbox id="conteo"
+							itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CONTEO']}"
+							value="#{plantillaBean.columnaSeleccionada.conteo}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+						<p:message for="conteo" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="mascara"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MASCARA']}" />
+						<p:inputText id="mascara"
+							placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MASCARA']}"
+							value="#{plantillaBean.columnaSeleccionada.mascara}">
+						</p:inputText>
+						<p:message for="mascara" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel styleClass="log-label form-label-formularios"
+							for="observaciones"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_OBSERVACIONES']}" />
+						<p:inputTextarea id="observaciones"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_OBSERVACIONES']}"
+							value="#{plantillaBean.columnaSeleccionada.observaciones}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+						</p:inputTextarea>
+						<p:message for="observaciones" display="text" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<hr style="border-top: 1.5px solid rgb(196, 196, 196); width: 92.5%;" />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3">
+				<p:commandButton value="${titles['TTL_CANCEL']}"
+					title="${titles['TTL_CANCEL']}" process="@this" update="contains"
+					resetValues="true"
+					actionListener="#{plantillaBean.cancelarAnterior()}"
+					styleClass="btn btn-default"
+					style="background:#D1D1D1!important;color:#2A89B5!important;font-size: 1.6em!important; padding-left:4%!important; padding-right:4%!important; border-radius: 4px!important;" />
+			</div>
+			<div class="col-md-3">
+				<p:commandButton value="${titles['TTL_SAVE']}"
+					title="${titles['TTL_SAVE']}" process="@this,contains"
+					update="contains" actionListener="#{plantillaBean.update()}"
+					styleClass="btn btn-primary"
+					style="font-size: 1.6em!important; padding-left:4%!important; padding-right:4%!important; border-radius: 4px!important;" />
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+	</ui:define>
+</ui:composition>

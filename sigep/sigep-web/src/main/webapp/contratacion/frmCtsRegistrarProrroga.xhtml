@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• ${titles['TTL_TAB_CT_REGISTRAR_PRORROGA']} •"
+						styleClass="page-subtitle"
+						style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+	
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" /> 
+	
+	<br /><br />	
+
+	<p:panel id="idpnContratacionesTbRegistrarProrrogaCto" style="background: transparent !important;">
+		<p:panel id="frmProrrogaContrato" style="background: transparent !important;">
+      		<div class="row row-background-white">
+      			<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">${titles['TTL_REGISTRAR_PRORROGA']}</span> 
+				<br /> <br />
+      			<div class="row">
+      				<div class="col-md-12">
+      					<div class="col-md-4">
+
+						</div>	
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_FIN_PRORROGA_PR']}:" 
+								styleClass="log-label form-label-formularios" for="idCTFechaFinProrroga" />
+							<p:calendar mask="true" 
+								id="idCTFechaFinProrroga"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_FIN_PRORROGA_PR']} ${titles['TTL_TIPO_NUMERICO']}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaFinModificacion}"
+								pattern="#{fechaFormato}" 
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}" mindate="today" readonlyInput="true" yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect" update="frContrataciones:viewTabContrataciones"></p:ajax>
+								<f:attribute name="startDateName" value="${titles['LBL_CT_FECHA_INI_PRORROGA']}" />
+								<f:attribute name="endDateName" value="${titles['LBL_CT_FECHA_FIN_PRORROGA']}" />								
+								
+								<f:validator validatorId="dateRangeValidator"></f:validator>
+							</p:calendar>
+							<p:message for="idCTFechaFinProrroga" display="text" />
+						</div>	
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_PRORROGA']}:" styleClass="log-label form-label-formularios" for="idCTFechaAutProrroga"/>
+							<p:calendar mask="true" 
+								id="idCTFechaAutProrroga"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_AUT_PRORROGA']} ${titles['TTL_TIPO_NUMERICO']}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaAutorizacionModificacion}"
+								pattern="#{fechaFormato}" 
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}" readonlyInput="true" yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+							<p:message for="idCTFechaAutProrroga" display="text" />
+						</div>	
+					</div>
+				</div>
+				<br />
+				<div class="row">	
+					<div class="col-md-12">
+      					<div class="col-md-12">
+      						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}:" 
+      							styleClass="log-label form-label-formularios" for="idCTJustificacionProrroga"/>
+      						<p:inputTextarea id="idCTJustificacionProrroga" rows="3" cols="32"
+      							title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								counterTemplate="Quedan {0} caracteres." autoResize="false" maxlength="999"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+								value="#{contratacionesBean.modificacionContrato.justificacionModificacion}">
+							</p:inputTextarea>
+							<p:message for="idCTJustificacionProrroga" display="text" />
+      					</div>
+      				</div>
+				</div>
+     			<br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_TAB_CT_REGISTRAR_PRORROGA']}" id="idBtGuardarProrrogaContrato" 
+	                   		styleClass="btn btn-primary"
+	                   		style="font-size:1.5em!important; padding-top:0!important;"
+	                     	process="@this frmProrrogaContrato"
+							action="#{contratacionesBean.persist()}"
+	          				update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['BTN_CT_VOLVER']}" id="idBtRegresarProrroga" 
+                   			styleClass="btn btn-default"
+                   			style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+                     		process="@this"
+                     		action="#{contratacionesBean.regresarBusqueda()}"
+                  			update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+			<br />
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" style="margin-left: 24%; width: 75.5%; margin-top: 1em;" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379;">${titles['TTL_REGISTRO_CONTRATO_MODIFICACIONES']}</span> <br /> <br />
+			<div class="row row-background-white">
+				<br /><br />
+				<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable
+						id="dataTableProrrogasContrato"
+						
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						
+						var="dataTableModificacionAdicion"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						value="#{contratacionesBean.lstModificacionesContrato}">
+						<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:selectOneMenu id="iDSOMTipoModListaProrroga" value="#{dataTableModificacionAdicion.codTipoModificacionContrato}" 
+								disabled="true" styleClass="form-label"  
+								style="font-size: 1em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+								<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+							</h:selectOneMenu>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.audFechaActualizacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_FECHA_FIN_CONTRATO']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{contratacionesBean.contrato.fechaFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>		
+						<p:column headerText="${titles['LBL_CT_FECHA_INI_PRORROGA_PR']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaInicioModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_FECHA_FIN_PRORROGA_PR']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaFinModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>						
+						<p:column headerText="${titles['LBL_CT_NUEVA_FECHA_FIN_CONTRATO']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaFinModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_FECHA_AUT_PRORROGA']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaAutorizacionModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_JUSTIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.justificacionModificacion}"/>
+						</p:column>																
+					</p:dataTable>
+				</div>
+      		</div>
+      		<br />
+
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgPrContrato_01" id="dlgPrContrato_01" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;">
+					<h5>#{contratacionesBean.strMsgMensajesvalidacionesProrroga}</h5>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						onclick="PF('dlgPrContrato_01').hide();">
+					</p:commandButton>
+				</div>
+				<br />
+			</p:dialog>	
+		
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgRegistroProrrogaGuardar" id="dlgRegistroProrrogaGuardar" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center>
+						<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						action="#{contratacionesBean.regresarBusqueda()}"
+	   		   			update="frContrataciones:viewTabContrataciones"
+	   		    		onclick="PF('dlgRegistroProrrogaGuardar').hide();" />
+				</div>
+				<br />
+			</p:dialog>				
+			
+		</p:panel>
+	</p:panel>
+</ui:composition>

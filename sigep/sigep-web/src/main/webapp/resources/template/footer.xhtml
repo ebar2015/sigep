@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<div class="footer" style="margin: 0">
+    <div class="row">
+        <div class="col-12">
+            <div class="row footer__row">
+                <div class="footer__col">
+                    <div class="foo-body">
+                        <p:graphicImage dir="resources" height="40"
+                                        name="images/map-position.png" title="Ubicación" alt="Ubicación"
+
+                                        class="img-footer"/>
+                        <br/>
+                        <b>${titles['TTL_FOOTER_DIRECCION']}:</b> Carrera 6 No 12 - 62. Bogotá D.C.
+                    </div>
+                </div>
+
+                <div class="footer__col">
+                    <div class="foo-body">
+                        <p:graphicImage dir="resources" height="40"
+                                        name="images/telephone.png" title="Teléfonos" alt="Teléfonos"
+
+                                        class="img-footer"/>
+                        <b>PBX:</b> (57+1) 739 56 56 <b>FAX:</b> (57+1) 739 56 57
+                        <b>${titles['TTL_FOOTER_LINEA_NACIONAL']}:</b>
+                        018000-917770
+                    </div>
+                </div>
+
+                <div class="footer__col">
+                    <div class="foo-body">
+                        <p:graphicImage dir="resources" height="40" name="images/clock.png"
+                                        title="Horario de atención" alt="Horario de atención"
+
+                                        class="img-footer"/>
+                        <b>${titles['TTL_FOOTER_HORARIO_ATENCION']}:</b>
+                        ${titles['TTL_FOOTER_HORARIO_ATENCION_DIAS']}
+                    </div>
+                </div>
+
+                <div class="footer__col">
+                    <div class="foo-body">
+                        <p:graphicImage dir="resources" height="40"
+                                        name="images/monitor.png" title="Contacto" alt="Contacto"
+
+                                        class="img-footer"/>
+                        <a href="http://www.funcionpublica.gov.co/"
+                           style="text-decoration: none" target="_blank">www.funcionpublica.gov.co</a>
+                        <br/> <a href="mailto:soporteeva@funcionpublica.gov.co"
+                                 style="text-decoration: none">soporteeva@funcionpublica.gov.co</a>
+                    </div>
+                </div>
+
+                <div class="footer__col">
+                   <!--   <div class="foo-body text-center">
+                        ${titles['TTL_FOOTER_DESCARGA_APP']}</div>
+                    <p:link href="#">
+                        <p:graphicImage dir="resources" height="21"
+                                        name="images/logos/ios.png" title="App Store" alt="App Store"
+                                        class="img-footer-store"/>
+                    </p:link>
+                    <p:spacer width="5"/>
+                    <p:link href="#">
+                        <p:graphicImage dir="resources" height="21"
+                                        name="images/logos/google.png" title="Google Store"
+                                        alt="Google Store" class="img-footer-store"/>
+                    </p:link>
+                   
+                    <ui:fragment rendered="#{sesionBean.sesionValida}">
+                        <div class="col-md-12  foo-body-store"
+                             style="line-height: 1.3em; text-align: center; padding: 0 !important;">
+                            ${titles['TTL_FOOTER_ACCESO_POLITICA']}
+                            <p:commandButton value="${titles['TTL_FOOTER_BOTON_POLITICA']}"
+                                             style="border:none;font-size: 9.5px; line-height: 1em;text-shadow:none;color:#fff;box-shadow:none;padding: 0!important;"
+                                             type="button"
+                                             onclick="$('#habeasDataUsuarioDialog').modal('show')"/>
+                            ${titles['TTL_FOOTER_ACEPTADA_DIA']}
+                            <h:outputLabel
+                                    value="#{sesionBean.usuarioSesion.fechaAceptoHabeas}"
+                                    style="font-weight:normal;">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputLabel>
+                        </div>
+                    </ui:fragment>
+                     -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

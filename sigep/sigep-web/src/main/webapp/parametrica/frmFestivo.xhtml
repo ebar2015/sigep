@@ -1,0 +1,353 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_FESTIVO']}" />
+	
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.TTL_FESTIVO} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="anio" maxlength="255"
+						placeholder="${titles['TTL_FESTIVO_ANIO']}"
+						title="${titles['TTL_INGRESE']} ${titles['TTL_FESTIVO_ANIO']} ${titles['TTL_TIPO_NUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this"
+						scrollable="true" scrollHeight="150"
+						completeMethod="#{festivoBean.listaFestivo}"  
+						value="#{festivoBean.anio}">
+					</p:autoComplete>
+					<p:message for="anio" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonBuscarParametro" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{festivoBean.filtrarFestivo()}"
+						process="@this anio"
+						update="anio dataTableFestivoes" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+		<p:spacer height="4" />
+		<span class="span-style">#{titles.TTL_FESTIVO}</span> <br /> <br />
+		<hr class="hr-style hr-style-two" />
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarFestivo"
+					value="${titles['LBL_ADD_NEW']}" icon="fa fa-fw fa-plus-circle"
+					process="@this" styleClass="btn btn-transparent"
+					actionListener="#{festivoBean.nuevaFestivo()}"
+					immediate="true"
+					update="panelFestivo"
+					oncomplete="window.location.href='#frmPrincipal:panelFestivo';">
+					<p:resetInput target="frmPrincipal:panelFestivo" />
+				</p:commandButton>
+			</div>
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"> </label>
+			</div>
+		</div>
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTableFestivoes" paginator="true" reflow="true"
+				rowIndexVar="rowIndex" 
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				value="#{festivoBean.lstFestivo}"
+				var="dataFestivo"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				<p:column headerText="${titles['TTL_FESTIVO_ANIO']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataFestivo.anio}"
+					filterBy="#{dataFestivo.anio}"  filterMatchMode="contains">
+					<h:outputText value="#{dataFestivo.anio}" />
+				</p:column>
+				
+				<p:column headerText="${titles['TTL_FESTIVO_FECHA']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataFestivo.fechaFeriado}">
+					<h:outputText value="#{dataFestivo.fechaFeriado}">
+					   <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="${titles['TTL_FESTIVO_DESCRIPCION']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataFestivo.descripcion}"
+					filterBy="#{dataFestivo.descripcion}"  filterMatchMode="contains">
+					<h:outputText value="#{dataFestivo.descripcion}" />
+				</p:column>
+
+				<p:column headerText="#{titles.TTL_ACTIVO}"
+					style="word-wrap: break-word!important;text-align: center!important;"
+					sortBy="#{dataFestivo.flgActivo}">
+					<p:selectBooleanCheckbox
+						value="#{dataFestivo.flgActivo == 1 ? true : false}" disabled="true" />
+				</p:column>
+
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+					style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					<p:commandButton id="btnEditarFestivo"
+						title="${titles['TTL_EDIT']}" icon="icon-edit"
+						styleClass="icon-btn btn-view-data" 
+						immediate="true"
+						process="@this"
+						update="frmPrincipal:panelFestivo"
+						oncomplete="window.location.href='#frmPrincipal:panelFestivo';"
+						actionListener="#{festivoBean.modificarFestivo(dataFestivo)}">
+					</p:commandButton>					
+					
+					<p:commandButton id="btnConsultarFestivo"
+						title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:panelFestivo"
+						actionListener="#{festivoBean.consultarFestivo(dataFestivo)}">
+					</p:commandButton>
+					<p:commandButton id="btnEliminarFestivo"
+						title="${titles['BTN_ELIMINAR']}" icon="icon-delete" process="@this"
+						styleClass="icon-btn" rendered="false">
+						 <p:ajax process="@this" listener="#{festivoBean.solicitarConfirmacionEliminarFestivo(dataFestivo)}"/>	
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+
+	</div>
+	<br />
+	<p:outputPanel id="panelFestivo">
+		<p:panel id="subpanelFestivo"
+			widgetVar="subpanelFestivo"
+			rendered="#{festivoBean.habilitaFormulario}">
+			<div class="row row-background-white">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<c:if test="#{!festivoBean.lbEsConsulta and !festivoBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_AGREGAR_FESTIVO']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{!festivoBean.lbEsConsulta and festivoBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_MODIFICAR_FESTIVO']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{festivoBean.lbEsConsulta and !festivoBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_FESTIVO']}
+					</span> 
+					<br /><br /><br />
+				</c:if>
+				<p:panel>
+					<div class="row">
+						<div class="col-md-12">
+							
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_FESTIVO_FECHA']}"
+									styleClass="log-label form-label-formularios" for="anioInput"/>
+								<p:calendar id="anioInput" required="true" mask="true"
+									yearRange="#{rangoAnios}" disabled="#{festivoBean.lbEsConsulta}" navigator="true"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									title="${titles['TTL_SELECT']} ${titles['TTL_FESTIVO_FECHA']}"
+									pattern="#{fechaFormato}" effect="slideDown" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+									value="#{festivoBean.festivoSeleccionada.fechaFeriado}">
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="anioInput" display="text" />
+							</div>
+							
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_FESTIVO_DESCRIPCION']}"
+									styleClass="log-label form-label-formularios" for="descripcionInput"/>
+								<p:inputText id="descripcionInput" disabled="#{festivoBean.lbEsConsulta}"
+											requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" required="true"
+											value="#{festivoBean.festivoSeleccionada.descripcion}" 
+											maxlength="100">
+											<f:validator validatorId="textAlfanumericoTildeValidator" />
+											<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="descripcionInput" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoFestivo"
+									styleClass="log-label form-label-formularios" />
+								<br />
+								<p:selectBooleanCheckbox required="true" id="activoFestivo"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									disabled="#{festivoBean.lbEsConsulta}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+									value="#{festivoBean.blnFlgActivo}">
+								</p:selectBooleanCheckbox>
+								<p:message for="activoFestivo" display="text" />
+							</div>
+						</div>
+					</div>
+	
+				</p:panel>
+				<div class="row" align="center" style="margin-top:4.3em!important">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="idpanelGuardarFestivo"
+							style="padding: 0%;">
+							<c:if test="#{!festivoBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_SAVE']}"
+									process="frmPrincipal:panelFestivo"
+									update="panelFestivo dataTableFestivoes"
+									actionListener="#{festivoBean.guardarFestivo()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+							<c:if test="#{festivoBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_OK']}"
+									process="frmPrincipal:panelFestivo"
+									update="panelFestivo dataTableFestivoes"
+									actionListener="#{festivoBean.aceptarConsulta()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+						</p:panel>
+					</div>
+					
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-default btn-update-disable"
+							process="@this" immediate="true"
+							rendered="#{!festivoBean.lbEsConsulta}"
+							style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; 
+							font-size:1.5em!important; padding-top:0!important;"
+							onclick="PF('dlg2').show();" >
+							<p:resetInput target="frmPrincipal:panelFestivo" />
+
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	
+	
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlg2" modal="true" minHeight="300"
+			  draggable="false" 
+			  closable="false" 
+			  appendTo="@(body)">
+    	
+    	<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+			<center><h5>#{festivoBean.strMensajeConfirmacion}</h5></center>
+		</div>
+		<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['LBL_SI']}"
+						    		process="@this" 
+								    styleClass="btn btn-primary"
+								    actionListener="#{festivoBean.accionConfirmada()}"
+								    style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								    onclick="PF('dlg2').hide();"
+								    update="frmPrincipal:panelFestivo frmPrincipal:dataTableFestivoes"
+						    />
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['LBL_NO']}"
+								onclick="PF('dlg2').hide();"
+								styleClass="btn btn-default">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+	</p:dialog> 
+
+	
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgEliminarnFestivo"
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{festivoBean.strMensajeConfirmacionEliminacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="Si"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{festivoBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgEliminarnFestivo').hide();"
+		    		    		update="frmPrincipal:panelFestivo frmPrincipal:dataTableFestivoes"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="No"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgEliminarnFestivo').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>	
+		
+	</ui:define>
+		
+</ui:composition>

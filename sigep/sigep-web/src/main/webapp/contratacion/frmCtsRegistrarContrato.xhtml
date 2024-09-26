@@ -1,0 +1,633 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div class="row">
+			<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• #{contratacionesBean.stsNombreTabContrato} •"
+						styleClass="page-subtitle"
+						style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+	
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" /> 
+	
+	<br /><br />	
+	
+	<p:panel id="idpnContratacionesTbRegistrarContrato" style="background: transparent !important;">
+		<p:panel id="frmRegistarContrato" style="background: transparent !important;">
+      		<div class="row row-background-white">
+      			<br />
+				<div class="row">
+					<div class="col-md-12" style="text-align: center;">
+					<p:outputLabel
+						value="#{contratacionesBean.strMensajeRegistrarContrato}"
+					   	for="idTipoDocumento"
+						styleClass="advisor" />
+					</div>
+				</div>
+				
+				<hr class="hr-style" />
+				
+      			<div class="row">
+      				<div class="col-md-12">
+      					<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_DE_ENTIDAD_USUARIO']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="idCTNombreEntidad" required="true"
+							   title="${titles['LBL_DE_ENTIDAD_USUARIO']} "
+								value="#{contratacionesBean.strEntidadUsuario}"
+								class="form-control-acti-usua" disabled="true" />
+								<p:message for="idCTNombreEntidad" display="text" />
+						</div>
+						<div class="col-sm-4">	 
+							<p:outputLabel value="${titles['LBL_CT_AREA_ENTIDAD']}"
+								styleClass="log-label form-label-formularios"
+								for="idCTAreaEntidad" />
+							<h:selectOneMenu id="idCTAreaEntidad"
+							                 title="${titles['LBL_CT_AREA_ENTIDAD']}"
+								             value="#{contratacionesBean.contrato.codDependenciaEntidad}"
+								             styleClass="form-control-form-act-usua"
+								             required="true"
+								             requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}"/>
+								<f:selectItems value="#{contratacionesBean.lstDependenciasEntidadSelect}" />
+								<p:ajax event="change" process="@this" 
+								update="frContrataciones:viewTabContrataciones" />
+							</h:selectOneMenu>							 
+							 
+							 <p:message for="idCTAreaEntidad" display="text" />
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+								styleClass="log-label form-label-formularios" for="iDSOMDptosContrato"/>
+							<h:selectOneMenu id="iDSOMDptosContrato"
+								title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}"
+								value="#{contratacionesBean.contrato.codDepartamento}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getDeptos(169)}" />
+								<p:ajax event="change" process="@this" 
+								update="idSOMMunicipioContrato frContrataciones:viewTabContrataciones" />
+							 </h:selectOneMenu>
+							 <p:message for="iDSOMDptosContrato" display="text" />
+						</div>
+      				</div>
+      			</div>
+      			<br />
+      			<div class="row">
+      				<div class="col-md-12">
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MUNICIPIO']}:"
+								styleClass="log-label form-label-formularios" for="idSOMMunicipioContrato"/>
+							<h:selectOneMenu id="idSOMMunicipioContrato"
+								value="#{contratacionesBean.contrato.codMunicipio}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_MUNICIPIO']}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(contratacionesBean.contrato.codDepartamento)}" />
+								<p:ajax event="change"/>
+							</h:selectOneMenu>
+							<p:message for="idSOMMunicipioContrato" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_FIRMA']}:"
+								styleClass="log-label form-label-formularios" for="idCTFechaFirma" />
+							<p:calendar mask="true" 
+							   title="${titles['TTL_SELECT']} ${titles['LBL_CT_FECHA_FIRMA']}  ${titles['TTL_TIPO_NUMERICO']}"
+								id="idCTFechaFirma"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.contrato.fechaFirma}"
+								pattern="#{fechaFormato}" 
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}"
+								maxdate="today" readonlyInput="true" yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect" update="idCTFechaInicio"></p:ajax>
+							</p:calendar>
+							<p:message for="idCTFechaFirma" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_INICIO_CONTRATO']}:" 
+								styleClass="log-label form-label-formularios" for="idCTFechaInicio"/>
+							<p:calendar mask="true"
+								id="idCTFechaInicio"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CT_FECHA_INICIO_CONTRATO']} ${titles['TTL_TIPO_NUMERICO']}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.contrato.fechaInicio}"
+								pattern="#{fechaFormato}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}"
+								disabled="#{contratacionesBean.lbContratoDeshabilitaFecIni}"
+								mindate="#{contratacionesBean.contrato.fechaFirma}" 
+								readonlyInput="true" yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect" listener="#{contratacionesBean.obtenerDuracionContratos(contratacionesBean.contrato.fechaInicio, contratacionesBean.contrato.fechaFin)}" 
+									update="idCTDuracionContratoMeses idCTDuracionContratoDias idCTFechaFin" />
+								<f:attribute name="endDate" value="#{contratacionesBean.contrato.fechaFirma}"></f:attribute>
+								<f:validator validatorId="dateRangeValidator"></f:validator>
+							</p:calendar>
+							<p:message for="idCTFechaInicio" display="text" />
+						</div>
+      				</div>
+      			</div>
+      			<br />
+      			<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}:" 
+								styleClass="log-label form-label-formularios" for="idCTFechaFin"/>
+							<p:calendar mask="true" 
+								id="idCTFechaFin"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_FIN_2']} ${titles['TTL_TIPO_NUMERICO']}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.contrato.fechaFin}"
+								pattern="#{fechaFormato}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}"
+								disabled="#{contratacionesBean.lbContratoDeshabilitaFecFin}"
+								readonlyInput="true" yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect" listener="#{contratacionesBean.obtenerDuracionContratos(contratacionesBean.contrato.fechaInicio, contratacionesBean.contrato.fechaFin)}"      
+								update="idCTDuracionContratoDias idCTDuracionContratoMeses" />
+								<f:attribute name="startDateName" value="${titles['LBL_CT_FECHA_INICIO_CONTRATO']}" />
+								<f:attribute name="endDateName" value="${titles['LBL_FECHA_FIN_2']}" />
+								<f:attribute name="startDate" value="#{contratacionesBean.contrato.fechaInicio}"></f:attribute>
+								<f:validator validatorId="dateRangeValidator"></f:validator>
+							</p:calendar>
+							<p:message for="idCTFechaFin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['BR_NUM_CONTRATO']}:"
+								styleClass="log-label form-label-formularios" for="idCTNumeroContrato" />						
+							 <p:inputText id="idCTNumeroContrato"
+							 title="${titles['TTL_INGRESE']} ${titles['BR_NUM_CONTRATO']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+							 requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{contratacionesBean.contrato.numeroContrato}"
+								class="form-control-acti-usua" required="true" 
+								maxlength="30">
+								<p:ajax listener="#{contratacionesBean.validarContratoEntidad()}"> </p:ajax> 
+								<p:dialog header="" 
+								          widgetVar="dlg2" id ="dlg2" 
+									      minHeight="200" modal="true" resizable="false" closeOnEscape="true"
+									      responsive="true" draggable="false" closable="false"
+									      appendTo="@(body)" width="525">
+									<br />
+									<h:outputText value="• #{contratacionesBean.mensajeNumContratos} •" />
+									<div class="row">
+										<div class="col-md-3"></div>
+										<div class="col-md-2">
+										    <p:commandButton title="${titles['LBL_REGRESAR']}"
+												icon="icon-regresar"
+												process="@this" 
+												styleClass="icon-btn"
+												onclick="PF('dlg2').hide();">
+											</p:commandButton>
+										</div>
+										<div class="col-md-3"></div>
+									</div>
+									<br />
+								</p:dialog>									
+							</p:inputText>
+							<p:message for="idCTNumeroContrato" display="text" />
+						</div>
+						<div class="col-md-4">
+							<div class="col-md-6" style="padding-left: 0; padding-right: 0;">
+								<p:outputLabel value="${titles['LBL_CT_DURACION_CONTRATO_DIAS']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="idCTDuracionContratoDias"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_DURACION_CONTRATO_DIAS']} ${titles['TTL_TIPO_NUMERICO']} "
+									value="#{contratacionesBean.contrato.duracionContrato}"
+									class="form-control-acti-usua" disabled="true" />
+							</div>
+							<div class="col-md-6" style="padding-left: 0; padding-right: 0;">	
+								<p:outputLabel value="${titles['LBL_CT_DURACION_CONTRATO_MESES']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="idCTDuracionContratoMeses"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_CT_DURACION_CONTRATO_MESES']} ${titles['TTL_TIPO_NUMERICO']} "
+									value="#{contratacionesBean.contrato.duracionContratoMeses}"
+									class="form-control-acti-usua" disabled="true" />								
+							</div>
+						</div>
+					</div>
+				</div>
+      			<br />
+      			<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_OBJETO_CONTRATO']}:"
+								styleClass="log-label form-label-formularios" for="idCTObjetoContrato"/>
+							 <p:inputText id="idCTObjetoContrato"
+								value="#{contratacionesBean.contrato.objetoContrato}"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_OBJETO_CONTRATO']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+								class="form-control-acti-usua" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" maxlength="2000">
+								<f:validator validatorId="maxByteLengthValidator" />
+							 </p:inputText> 								
+							 <p:message for="idCTObjetoContrato" display="text" />
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_ALCANCE_CONTRATO']}:"
+								styleClass="log-label form-label-formularios" for="idCTAlcanceContrato"/>	
+							 <p:inputText id="idCTAlcanceContrato"
+							    title="${titles['TTL_INGRESE']} ${titles['LBL_CT_ALCANCE_CONTRATO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							 	requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{contratacionesBean.contrato.alcanceContrato}"
+								class="form-control-acti-usua" required="true"
+								maxlength="2000">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText> 
+							<p:message for="idCTAlcanceContrato" display="text" />
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_MONEDA_CONTRATO']}:" 
+								styleClass="log-label form-label-formularios" for="iDSOMmONEDAMonto"/>
+							<h:selectOneMenu id="iDSOMmONEDAMonto"
+								value="#{contratacionesBean.contrato.codMonedaMonto}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CT_MONEDA_CONTRATO']} "
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getTipoMonedas()}" />
+								<p:ajax event="change" process="@this" update="idCTMontoContrato"/> 
+							 </h:selectOneMenu>
+							 <p:message for="iDSOMmONEDAMonto" display="text" />						
+
+						</div>
+					</div>      				
+      			</div>
+      			<br />
+      			<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_MONEDA_HONORARIOS']}:" 
+								styleClass="log-label form-label-formularios" for="iDSOMmONEDAHonorario"/>
+							<h:selectOneMenu id="iDSOMmONEDAHonorario"
+								value="#{contratacionesBean.contrato.codMonedaHonorario}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CT_MONEDA_HONORARIOS']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getTipoMonedas()}" />
+								<p:ajax event="change" process="@this" update="idCTHonorarios"/> 
+							 </h:selectOneMenu>
+							 <p:message for="iDSOMmONEDAHonorario" display="text" />
+						</div>
+						<div class="col-sm-4" >
+							<p:outputLabel value="${titles['LBL_CT_MONTO_CONTRATO']}:"
+								styleClass="log-label form-label-formularios" for="idCTMontoContrato"/>
+							<p:inputNumber id="idCTMontoContrato"
+										symbol="#{contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaPesos ? '$' : 
+											      contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaEuros ? '€' : 
+											      contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaDolar ? 'U$D':'' } " 
+		                                 decimalSeparator=","
+		                                 thousandSeparator="."
+		                                 decimalPlaces="2"
+							             title="${titles['TTL_INGRESE']} ${titles['LBL_CT_MONTO_CONTRATO']}  ${titles['TTL_TIPO_NUMERICO']}"
+							             requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							             validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+								         value="#{contratacionesBean.contrato.monto}"
+								         disabled="#{contratacionesBean.lbContratoDeshabilitaMonto}" 
+								         required="true"
+								         converter="javax.faces.BigDecimal"
+								         converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}" >
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+							</p:inputNumber>
+							<p:message for="idCTMontoContrato" display="text" />
+
+						</div>
+						<div class="col-sm-4" >
+						
+							<p:outputLabel value="${titles['LBL_CT_HONORARIOS']}:" 
+								styleClass="log-label form-label-formularios" />
+							<p:inputNumber id="idCTHonorarios"
+								symbol="#{contratacionesBean.contrato.codMonedaHonorario eq contratacionesBean.liMonedaPesos ? '$' : 
+									      contratacionesBean.contrato.codMonedaHonorario eq contratacionesBean.liMonedaEuros ? '€' : 
+									      contratacionesBean.contrato.codMonedaHonorario eq contratacionesBean.liMonedaDolar ? 'U$D':'' } " 
+							 	decimalSeparator=","
+                                thousandSeparator="."
+                                decimalPlaces="2"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_HONORARIOS']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{contratacionesBean.contrato.honorarios}"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15']}" 
+								converter="javax.faces.BigDecimal"
+								converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="0"  maximum="999999999999999"/>
+							</p:inputNumber>
+							<p:message for="idCTHonorarios" display="text" />						
+						
+
+						</div>
+					</div>		
+				</div>
+      			<br />
+      			<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_FUENTE_FINANCIACION']}:" 
+								styleClass="log-label form-label-formularios" for="iDSOMFuenteFinanciacion"/>
+							<h:selectOneMenu id="iDSOMFuenteFinanciacion"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CT_FUENTE_FINANCIACION']}"
+								value="#{contratacionesBean.contrato.codFuenteFinanciacion}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getTipoFuentesFinanciacion()}" />
+								<p:ajax event="change" process="@this"
+								        listener="#{contratacionesBean.cambioFuenteFinanciacion()}" 
+								        update="iDSOMAdmonRecursos dlgRegistroContrato"
+								/>
+							 </h:selectOneMenu>
+							 <p:message for="iDSOMFuenteFinanciacion" display="text" />
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_ADMON_RECURSOS']}:"
+								styleClass="log-label form-label-formularios" for="iDSOMAdmonRecursos" />
+							
+							<h:selectOneMenu id="iDSOMAdmonRecursos"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CT_ADMON_RECURSOS']}"
+								value="#{contratacionesBean.contrato.codAdministracionRecurso}"
+								disabled="#{not contratacionesBean.adminRecursos}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								required="true">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getLstAdmonRecursosContratos()}" />
+								<p:ajax event="change" process="@this"/>
+							 </h:selectOneMenu>
+							 <p:message for="iDSOMAdmonRecursos" display="text" />
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_DERECHO_EXCLUSIVIDAD']}:"
+							    title="${titles['TTL_SELECT']} ${titles['LBL_CT_DERECHO_EXCLUSIVIDAD']}"
+								styleClass="log-label form-label-formularios" />    
+							<p:selectOneRadio id="idSORDerechoExclusividad" value="#{contratacionesBean.contrato.derechoExclusividad}">
+					            <f:selectItem itemLabel="Sí" itemValue="1" />
+					            <f:selectItem itemLabel="No" itemValue="0" />
+					        </p:selectOneRadio>
+						</div>							
+					</div>
+				</div>
+      			<br />
+	      		<div id="idPanelSupervisorGeneral">
+	      			<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_CT_SUPERVISOR_CONTRATO']}:" id= "idCBSupervisorpersona"
+									
+									styleClass="log-label form-label-formularios"
+									style="display: initial;" />
+								<p:spacer width="5" />
+
+							</div>
+							<div class="col-sm-8">
+							</div>
+						</div>
+					</div>
+	      			<br />
+					<p:panel id="idPanelSupervisorPersona">
+
+						<div class="row">
+							<div class="col-md-12" id="idDivSupervisor">
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}:"
+										styleClass="log-label form-label-formularios" />
+									 <h:selectOneMenu id="idCTTipoDocSupervisor"
+										value="#{contratacionesBean.vinculacionSupervisor.codTipoIdentificacion}"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.tiposDeIdentificacion}" />
+										<p:ajax update="idCTTipoDocSupervisor" />
+															
+									</h:selectOneMenu>
+									
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['TTL_NICK_NAME']}:" for="idCTNumDocSupervisor"
+										styleClass="log-label form-label-formularios" />
+									 <p:inputText id="idCTNumDocSupervisor"
+									    title="${titles.TTL_INGRESE} ${titles.TTL_NICK_NAME}"
+										value="#{contratacionesBean.vinculacionSupervisor.numeroIdentificacion}"
+										class="form-control-acti-usua">
+										<p:ajax listener="#{contratacionesBean.consultarSupervisorByTipoNumeroIdentificacion(
+															contratacionesBean.vinculacionSupervisor.codTipoIdentificacion, contratacionesBean.vinculacionSupervisor.numeroIdentificacion)}" 
+										update="dlgRegistroContrato idCTTipoDocSupervisor idCTNombreSuperVisor idCTCodigoDenominacion idCTGradoEmpleo idCTDependencia" />
+										<p:keyFilter mask="num"></p:keyFilter>
+										</p:inputText>
+										
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_CT_NOMBRE_SUPERVISOR']}:"
+										for="idCTNombreSuperVisor"
+										styleClass="log-label form-label-formularios" />
+									 <p:inputText id="idCTNombreSuperVisor" 
+									 	title="${titles.TTL_INGRESE} ${titles.TTL_NICK_NAME}"
+										value="#{contratacionesBean.strNombreSupervisor}"
+										class="form-control-acti-usua" disabled="true"/>
+								</div>
+							</div>
+						</div>								      				
+						<div class="row">
+							<div class="col-md-12" id="idDivSupervisorVinculado">
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_CT_CODIGO_DENOMINACION']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="idCTCodigoDenominacion"
+									    title="${titles.TTL_INGRESE} ${titles.LBL_CT_CODIGO_DENOMINACION} ${titles['TTL_TIPO_ALFANUMERICO']} "
+										value="#{contratacionesBean.vinculacionSupervisor.nombreCargo}"
+										class="form-control-acti-usua" disabled="true"/> 
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_CT_GRADO_EMPLEO']}:" 
+										styleClass="log-label form-label-formularios" />
+									 <p:inputText id="idCTGradoEmpleo"
+									    title="${titles.TTL_INGRESE} ${titles.LBL_CT_GRADO_EMPLEO} ${titles['TTL_TIPO_ALFANUMERICO']} "
+										value="#{contratacionesBean.vinculacionSupervisor.codGrado}"
+										class="form-control-acti-usua" disabled="true" /> 
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_CT_DEPENDENCIA']}:"
+										for="primerNombre"
+										styleClass="log-label form-label-formularios" />
+									 <p:inputText id="idCTDependencia" 
+									 title="${titles.TTL_INGRESE} ${titles.LBL_CT_DEPENDENCIA} ${titles['TTL_TIPO_ALFANUMERICO']} "
+										value="#{contratacionesBean.vinculacionSupervisor.nombreDependencia}"
+										class="form-control-acti-usua" disabled="true" />
+								</div>
+							</div>
+						</div>									      				
+	     			</p:panel>
+	     		</div>
+     			
+     			<p:panel id="idPanelJustificacionRegistro" rendered="#{not contratacionesBean.lbContratoDeshabilitaJustificacion}" >
+     			     			
+					<hr class="hr-style hr-style-two" />
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">${titles['LBL_CT_JUSTIFICACION']}</span>
+					<br /><br />
+						
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION_CORRECCION']}: "
+									styleClass="log-label form-label-formularios" />
+								<p:inputTextarea rows="2" cols="25" id="iTAJustificacion"
+									counterTemplate="Quedan {0} caracteres."
+									autoResize="false"
+									style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+									styleClass="form-control-acti-usua form-control"
+									required="#{not contratacionesBean.lbContratoDeshabilitaJustificacion}"
+									value="#{contratacionesBean.contrato.justificacionModificacion}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"/>
+								<p:message for="iTAJustificacion" display="text" />
+							</div>
+						</div>
+					</div>
+				</p:panel>
+				<br /><br />
+				<div class="row" align="center">
+	    			<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="#{contratacionesBean.strNombreBotonContratos}" id="idBtGuardarContrato" 
+	               			styleClass="btn btn-primary"
+	               			style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+	                       	process="@this frmRegistarContrato"
+	             			action="#{contratacionesBean.persist()}"
+	                    	update="frContrataciones:viewTabContrataciones dlgRegistroContrato">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="#{contratacionesBean.strNombreBotonContratoVolver}" id="idBtRegresar" 
+	                  		styleClass="btn btn-default"
+	                  		style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;" 
+	                   		process="@this" onclick="PF('dlgRegistroContratoVolver').show();">            
+						</p:commandButton>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+  			</div>
+      		
+		<p:dialog header= "${titles.TTL_MENSAJE_IMPORTANTE}" widgetVar="dlgRegistroContrato" id="dlgRegistroContrato" minHeight="300" 
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+				<center>
+					<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+			    <p:commandButton value="${titles.TTL_OK}"
+					process="@this" 
+					styleClass="btn btn-primary"
+					onclick="PF('dlgRegistroContrato').hide();">
+				</p:commandButton>
+			</div>
+			<br />
+		</p:dialog>
+
+		<p:dialog header="• ${titles.TTL_MENSAJE_IMPORTANTE} •" widgetVar="dlgRegistroContratoVolver" id="dlgRegistroContratoVolver" minHeight="300" 
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+				<center>
+					<h5>${messages['MSG_PARAMETRICA_DESCARTAR_CAMBIOS']}</h5>
+				</center>
+				
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+				    <p:commandButton value="${titles['TTL_YES']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+						action="#{contratacionesBean.regresarBusqueda()}"
+    		   			update="frContrataciones:viewTabContrataciones"
+    		    		onclick="PF('dlgRegistroContratoVolver').hide();" />
+	         	</div>
+	         	<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['TTL_NO']}"
+						process="@this" 
+						styleClass="btn btn-default"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+	                    onclick="PF('dlgRegistroContratoVolver').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>	
+		
+		<p:dialog header="• ${titles.TTL_MENSAJE_IMPORTANTE} •" widgetVar="dlgRegistroContratoGuardar" id="dlgRegistroContratoGuardar" minHeight="300" 
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+				<center>
+					<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+			    <p:commandButton value="${titles.TTL_OK}"
+					process="@this" 
+					styleClass="btn btn-primary"
+					action="#{contratacionesBean.regresarBusqueda()}"
+   		   			update="frContrataciones:viewTabContrataciones"
+   		    		onclick="PF('dlgRegistroContratoGuardar').hide();" />
+			</div>
+			<br />
+		</p:dialog>		
+
+		</p:panel>
+	</p:panel>
+	
+	<script type="text/javascript">
+	    function hideOrShowSupervisor(show) {
+	    	if (show) {
+	        	$("#idDivSupervisor").attr("style", "display:block");
+	        } else {
+	        	$("#idDivSupervisor").attr("style", "display:none");
+	        }        
+	    }
+	    function hideOrShowSupervisorVinculado(show) {
+	    	if (show) {
+	        	$("#idDivSupervisorVinculado").attr("style", "display:block");
+	        } else {
+	        	$("#idDivSupervisorVinculado").attr("style", "display:none");
+	        }        
+	    }    
+	</script>
+
+	
+	
+</ui:composition>

@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<style>
+		tr {
+			background: transparent !important;
+		}
+	</style>
+
+	<h:form id="frmGestionAmbitoAplicacionModificar">
+		<br />
+		<ui:include src="ambitoAplicacion/asignarPoliticas.xhtml" />
+		<ui:include src="ambitoAplicacion/tablaEntidades.xhtml" />
+		<ui:include src="ambitoAplicacion/botonesGeneralesAmbito.xhtml" />
+		<ui:include src="ambitoAplicacion/dialogos.xhtml" />
+	</h:form>
+</ui:composition>

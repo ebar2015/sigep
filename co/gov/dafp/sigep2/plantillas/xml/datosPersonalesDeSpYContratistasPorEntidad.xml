@@ -1,0 +1,1641 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:reporte xmlns:ns2="http://reporte.xml.util.sigep2.dafp.gov.co/config">
+    <ns2:id>1602116863710</ns2:id>
+    <ns2:nombre>Datos Personales De Sp Y Contratistas Por Entidad</ns2:nombre>
+    <ns2:descripcion>Datos personales de SP y contratistas por Entidad</ns2:descripcion>
+    <ns2:periodoGeneracion>TTL_REPORTES_PERIODO_SEMANAL</ns2:periodoGeneracion>
+    <ns2:formatoReporte>TTL_REPORTES_FORMATO_EXCEL</ns2:formatoReporte>
+    <ns2:formaConsulta>TTL_REPORTES_FORMA_CONSULTA_LOCAL</ns2:formaConsulta>
+    <ns2:tipoPlantilla>REPORTE</ns2:tipoPlantilla>
+    <ns2:versionEsquema>1.0</ns2:versionEsquema>
+    <ns2:publicado>false</ns2:publicado>
+    <ns2:eliminado>false</ns2:eliminado>
+    <ns2:usuarioSolicita>
+        <ns2:bandeja>A</ns2:bandeja>
+        <ns2:nombreCuenta>sigep2@ada.co</ns2:nombreCuenta>
+    </ns2:usuarioSolicita>
+    <ns2:rol>ADMINENT</ns2:rol>
+    <ns2:rol>ADMINFUNC</ns2:rol>
+    <ns2:rol>JEFECONTRATOS</ns2:rol>
+    <ns2:rol>JEFECONTROLINTERNO</ns2:rol>
+    <ns2:rol>JEFETH</ns2:rol>
+    <ns2:rol>OPERCONTRATOS</ns2:rol>
+    <ns2:rol>OPERTH</ns2:rol>
+    <ns2:mallaReporte>
+        <ns2:id>1593123424567</ns2:id>
+        <ns2:nombre>Entidad Caracterizacion</ns2:nombre>
+        <ns2:valorMalla>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:nombre>Código SIGEP</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_SIGEP</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>1</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGUAL</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:nombre>Nombre de la Entidad</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ENTIDAD</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>3</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:nombre>Clasificación Orgánica</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_CLASIFICACION_ORGANICA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>4</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:nombre>Orden</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ORDEN</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>5</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:nombre>Naturaleza Jurídica</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_NATURALEZA_JURIDICA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>6</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:nombre>Sector Administrativo</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SECTOR_ADMINISTRATIVO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>7</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+    </ns2:mallaReporte>
+    <ns2:mallaReporte>
+        <ns2:id>1593192186908</ns2:id>
+        <ns2:nombre>Hojas Vida Seguimiento</ns2:nombre>
+        <ns2:valorMalla>
+            <ns2:id>1593192193486</ns2:id>
+            <ns2:nombre>Tipo de Asociación en la entidad</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_TIPO_ASOCIACION</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>8</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193487</ns2:id>
+            <ns2:nombre>Tipo de Documento de identidad</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_TIPO_DOCUMENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>9</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193467</ns2:id>
+            <ns2:nombre>Número de Documento de Identidad</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_NO_DOCUMENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>10</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193480</ns2:id>
+            <ns2:nombre>Primer Apellido</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_PRIMER_APELLIDO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>11</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193483</ns2:id>
+            <ns2:nombre>Segundo Apellido</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_SEGUNDO_APELLIDO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>12</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193481</ns2:id>
+            <ns2:nombre>Primer Nombre</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_PRIMER_NOMBRE</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>13</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193468</ns2:id>
+            <ns2:nombre>Segundo Nombre</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_NOMBRE_FAMILIAR</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>14</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193499</ns2:id>
+            <ns2:nombre>¿Vinculado a cargo de planta? SI/NO</ns2:nombre>
+            <ns2:nombreColumna>TIENE_VINCULACION</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>16</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193492</ns2:id>
+            <ns2:nombre>¿Contrato asignado en la entidad? SI/NO</ns2:nombre>
+            <ns2:nombreColumna>TIENE_CONTRATO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>17</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193453</ns2:id>
+            <ns2:nombre>Correo Electrónico personal (principal)</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_CORREO_ELECTRONICO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>18</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193452</ns2:id>
+            <ns2:nombre>Correo Electrónico Institucional</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_CORREO_ALTERNATIVO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>19</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193439</ns2:id>
+            <ns2:nombre>Estado Civil</ns2:nombre>
+            <ns2:nombreColumna>ESTADO_CIVIL_ESTADO_CIVIL</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>20</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193491</ns2:id>
+            <ns2:nombre>Pertenencia Etnica</ns2:nombre>
+            <ns2:nombreColumna>PERTENENCIA_ETNICA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>21</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193459</ns2:id>
+            <ns2:nombre>Fecha de Nacimiento</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_FECHA_NACIMIENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>22</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193475</ns2:id>
+            <ns2:nombre>País Nacimiento</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_PAIS_NACIMIENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>23</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193454</ns2:id>
+            <ns2:nombre>Departamento Nacimiento</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_DEPARTAMENTO_NACIMIENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>24</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193465</ns2:id>
+            <ns2:nombre>Municipio Nacimiento</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_MUNICIPIO_NACIMIENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>25</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193456</ns2:id>
+            <ns2:nombre>Dirección Residencia</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_DIRECCION_RESIDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>26</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193455</ns2:id>
+            <ns2:nombre>Departamento</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_DEPARTAMENTO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>27</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193466</ns2:id>
+            <ns2:nombre>Municipio o Ciudad</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_MUNICIPIO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>28</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193484</ns2:id>
+            <ns2:nombre>Teléfono Residencia</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_TELEFONO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>29</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593192193469</ns2:id>
+            <ns2:nombre>Teléfono Celular</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_NUMERO_CELULAR</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>30</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1603291551413</ns2:id>
+            <ns2:nombre>Genero</ns2:nombre>
+            <ns2:nombreColumna>PERSONA_GENERO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>15</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1608321433490</ns2:id>
+            <ns2:nombre>Hoja de Vida Activa en la Entidad</ns2:nombre>
+            <ns2:nombreColumna>FLG_HV_ACTIVA_ENTIDAD_TXT</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro>Si</ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+    </ns2:mallaReporte>
+    <ns2:SQL>
+        <ns2:parametro>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:nombre>:entidad_codigo_sigep</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:nombre>:entidad_nombre_entidad</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:nombre>:entidad_nombre_orden</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:nombre>:entidad_nombre_naturaleza_juridica</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:nombre>:entidad_nombre_sector_administrativo</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193486</ns2:id>
+            <ns2:nombre>:persona_tipo_asociacion</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Tipo de Asociación en la entidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193487</ns2:id>
+            <ns2:nombre>:persona_tipo_documento</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Tipo de Documento de identidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193467</ns2:id>
+            <ns2:nombre>:persona_no_documento</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Número de Documento de Identidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193480</ns2:id>
+            <ns2:nombre>:persona_primer_apellido</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Primer Apellido</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193483</ns2:id>
+            <ns2:nombre>:persona_segundo_apellido</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Segundo Apellido</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193481</ns2:id>
+            <ns2:nombre>:persona_primer_nombre</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Primer Nombre</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593192193468</ns2:id>
+            <ns2:nombre>:persona_nombre_familiar</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Segundo Nombre</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1608321433490</ns2:id>
+            <ns2:nombre>:flg_hv_activa_entidad_txt</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Hoja de Vida Activa en la Entidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:sentencia>select * from (select distinct ecar.entidad_codigo_sigep entidad_codigo_sigep_1, ecar.entidad_nombre_entidad entidad_nombre_entidad_2, ecar.entidad_nombre_clasificacion_organica entidad_nombre_clasificacion_organica_3, ecar.entidad_nombre_orden entidad_nombre_orden_4, ecar.entidad_nombre_naturaleza_juridica entidad_nombre_naturaleza_juridica_5, ecar.entidad_nombre_sector_administrativo entidad_nombre_sector_administrativo_6, hvseg.persona_tipo_asociacion persona_tipo_asociacion_7, hvseg.persona_tipo_documento persona_tipo_documento_8, hvseg.persona_no_documento persona_no_documento_9, hvseg.persona_primer_apellido persona_primer_apellido_10, hvseg.persona_segundo_apellido persona_segundo_apellido_11, hvseg.persona_primer_nombre persona_primer_nombre_12, hvseg.persona_nombre_familiar persona_nombre_familiar_13, hvseg.persona_genero persona_genero_14, hvseg.tiene_vinculacion tiene_vinculacion_15, hvseg.tiene_contrato tiene_contrato_16, hvseg.persona_correo_electronico persona_correo_electronico_17, hvseg.persona_correo_alternativo persona_correo_alternativo_18, hvseg.estado_civil_estado_civil estado_civil_estado_civil_19, hvseg.pertenencia_etnica pertenencia_etnica_20, hvseg.persona_fecha_nacimiento persona_fecha_nacimiento_21, hvseg.persona_pais_nacimiento persona_pais_nacimiento_22, hvseg.persona_departamento_nacimiento persona_departamento_nacimiento_23, hvseg.persona_municipio_nacimiento persona_municipio_nacimiento_24, hvseg.persona_direccion_residencia persona_direccion_residencia_25, hvseg.persona_departamento_residencia persona_departamento_residencia_26, hvseg.persona_municipio_residencia persona_municipio_residencia_27, hvseg.persona_telefono_residencia persona_telefono_residencia_28, hvseg.persona_numero_celular persona_numero_celular_29, hvseg.flg_hv_activa_entidad_txt flg_hv_activa_entidad_txt_30 from v_gi_m_entidad_caracterizacion ecar inner join v_gi_m_hojas_vida_seguimiento hvseg on ecar.cod_entidad = hvseg.cod_entidad ) reporte</ns2:sentencia>
+    </ns2:SQL>
+    <ns2:registro>
+        <ns2:descripcion>Datos Personales De Sp Y Contratistas Por Entidad</ns2:descripcion>
+        <ns2:csv>false</ns2:csv>
+        <ns2:tipoRegistro>CABECERA</ns2:tipoRegistro>
+        <ns2:contieneSentenciaSQL>false</ns2:contieneSentenciaSQL>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:descripcion>Entidad Codigo Sigep</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_SIGEP</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Codigo Sigep</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:descripcion>Entidad Nombre Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ENTIDAD</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Nombre Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Clasificación Orgánica</ns2:etiquetaColumna>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:descripcion>Nombre Clasificacion Organica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_CLASIFICACION_ORGANICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Clasificacion Organica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:descripcion>Nombre Orden</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ORDEN</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>false</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Orden</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:descripcion>Nombre Naturaleza Juridica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_NATURALEZA_JURIDICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Naturaleza Juridica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:descripcion>Sector Administrativo</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SECTOR_ADMINISTRATIVO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Sector Administrativo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Tipo de Asociación en la entidad</ns2:etiquetaColumna>
+            <ns2:id>1593192193486</ns2:id>
+            <ns2:descripcion>Persona Tipo Asociacion</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_TIPO_ASOCIACION</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Tipo Asociacion</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Tipo de Documento de identidad</ns2:etiquetaColumna>
+            <ns2:id>1593192193487</ns2:id>
+            <ns2:descripcion>Persona Tipo Documento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_TIPO_DOCUMENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Tipo Documento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Número de Documento de Identidad</ns2:etiquetaColumna>
+            <ns2:id>1593192193467</ns2:id>
+            <ns2:descripcion>Persona No Documento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_NO_DOCUMENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona No Documento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Primer Apellido</ns2:etiquetaColumna>
+            <ns2:id>1593192193480</ns2:id>
+            <ns2:descripcion>Persona Primer Apellido</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_PRIMER_APELLIDO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Primer Apellido</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Segundo Apellido</ns2:etiquetaColumna>
+            <ns2:id>1593192193483</ns2:id>
+            <ns2:descripcion>Persona Segundo Apellido</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_SEGUNDO_APELLIDO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Segundo Apellido</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Primer Nombre</ns2:etiquetaColumna>
+            <ns2:id>1593192193481</ns2:id>
+            <ns2:descripcion>Persona Primer Nombre</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_PRIMER_NOMBRE</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Primer Nombre</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Segundo Nombre</ns2:etiquetaColumna>
+            <ns2:id>1593192193468</ns2:id>
+            <ns2:descripcion>Persona Nombre Familiar</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_NOMBRE_FAMILIAR</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Nombre Familiar</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Genero</ns2:etiquetaColumna>
+            <ns2:id>1603291551413</ns2:id>
+            <ns2:descripcion>Genero</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_GENERO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Genero</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>¿Vinculado a cargo de planta? SI/NO</ns2:etiquetaColumna>
+            <ns2:id>1593192193499</ns2:id>
+            <ns2:descripcion>Tiene Vinculacion</ns2:descripcion>
+            <ns2:nombreColumna>TIENE_VINCULACION</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Tiene Vinculacion</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>¿Contrato asignado en la entidad? SI/NO</ns2:etiquetaColumna>
+            <ns2:id>1593192193492</ns2:id>
+            <ns2:descripcion>Tiene Contrato</ns2:descripcion>
+            <ns2:nombreColumna>TIENE_CONTRATO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Tiene Contrato</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Correo Electrónico personal (principal)</ns2:etiquetaColumna>
+            <ns2:id>1593192193453</ns2:id>
+            <ns2:descripcion>Persona Correo Electronico</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_CORREO_ELECTRONICO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Correo Electronico</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Correo Electrónico Institucional</ns2:etiquetaColumna>
+            <ns2:id>1593192193452</ns2:id>
+            <ns2:descripcion>Persona Correo Alternativo</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_CORREO_ALTERNATIVO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Correo Alternativo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Estado Civil</ns2:etiquetaColumna>
+            <ns2:id>1593192193439</ns2:id>
+            <ns2:descripcion>Estado Civil Estado Civil</ns2:descripcion>
+            <ns2:nombreColumna>ESTADO_CIVIL_ESTADO_CIVIL</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Estado Civil Estado Civil</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Pertenencia Etnica</ns2:etiquetaColumna>
+            <ns2:id>1593192193491</ns2:id>
+            <ns2:descripcion>Pertenencia Etnica</ns2:descripcion>
+            <ns2:nombreColumna>PERTENENCIA_ETNICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Pertenencia Etnica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Fecha de Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193459</ns2:id>
+            <ns2:descripcion>Persona Fecha Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_FECHA_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_DATE</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>dd/MM/yyyy</ns2:mascara>
+            <ns2:observaciones>Persona Fecha Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>País Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193475</ns2:id>
+            <ns2:descripcion>Persona Pais Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_PAIS_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Pais Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Departamento Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193454</ns2:id>
+            <ns2:descripcion>Persona Departamento Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_DEPARTAMENTO_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Departamento Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Municipio Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193465</ns2:id>
+            <ns2:descripcion>Persona Municipio Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_MUNICIPIO_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Municipio Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dirección Residencia</ns2:etiquetaColumna>
+            <ns2:id>1593192193456</ns2:id>
+            <ns2:descripcion>Persona Direccion Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_DIRECCION_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Direccion Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Departamento</ns2:etiquetaColumna>
+            <ns2:id>1593192193455</ns2:id>
+            <ns2:descripcion>Persona Departamento Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_DEPARTAMENTO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Departamento Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Municipio o Ciudad</ns2:etiquetaColumna>
+            <ns2:id>1593192193466</ns2:id>
+            <ns2:descripcion>Persona Municipio Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_MUNICIPIO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Municipio Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Teléfono Residencia</ns2:etiquetaColumna>
+            <ns2:id>1593192193484</ns2:id>
+            <ns2:descripcion>Persona Telefono Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_TELEFONO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Telefono Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Teléfono Celular</ns2:etiquetaColumna>
+            <ns2:id>1593192193469</ns2:id>
+            <ns2:descripcion>Persona Numero Celular</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_NUMERO_CELULAR</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Numero Celular</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Hoja de Vida Activa en la Entidad</ns2:etiquetaColumna>
+            <ns2:id>1608321433490</ns2:id>
+            <ns2:descripcion>Hoja de Vida Activa en la Entidad</ns2:descripcion>
+            <ns2:nombreColumna>FLG_HV_ACTIVA_ENTIDAD_TXT</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>false</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Hoja de Vida Activa en la Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+    </ns2:registro>
+    <ns2:registro>
+        <ns2:descripcion>Datos Personales De Sp Y Contratistas Por Entidad</ns2:descripcion>
+        <ns2:SQL>
+            <ns2:parametro>
+                <ns2:id>1593123429357</ns2:id>
+                <ns2:nombre>:entidad_codigo_sigep</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593123429380</ns2:id>
+                <ns2:nombre>:entidad_nombre_entidad</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593546605392</ns2:id>
+                <ns2:nombre>:entidad_nombre_orden</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593546684820</ns2:id>
+                <ns2:nombre>:entidad_nombre_naturaleza_juridica</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593730932786</ns2:id>
+                <ns2:nombre>:entidad_nombre_sector_administrativo</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193486</ns2:id>
+                <ns2:nombre>:persona_tipo_asociacion</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Tipo de Asociación en la entidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193487</ns2:id>
+                <ns2:nombre>:persona_tipo_documento</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Tipo de Documento de identidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193467</ns2:id>
+                <ns2:nombre>:persona_no_documento</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Número de Documento de Identidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193480</ns2:id>
+                <ns2:nombre>:persona_primer_apellido</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Primer Apellido</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193483</ns2:id>
+                <ns2:nombre>:persona_segundo_apellido</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Segundo Apellido</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193481</ns2:id>
+                <ns2:nombre>:persona_primer_nombre</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Primer Nombre</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593192193468</ns2:id>
+                <ns2:nombre>:persona_nombre_familiar</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Segundo Nombre</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1608321433490</ns2:id>
+                <ns2:nombre>:flg_hv_activa_entidad_txt</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Hoja de Vida Activa en la Entidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:sentencia>select * from (select distinct ecar.entidad_codigo_sigep entidad_codigo_sigep_1, ecar.entidad_nombre_entidad entidad_nombre_entidad_2, ecar.entidad_nombre_clasificacion_organica entidad_nombre_clasificacion_organica_3, ecar.entidad_nombre_orden entidad_nombre_orden_4, ecar.entidad_nombre_naturaleza_juridica entidad_nombre_naturaleza_juridica_5, ecar.entidad_nombre_sector_administrativo entidad_nombre_sector_administrativo_6, hvseg.persona_tipo_asociacion persona_tipo_asociacion_7, hvseg.persona_tipo_documento persona_tipo_documento_8, hvseg.persona_no_documento persona_no_documento_9, hvseg.persona_primer_apellido persona_primer_apellido_10, hvseg.persona_segundo_apellido persona_segundo_apellido_11, hvseg.persona_primer_nombre persona_primer_nombre_12, hvseg.persona_nombre_familiar persona_nombre_familiar_13, hvseg.persona_genero persona_genero_14, hvseg.tiene_vinculacion tiene_vinculacion_15, hvseg.tiene_contrato tiene_contrato_16, hvseg.persona_correo_electronico persona_correo_electronico_17, hvseg.persona_correo_alternativo persona_correo_alternativo_18, hvseg.estado_civil_estado_civil estado_civil_estado_civil_19, hvseg.pertenencia_etnica pertenencia_etnica_20, hvseg.persona_fecha_nacimiento persona_fecha_nacimiento_21, hvseg.persona_pais_nacimiento persona_pais_nacimiento_22, hvseg.persona_departamento_nacimiento persona_departamento_nacimiento_23, hvseg.persona_municipio_nacimiento persona_municipio_nacimiento_24, hvseg.persona_direccion_residencia persona_direccion_residencia_25, hvseg.persona_departamento_residencia persona_departamento_residencia_26, hvseg.persona_municipio_residencia persona_municipio_residencia_27, hvseg.persona_telefono_residencia persona_telefono_residencia_28, hvseg.persona_numero_celular persona_numero_celular_29, hvseg.flg_hv_activa_entidad_txt flg_hv_activa_entidad_txt_30 from v_gi_m_entidad_caracterizacion ecar inner join v_gi_m_hojas_vida_seguimiento hvseg on ecar.cod_entidad = hvseg.cod_entidad ) reporte</ns2:sentencia>
+        </ns2:SQL>
+        <ns2:csv>false</ns2:csv>
+        <ns2:tipoRegistro>DETALLE</ns2:tipoRegistro>
+        <ns2:contieneSentenciaSQL>true</ns2:contieneSentenciaSQL>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:descripcion>Entidad Codigo Sigep</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_SIGEP</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Codigo Sigep</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:descripcion>Entidad Nombre Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ENTIDAD</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Nombre Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Clasificación Orgánica</ns2:etiquetaColumna>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:descripcion>Nombre Clasificacion Organica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_CLASIFICACION_ORGANICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Clasificacion Organica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:descripcion>Nombre Orden</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ORDEN</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>false</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Orden</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:descripcion>Nombre Naturaleza Juridica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_NATURALEZA_JURIDICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Naturaleza Juridica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:descripcion>Sector Administrativo</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SECTOR_ADMINISTRATIVO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Sector Administrativo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Tipo de Asociación en la entidad</ns2:etiquetaColumna>
+            <ns2:id>1593192193486</ns2:id>
+            <ns2:descripcion>Persona Tipo Asociacion</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_TIPO_ASOCIACION</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Tipo Asociacion</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Tipo de Documento de identidad</ns2:etiquetaColumna>
+            <ns2:id>1593192193487</ns2:id>
+            <ns2:descripcion>Persona Tipo Documento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_TIPO_DOCUMENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Tipo Documento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Número de Documento de Identidad</ns2:etiquetaColumna>
+            <ns2:id>1593192193467</ns2:id>
+            <ns2:descripcion>Persona No Documento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_NO_DOCUMENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona No Documento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Primer Apellido</ns2:etiquetaColumna>
+            <ns2:id>1593192193480</ns2:id>
+            <ns2:descripcion>Persona Primer Apellido</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_PRIMER_APELLIDO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Primer Apellido</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Segundo Apellido</ns2:etiquetaColumna>
+            <ns2:id>1593192193483</ns2:id>
+            <ns2:descripcion>Persona Segundo Apellido</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_SEGUNDO_APELLIDO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Segundo Apellido</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Primer Nombre</ns2:etiquetaColumna>
+            <ns2:id>1593192193481</ns2:id>
+            <ns2:descripcion>Persona Primer Nombre</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_PRIMER_NOMBRE</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Primer Nombre</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Segundo Nombre</ns2:etiquetaColumna>
+            <ns2:id>1593192193468</ns2:id>
+            <ns2:descripcion>Persona Nombre Familiar</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_NOMBRE_FAMILIAR</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Nombre Familiar</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Genero</ns2:etiquetaColumna>
+            <ns2:id>1603291551413</ns2:id>
+            <ns2:descripcion>Genero</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_GENERO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Genero</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>¿Vinculado a cargo de planta? SI/NO</ns2:etiquetaColumna>
+            <ns2:id>1593192193499</ns2:id>
+            <ns2:descripcion>Tiene Vinculacion</ns2:descripcion>
+            <ns2:nombreColumna>TIENE_VINCULACION</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Tiene Vinculacion</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>¿Contrato asignado en la entidad? SI/NO</ns2:etiquetaColumna>
+            <ns2:id>1593192193492</ns2:id>
+            <ns2:descripcion>Tiene Contrato</ns2:descripcion>
+            <ns2:nombreColumna>TIENE_CONTRATO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Tiene Contrato</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Correo Electrónico personal (principal)</ns2:etiquetaColumna>
+            <ns2:id>1593192193453</ns2:id>
+            <ns2:descripcion>Persona Correo Electronico</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_CORREO_ELECTRONICO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Correo Electronico</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Correo Electrónico Institucional</ns2:etiquetaColumna>
+            <ns2:id>1593192193452</ns2:id>
+            <ns2:descripcion>Persona Correo Alternativo</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_CORREO_ALTERNATIVO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Correo Alternativo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Estado Civil</ns2:etiquetaColumna>
+            <ns2:id>1593192193439</ns2:id>
+            <ns2:descripcion>Estado Civil Estado Civil</ns2:descripcion>
+            <ns2:nombreColumna>ESTADO_CIVIL_ESTADO_CIVIL</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Estado Civil Estado Civil</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Pertenencia Etnica</ns2:etiquetaColumna>
+            <ns2:id>1593192193491</ns2:id>
+            <ns2:descripcion>Pertenencia Etnica</ns2:descripcion>
+            <ns2:nombreColumna>PERTENENCIA_ETNICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Pertenencia Etnica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Fecha de Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193459</ns2:id>
+            <ns2:descripcion>Persona Fecha Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_FECHA_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_DATE</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>dd/MM/yyyy</ns2:mascara>
+            <ns2:observaciones>Persona Fecha Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>País Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193475</ns2:id>
+            <ns2:descripcion>Persona Pais Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_PAIS_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Pais Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Departamento Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193454</ns2:id>
+            <ns2:descripcion>Persona Departamento Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_DEPARTAMENTO_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Departamento Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Municipio Nacimiento</ns2:etiquetaColumna>
+            <ns2:id>1593192193465</ns2:id>
+            <ns2:descripcion>Persona Municipio Nacimiento</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_MUNICIPIO_NACIMIENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Municipio Nacimiento</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dirección Residencia</ns2:etiquetaColumna>
+            <ns2:id>1593192193456</ns2:id>
+            <ns2:descripcion>Persona Direccion Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_DIRECCION_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Direccion Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Departamento</ns2:etiquetaColumna>
+            <ns2:id>1593192193455</ns2:id>
+            <ns2:descripcion>Persona Departamento Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_DEPARTAMENTO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Departamento Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Municipio o Ciudad</ns2:etiquetaColumna>
+            <ns2:id>1593192193466</ns2:id>
+            <ns2:descripcion>Persona Municipio Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_MUNICIPIO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Municipio Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Teléfono Residencia</ns2:etiquetaColumna>
+            <ns2:id>1593192193484</ns2:id>
+            <ns2:descripcion>Persona Telefono Residencia</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_TELEFONO_RESIDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Telefono Residencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Teléfono Celular</ns2:etiquetaColumna>
+            <ns2:id>1593192193469</ns2:id>
+            <ns2:descripcion>Persona Numero Celular</ns2:descripcion>
+            <ns2:nombreColumna>PERSONA_NUMERO_CELULAR</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Persona Numero Celular</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Hoja de Vida Activa en la Entidad</ns2:etiquetaColumna>
+            <ns2:id>1608321433490</ns2:id>
+            <ns2:descripcion>Hoja de Vida Activa en la Entidad</ns2:descripcion>
+            <ns2:nombreColumna>FLG_HV_ACTIVA_ENTIDAD_TXT</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>false</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Hoja de Vida Activa en la Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+    </ns2:registro>
+</ns2:reporte>

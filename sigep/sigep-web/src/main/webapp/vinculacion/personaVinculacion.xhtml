@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/basicTemplate.xhtml">
+	
+	<f:metadata>
+		<f:viewParam name="id" value="#{personaVinculacionBean.id}" />
+		<f:viewParam name="dialog" value="#{personaVinculacionBean.dialog}" />
+		<f:event listener="#{personaVinculacionBean.retrieve}" type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['TTL_VINCULAR/DESVINCULAR']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_VINCULAR/DESVINCULAR']}" />
+	<ui:define name="content">
+	
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2 style="margin-top: -1%"><br />
+				<p:outputLabel value="• ${titles['TTL_VINCULACION_SERVIDOR_PUBLICO']} •" 
+					styleClass="page-subtitle" style="color: #263948!important;" /></h2>
+			</div>
+		</div>
+		
+		<!-- FORMULARIO DE BUSQUEDA -->
+		<ui:include src="formFilterVinculacion.xhtml" />
+		<br /><br/>
+		<!--FIN FORMULARIO DE BUSQUEDA -->
+		<h:form id="frmPrincipalVincular" enctype="multipart/form-data">
+			<!-- TABLA PARA MOSTAR DATOS  -->
+			<div class="row row-background-white">
+				<br /><br/>
+				<div class="col-md-12">
+					<p:panel id="panelTableHV" widgetVar="panelTableHV" style="background: transparent;">
+						<p:dataTable id="tablaConsulta" var="dataHV" paginator="true"
+							reflow="true" emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							value="#{personaVinculacionBean.listPersona}"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}">
+							<p:column sortBy="#{dataHV.nombreTipoDocuento}">
+								<f:facet name="header">
+									<h:outputText value="#{titles.TTL_TIPO_DOCUMENTO}" />
+								</f:facet>
+								<h:outputText value="#{dataHV.nombreTipoDocuento}" />
+							</p:column>
+							<p:column sortBy="#{dataHV.numeroIdentificacion}">
+								<f:facet name="header">
+									<h:outputText value="#{titles.TTL_NICK_NAME}" />
+								</f:facet>
+								<h:outputText value="#{dataHV.numeroIdentificacion}" />
+							</p:column>
+							<p:column sortBy="#{dataHV.primerNombre}">
+								<f:facet name="header">
+									<h:outputText value="${titles['TTL_NOMBRES']}" />
+								</f:facet>
+								<h:outputText value="#{dataHV.primerNombre} #{dataHV.segundoNombre}" />
+							</p:column>
+							<p:column sortBy="#{dataHV.primerApellido}">
+								<f:facet name="header">
+									<h:outputText value="${titles['TTL_APELLIDOS']}" />
+								</f:facet>
+								<h:outputText value="#{dataHV.primerApellido} #{dataHV.segundoApellido}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+								style="opacity: 1!important;padding: 0.5%!important;text-align:center!important;">
+								<p:commandButton
+									id="vinculacion"
+									title="${titles['LBL_VINCULACION']}" 
+									icon="icon-cadena"
+									styleClass="icon-btn" 
+									process="@this"
+									update="frmPrincipalVincular:panelVincular deshacerVinculacion frmPrincipalVincular:panelComfirmacionOtraVinculacion"
+									action="#{personaVinculacionBean.formVinculacion}"
+									oncomplete="window.location.href='#frmPrincipalVincular:panelVincular'">
+									<p:resetInput target="frmPrincipalVincular:panelVincular" />
+									<f:setPropertyActionListener value="#{dataHV}" target="#{personaVinculacionBean.persona}" />	
+								</p:commandButton>
+								<p:commandButton
+									id="btnVinDesvincularServidor"
+									title="${titles['TTL_DESVINCULAR_SERVIDOR_PUBLICO']}" 
+									icon="icon-cadena-rota"
+									styleClass="icon-btn" 
+									process="@this" update="deshacerVinculacion frmPrincipalVincular:panelVincular"
+									action="#{personaVinculacionBean.redireccionarDesvincularPersona()}">
+									<f:setPropertyActionListener value="#{dataHV}" target="#{personaVinculacionBean.persona}" />
+								</p:commandButton>
+								<p:commandButton
+									id="consultarVinculacion"
+									title="${titles['LBL_CONSULTA_VINCULACION']}" 
+									icon="icon-view"
+									styleClass="icon-btn" 
+									process="@this"
+									update="frmPrincipalVincular:panelVincular"
+									action="#{personaVinculacionBean.redireccionarConsultarVinculacion()}">
+									<f:setPropertyActionListener value="#{dataHV}" target="#{personaVinculacionBean.persona}" />
+								</p:commandButton>
+								<p:commandButton
+									id="deshacerVinculacion"
+									title="${titles['LBL_DESHACER_ULTIMA_VINCULACION']}" 
+									icon="icon-back-arrow_oscuro"
+									styleClass="icon-btn" 
+									process="@this"
+									update="@this frmPrincipalVincular:panelVincular frmPrincipalVincular:panelComfirmacionDeshacerVinculacion frmPrincipalVincular:panelTableHV"
+									action="#{personaVinculacionBean.verificarVinculacionDesvinculacion()}"
+									rendered="#{dataHV.deshacerVinc == 1 ? true : false}">
+									<f:setPropertyActionListener value="#{dataHV}" target="#{personaVinculacionBean.persona}" />
+								</p:commandButton>
+						</p:column>
+						</p:dataTable>
+					</p:panel>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+			<br /><br />
+			<!--FIN TABLA PARA MOSTAR DATOS  -->
+		
+			<!--FORMULARIO DE VINCULACION  -->
+			<ui:include src="formVinculacion.xhtml" />
+			<!--FIN FORMULARIO DE VINCULACION  -->
+		
+			<p:remoteCommand name="showFormVinculacion" update="frmPrincipalVincular:panelVincular" 
+				action="#{personaVinculacionBean.showFormVinculacion}"/>
+			
+			<!-- Inicia Dialog Cancelacion Vinculacion -->
+			<div id="cancelarVinculacion" class="modal fade" role="dialog">
+				<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<div class="modal-body">
+							<p:panel id="panelComfirmacionCancelarVinculacion" style="background: transparent!important;">
+								<div class="col-md-12" align="center"
+									style="margin-top: 4%; margin-bottom: 4%;">
+									<p:outputLabel
+										value="¿Desea descartar esta vinculación?"
+										style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+										escape="false" />
+								</div>
+								<div class="row" align="center">
+									<div class="col-md-2"></div>
+									<div class="col-md-4">
+										<p:commandButton id="btnDescartarVinculacion" value="Descartar" styleClass="btn btn-primary" style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											process="@this" resetValues="true" update="frmPrincipalVincular:panelVincular"
+											onclick="$('#cancelarVinculacion').modal('hide')" immediate="true" 
+											actionListener="#{personaVinculacionBean.descartarVinculacion}">
+											<p:resetInput target="frmPrincipalVincular:panelVincular" />
+										</p:commandButton>
+									</div>
+									<div class="col-md-4">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" process="@this" 
+											styleClass="btn btn-default" style="padding-left:13.5%!important;padding-right:13.5%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											onclick="$('#cancelarVinculacion').modal('hide')" />
+									</div>
+									<div class="col-md-2"></div>
+								</div>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Finaliza Dialog Cancelacion Vinculacionn -->
+			
+			<!-- Inicia Dialog deshacer Vinculacion/Desvinculacion -->
+			<div id="dialogDeshacerVinculacion" class="modal fade" role="dialog">
+				<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<div class="modal-body">
+							<p:panel id="panelComfirmacionDeshacerVinculacion" style="background: transparent!important;">
+								<div class="col-md-12" align="center"
+									style="margin-top: 4%; margin-bottom: 4%;">
+									<p:outputLabel
+										value="#{personaVinculacionBean.strMensajeDeshacer}"
+										style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+										escape="false" />
+								</div>
+								<div class="row" align="center">
+									<div class="col-md-2"></div>
+									<div class="col-md-4">
+										<p:commandButton id="btnDeshacerVinculacion" value="Si" styleClass="btn btn-primary" style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											process="@this" resetValues="true"
+											update="frmPrincipalVincular:panelTableHV, frmPrincipal:panelFilterForm"
+											onclick="$('#dialogDeshacerVinculacion').modal('hide')" 
+											actionListener="#{personaVinculacionBean.deshacerVinculacionDesvinculacion()}"/>
+									</div>
+									<div class="col-md-4">
+										<p:commandButton value="No" process="@this"
+											styleClass="btn btn-default" style="padding-left:13.5%!important;padding-right:13.5%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											onclick="$('#dialogDeshacerVinculacion').modal('hide')"  />
+									</div>
+									<div class="col-md-2"></div>
+								</div>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Finaliza Dialog deshacer Vinculacionn -->
+			
+			<!-- Inicia Dialog Mensaje de una vinculacion en mas de una entidad -->
+			<div id="dialogOtraVinculacion" class="modal fade" role="dialog" >
+				<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<div class="modal-body">
+							<p:panel id="panelComfirmacionOtraVinculacion" style="background: transparent!important;">
+								<div class="col-md-12" align="center"
+									style="margin-top: 4%; margin-bottom: 4%;">
+									<p:outputLabel
+										value="#{personaVinculacionBean.strMensajeOtraVinculacion}"
+										style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+										escape="false" />
+								</div>
+								<div class="row" align="center">
+									<div class="col-md-2"></div>
+									<div class="col-md-4">
+										<p:commandButton id="btnOtraVinculacion" value="Si" styleClass="btn btn-primary" style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											process="@this" resetValues="true" update="frmPrincipalVincular:panelVincular"
+											oncomplete="window.location.href='#frmPrincipalVincular:panelVincular'"
+											onclick="$('#dialogOtraVinculacion').modal('hide')" 
+											actionListener="#{personaVinculacionBean.showFormVinculacion()}"/>
+									</div>
+									<div class="col-md-4">
+										<p:commandButton value="No" process="@this" 
+											styleClass="btn btn-default" style="padding-left:13.5%!important;padding-right:13.5%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											onclick="$('#dialogOtraVinculacion').modal('hide')" />
+									</div>
+									<div class="col-md-2"></div>
+								</div>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Finaliza Mensaje de una Vinculacion en mas de una entidad-->
+		</h:form>
+		<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-11142030-3"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-11142030-3');
+		
+		</script>
+		
+	</ui:define>
+</ui:composition>

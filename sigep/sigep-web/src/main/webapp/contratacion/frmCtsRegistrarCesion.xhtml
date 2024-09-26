@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• ${titles['TTL_TAB_CT_REGISTRAR_CESION']} •"
+						styleClass="page-subtitle"
+						style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" /> 
+	
+	<br /><br />	
+	
+	<p:panel id="idpnContratacionesTbRegistrarCesionCto" style="background: transparent !important;">
+		<p:panel id="frmCesionContrato" style="background: transparent !important;">
+	   		<div class="row row-background-white">
+	   			<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style"> ${titles['TTL_REGISTRAR_CESION_CONTRATO']} </span> <br /> <br />
+	     		<div class="row">
+	      			<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}:"
+								for="idTipoDocumentoCesion"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="idTipoDocumentoCesion"
+							    title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_DOCUMENTO']}"
+								value="#{contratacionesBean.personaCesionContrato.codTipoIdentificacion}"
+								styleClass="form-control-form-act-usua" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tiposDeIdentificacion}" />
+								<p:ajax update="idCTTipoDocSupervisor" />
+							</h:selectOneMenu>
+							<p:message for="idTipoDocumentoCesion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NUM_DOCUMENTO']}:" for="idNumDocCesion"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="idNumDocCesion"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_NUM_DOCUMENTO']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{contratacionesBean.personaCesionContrato.numeroIdentificacion}"
+								class="form-control-acti-usua" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" maxlength="30">
+								<p:ajax listener="#{contratacionesBean.counsultaPersonaCesionByTipoNumeroIdentificacion(
+														contratacionesBean.personaCesionContrato.codTipoIdentificacion, contratacionesBean.personaCesionContrato.numeroIdentificacion)}" 
+									update="frContrataciones:viewTabContrataciones idTipoDocumentoCesion idNumDocCesion idNombreContratistaCesion" event="blur" process="idNumDocCesion idTipoDocumentoCesion"/>
+									
+							</p:inputText>
+							<p:message for="idNumDocCesion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NOMBRE_CONTRATISTA']}:" for="idNombreContratistaCesion"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="idNombreContratistaCesion"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_NOMBRE_CONTRATISTA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{contratacionesBean.strNombrePersonaCesion}"
+								class="form-control-acti-usua" disabled="true">
+							</p:inputText>
+						</div>								
+					</div>
+				</div>
+				<br />
+				<div class="row">		
+	      			<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_INI_CESION']}:" 
+								styleClass="log-label form-label-formularios" for="idCTFechainicioCesion"/>
+							<p:calendar mask="true"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_INI_CESION']} ${titles['TTL_TIPO_NUMERICO']} "
+								id="idCTFechainicioCesion"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaInicioModificacion}"
+								pattern="#{fechaFormato}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}" readonlyInput="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								>
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+							<p:message for="idCTFechainicioCesion" display="text" />
+						</div>	
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NUEVO_MONTO_CONTRATO']}:"
+								styleClass="log-label form-label-formularios" for="idCTNuevoAlcanceContratoCesion"/>	
+							<p:inputNumber id="idCTNuevoAlcanceContratoCesion"
+								symbol="#{contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaPesos ? '$' : 
+								      contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaEuros ? '€' : 
+								      contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaDolar ? 'U$D':'' } " 
+                                decimalSeparator=","
+                                thousandSeparator="."
+                                decimalPlaces="2"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_NUEVO_MONTO_CONTRATO']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{contratacionesBean.modificacionContrato.nuevoMontoContrato}"
+								
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15']}"
+								converter="javax.faces.BigDecimal"
+								converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+							</p:inputNumber>							
+							<p:message for="idCTNuevoAlcanceContratoCesion" display="text" />
+						</div>
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_CESION']}:" 
+								styleClass="log-label form-label-formularios" for="idCTFechaAutCesion"/>
+							<p:calendar mask="true" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_AUT_CESION']} ${titles['TTL_TIPO_NUMERICO']}"
+								id="idCTFechaAutCesion"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaAutorizacionModificacion}"
+								pattern="#{fechaFormato}" 
+								locale="#{lenguajeBean.localeCode}" readonlyInput="true"
+								yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+							<p:message for="idCTFechaAutCesion" display="text" />
+						</div>	
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+	 					<div class="col-md-12">
+	      					<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}:" 
+	      						styleClass="log-label form-label-formularios" for="idCTJustificacionCesion"/>
+	      					<p:inputTextarea id="idCTJustificacionCesion" rows="3" cols="32"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+								counterTemplate="Quedan {0} caracteres." autoResize="false" maxlength="3000"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+								value="#{contratacionesBean.modificacionContrato.justificacionModificacion}">
+							</p:inputTextarea>
+							<p:message for="idCTJustificacionCesion" display="text" />
+	      				</div>
+	      			</div>							
+				</div>
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_TAB_CT_REGISTRAR_CESION']}" id="idBtGuardarTCesionContrato" 
+	                        styleClass="btn btn-primary"
+	                        style="padding-left:7%!important;padding-right:7%!important;font-size:1.5em!important;" 
+	                        process="@this frmCesionContrato"
+	              			action="#{contratacionesBean.persist()}"
+	                 		update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['BTN_CT_VOLVER']}" id="idBtRegresarCesion" 
+	                        styleClass="btn btn-default"
+	                        style="padding-left:12.5%!important;padding-right:12.5%!important;font-size:1.5em!important;" 
+	                        process="@this"
+	                        action="#{contratacionesBean.regresarBusqueda()}"
+	                 		update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</div>
+			<br />
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" style="margin-left: 24%; width: 75.5%; margin-top: 1em;" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379;">${titles['TTL_REGISTRO_CONTRATO_MODIFICACIONES']}</span> <br /> <br />
+			<div class="row row-background-white">
+				<br /><br />		
+				<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable
+						id="dataTableCesionContrato"
+						
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						
+						var="dataTableModificacionAdicion"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						value="#{contratacionesBean.lstModificacionesContrato}">
+						<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nombreTipoModificacionContrato}"/>
+						</p:column>							
+						<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.audFechaActualizacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_TIPO_DOC_CONTRATISTA_INICIAL']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nombreIdentificacionInicial}"/>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_NUMERO_DOC_CONTRATISTA_INICIAL']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.numeroIdentificacionInicial}"/>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_NOMBRE_INICIAL']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nombreContratistaInicial}"/>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_MONTO_INICIAL_CONTRATO']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.montoRegistroContrato}"/>
+						</p:column>																												
+						<p:column headerText="${titles['LBL_CT_TIPO_DOC_CONTRATISTA_RECIBE']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nombreIdentificacionNuevo}"/>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_NUMERO_DOC_CONTRATISTA_RECIBE']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.numeroIdentificacionNuevo}"/>
+						</p:column>
+						<p:column headerText="${titles['TTL_CT_NOMBRE_DOCUMENTO_RECIBE']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nombreNuevoContratista}"/>
+						</p:column>						
+						<p:column headerText="${titles['LBL_CT_FECHA_CESION']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaInicioModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_NUEVO_MONTO_CONTRATO_2']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nuevoMontoContrato}"/>
+						</p:column>							
+						<p:column headerText="${titles['LBL_CT_FECHA_FIN_REG_CONTRATO']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{contratacionesBean.contrato.fechaFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						
+						<p:column headerText="${titles['LBL_CT_FECHA_TERMINACION_ANT']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_MOTIVO_SUSPENSION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value=""/>
+						</p:column>													
+						
+						
+						<p:column headerText="${titles['LBL_CT_FECHA_AUT_CESION']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaAutorizacionModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_JUSTIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.justificacionModificacion}"/>
+						</p:column>																																																												
+					</p:dataTable>
+				</div>							
+			</div>
+		</p:panel>
+		
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgCesionContrato_01" id="dlgCesionContrato_01" minHeight="300" 
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;">
+				<h5>#{contratacionesBean.strMsgMensajesvalidacionesProrroga}</h5>
+			</div>
+			<br />
+			<div class="row" align="center">
+			    <p:commandButton value="${titles['TTL_OK']}"
+					process="@this" 
+					styleClass="btn btn-primary"
+					onclick="PF('dlgCesionContrato_01').hide();">
+				</p:commandButton>
+			</div>
+			<br />
+		</p:dialog>	
+		
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgRegistroCesionGuardar" id="dlgRegistroCesionGuardar" minHeight="300" 
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+				<center>
+					<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+			    <p:commandButton value="${titles['TTL_OK']}"
+					process="@this" 
+					styleClass="btn btn-primary"
+					action="#{contratacionesBean.regresarBusqueda()}"
+   		   			update="frContrataciones:viewTabContrataciones"
+   		    		onclick="PF('dlgRegistroCesionGuardar').hide();" />
+			</div>
+			<br />
+		</p:dialog>
+		
+	</p:panel>
+</ui:composition>
+

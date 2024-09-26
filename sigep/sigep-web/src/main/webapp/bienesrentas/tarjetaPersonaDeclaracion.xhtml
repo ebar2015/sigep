@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<br />
+ 	<f:view encoding="${configurationView['CNS_ENCODING']}" locale="#{lenguajeBean.locale}">
+		<span class="span-style">${titles['TTL_DATOS_BASICOS_IDENTI']}</span> <br />
+		<div class="col-md-12">
+			<div class="col-md-4 inf-decl-media">
+				<p:outputLabel value="#{titles.TTL_BIENES_RENTAS_NOMBRE_COMPLETO}: #{null}"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px;"
+					styleClass="log-label form-label" />
+				<p:outputLabel value="#{null}"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px; display: inline!important;"
+					styleClass="log-label form-label" />
+				<p:outputLabel value="#{bienesRentasBean.nombreUsuario}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px;"
+					styleClass="log-label form-label" />
+			</div>
+			<div class="col-md-4 inf-decl-media">
+				<p:outputLabel value="#{titles.TTL_BIENES_RENTAS_TIPO_IDENTIFICACION}&#58;&#160;"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px;"
+					styleClass="log-label form-label" />
+				<p:outputLabel
+					value="#{bienesRentasBean.nombreTipoDocumento}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px;"
+					styleClass="log-label form-label" >
+				</p:outputLabel>
+
+
+			</div>
+			<div class="col-md-4 inf-decl-media">
+
+				<p:outputLabel value="#{titles.TTL_NICK_NAME}&#58;&#160;"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px;"
+					styleClass="log-label form-label" />
+				<p:outputLabel
+					value="#{bienesRentasBean.numeroIdentificacion}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px; text-overflow: ellipsis!important; word-break: normal; display: inline!important;"
+					styleClass="log-label form-label" />
+			</div>
+		</div>
+	</f:view>
+	
+</ui:composition>

@@ -1,0 +1,565 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{reporteBean.id}' />
+		<f:viewParam name="recursoId" value='#{reporteBean.recursoId}' />
+		<f:event type="preRenderView" listener='#{reporteBean.retrieve}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['TTL_GI_BREADCRUMBS']}" />
+	<ui:param name="pageSubtitle" value="#{reporteBean.xml.nombre}" />
+
+	<ui:define name="main">
+		<f:event listener="#{reporteBean.validateForm}" type="postValidate" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.TipoDato"
+			var="PFTipoDato" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.FormatoReporte"
+			var="PFFormatoReporte" />
+
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• #{reporteBean.xml.nombre} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+		<div class="panel-body form-horizontal cuadrito col-md-12"
+			style="margin: auto !important; padding-right: 0px !important; padding-left: 0px !important; padding-top: 12px !important; padding-bottom: 25px !important; background-color: white;">
+			<!-- Formulario -->
+			<h:panelGroup id="parametros">
+				<div class="row">
+					<div class="col-md-12" style="display: flex;">
+						<ui:repeat value="#{reporteBean.parametros}" var="parametro">
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="intParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()}" />
+								<p:inputText required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()}"
+									id="intParameter" maxlength="38" value="#{parametro.value}"
+									decimalPlaces="0" decimalSeparator="" thousandSeparator=""
+									styleClass="form-control-form-act-usua-acti-usua">
+								</p:inputText>
+								<p:message for="intParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="doubleParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value() || parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value()}" />
+								<p:inputNumber id="doubleParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value() || parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value()}"
+									maxValue="9999999999999.99" value="#{parametro.value}"
+									decimalPlaces="2" decimalSeparator="." thousandSeparator=","
+									styleClass="form-control-form-act-usua-acti-usua">
+									<f:validateDoubleRange minimum="1" />
+								</p:inputNumber>
+								<p:message for="doubleParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value() || parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="dateParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE.value()}" />
+								<p:calendar mask="true" id="dateParameter"
+									style="background-color:white!important"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE.value()}"
+									yearRange="#{rangoAnios}" navigator="true"
+									pattern="#{fechaFormato}" value="#{parametro.value}"
+									locale="#{lenguajeBean.localeCode}" maxdate="#{fechaSistema}"
+									icon="fa fa-calendar">
+									<f:attribute name="maxDate" value="#{fechaSistema}" />
+									<f:validator validatorId="maxDateValidator" />
+								</p:calendar>
+								<p:message for="dateParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE.value()}" />
+
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="periodParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERIOD.value()}" />
+								<p:calendar mask="true" id="periodParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERIOD.value()}"
+									yearRange="#{rangoAnios}" navigator="true"
+									pattern="#{periodoFormato}" value="#{parametro.value}"
+									locale="#{lenguajeBean.localeCode}" maxdate="#{fechaSistema}"
+									icon="fa fa-calendar">
+									<f:attribute name="maxDate" value="#{fechaSistema}" />
+									<f:validator validatorId="maxDateValidator"
+										styleClass="form-control-form-act-usua" />
+								</p:calendar>
+								<p:message for="periodParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERIOD.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="dateStringParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_STRING.value()}" />
+								<p:calendar mask="true" id="dateStringParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_STRING.value()}"
+									yearRange="#{rangoAnios}" navigator="true"
+									pattern="#{fechaFormato}" value="#{parametro.value}"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar">
+								</p:calendar>
+								<p:message for="dateStringParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_STRING.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="dateLargeParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE.value()}" />
+								<p:calendar mask="true" id="dateLargeParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE.value()}"
+									yearRange="#{rangoAnios}" navigator="true"
+									pattern="#{fechaHoraFormato}" value="#{parametro.value}"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar">
+								</p:calendar>
+								<p:message for="dateLargeParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="firstDayAnioParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_FIRST_DAY_ANIO.value()}" />
+								<p:calendar mask="true" id="firstDayAnioParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_FIRST_DAY_ANIO.value()}"
+									yearRange="#{rangoAnios}" navigator="true"
+									pattern="#{fechaHoraFormato}" value="#{parametro.value}"
+									mindate="#{primerDiaAnio}" locale="#{lenguajeBean.localeCode}"
+									icon="fa fa-calendar">
+									<f:attribute name="minDate" value="#{primerDiaAnio}" />
+									<f:validator validatorId="minDateValidator" />
+								</p:calendar>
+								<p:message for="firstDayAnioParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_FIRST_DAY_ANIO.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="lastDayAnioParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LAST_DAY_ANIO.value()}" />
+								<p:calendar mask="true" id="lastDayAnioParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LAST_DAY_ANIO.value()}"
+									yearRange="#{rangoAnios}" navigator="true"
+									pattern="#{fechaHoraFormato}" value="#{parametro.value}"
+									maxdate="#{ultimoDiaAnio}" locale="#{lenguajeBean.localeCode}"
+									icon="fa fa-calendar">
+									<f:attribute name="maxDate" value="#{ultimoDiaAnio}"
+										styleClass="form-control-form-act-usua" />
+									<f:validator validatorId="maxDateValidator" />
+								</p:calendar>
+								<p:message for="lastDayAnioParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LAST_DAY_ANIO.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="monthParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_MONTH.value()}" />
+								<p:selectOneMenu id="monthParameter" value="#{parametro.value}"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									varStatus="loop"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_MONTH.value()}"
+									filter="true" filterMatchMode="contains" var="t"
+									styleClass="form-control-form-act-usua-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="#{parametro.required}" />
+									<c:forEach items="#{meses}" var="origen" varStatus="loop">
+										<f:selectItem itemValue="#{loop.index + 1}"
+											itemLabel="#{origen}" />
+									</c:forEach>
+									<p:column>
+										<h:outputText value="#{t}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="monthParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_MONTH.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="trimesterParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER.value()}" />
+								<p:selectOneMenu id="trimesterParameter"
+									value="#{parametro.value}" required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER.value()}"
+									filter="true" filterMatchMode="contains" var="t"
+									styleClass="form-control-form-act-usua-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="#{parametro.required}" />
+									<f:selectItems value="#{trimestres}" var="origen"
+										itemValue="#{origen}" itemLabel="#{origen}" />
+									<p:column>
+										<h:outputText value="#{t}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="trimesterParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="semesterParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER.value()}" />
+								<p:selectOneMenu id="semesterParameter"
+									value="#{parametro.value}" required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER.value()}"
+									filter="true" filterMatchMode="contains" var="t"
+									styleClass="form-control-form-act-usua-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="#{parametro.required}" />
+									<f:selectItems value="#{semestres}" var="origen"
+										itemValue="#{origen}" itemLabel="#{origen}" />
+									<p:column>
+										<h:outputText value="#{t}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="semesterParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="anioParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}" />
+								<p:selectOneMenu id="anioParameter" value="#{parametro.value}"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}"
+									filter="true" filterMatchMode="contains" var="t"
+									styleClass="form-control-form-act-usua-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="#{parametro.required}" />
+									<f:selectItems value="#{anios}" var="origen"
+										itemValue="#{origen}" itemLabel="#{origen}" />
+									<p:column>
+										<h:outputText value="#{t}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="anioParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="stringParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_STRING.value()}" />
+								<p:inputText id="stringParameter" value="#{parametro.value}"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_STRING.value()}"
+									styleClass="form-control-form-act-usua-acti-usua">
+								</p:inputText>
+								<p:message for="stringParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_STRING.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="queryParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY.value()}" />
+								<h:selectOneMenu id="queryParameter" value="#{parametro.value}"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY.value()}"
+									filter="true" filterMatchMode="contains" var="t"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="#{parametro.required}" />
+									<f:selectItems
+										value="#{reporteBean.getListaQuery(parametro.source)}"
+										var="origen" itemValue="#{origen}" itemLabel="#{origen.key}" />
+									<p:column>
+										<h:outputText value="#{t.key}" />
+									</p:column>
+								</h:selectOneMenu>
+								<p:message for="queryParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="csvParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV.value()}" />
+								<p:selectOneMenu id="csvParameter" value="#{parametro.value}"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV.value()}"
+									filter="true" filterMatchMode="contains" var="t"
+									styleClass="form-control-form-act-usua-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="#{parametro.required}" />
+									<f:selectItems
+										value="#{reporteBean.getListaCSV(parametro.source)}"
+										var="origen" itemValue="#{origen}" itemLabel="#{origen.key}" />
+									<p:column>
+										<h:outputText value="#{t.key}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="csvParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="queryOpParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP.value()}" />
+								<p:panelGrid columnClasses="component" columns="1"
+									captionClass="component"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP.value()}">
+									<p:selectOneRadio id="queryOpParameter"
+										value="#{parametro.value}" required="#{parametro.required}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP.value()}"
+										columns="1" styleClass="form-control-form-act-usua">
+										<f:selectItems
+											value="#{reporteBean.getListaQuery(parametro.source)}"
+											var="origen" itemValue="#{origen.key}" itemLabel="#{origen}" />
+									</p:selectOneRadio>
+								</p:panelGrid>
+								<p:message for="queryOpParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="csvOpParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV_OP.value()}" />
+								<p:panelGrid columnClasses="component" columns="1"
+									captionClass="component"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV_OP.value()}">
+									<p:selectOneRadio id="csvOpParameter"
+										value="#{parametro.value}" required="#{parametro.required}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV_OP.value()}"
+										columns="1" styleClass="form-control-form-act-usua">
+										<f:selectItems
+											value="#{reporteBean.getListaCSV(parametro.source)}"
+											var="origen" itemValue="#{origen.key}" itemLabel="#{origen}" />
+									</p:selectOneRadio>
+								</p:panelGrid>
+								<p:message for="csvOpParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CSV_OP.value()}" />
+
+								<p:outputLabel styleClass="log-label form-label-formularios"
+									for="booleanParameter" value="#{parametro.label}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP.value()}" />
+								<p:selectBooleanCheckbox id="booleanParameter"
+									required="#{parametro.required}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									value="#{parametro.value}" itemLabel="#{parametro.source}"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_BOOLEAN.value()}"
+									styleClass="form-control-form-act-usua">
+								</p:selectBooleanCheckbox>
+								<p:message for="booleanParameter" display="icon"
+									rendered="#{parametro.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_BOOLEAN.value()}" />
+							</div>
+						</ui:repeat>
+					</div>
+				</div>
+				<br />
+			</h:panelGroup>
+
+			<!-- DataTable  -->
+			<br />
+			<h:panelGroup>
+				<div class="row row-background-white">
+					<br />
+					<div class="col-md-12" align="right">
+						<p:commandButton id="cancelBtn" value="${titles['TTL_FINALIZE']}"
+							title="${titles['TTL_FINALIZE']}" process="@this" update="@form"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							action="#{reporteBean.cancelar()}" icon="fa fa-fw fa-backward">
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="searchBtn"
+							value="${titles['TTL_SUB_TRANSVERSAL_REPORTEADOR_CONSULTAR']}"
+							title="${titles['TTL_SUB_TRANSVERSAL_REPORTEADOR_CONSULTAR']}"
+							icon="fa fa-fw fa-search" process="@form" update="@this,contains"
+							actionListener="#{reporteBean.generarReporte}"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							rendered="#{reporteBean.xml ne null and not empty reporteBean.parametros}" />
+						<p:spacer width="2" />
+						<p:commandButton value="${titles['TTL_DOWNLOAD']} Excel"
+							title="${titles['TTL_DOWNLOAD']} Excel" ajax="false"
+							rendered="#{reporteBean.xml ne null and reporteBean.xml.formatoReporte eq PFFormatoReporte.TTL_REPORTES_FORMATO_EXCEL and reporteBean.habilitarBotonesExportar}"
+							immediate="true" icon="fa fa-fw fa-download"
+							styleClass="btn btn-transparent" style="padding: 0% !important;">
+							<pe:exporter type="xlsx" target="resultados"
+								fileName="#{reporteBean.xml.nombre} #{fechaSistemaString}"
+								postProcessor="#{reporteBean.postProcessXLS}" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton value="${titles['TTL_DOWNLOAD']} CSV"
+							title="${titles['TTL_DOWNLOAD']} CSV" ajax="false"
+							rendered="#{reporteBean.xml ne null and reporteBean.xml.formatoReporte eq PFFormatoReporte.TTL_REPORTES_FORMATO_CSV and reporteBean.habilitarBotonesExportar}"
+							immediate="true" icon="fa fa-fw fa-download"
+							styleClass="btn btn-transparent" style="padding: 0% !important;">
+							<p:dataExporter type="csv" target="resultados"
+								tableTitle="#{reporteBean.xml.nombre}"
+								fileName="#{reporteBean.xml.nombre} #{fechaSistemaString}" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton value="${titles['TTL_DOWNLOAD']} PDF"
+							title="${titles['TTL_DOWNLOAD']} PDF" ajax="false"
+							rendered="#{reporteBean.xml ne null and reporteBean.xml.formatoReporte eq PFFormatoReporte.TTL_REPORTES_FORMATO_PDF and reporteBean.habilitarBotonesExportar}"
+							immediate="true" icon="fa fa-fw fa-download"
+							styleClass="btn btn-transparent" style="padding: 0% !important;">
+							<pe:exporter type="pdf" target="resultados"
+								fileName="#{reporteBean.xml.nombre} #{fechaSistemaString}"
+								postProcessor="#{reporteBean.postProcessPDF}"
+								orientation="Landscape" facetBackground="#FFFFFF"
+								facetFontSize="10" facetFontColor="#000000"
+								facetFontStyle="BOLD" cellFontColor="#000000" cellFontSize="10"
+								cellFontStyle="NORMAL" />
+						</p:commandButton>
+					</div>
+					<br />
+					<!-- Resultados consulta -->
+					<div class="row">
+						<div class="col-md-12"
+							style="padding-left: 2% !important; padding-right: 2% !important;">
+							<p:panel id="panelTableResultado" widgetVar="panelTableResultado"
+								style="background: transparent; padding: 0px!important;">
+								<p:dataTable id="resultados" lazy="true" draggableColumns="true"
+									tableStyle="margin:0 auto;width:auto"
+									paginator="#{reporteBean.resultados.rowCount gt 0}"
+									rowKey="#{item.id}" value="#{reporteBean.resultados}"
+									rows="#{paginatorSize}"
+									currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									rowsPerPageTemplate="#{paginatorsSize}" var="registros"
+									emptyMessage="#{reporteBean.mensajeValidaciones}"
+									rowIndexVar="indice" sortMode="multiple">
+									<p:columns var="column" value="#{reporteBean.columns}"
+										headerText="#{column.header}"
+										style="word-wrap: break-word!important;#{(column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value() or column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value() or column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()) ? 'text-align:right;width:1px;white-space:nowrap;' : ((column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() or column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()) ? 'text-align:center;width:1px;white-space:nowrap;' : 'text-align:left;width:1px;white-space:nowrap;')}"
+										exportable="#{column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() and column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value() and column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CRUD.value()}">
+										<f:facet name="header">
+											<h:outputText value="#{column.header}" />
+										</f:facet>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}">
+											<f:convertDateTime pattern="#{anioFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}">
+											<f:convertDateTime pattern="#{anioFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER.value()}" />
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER.value()}" />
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERIOD.value()}">
+											<f:convertDateTime pattern="#{periodoFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE.value()}">
+											<f:convertDateTime pattern="#{fechaFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).dateValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE.value()}">
+											<f:convertDateTime pattern="#{fechaHoraFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).stringValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_STRING.value()}" />
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).currencyValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value()}">
+											<f:convertNumber pattern="#{monedaFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).percentValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value()}">
+											<f:convertNumber pattern="#{porcentajeFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).longValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()}">
+											<f:convertNumber pattern="#{enteroFormato}" />
+										</h:outputText>
+										<h:outputText title="#{column.title}"
+											value="#{registros.item.get(column.index).stringValue}"
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}" />
+										<p:link id="linkToolTip" href="#"
+											value="#{column.headerAlias}"
+											rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()}" />
+										<p:tooltip id="toolTip"
+											rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()}"
+											for="linkToolTip" escape="false" hideDelay="3000"
+											globalSelector="true"
+											value="#{reporteBean.getExecQuery(registros.item.get(column.index).stringValue)}"
+											showEffect="clip" hideEffect="clip" position="left"
+											style="max-width:80%" />
+										<p:commandLink id="linkNotUpdate"
+											value="#{column.headerAlias}" process="@this" update="@this"
+											actionListener="#{reporteBean.abrirDetalle(registros.item.get(column.index).stringValue)}"
+											title="#{registros.item.get(column.index).stringValue.split(';')[0]}"
+											rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() and !reporteBean.actualizarFormularioConsultarDetalle}">
+										</p:commandLink>
+										<p:commandLink id="linkUpdate" value="#{column.headerAlias}"
+											process="@this" update="@form"
+											actionListener="#{reporteBean.abrirDetalle(registros.item.get(column.index).stringValue)}"
+											title="#{registros.item.get(column.index).stringValue.split(';')[0]}"
+											rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() and reporteBean.actualizarFormularioConsultarDetalle}">
+										</p:commandLink>
+										<h:panelGroup
+											rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CRUD.value()}">
+											<c:forEach items="#{permisosUsuarioRol}" var="crud"
+												varStatus="loop">
+												<p:commandButton value=" " icon="#{crud.icono}"
+													styleClass="icon-btn"
+													actionListener="#{reporteBean.abrirAccion(registros.item.get(column.index).longValue, crud.pagina)}"
+													title="#{titles[crud.accion]}" process="@this"
+													update="@form" />
+												<p:spacer width="20" />
+											</c:forEach>
+										</h:panelGroup>
+									</p:columns>
+									<p:columnGroup type="footer"
+										rendered="#{reporteBean.resultados.rowCount ge 1 and fn:length(reporteBean.totales) ge 1 and !empty reporteBean.totales.get(0).valorFormateado}">
+										<p:row rendered="#{fn:length(reporteBean.totales) > 0}">
+											<p:columns var="column" value="#{reporteBean.columns}"
+												style="text-align:right"
+												footerText="#{(fn:length(reporteBean.totales) ge (column.index + 1)) ? reporteBean.totales.get(column.index).valorFormateado : ''}"
+												exportable="#{column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() and column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value() and column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_CRUD.value()}">
+											</p:columns>
+										</p:row>
+									</p:columnGroup>
+								</p:dataTable>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12" align="left">
+					<br />
+					<p:outputLabel
+						value="${titles['LBL_TRANSVERSAL_REPORTEADOR_TOTAL_REGISTROS']}" />
+					<p:spacer width="10" />
+					<h:outputText value="#{reporteBean.resultados.rowCount}">
+						<f:convertNumber pattern="#{enteroFormato}" />
+					</h:outputText>
+				</div>
+			</h:panelGroup>
+		</div>
+		<p:defaultCommand target="frmPrincipal:searchBtn" />
+	</ui:define>
+</ui:composition>

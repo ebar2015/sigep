@@ -1,0 +1,701 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/template/basicTemplate.xhtml">
+	
+	<ui:define name="content">
+		<!-- Botones que activan modales -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Acción a Realizar"
+						href="javascript:void(0);"
+						onclick="$('#accionRealizarDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Mensaje Datos de Domicilio"
+						href="javascript:void(0);"
+						onclick="$('#datosDomicilioDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">	
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Mensaje de Confirmación"
+						href="javascript:void(0);"
+						onclick="$('#confirmacionDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">	
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Entidad Receptora"
+						href="javascript:void(0);"
+						onclick="$('#entidadReceptoraDialog').modal('show')" />
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Consulta Declaración"
+						href="javascript:void(0);"
+						onclick="$('#consultaDeclaracionDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">	
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Cambio Entidad"
+						href="javascript:void(0);"
+						onclick="$('#cambioEntidadDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">	
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Borrador Declaración"
+						href="javascript:void(0);"
+						onclick="$('#borradorDeclaracionDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Modificación Declaración"
+						href="javascript:void(0);"
+						onclick="$('#modificacionDeclaracionDialog').modal('show')" />
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Precargo Declaración"
+						href="javascript:void(0);"
+						onclick="$('#precargoDeclaracionDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Descartar Cambios"
+						href="javascript:void(0);"
+						onclick="$('#descartarCambiosDialog').modal('show')" />
+				</div>
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Registro D.C."
+						href="javascript:void(0);"
+						onclick="$('#registroDCDialog').modal('show')" />
+				</div>			
+				<div class="col-md-3">
+					<p:commandButton 
+						styleClass="btn btn-primary"
+						style="padding-left:5%!important;padding-right:5%!important; font-size:1.5em!important; padding-top:0!important;"
+						value="Guardado Exitoso"
+						href="javascript:void(0);"
+						onclick="$('#guardadoExitosoDialog').modal('show')" />
+				</div>
+			</div>
+		</div>
+		<!-- FIN Botones que activan modales -->
+		
+		<!-- Modal accion a realizar -->
+		<div class="modal fade" id="accionRealizarDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<br /><br />
+								<h4>
+									<p:outputLabel
+										value="#{titles.TTL_BIENES_RENTAS_MENSAJE_INICIO}"
+										style="color: #265379!important; font-weight: normal!important;" />
+								</h4>
+								<h:selectOneMenu id="seleccioneAccion"
+									value="Hola" style="width: 52.5%;"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.pais}" />
+								</h:selectOneMenu>
+								<br /><br />
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal mensaje datos de domicilio -->
+		<div class="modal fade" id="datosDomicilioDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="#{messages.MSG_DATOS_DOMICILIO_INFORMACION}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal mensaje de confirmación -->
+		<div class="modal fade" id="confirmacionDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="#{messages.MSG_CHECK_CASILLA}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+									<p:outputLabel
+										value="se borrarán los datos registrados en la tabla"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal Entidad Receptora -->
+		<div class="modal fade" id="entidadReceptoraDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="#{messages.MSG_ENTIDAD_RECEPTORA_USUARIO}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12"
+								align="center">
+								<h4>
+									<p:outputLabel
+										value="• #{titles.TTL_SELECCIONE_ENTIDAD} •"
+										styleClass="page-subtitle"
+										style="color: #263948!important;font-size: 1.6em!important;text-align: center!important;font-family: 'Poppins'!important;" />
+								</h4>
+							</div>
+						</div>
+						<div style="text-align:center; box-shadow: 0em -1em 3em -1.5em #000; padding-top: 2.2em;">
+							<h:selectOneMenu id="entidadUsuario"
+								converter="entidadConverter" var="t"
+								value="#{sesionBean.entidadSeleccion}" required="true"
+								valueChangeListener="#{sesionBean.valueChangeEntidad}"
+								filter="false" filterMatchMode="contains"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-entidad"
+								style="width: 50%;">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" itemDisabled="true" />
+								<f:selectItems value="#{entidadesUsuario}" var="entidad"
+									itemLabel="#{entidad.nombreEntidad}" itemValue="#{entidad}" />
+							</h:selectOneMenu>
+							<p:message for="entidadUsuario" />
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal consulta declaración -->
+		<div class="modal fade" id="consultaDeclaracionDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Señor usuario no tiene ningún borrador o declaración generada para el tipo de declaracion
+										de Ingreso en el periodo {fecha} al {fecha}, por lo cual el sistema generará una nueva declaración,
+										la cuál podrá tener datos precargados coincidentes de su hoja de vida y otras fuentes de información,
+										la cual podrá modificar en el borrador hasta tanto no realice el guardado definitivo"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal cambio de entidad -->
+		<div class="modal fade" id="cambioEntidadDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Debido a que la entidad receptora de esta declaración es diferente a la que usted selecciono al 
+										ingresar sesión, el sistema realizó el cambio a la entidad Función Pública seleccionada por el 
+										{nombre usuario}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal borrador declaración -->
+		<div class="modal fade" id="borradorDeclaracionDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Señor usuario(a), usted ya cuenta con un borrador para el tipo de declaración, 
+										'Ingreso' en el periodo {fecha} al {fecha}, se cargarán los datos que tiene actualmente 
+										registrados, los cuales podrá modificar cuantas veces desee hasta tanto no guarde su 
+										declaración de forma definitiva"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal modificación declaración -->
+		<div class="modal fade" id="modificacionDeclaracionDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h4>
+									<p:outputLabel
+										value="Seleccione cual declaración desea modificar"
+										style="color: #265379!important; font-weight: normal!important;" />
+								</h4>
+								<h:selectOneMenu id="seleccioneDeclaracion"
+									value="Hola" style="width: 52.5%;"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.nivelEducativo}" />
+								</h:selectOneMenu>
+								<br /><br />
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal precargo declaración -->
+		<div class="modal fade" id="precargoDeclaracionDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Señor usuario a continuación se precargará la declaración seleccionada por usted para que 
+										realice los cambios que requiera, cuantas veces necesite, hasta tanto usted no realice un 
+										Guardado Definitivo con lo cual generará una declaración que quedará marcada como una "
+										style="color: #265379!important; font-weight: normal!important; text-align: center;">
+									<p:outputLabel
+										value="Modificación a una declaración ya existente"
+										style="color: #008AB8!important; font-weight: normal!important; text-align: center;" />
+									</p:outputLabel>
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal descartar cambios -->
+		<div class="modal fade" id="descartarCambiosDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Se van a descartar cambios ¿Continuar?"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_YES']}"
+										styleClass="btn btn-primary"
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_NO']}"
+										styleClass="btn btn-default"
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal registro DC -->
+		<div class="modal fade" id="registroDCDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Señor usuario. Usted se encuentra registrado y vigente en la entidad Función Pública de 
+										Bogotá Distrito Capital, por lo cual debe realizar su registro de bienes y rentas en el 
+										Sistema de Información Distrital del Empleo y la Administración Pública SIDEAP."
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal guardado exitoso -->
+		<div class="modal fade" id="guardadoExitosoDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+		
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="Datos guardados exitosamente. Esta es la última sección del formulario de declaración, en 
+										cualquier momento puede proceder a su previsualización y guardado definitivo, o si aún le falta 
+										diligenciar información, puede realizar un guardado parcial para retomarlo posteriormente. Tenga 
+										en cuenta que los borradores o guardados parciales no serán tenidos en cuenta como declaración 
+										definitiva para los efectos legales correspondientes"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#accionRealizarDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#datosDomicilioDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#confirmacionDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#entidadReceptoraDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#consultaDeclaracionDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#cambioEntidadDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#borradorDeclaracionDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#modificacionDeclaracionDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#precargoDeclaracionDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+			
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#descartarCambiosDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+			
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#registroDCDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+			
+			$(window).on('load', function() {
+				if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+					$('#guardadoExitosoDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+		</script>
+		
+	</ui:define>
+</ui:composition>

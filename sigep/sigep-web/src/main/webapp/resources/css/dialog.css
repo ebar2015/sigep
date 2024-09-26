@@ -1,0 +1,13 @@
+body {
+	background: #FFFFFF !important;
+}
+
+body .ui-dialog {
+	height: 90%;
+	width: 90%;
+}
+
+body .ui-dialog #primefacesmessagedlg{
+	height: auto !important;
+	width: auto !important;
+}

@@ -1,0 +1,314 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="pnlGerenciaPublicaParticipacionProyectos">
+	 <div class="col-md-12 row row-background-white">
+		<div id="btnDivNuevoParticipacionproyecto" align="right">
+				<p:commandButton id="cbNuevoParticipacionProyecto" value="${titles['LBL_NUEVO_PARTICIPACION']}"
+								 update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida"
+					             icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					             actionListener="#{gerenciaPublicaHVBean.nuevoParticipacionProyecto()}"
+					             process="@this" immediate="true"
+					      		 onclick="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionProyectoNuevo';"					             
+					      		 oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionProyectoNuevo';
+					                         oncomplete=datosModificados(1);"
+					             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					<p:resetInput  target="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionProyectoNuevo" />
+				</p:commandButton>
+		</div>
+		<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">			
+			<p:dataTable id="tblParticipacionProyectos" 
+	             paginator="true"
+	             reflow="true"
+	             rows="#{paginatorSize}"
+				 rowsPerPageTemplate="#{paginatorsSize}"
+	             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+	             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	             var="participacion" 
+	             value="#{gerenciaPublicaHVBean.lstParticipacionproyectos}"
+	             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+			 	
+				<p:column sortBy="#{participacion.nombreEntidad}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}" /></f:facet>
+					<h:outputText value="#{participacion.nombreEntidad}"/>
+				</p:column>
+			 	
+			 	<p:column sortBy="#{participacion.nombreProyecto}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_NOMBRE_PROYECTO']}" /></f:facet>
+					<h:outputText value="#{participacion.nombreProyecto}"/>
+				</p:column>
+			 				
+				<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"  style="opacity: 1!important; text-align:center!important;">
+					<p:commandButton id="idModificarParticipacionProyectos" title="${titles['TTL_EDIT']}"
+						             icon="icon-edit" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.modificarParticipacionProyecto(participacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionProyectoNuevo"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+						             oncomplete="datosModificados(1);">
+					</p:commandButton>	
+					<p:commandButton id="idConsultarParticipacionProyectos" title="${titles['TTL_CONSULT']}"
+						             icon="icon-view" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.consultarParticipacionProyecto(participacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlParticipacionProyectoNuevo"
+						            >
+					</p:commandButton>	
+					<p:commandButton id="idEliminarParticipacionProyectos" title="${titles['TTL_DELETE']}"
+						             icon="icon-delete" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.solicitarConfirmacionEliminarParticipacionProyecto(participacion)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaParticipacionPro"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					</p:commandButton>								             
+				</p:column>					
+			</p:dataTable>	
+		</div>
+		</div>	
+		<h:panelGroup id="pnlParticipacionProyectoNuevo">
+			<p:panel id="pnlFrmlParticipacionProyecto"  rendered="#{gerenciaPublicaHVBean.flgHabilitaPanelParticipacionProyecto}"
+					 class="col-md-12 row row-background-white" style="margin-top: 3.3em!important;" >
+				<p:spacer height="2" style="padding-top: 3em!important;"/>
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_ADD_PARTICIPACION_PROYECTO']}</span> 
+				<br /> <br />
+				
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NOMBRE_PROYECTO']}:"
+								for="txtNombreProyecto"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreProyecto" required="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_PROYECTO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+								maxlength="#{maxNumeros.gpPpTammaxNombreproyecto}" styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.nombreProyecto}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onchange="datosModificados(1);">
+								<f:attribute value="1" name="minLength" />
+								<f:attribute value="#{maxNumeros.gpPpTammaxNombreproyecto}" name="maxLength" />
+							</p:inputText>
+							<p:message for="txtNombreProyecto" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_ROL_DESEMPENADO']}:"
+								for="txtRolDesempenado"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtRolDesempenado"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_ROL_DESEMPENADO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+								required="true" maxlength="#{maxNumeros.gpPpTammaxRoldesempenado}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.rolLaborado}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}"
+								onchange="datosModificados(1);">
+								<f:attribute value="1" name="minLength" />
+								<f:attribute value="#{maxNumeros.gpPpTammaxRoldesempenado}" name="maxLength" />
+							</p:inputText>
+							<p:message for="txtRolDesempenado" display="text" />
+						</div>	
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								for="acEntidades"
+								styleClass="log-label form-label-formularios" />
+							<p:autoComplete id="acEntidades" 
+							                dropdown="true"
+								            disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}"
+											required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								completeMethod="#{gerenciaPublicaHVBean.lstEntidadesParticipacionProyecto}"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.nombreEntidad}">
+								<f:attribute value="1" name="minLength" />
+								<f:attribute value="#{maxNumeros.gpPpTammaxNombreentidad}" name="maxLength" />
+						
+							</p:autoComplete>
+							<p:message for="acEntidades" display="text" />							
+
+						</div>
+					</div>										
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PAIS']}:"
+								for="cmbPaisR" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbPaisR" required="true"
+								title="#{titles.TTL_SELECT} #{titles.LBL_PAIS_RESIDENCIA}"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.codPais}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.pais}" />
+								<p:ajax event="change"
+										process="@this"
+										update="cmbDepartamentoParticipaProyecto cmbCiudadParticipaProyecto"
+									    listener="#{gerenciaPublicaHVBean.changePaisParticipacionProyecto()}"
+									    oncomplete="datosModificados(1);"/>
+							</h:selectOneMenu>
+							<p:message for="cmbPaisR" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+								for="cmbDepartamentoParticipaProyecto"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbDepartamentoParticipaProyecto" 
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta or !gerenciaPublicaHVBean.flgParticipacionproyectoActivaDepto}"
+								title="#{titles.TTL_SELECT} #{titles.LBL_DEPARTAMENTO}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.codDepartamento}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getDeptos(gerenciaPublicaHVBean.participacionProyectoProcesar.codPais)}" />
+								<p:ajax event="change"
+									update="cmbCiudadParticipaProyecto" 
+									oncomplete="datosModificados(1);"/>
+							</h:selectOneMenu>
+							<p:message for="cmbDepartamentoParticipaProyecto" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MUNICIPIO']}:"
+								for="cmbCiudadParticipaProyecto" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbCiudadParticipaProyecto"
+								title="#{titles.TTL_SELECT} #{titles.LBL_MUNICIPIO}"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.codMunicipio}"
+								styleClass="form-control-form-act-usua" 
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta or !gerenciaPublicaHVBean.flgParticipacionproyectoActivaDepto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(gerenciaPublicaHVBean.participacionProyectoProcesar.codDepartamento)}" />
+							</h:selectOneMenu>
+							<p:message for="cmbCiudadParticipaProyecto" display="text" />
+						</div>						
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_INICIO_2']}:"
+								for="cldFechaInicioP"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaInicioP" required="true" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_INICIO_2} #{titles['TTL_TIPO_NUMERICO']}"
+								effect="slideDown" mask="true" mode="popup"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.fechaInicio}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+								<p:ajax event="dateSelect" update="cldFechaFinPro" />
+							</p:calendar>
+							<p:message for="cldFechaInicioP" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}:"
+								for="cldFechaFinPro"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaFinPro" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_FIN_2} #{titles['TTL_TIPO_NUMERICO']}"
+								effect="slideDown" mask="true" mode="popup"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.fechaTerminacion}"
+								disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:attribute name="startDateName"
+									value="${titles['LBL_FECHA_INICIO_2']}" />
+								<f:attribute name="endDateName"
+									value="${titles['LBL_FECHA_FIN_2']}" />
+								<f:attribute name="startDate"
+									value="#{gerenciaPublicaHVBean.participacionProyectoProcesar.fechaInicio}" />
+								<f:validator validatorId="maxDateValidator" />
+								<f:validator validatorId="dateRangeValidator" />
+							</p:calendar>
+							<p:message for="cldFechaFinPro" display="text" />
+						</div>
+					</div>
+				</div>
+				<div class="row" align="center">
+					<BR /><BR />
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton id="btnGuardarParticipacionproyecto" value="${titles['TTL_SAVE']}"
+											process="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"
+											update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida
+											        frmPrincipal:informacionPersonalUsuario"
+											styleClass="btn btn-primary"
+											style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+											oncomplete="datosModificados(0);"
+											actionListener="#{gerenciaPublicaHVBean.guardarGerenciaPublica()}"
+											disabled="#{gerenciaPublicaHVBean.flgParticipacionProyectoEsConsulta}">
+						</p:commandButton>							
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+							action="#{gerenciaPublicaHVBean.solicitarConfirmacionCancelarParticipacionProyecto()}"
+							update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaParticipacionPro">
+						</p:commandButton>
+					</div>
+				</div>										
+			</p:panel>
+		</h:panelGroup>		
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionGerenciaPublicaParticipacionPro" id="dlgConfirmarAccionGerenciaPublicaParticipacionPro" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{gerenciaPublicaHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{gerenciaPublicaHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionGerenciaPublicaParticipacionPro').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionGerenciaPublicaParticipacionPro').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>		
+	</p:panel>
+</ui:composition>

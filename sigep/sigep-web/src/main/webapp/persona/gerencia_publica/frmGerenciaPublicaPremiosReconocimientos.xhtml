@@ -1,0 +1,265 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="pnlGerenciaPublicaPremiosReconocimientos">
+		<div class="col-md-12 row row-background-white">
+		<div id="btnDivNuevoPremioReconocimiento" align="right">
+				<p:commandButton id="cbNuevoPremioReconocimiento" value="${titles['LBL_NUEVO_PREMIO_RECONOCIMIENTO']}"
+								 update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida"
+					             icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					             actionListener="#{gerenciaPublicaHVBean.nuevoPremioReconocimiento()}"
+					             process="@this" immediate="true"
+					             onclick="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPremioReconocimientoNuevo';"	
+					             oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPremioReconocimientoNuevo';
+					                         oncomplete=datosModificados(1);"					             
+					              rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					<p:resetInput  target="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPremioReconocimientoNuevo" />
+				</p:commandButton>
+		</div>
+		<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">			
+			<p:dataTable id="tblPremiosReconocimientos" 
+	             paginator="true"
+	             reflow="true"
+	             rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+	             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+	             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	             var="premio" 
+	             value="#{gerenciaPublicaHVBean.lstPremiosReconocimientos}"
+	             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+			 	
+			 	<p:column sortBy="#{premio.nombreEntidad}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}" /></f:facet>
+					<h:outputText value="#{premio.nombreEntidad}" />
+				</p:column>
+				
+				<p:column sortBy="#{premio.nombrePais}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_PAIS']}" /></f:facet>
+					<h:outputText value="#{premio.nombrePais}"/>
+				</p:column>
+					
+				<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"  style="opacity: 1!important; text-align:center!important;">
+					<p:commandButton id="idModificarPremio" title="${titles['TTL_EDIT']}"
+						             icon="icon-edit" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.modificarPremioReconocimiento(premio)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPremioReconocimientoNuevo"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+						             oncomplete="datosModificados(1);">
+					</p:commandButton>	
+					<p:commandButton id="idConsultarPremio" title="${titles['TTL_CONSULT']}"
+						             icon="icon-view" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.consultarPremioReconocimiento(premio)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlPremioReconocimientoNuevo"
+						            >
+					</p:commandButton>	
+					<p:commandButton id="idEliminarPremio" title="${titles['TTL_DELETE']}"
+						             icon="icon-delete" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.solicitarConfirmacionEliminarPremioReconocimiento(premio)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaPremio"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					</p:commandButton>								             
+				</p:column>					
+			</p:dataTable>	
+		</div>
+		</div>
+		
+		<h:panelGroup id="pnlPremioReconocimientoNuevo">
+			<p:panel id="pnlFrmPremioReconocimiento"  rendered="#{gerenciaPublicaHVBean.flgHabilitaPanelPremioReconocimiento}"
+					 class="col-md-12 row row-background-white" style="margin-top: 3.3em!important;" >
+				<p:spacer height="2" style="padding-top: 3em!important;"/>
+				<hr class="hr-style hr-style-two" />
+				<span style="font-size: 2em;
+				             font-weight: 500;
+				             color: #245379;
+				             background-color: white;
+				             margin-left: 1em;">
+					${titles['LBL_ADD_PREMIO']}</span> 
+				
+				
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<div class="col-md-4" style="margin-top: 2.3em">
+								<p:selectOneRadio id="rdbTipo"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									value="#{gerenciaPublicaHVBean.premioReconocimientoProcesar.banderaEsPremio}"
+									onchange="datosModificados(1);">
+									<f:selectItem itemLabel="${titles['LBL_PREMIO']}" itemValue="true" />
+									<f:selectItem itemLabel="${titles['LBL_RECONOCIMIENTO']}" itemValue="false" />
+								</p:selectOneRadio>
+								<p:message for="rdbTipo" display="text" />
+						</div>
+						
+					<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								for="txtNombreEntidadOrg"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreEntidadOrg" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{gerenciaPublicaHVBean.premioReconocimientoProcesar.nombreEntidad}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								disabled="#{gerenciaPublicaHVBean.flgPremioReconocimientoEsConsulta}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreEntidadOrg" display="text" />
+					</div>	
+										
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_PREMIO']}:"
+								for="cldFechaPremio"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaPremio" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_PREMIO} #{titles['TTL_TIPO_NUMERICO']} "
+								effect="slideDown" mask="true" mode="popup"
+								value="#{gerenciaPublicaHVBean.premioReconocimientoProcesar.fechaReconocimiento}"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								disabled="#{gerenciaPublicaHVBean.flgPremioReconocimientoEsConsulta}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<p:message for="cldFechaPremio" display="text" />
+						</div>
+						
+						
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4 media-txt-3">
+							<p:outputLabel value="${titles['LBL_PAIS']}:"
+								for="cmbPaisResidencia"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbPaisResidencia"
+								title="#{titles.TTL_SELECT} #{titles.LBL_PAIS_RESIDENCIA}"
+								value="#{gerenciaPublicaHVBean.premioReconocimientoProcesar.codPais}"
+								styleClass="form-control-form-act-usua" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{gerenciaPublicaHVBean.flgPremioReconocimientoEsConsulta}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="" />
+								<f:selectItems value="#{webUtils.pais}" />
+								<p:ajax event="change"
+									update="cmbDepartamentoResidencia, cmbMunResidencia"
+									listener="#{gerenciaPublicaHVBean.changePais()}"
+									oncomplete="datosModificados(1);" />								
+							</h:selectOneMenu>
+							<p:message for="cmbPaisResidencia" display="text" />
+						</div>
+						<div class="col-md-4 media-txt-3">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+								for="cmbDepartamentoResidencia"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbDepartamentoResidencia"
+								title="#{titles.TTL_SELECT} #{titles.LBL_DEPARTAMENTO}"
+								value="#{gerenciaPublicaHVBean.premioReconocimientoProcesar.codDepartamento}"
+								disabled="#{gerenciaPublicaHVBean.flgPremioReconocimientoEsConsulta or !gerenciaPublicaHVBean.flgPremioReconocimientoActivaDepto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getDeptos(gerenciaPublicaHVBean.premioReconocimientoProcesar.codPais)}" />
+								<p:ajax event="change"
+									update="cmbMunResidencia"
+									oncomplete="datosModificados(1);" />
+							</h:selectOneMenu>
+							<p:message for="cmbDepartamentoResidencia" display="text" />
+						</div>					
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MUNICIPIO']}:"
+								for="cmbMunResidencia"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbMunResidencia"
+								title="#{titles.TTL_SELECT} #{titles.LBL_MUNICIPIO}"
+								value="#{gerenciaPublicaHVBean.premioReconocimientoProcesar.codMunicipio}"
+								disabled="#{gerenciaPublicaHVBean.flgPremioReconocimientoEsConsulta or !gerenciaPublicaHVBean.flgPremioReconocimientoActivaDepto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(gerenciaPublicaHVBean.premioReconocimientoProcesar.codDepartamento)}" />
+							</h:selectOneMenu>
+							<p:message for="cmbMunResidencia" display="text" />
+						</div>
+					</div>
+				</div>
+					<div class="row" align="center">
+					<BR /><BR />
+						<div class="col-md-4 media-btn-gerencia"></div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton id="btnGuardarPremioReconocimiento" value="${titles['TTL_SAVE']}"
+												process="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"
+												update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida
+												        frmPrincipal:informacionPersonalUsuario"
+												styleClass="btn btn-primary"
+												style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+												oncomplete="datosModificados(0);"
+												actionListener="#{gerenciaPublicaHVBean.guardarGerenciaPublica()}"
+												disabled="#{gerenciaPublicaHVBean.flgPremioReconocimientoEsConsulta}">
+							</p:commandButton>							
+						</div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+								styleClass="btn btn-default"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								action="#{gerenciaPublicaHVBean.solicitarConfirmacioncancelarPremioReconocimiento()}"
+									update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaPremio"
+								>
+							</p:commandButton>
+						</div>
+					</div>				
+			</p:panel>
+		</h:panelGroup>	
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionGerenciaPublicaPremio" id="dlgConfirmarAccionGerenciaPublicaPremio" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{gerenciaPublicaHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{gerenciaPublicaHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionGerenciaPublicaPremio').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionGerenciaPublicaPremio').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>									
+	</p:panel>
+</ui:composition>

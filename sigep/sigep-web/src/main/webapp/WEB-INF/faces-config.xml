@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	<converter>
+		<description>Convertidor de los valores mallas necesarios para el uso del ordenador de columnas para la generación de los reportes</description>
+		<converter-id>valorMallaConverter</converter-id>
+		<converter-class>co.gov.dafp.sigep2.converter.ValorMallaConverter</converter-class>
+	</converter>
+	<application>
+		<action-listener>org.primefaces.application.DialogActionListener</action-listener>
+		<navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+		<view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+		<locale-config>
+			<default-locale>es</default-locale>
+			<supported-locale>en</supported-locale>
+		</locale-config>
+		<resource-bundle>
+			<description>Propiedades de configuración del sistema</description>
+			<base-name>co.gov.dafp.sigep2.configurationView</base-name>
+			<var>configurationView</var>
+		</resource-bundle>
+		<resource-bundle>
+			<description>Mensajes del sistema</description>
+			<base-name>co.gov.dafp.sigep2.messages</base-name>
+			<var>messages</var>
+		</resource-bundle>
+		<message-bundle>co.gov.dafp.sigep2.messages</message-bundle>
+		<resource-bundle>
+			<description>Bundle de tItulos y etiquetas</description>
+			<base-name>co.gov.dafp.sigep2.titles</base-name>
+			<var>titles</var>
+		</resource-bundle>
+		<resource-bundle>
+			<description>Etiquetas del menu</description>
+			<base-name>co.gov.dafp.sigep2.menu</base-name>
+			<var>menu</var>
+		</resource-bundle>
+	</application>
+</faces-config>

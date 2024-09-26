@@ -1,0 +1,317 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_DENOMINACION']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.TTL_DENOMINACIOND} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="NombreDenominacion" maxlength="255"
+						placeholder="${titles['TTL_NOMBRE_DENOMINACION']}"
+						title="${titles['TTL_INGRESE']} ${titles['TTL_NOMBRE_DENOMINACION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						completeMethod="#{denominacionBean.listaDenominaciones}"
+						value="#{denominacionBean.nombreDenominacion}">
+						<p:ajax event="itemSelect" listener="#{denominacionBean.filtrarDenominacion()}" 
+						 update="NombreDenominacion dataTableDenominaciones" />
+					</p:autoComplete>
+					<p:message for="NombreDenominacion" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonBuscarParametro" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						action="#{denominacionBean.filtrarDenominacion()}"
+						process="@this NombreDenominacion"
+						update="NombreDenominacion dataTableDenominaciones" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+		<p:spacer height="4" />
+		<span class="span-style">#{titles.TTL_DENOMINACIOND}</span> <br /> <br />
+		<hr class="hr-style hr-style-two" />
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarDenominacion"
+					value="${titles['LBL_ADD_NEW']}" icon="fa fa-fw fa-plus-circle"
+					process="@this" styleClass="btn btn-transparent"
+					actionListener="#{denominacionBean.nuevaDenominacion()}"
+					immediate="true"
+					update="panelDenominacion"
+					oncomplete="window.location.href='#frmPrincipal:panelDenominacion';">
+					<p:resetInput target="frmPrincipal:panelDenominacion" />
+				</p:commandButton>
+			</div>
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"> </label>
+			</div>
+		</div>
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTableDenominaciones" paginator="true" reflow="true"
+				rowIndexVar="rowIndex" 
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				value="#{denominacionBean.lstDenominacion}"
+				var="dataDenominacion"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				
+				<p:column headerText="${titles['TTL_NOMBRE_DENOMINACION']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataDenominacion.nombreDenominacion}"
+					filterBy="#{dataDenominacion.nombreDenominacion}"  filterMatchMode="contains">
+					<h:outputText value="#{dataDenominacion.nombreDenominacion}" />
+				</p:column>
+
+				<p:column headerText="#{titles.TTL_ACTIVO}"
+					style="word-wrap: break-word!important;text-align: center!important;"
+					sortBy="#{dataDenominacion.flgActivo}">
+					<p:selectBooleanCheckbox
+						value="#{dataDenominacion.flgActivo == 1 ? true : false}" disabled="true" />
+				</p:column>
+
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+					style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					<p:commandButton id="btnEditarDenominacion"
+						title="${titles['TTL_EDIT']}" icon="icon-edit"
+						styleClass="icon-btn btn-view-data" 
+						immediate="true"
+						process="@this"
+						update="frmPrincipal:panelDenominacion"
+						oncomplete="window.location.href='#frmPrincipal:panelDenominacion';"
+						actionListener="#{denominacionBean.modificarDenominacion(dataDenominacion)}">
+					</p:commandButton>					
+					
+					<p:commandButton id="btnConsultarDenominacion"
+						title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:panelDenominacion"
+						actionListener="#{denominacionBean.consultarDenominacion(dataDenominacion)}"
+						oncomplete="window.location.href='#frmPrincipal:panelDenominacion';">
+					</p:commandButton>
+					<p:commandButton id="btnEliminarDenominacion"
+						title="${titles['BTN_ELIMINAR']}" icon="icon-delete" process="@this"
+						styleClass="icon-btn" rendered="false">
+						 <p:ajax process="@this" listener="#{denominacionBean.solicitarConfirmacionEliminarDenominacion(dataDenominacion)}"/>	
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+	<br />
+	<p:outputPanel id="panelDenominacion">
+		<p:panel id="subpanelDenominacion"
+			widgetVar="subpanelDenominacion"
+			rendered="#{denominacionBean.habilitaFormulario}">
+			<div class="row row-background-white">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<c:if test="#{!denominacionBean.lbEsConsulta and !denominacionBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_AGREGAR_DENOMINACION']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{!denominacionBean.lbEsConsulta and denominacionBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_MODIFICAR_DENOMINACION']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{denominacionBean.lbEsConsulta and !denominacionBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_DENOMINACIOND']}
+					</span> 
+					<br /><br /><br />
+				</c:if>
+				<p:panel>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['TTL_NOMBRE_DENOMINACION']}"
+									styleClass="log-label form-label-formularios" for="nombreDenominacion"/>
+								<p:inputText id="nombreDenominacion" required="true" disabled="#{denominacionBean.lbEsConsulta}"
+											requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" maxlength="250"
+											value="#{denominacionBean.denominacionSeleccionada.nombreDenominacion}"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_NOMBRE_DENOMINACION']} ${titles['TTL_TIPO_ALFANUMERICO']}" >
+								<f:validator validatorId="textAlfanumericoValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="nombreDenominacion" display="text" />
+							</div>
+							<div class="col-md-6">
+								<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoDenominacion"
+									styleClass="log-label form-label-formularios" />
+								<br />
+								<p:selectBooleanCheckbox required="true" id="activoDenominacion"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									disabled="#{denominacionBean.lbEsConsulta}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+									value="#{denominacionBean.blnFlgActivo}">
+								</p:selectBooleanCheckbox>
+								<p:message for="activoDenominacion" display="text" />
+							</div>
+						</div>
+					</div>
+	
+				</p:panel>
+				<div class="row" align="center" style="margin-top:4.3em!important">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="idpanelGuardarDenominacion"
+							style="padding: 0%;">
+							<c:if test="#{!denominacionBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_SAVE']}"
+									process="frmPrincipal:panelDenominacion"
+									update="panelDenominacion dataTableDenominaciones"
+									actionListener="#{denominacionBean.guardarDenominacion()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+							<c:if test="#{denominacionBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_OK']}"
+									process="frmPrincipal:panelDenominacion"
+									update="panelDenominacion dataTableDenominaciones"
+									actionListener="#{denominacionBean.aceptarConsulta()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+						</p:panel>
+					</div>
+					
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-default btn-update-disable"
+							process="@this" immediate="true"
+							rendered="#{!denominacionBean.lbEsConsulta}"
+							style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; 
+							font-size:1.5em!important; padding-top:0!important;"
+							onclick="PF('dlg2').show();" >
+							<p:resetInput target="frmPrincipal:panelDenominacion" />
+
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+
+
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlg2" modal="true" minHeight="300" draggable="false"
+			closable="false" appendTo="@(body)">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center><h5>#{denominacionBean.strMensajeConfirmacion}</h5></center>
+			</div>
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['LBL_SI']}" process="@this"
+						styleClass="btn btn-primary"
+						actionListener="#{denominacionBean.accionConfirmada()}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlg2').hide();"
+						update="frmPrincipal:panelDenominacion frmPrincipal:dataTableDenominaciones" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['LBL_NO']}"
+						styleClass="btn btn-default"
+						onclick="PF('dlg2').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+		</p:dialog>
+
+
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgEliminarnDenominacion"
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{denominacionBean.strMensajeConfirmacionEliminacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="Si"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{denominacionBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgEliminarnDenominacion').hide();"
+		    		    		update="frmPrincipal:panelDenominacion frmPrincipal:dataTableDenominaciones"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="No"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgEliminarnDenominacion').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>	
+		
+	</ui:define>
+		
+</ui:composition>

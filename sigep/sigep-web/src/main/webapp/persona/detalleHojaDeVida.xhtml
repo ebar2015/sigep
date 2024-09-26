@@ -1,0 +1,638 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:p="http://primefaces.org/ui"
+		template="/resources/template/pageTemplate.xhtml">
+	<f:metadata>
+		<f:viewParam
+				name="id"
+				value="#{detalleHojaVidaBean.id}"/>
+		<f:viewParam
+				name="recursoId"
+				value="#{detalleHojaVidaBean.recursoId}"/>
+		<f:event
+				type="preRenderView"
+				listener="#{detalleHojaVidaBean.retrieve}"/>
+	</f:metadata>
+	<ui:param
+			name="pageTitle"
+			value="${titles['TTL_HOJA_VIDA']}"/>
+	<ui:param
+			name="pageSubtitle"
+			value="Detalle Hoja de Vida"/>
+	<ui:define name="main">
+		<div class="panel-body form-horizontal col-md-12">
+			<p:fieldset
+					style="background-color: rgba(242, 242, 242, 0.85); -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); -ms-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.2);">
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputLabel
+								value="#{detalleHojaVidaBean.hojaDeVidaToPrint.nombresPersona}"
+								styleClass="page-subtitle"
+								style="font-size:2.5em;padding-top: 0.5em!important; color: #24547A; font-family: 'Poppins';"/>
+					</div>
+				</div>
+				<hr
+						style="display: block; margin-top: 0.5em; margin-left: auto; margin-right: auto; border-style: inset; border-width: 1px; border-color: #fff; width: 97%;"/>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['TTL_TIPO_IDENTIFICACION']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.nombreTipoDocuento}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['TTL_NUMERO']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.numeroIdentificacion}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_FECHA_NACIMIENTO']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.fechaNacimiento}"
+									styleClass="log-label form-label label-gris">
+								<f:convertDateTime
+										pattern="dd/MM/yyyy"
+										type="date"/>
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_TRANSVERSAL_USUARIO_CORREO_ELECTRONICO']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.correoElectronico}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_TRANSVERSAL_PERSONAS_CIUDAD']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.nombreMunicipioResidencia}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_PAIS_RESIDENCIA']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.nombrePaisResidencia}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.direccionResidencia}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_DISTRITO_LIBRETA_MILITAR']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value=" #{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.distritoMilitar}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+									value="${titles['LBL_NUMERO_LIBRETA_MILITAR']}:&#160;"
+									styleClass="log-label form-label"
+									style="font-weight: bold; color: #263948;"/>
+							<p:outputLabel
+									value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detallePersona.numeroLibretaMilitar}"
+									styleClass="log-label form-label label-gris"/>
+						</div>
+					</div>
+				</div>
+				<hr
+						style="display: block; margin-top: 0.5em; margin-left: auto; margin-right: auto; border-style: inset; border-width: 1px; border-color: #fff; width: 97%;"/>
+			</p:fieldset>
+			<br/> <br/>
+			<div class="row row-background-white">
+				<p:tabView style="background: transparent!important;">
+					<p:tab title="Educación">
+						<br/>
+						<br/>
+						<hr class="hr-style hr-style-two"/>
+						<span class="span-style"> Educación Formal </span>
+						<br/>
+						<br/>
+						<p:repeat
+								var="educacionesFormales"
+								value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detalleEducacion}">
+							<p:panel>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<h:outputLabel
+													value="Nivel Educativo:&#160;"
+													for="nvlEducativo"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #253846;"/>
+											<h:outputLabel
+													id="nvlEducativo"
+													value="#{educacionesFormales.nivelEducativo}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Nivel de Formación:&#160;"
+													for="nvlFormacion"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="nvlFormacion"
+													value="#{educacionesFormales.nivelFormacion}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Área del Conocimiento:&#160;"
+													for="areaConocimiento"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="areaConocimiento"
+													value="#{educacionesFormales.areaConocimiento}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="País:&#160;"
+													for="paisEducacion"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="paisEducacion"
+													value="#{educacionesFormales.nombrePais}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Departamento:&#160;"
+													for="departamentoEducacion"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="departamentoEducacion"
+													value="#{null}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Ciudad/Municipio:&#160;"
+													for="municipioEducacion"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="municipioEducacion"
+													value="#{null}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div
+											class="col-md-12"
+											style="padding: -1em !important;">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Institución Educativa:&#160;"
+													for="institucionEducativa"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="institucionEducativa"
+													value="#{educacionesFormales.nombreInstitucionAcademica}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Programa Académico:&#160;"
+													for="programAcademico"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="programAcademico"
+													value="#{educacionesFormales.nombreProgramaAcademico}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Título Obtenido:&#160;"
+													for="tituloObtenido"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="tituloObtenido"
+													value="#{educacionesFormales.tituloObtenido}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div
+											class="col-md-12"
+											style="padding: -1em !important;">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Fecha de Terminacion de Materias:&#160;"
+													for="terminacionMaterias"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="terminacionMaterias"
+													value="#{educacionesFormales.fechaFinalizacion}"
+													styleClass="log-label form-label label-gris">
+												<f:convertDateTime
+														pattern="dd/MM/yyyy"
+														type="date"/>
+											</p:outputLabel>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Fecha de Grado:&#160;"
+													for="fGrado"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="fGrado"
+													value="#{educacionesFormales.fechaGrado}"
+													styleClass="log-label form-label label-gris">
+												<f:convertDateTime
+														pattern="dd/MM/yyyy"
+														type="date"/>
+											</p:outputLabel>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Tarjeta Profesional:&#160;"
+													for="tProfesional"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="tProfesional"
+													value="#{educacionesFormales.numTarjetaProfesional}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<br/>
+							</p:panel>
+						</p:repeat>
+						<br/>
+						<br/>
+					</p:tab>
+					<p:tab title="Experiencia Laboral">
+						<br/>
+						<br/>
+						<hr class="hr-style hr-style-two"/>
+						<span class="span-style"> Experiencia Laboral </span>
+						<br/>
+						<br/>
+						<p:repeat
+								var="experienciasLaborales"
+								value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detalleLaboral}">
+							<p:panel>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<h:outputLabel
+													value="Entidad:&#160;"
+													for="nombreEntidad"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #253846;"/>
+											<h:outputLabel
+													id="nombreEntidad"
+													value="#{experienciasLaborales.nombreEntidad}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Cargo:&#160;"
+													for="cargo"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="cargo"
+													value="#{experienciasLaborales.cargo}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Dependencia:&#160;"
+													for="dependencia"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="dependencia"
+													value="#{experienciasLaborales.dependencia}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Fecha de Ingreso:&#160;"
+													for="fIngresoCargo"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="fIngresoCargo"
+													value="#{experienciasLaborales.fechaIngreso}"
+													styleClass="log-label form-label label-gris">
+												<f:convertDateTime
+														pattern="dd/MM/yyyy"
+														type="date"/>
+											</p:outputLabel>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Fecha de Retiro:&#160;"
+													for="fRetiroCargo"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="fRetiroCargo"
+													value="#{experienciasLaborales.fechaRetiro}"
+													styleClass="log-label form-label label-gris">
+												<f:convertDateTime
+														pattern="dd/MM/yyyy"
+														type="date"/>
+											</p:outputLabel>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Horas Promedio al Mes:&#160;"
+													for="horasPromedioMes"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="horasPromedioMes"
+													value="#{experienciasLaborales.horasPromedioMes}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Dirección de entidad:&#160;"
+													for="direccionEntidad"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="direccionEntidad"
+													value="#{experienciasLaborales.direccionEntidad}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="País:&#160;"
+													for="paisTrabajo"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="paisTrabajo"
+													value="#{experienciasLaborales.nombrePais}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Departamento:&#160;"
+													for="departamentoLaboral"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="departamentoLaboral"
+													value="#{experienciasLaborales.nombreDepartamento}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div
+											class="col-md-12"
+											style="padding: -1em !important;">
+										<div class="col-md-4">
+											<div class="col-md-4">
+												<p:outputLabel
+														value="Ciudad/Municipio:&#160;"
+														for="municipioLaboral"
+														styleClass="log-label form-label"
+														style="font-weight: 600; color: #233947;"/>
+												<p:outputLabel
+														id="municipioLaboral"
+														value="#{experienciasLaborales.nombreMunicipio}"
+														styleClass="log-label form-label label-gris"/>
+											</div>
+											<div class="col-md-4"></div>
+											<div class="col-md-4"></div>
+										</div>
+									</div>
+								</div>
+								<br/>
+							</p:panel>
+						</p:repeat>
+						<br/>
+						<br/>
+					</p:tab>
+					<p:tab title="Experiencia Docente">
+						<br/>
+						<br/>
+						<hr class="hr-style hr-style-two"/>
+						<span class="span-style"> Experiencia Docente </span>
+						<br/>
+						<br/>
+						<p:repeat
+								var="experienciasDocente"
+								value="#{detalleHojaVidaBean.hojaDeVidaToPrint.detalleExpDocente}">
+							<p:panel>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<h:outputLabel
+													value="Institucion Educativa:&#160;"
+													for="nombreInstitucion"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #253846;"/>
+											<h:outputLabel
+													id="nombreInstitucion"
+													value="#{experienciasDocente.nombreInstitucion}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Nivel Educativo:&#160;"
+													for="cargoss"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="nvlEducativoMateria"
+													value="#{experienciasDocente.nivelEducativo}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Area Conocimiento:&#160;"
+													for="areaConocimiento"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="areaConocimientoMateria"
+													value="#{experienciasDocente.areaConocimiento}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Fecha de Ingreso:&#160;"
+													for="fIngreso"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="fIngreso"
+													value="#{experienciasDocente.fechaIngreso}"
+													styleClass="log-label form-label label-gris">
+												<f:convertDateTime
+														pattern="dd/MM/yyyy"
+														type="date"/>
+											</p:outputLabel>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Fecha de Retiro:&#160;"
+													for="fRetiro"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="fRetiro"
+													value="#{experienciasDocente.fechaFinalizacion}"
+													styleClass="log-label form-label label-gris">
+												<f:convertDateTime
+														pattern="dd/MM/yyyy"
+														type="date"/>
+											</p:outputLabel>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="País:&#160;"
+													for="paisTrabajoDocente"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="paisTrabajoDocente"
+													value="#{experienciasLaborales.nombrePais}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Numero de horas semanales:&#160;"
+													for="numHorasSemanales"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="numHorasSemanales"
+													value="#{experienciasDocente.horasSemana}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel
+													value="Materia Impartida:&#160;"
+													for="materia"
+													styleClass="log-label form-label"
+													style="font-weight: 600; color: #233947;"/>
+											<p:outputLabel
+													id="materia"
+													value="#{experienciasDocente.materiaImpartida}"
+													styleClass="log-label form-label label-gris"/>
+										</div>
+										<div class="col-md-4"></div>
+									</div>
+								</div>
+								<br/>
+							</p:panel>
+						</p:repeat>
+						<br/>
+						<br/>
+					</p:tab>
+				</p:tabView>
+				<br/> <br/>
+				<div class="row"
+				     align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-2">
+						<p:commandButton
+								value="Imprimir"
+								ajax="false"
+								action="#{detalleHojaVidaBean.verPDF()}"
+								styleClass="btn btn-primary"
+								style="padding-left:15%!important;padding-right:15%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"/>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton
+								value="Descargar"
+								ajax="false"
+								action="#{detalleHojaVidaBean.guardarPDF()}"
+								styleClass="btn btn-primary"
+								style="background:#356A89!important; border-color:#356A89!important;padding-left:15%!important;padding-right:15%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"/>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton
+								value="Compartir"
+								process="@this"
+								styleClass="btn btn-primary"
+								style="background:#235379!important; border-color:#235379!important;padding-left:15%!important;padding-right:15%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"/>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

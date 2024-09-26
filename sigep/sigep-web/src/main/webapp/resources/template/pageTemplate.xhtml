@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:head>
+		<h:outputStylesheet name="#{contrasteBean.temaAplicado}" />
+		<h:outputStylesheet name="/css/bootstrap.css" />
+		<h:outputStylesheet name="/css/sweetalert2.css" />
+		<h:outputStylesheet name="/css/styleGI.css" />
+		<h:outputScript library="js" name="ventana.js" />
+		<h:outputScript library="js" name="controlCierreSesion.js"
+			rendered="false" />
+		<h:outputScript library="js" name="sweetalert2.min.js" />
+		<h:outputScript library="js" name="bootstrap.min.js" />
+
+		<link rel="shortcut icon" type="image/x-icon"
+			href="#{resource['favicon.ico']}" />
+		<h:outputStylesheet name="/css/fontawesome.min.css" />
+
+		<f:metadata>
+			<f:viewParam name="recurso" value='#{controlRecursoBean.recurso}' />
+			<f:viewParam name="recursoId" value='#{controlRecursoBean.recursoId}' />
+		</f:metadata>
+
+		<title>${titles['TTL_SYSTEM_SHORT_NAME']} :: #{empty pageTitle
+			? 'Page Title' : pageTitle}</title>
+
+		<p:importConstants type="co.gov.dafp.sigep2.filtro.FiltroUsuario"
+			var="h" />
+		<meta charset="UTF-8" />
+		<meta content="#{h.VALUE_X_FRAME_OPTIONS}"
+			name="#{h.HEADER_X_FRAME_OPTIONS}" />
+		<meta content="#{h.VALUE_PRAGMA}" name="#{h.HEADER_PRAGMA}" />
+		<meta content="#{h.VALUE_CACHE_CONTROL}"
+			name="#{h.HEADER_CACHE_CONTROL}" />
+		<meta content="#{h.VALUE_X_UA_COMPATIBLE}"
+			name="#{h.HEADER_X_UA_COMPATIBLE}" />
+		<meta content="#{h.VALUE_EXPIRES}" name="#{h.HEADER_EXPIRES}" />
+		<meta content="#{h.VALUE_X_XSS_PROTECTION}"
+			name="#{h.HEADER_X_XSS_PROTECTION}" />
+		<meta content="#{h.VALUE_X_CONTENT_TYPE_OPTIONS}"
+			name="#{h.HEADER_X_CONTENT_TYPE_OPTIONS}" />
+		<meta content="#{h.VALUE_DESCRIPTION}" name="#{h.HEADER_DESCRIPTION}" />
+		<meta content="#{h.VALUE_KEYWORDS}" name="#{h.HEADER_KEYWORDS}" />
+		<meta content="#{h.VALUE_VIEWPORT}" name="#{h.HEADER_VIEWPORT}" />
+
+		<script type="text/javascript">
+
+            function contains(itemLabel, filterValue) {
+                return itemLabel.includes(filterValue) || specialCharacters(itemLabel).includes(filterValue);
+
+            }
+
+            function specialCharacters(input) {
+
+                var c = input.toLowerCase();
+                c = c.replace(new RegExp("[àáâãäå]", 'g'), "a");
+                c = c.replace(new RegExp("æ", 'g'), "ae");
+                c = c.replace(new RegExp("ç", 'g'), "c");
+                c = c.replace(new RegExp("[èéêë]", 'g'), "e");
+                c = c.replace(new RegExp("[ìíîï]", 'g'), "i");
+                c = c.replace(new RegExp("[òóôõö]", 'g'), "o");
+                c = c.replace(new RegExp("œ", 'g'), "oe");
+                c = c.replace(new RegExp("[ùúûü]", 'g'), "u");
+                c = c.replace(new RegExp("[ýÿ]", 'g'), "y");
+                return c;
+            }
+
+            function ackServer() {
+                try {
+                    var tok = '#{sesionBean.getToken()}';
+                    if (tok != '11111-11111-11111-0000') {
+                        if (tok != null) {
+							if(tok.trim()!=null){
+								 $.ajax({
+		                                type: 'GET',
+		                                url: '#{sesionBean.getUrlAck()}sigepack/ack/' + tok,
+		                                headers: {
+		                                    'Accept': 'text/plain',
+		                                    'Content-Type': 'text/plain'
+		                                },
+		                                crossDomain: true,
+		                            }).done(function (data) {
+		                                console.log("Respuesta: ->" + data);
+		                                if (data == 'true') {
+		                                    location.href = '${facesContext.externalContext.requestContextPath}';
+		                                }
+		                            });
+                        	}else{
+                        		console.log("La variable tok esta vacia"); 
+                        	}
+                        }
+                    }
+                } catch (err) {
+                    console.log("error: " + err);
+                }
+            }
+
+            function anular(e) {
+                tecla = (document.all) ? e.keyCode : e.which;
+                return (tecla != 13);
+            }
+        </script>
+
+		<h:outputScript>
+            function handleDrop(event, ui) {
+            var droppedCar = ui.draggable;
+            droppedCar.fadeOut('fast');
+            }
+            window.sync = function(t){
+            PF('knob').setValue(t.current);
+            }
+            function redirectToIndex() {
+            window.location.href = getContextPath() + '/sigep2/index.xhtml';
+            }
+
+
+
+            function onload() {
+            var element = document.getElementById('frmPrincipal:submit');
+            //element.onclick = validate;
+            }
+
+            function redireccionarAPortal(){
+            location.href = '#{urlPortal}';
+            }
+        </h:outputScript>
+
+		<style>
+.ui-dialog {
+	font-size: 1.2em !important;
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif !Important;
+}
+
+.ui-dialog-content p {
+	text-align: justify !important;
+	padding: 2% !important;
+}
+
+.side {
+	font-size: 1.2em !important;
+	height: 2.7em !important;
+	border-radius: 0 !important;
+}
+
+/* Estilos del footer no borrar a no se que estes seguro */
+.footer__row {
+	display: flex;
+	gap: 15px;
+	justify-content: space-between;
+}
+
+.footer__col {
+	width: calc(100%/ 5) !important;
+}
+</style>
+		<script type="text/javascript">
+      //<![CDATA[
+      function showBtn() {
+        var btn = document.getElementById("btnside");
+        var sidemenu = document.getElementById("mySidenav");
+      	var content = document.getElementById("j_idt95");
+        	if (btn !== null && sidemenu !== null) {
+                if (screen.width < 1000 ) {
+                    btn.style.display = "block";
+                    sidemenu.style.display = "none";
+                    if (content !== null) {
+                		content.style.marginTop = '5rem';
+                		content.style.overflow = 'auto';
+                    }
+                  } else {
+                    btn.style.display = "none";
+                      if (content !== null) {
+                    sidemenu.style.display = "block";
+            		content.style.overflow = 'inherit';
+                      }
+                  }
+        	}
+
+      }
+      function openSideBar() {
+        var x = document.getElementById("mySidenav");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+
+      window.addEventListener("resize", function () {
+        showBtn();
+      });
+      $(window).on('load', function () {
+        showBtn();
+    	var dialog = document.getElementById("seleccionarEntidadDialog");
+    	if(dialog !== null) {
+    		if (screen.width < 1000) {
+        		dialog.style.marginLeft = '5rem';
+        		dialog.style.maxWidth = '80% !imporant';
+    		}
+
+    	}
+    	var menu = document.getElementsByClassName("ui-panelmenu-content ui-widget-content ui-helper-hidden");
+    	for (i = 0; i < menu.length; i ++ ) {
+    		if(menu[i] !== null) {
+        		menu[i].style.display = 'none';
+        	}	
+    	}
+      });
+      //]]>
+    </script>
+	</h:head>
+
+	<h:body onload="setInterval('ackServer()',3000);"
+		style="font-size:0.9em;font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important; overflow-x: hidden; ">
+
+		<div class="row header-style headerT" style="background: white">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-12">
+						<p:graphicImage dir="resources" class="media-tamano-logo"
+							style="width: 100%; max-width: 37.5rem;   "
+							name="images/logos_ul.png" title="Gobierno de Colombia"
+							alt="Gobierno de Colombia" onclick="redirectToIndex()" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-2">
+				<div class="row">
+					<div class="col-12 text-right">
+						<p:graphicImage dir="resources" class="media-tamano-logo"
+							style="width: 100%; max-width: 37.5rem; position: absolute; padding-right: 2rem; padding-top:1rem;"
+							name="images/logoFuncion.png" title="Gobierno de Colombia"
+							alt="Gobierno de Colombia" />
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-4"
+				style="display: flex; flex-direction: column; align-items: flex-end;">
+				<div class="row">
+					<div class="col-12">
+
+						<p:link href="http://www.funcionpublica.gov.co/suscripcion-a-rss"
+							tabindex="1">
+							<p:graphicImage dir="resources" height="28" width="28"
+								name="images/logos/rss.svg" title="RSS" alt="RSS" />
+						</p:link>
+
+						<p:commandLink id="idBtContrastePT"
+							onclick="PF('wvComprobarCambioContraste').show();">
+							<p:graphicImage dir="resources" height="28" width="28"
+								name="images/logos/contraste.svg" title="contraste"
+								alt="contraste" />
+						</p:commandLink>
+
+						<p:link href="javascript:fontSize(.1)" id="incfont" tabindex="2">
+							<p:graphicImage dir="resources" height="28" width="28"
+								name="images/logos/aplus.svg"
+								title="${titles['TTL_FONT_SIZE_UP']}"
+								alt="${titles['TTL_FONT_SIZE_UP']}" />
+						</p:link>
+
+						<p:link href="javascript:fontSize(-.1)" id="decfont" tabindex="3">
+							<p:graphicImage dir="resources" height="28" width="28"
+								name="images/logos/aminus.svg"
+								title="${titles['TTL_FONT_SIZE_DOWN']}"
+								alt="${titles['TTL_FONT_SIZE_DOWN']}" />
+						</p:link>
+
+						<p:spacer width="2" />
+
+						<c:forEach items="#{lenguajes}" var="len">
+							<p:commandLink outcome="/index.xhtml" tabindex="4"
+								rendered="#{empty len.pais or len.pais ne lenguajeBean.localeCode}"
+								actionListener="#{lenguajeBean.solicitarRefrescarIdioma(len,2)}">
+								<f:param name="faces-redirect" value="true" />
+								<f:param name="l" value="#{len.pais}" />
+								<p:graphicImage dir="resources" height="28" width="28"
+									name="#{'images/logos/'.concat(len.imagen)}"
+									title="#{len.etiqueta}" alt="#{len.etiqueta}" />
+							</p:commandLink>
+						</c:forEach>
+
+					</div>
+				</div>
+				<ui:fragment rendered="#{sesionBean.sesionValida}">
+					<h:form id="frmRolesLogin"
+						rendered="#{not restablecerPasswordBean.ticketValido}">
+						<div class="row">
+							<h:outputLabel value="#{sesionBean.usuarioSesion.nombrePersona}"
+								styleClass="form-label header-label" />
+							<h:outputLink id="roles" value="#" style="text-decoration:none">
+								<h:outputText value="${titles['TTL_ROLES_TITLE']}"
+									styleClass="form-label header-link" />
+							</h:outputLink>
+							<p:tooltip id="toolTipRoles" for="roles"
+								widgetVar="wvToolTipRoles"
+								value="#{sesionBean.rolesUsuarioSesionString}" escape="false"
+								trackMouse="true" />
+							<h:link value="${titles['TTL_LOGON']}" outcome="/logout.xhtml"
+								class="header-h_link" />
+						</div>
+
+					</h:form>
+				</ui:fragment>
+
+				<p:spacer height="2" />
+				<ui:fragment rendered="#{not sesionBean.sesionValida}">
+					<div class="row">
+						<p:link href="https://www.facebook.com/FuncionPublica"
+							tabindex="4" target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/facebook.svg" title="Facebook" alt="Facebook" />
+						</p:link>
+						<p:spacer width="3" />
+						<p:link href="https://twitter.com/dafp_colombia" tabindex="5"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/twitter.svg" title="Twitter" alt="Twitter" />
+						</p:link>
+						<p:spacer width="3" />
+						<p:link tabindex="6"
+							href="https://www.linkedin.com/company/departamento-administrativo-de-la-funcion-publica"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/linkedin.svg" title="Linked In"
+								alt="Linked In" />
+						</p:link>
+						<p:spacer width="3" />
+						<p:link href="http://www.youtube.com/webmasterdafp" tabindex="7"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/youtube.svg" title="Youtube" alt="Youtube" />
+						</p:link>
+						<p:spacer width="3" />
+						<p:link href="https://www.flickr.com/photos/funcionpublica/albums"
+							tabindex="8" target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/flickr.svg" title="Flickr" alt="Flickr" />
+						</p:link>
+					</div>
+				</ui:fragment>
+
+				<div class="row">
+					<p:outputLabel value="#{sesionBean.verVersion()}"
+						class="form-label-version header-version2" />
+				</div>
+			</div>
+		</div>
+
+		<div class="ui-fluid bodyT">
+			<f:view encoding="${configurationView['CNS_ENCODING']}"
+				locale="#{lenguajeBean.locale}">
+				<ui:fragment rendered="#{sesionBean.sesionValida}">
+					<ui:debug
+						rendered="#{facesContext.application.projectStage == 'Development'}" />
+					<div id="center" style="min-height: 110vh">
+						<h:outputText />
+						<h:panelGroup>
+							<h:form>
+								<p:menubar model="#{menuBean.menu}" widgetVar="wvMenu"
+									style="float:left; background-color: #245379; color: transparent; width: 100%; border-radius: 0px;"
+									styleClass="horizontalmenu" autoDisplay="true"
+									rendered="#{sesionBean.sesionValida and renderMenu and not restablecerPasswordBean.ticketValido}" />
+								<p:panelMenu model="#{menuBean.menuResponsive}"
+									widgetVar="wvMenuR" style="width: 100%; border-radius: 0px;"
+									styleClass="verticalmenu" autoDisplay="true"
+									rendered="#{sesionBean.sesionValida and renderMenu and not restablecerPasswordBean.ticketValido}" />
+							</h:form>
+							<ui:fragment rendered="#{pageTitle ne titles['TTL_HOME']}"
+								styleClass="row">
+								<div class="col-md-12" style="padding: 0;">
+									<ol class="breadcrumb">
+										<li><h:commandButton type="button"
+												styleClass="form-label"
+												value="${titles['TTL_SYSTEM_NAME_MENU']}"
+												style="font-weight:normal;color:#000;text-transform:uppercase!important; font-size:1.2em!important; font-family: 'neue_helvetica_bqregular'!important;"
+												onclick="redirectToIndex()"
+												rendered="#{not restablecerPasswordBean.ticketValido}" /> <h:outputText
+												type="button" styleClass="form-label"
+												value="${titles['TTL_SYSTEM_NAME_MENU']}"
+												style="font-weight:normal;color:#000;"
+												rendered="#{restablecerPasswordBean.ticketValido}" /></li>
+										<h:panelGroup rendered="#{pintarMiga==null or pintarMiga==2}">
+											<li><h:outputLabel style="font-weight:normal;color:#000"
+													value="#{empty pageTitle ? ' ' : pageTitle}" /></li>
+											<li class="active"><h:outputLabel
+													value="#{empty pageSubtitle ? ' ' : pageSubtitle}" /></li>
+										</h:panelGroup>
+										<h:panelGroup rendered="#{pintarMiga==3}">
+											<li><h:outputLabel style="font-weight:normal;color:#000"
+													value="#{empty pageTitle ? ' ' : pageTitle}" /></li>
+											<li><h:outputLabel style="font-weight:normal;color:#000"
+													value="#{pageSubtitle1}" /></li>
+											<li class="active"><h:outputLabel
+													value="#{pageSubtitle2}" /></li>
+										</h:panelGroup>
+									</ol>
+								</div>
+							</ui:fragment>
+						</h:panelGroup>
+						<h:outputText />
+						<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-10, ui-grid-col-2" layout="grid"
+							styleClass="ui-panelgrid-blank">
+
+							<h:form id="frmPrincipal" enctype="multipart/form-data"
+								style="margin-left: 2%!important; margin-right: 2%!important;">
+								<p:ajaxStatus onstart="PF('loadingDialog').show()"
+									onsuccess="PF('loadingDialog').hide()"
+									oncomplete="PF('loadingDialog').hide()"
+									onerror="PF('loadingDialogError').show()" />
+
+								<!-- Sidebar -->
+								<div style="float: right; height: 0">
+									<div id="btnside">
+										<p:graphicImage dir="resources" height="24" width="24"
+											onclick="openSideBar()" name="images/menuResponsive.png"
+											title="Flickr" alt="Flickr" />
+									</div>
+
+									<div id="mySidenav" class="sidenav">
+										<div class="row"
+											style="background-color: #245379; color: #fff;">
+											<div class="col-md-12"
+												style="font-size: 1.5em; padding-top: 0.3em; text-align: center">
+												<h:outputText value="${titles['TTL_USER']}" />
+											</div>
+
+											<div class="col-md-12"
+												style="text-align: center; font-size: 1.3em">
+												<h:outputLabel
+													value="#{sesionBean.usuarioSesion.nombrePersona}" />
+											</div>
+										</div>
+
+
+										<p:spacer height="1" />
+										<ui:insert name="mainDataUser"/>
+
+										<div class="row">
+											<p:spacer height="1" />
+											<div class="row">
+												<div class="col-md-12 sec-title">${titles['TTL_SIDEBAR_ENTIDADES']}</div>
+											</div>
+											<p:spacer height="1" />
+											<div class="col-md-12">
+												<p:selectOneMenu converter="entidadConverter" var="t"
+													value="#{sesionBean.entidadUsuario}" required="true"
+													filter="true" filterMatchMode="custom"
+													filterFunction="contains"
+													requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+													styleClass="form-control-form-act-usua side">
+													<f:selectItem itemLabel="Seleccione Entidad"
+														itemValue="#{null}" itemDisabled="true" />
+													<f:selectItems value="#{entidadesUsuario}" var="entidad"
+														itemLabel="#{entidad.codigoSigep.concat(' - ').concat(entidad.nombreEntidad)}"
+														itemValue="#{entidad}" style="text-align:center;" />
+													<p:column style="width:0%;">
+														<h:outputText value="#{t.codigoSigep}"
+															style="color:#2A89B5;" />
+													</p:column>
+													<p:column>
+														<h:outputText
+															value="#{t.nombreEntidad}"
+															style="text-transform: uppercase;" />
+													</p:column>
+													<p:ajax process="@this" event="change"
+														listener="#{sesionBean.setCambioEntidadSideBar()}"
+														update="@this,@widgetVar(wvMenu),@widgetVar(wvMenuR),@widgetVar(wvToolTipRoles)" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+										<p:spacer height="1" />
+										<div class="row">
+											<div class="col-md-12 sec-title">${titles['TTL_SIDEBAR_OTRAS_OPCIONES']}</div>
+										</div>
+										<p:spacer height="1" />
+										<div class="row">
+											<div class="col-md-12">
+												<ul
+													style="list-style: none; padding-left: 0; text-align: center">
+
+													<li class="btn-list"><a href="javascript:void(0);"
+														style="color: #265377;">${titles['TTL_SIDEBAR_FAQ']} </a>
+													</li>
+													<li class="btn-list"><a href="javascript:void(0);"
+														style="color: #265377;">${titles['TTL_SIDEBAR_MANUAL_USUARIO']}</a>
+													</li>
+
+												</ul>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12 sec-title">${titles['TTL_SIDEBAR_VIDEO_TUTORIAL']}</div>
+										</div>
+										<div class="row">
+											<div clasS="col-md-12">
+
+												<p:commandLink id="clAbrirVideoPageTemplate"
+													oncomplete="PF('dlgVideoPageTemplate').show();">
+													<p:ajax listener="#{sesionBean.abrirVideoTutorial()}"
+														update="dlgVideoPageTemplate"></p:ajax>
+													<p:graphicImage dir="resources" style="video-tutorial"
+														name="images/video-side.png" title="Video Tutorial"
+														alt="Video Tutorial" />
+												</p:commandLink>
+
+												<p:dialog header="Video Tutorial"
+													widgetVar="dlgVideoPageTemplate" id="dlgVideoPageTemplate"
+													width="520" height="420">
+													<iframe id="ytplayer" type="text/html" width="100%"
+														height="100%" src="#{sesionBean.videoTutorial}"
+														frameborder="0" />
+													<!--
+                                                    <video controls="true">
+                                                            <source src="#{sesionBean.videoTutorial}" type="video/mp4"/>
+                                                    </video>
+                                                    -->
+												</p:dialog>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- dialogos -->
+								<p:panel id="panelPrincipal" widgetVar="panelPrincipal"
+									style="background:transparent;">
+									<p:outputLabel rendered="#{!renderMenu}" style="color:red"
+										value="${messages['MSG_MENU_INACTIVO']}" />
+									<p:separator rendered="#{!renderMenu}" />
+									<p:focus context="panelPrincipal" />
+									<h:panelGroup id="contains" rendered="#{renderMenu}">
+										<p:remoteCommand name="sureExit"
+											oncomplete="redirectToIndex()" process="@this" update="@all"
+											actionListener="#{sesionBean.logout()}" />
+										<!-- <p:sticky target="stickyPanel" -->
+										<!-- rendered="#{sesionBean.sesionValida}" /> -->
+										<ui:insert name="main" />
+										<h:panelGroup id="stickyPanel">
+											<div id="botones">
+												<p:toolbar id="tb" style="background:transparent;"
+													class="row">
+													<f:facet name="left">
+														<ui:insert name="restablecer" />
+													</f:facet>
+													<f:facet name="right">
+														<ui:insert name="botones" />
+													</f:facet>
+												</p:toolbar>
+											</div>
+										</h:panelGroup>
+										<div class="row">
+											<div class="col-md-2"></div>
+											<div class="col-md-8">
+												<p:messages id="messages" showSummary="false"
+													showDetail="true" escape="false" globalOnly="true"
+													style="font-family:Helvetica;text-align:center;font-size:1.2em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0" />
+											</div>
+											<div class="col-md-2"></div>
+										</div>
+										<p:confirmDialog global="true" showEffect="fade"
+											hideEffect="fade">
+											<p:commandButton value="${titles['TTL_YES']}" type="button"
+												styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+											<p:commandButton value="${titles['TTL_NO']}" type="button"
+												styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+										</p:confirmDialog>
+										<h:form>
+											<p:idleMonitor timeout="#{timeout}">
+												<p:ajax event="idle" process="@this" update="@all"
+													listener="#{sesionBean.logout()}" />
+											</p:idleMonitor>
+										</h:form>
+									</h:panelGroup>
+								</p:panel>
+								<!-- Habeas data dialog -->
+								<div id="habeasDataUsuarioDialog" class="modal fade"
+									role="dialog" data-keyboard="false" data-backdrop="static">
+									<div class="modal-dialog modal-lg modal-dialog-2">
+										<div class="modal-content">
+											<div class="modal-header" align="center">
+												<h4 class="modal-title">• #{titles.TTL_HABEAS_DATA} •</h4>
+											</div>
+											<div class="modal-body">
+												<h:outputText value="#{sesionBean.generarHabeasData()}"
+													escape="false" />
+											</div>
+											<div class="modal-footer">
+												<div class="row" align="center">
+													<div class="col-md-2"></div>
+													<div class="col-md-4" style="margin-bottom: 1%;">
+														<p:commandButton value="${titles['LBL_ACEPTO']}"
+															actionListener="#{sesionBean.aceptarHabeasData()}"
+															process="@this"
+															update="@widgetVar(seleccionarEntidadDialog),@widgetVar(habeasDataUsuarioDialog),@widgetVar(footer) "
+															styleClass="btn btn-primary"
+															style="padding: 0% 15% !important; font-size: 1.5em !important;"
+															onclick="$('#habeasDataUsuarioDialog').modal('hide')"
+															rendered="#{not empty entidadesUsuario and entidadesUsuario.size() gt 1 and !sesionBean.usuarioSesion.flgAceptoHabeasData}" />
+														<p:commandButton value="${titles['LBL_ACEPTO']}"
+															actionListener="#{sesionBean.aceptarHabeasData()}"
+															process="@this"
+															update="@widgetVar(seleccionarEntidadDialog),@widgetVar(habeasDataUsuarioDialog) ,@widgetVar(footer) "
+															styleClass="btn btn-primary"
+															style="padding: 0% 15% !important; font-size: 1.5em !important;"
+															onclick="$('#habeasDataUsuarioDialog').modal('hide')"
+															rendered="#{not empty entidadesUsuario and entidadesUsuario.size() eq 1 and !sesionBean.usuarioSesion.flgAceptoHabeasData}" />
+													</div>
+													<div class="col-md-4" style="margin-bottom: 1%;">
+														<p:commandButton value="${titles['LBL_NO_ACEPTO']}"
+															actionListener="#{sesionBean.rechazarHabeasData()}"
+															process="@this"
+															onclick="$('#habeasDataUsuarioDialog').modal('hide')"
+															update="@widgetVar(seleccionarEntidadDialog),@widgetVar(habeasDataUsuarioDialog) ,@widgetVar(footer) "
+															styleClass="btn btn-default"
+															style="padding: 0% 10.5% !important; font-size: 1.5em !important;"
+															rendered="#{not empty entidadesUsuario and entidadesUsuario.size() gt 1 and !sesionBean.usuarioSesion.flgAceptoHabeasData }" />
+														<p:commandButton value="${titles['LBL_NO_ACEPTO']}"
+															actionListener="#{sesionBean.rechazarHabeasData()}"
+															process="@this"
+															onclick="$('#habeasDataUsuarioDialog').modal('hide')"
+															update="@widgetVar(seleccionarEntidadDialog),@widgetVar(habeasDataUsuarioDialog) ,@widgetVar(footer) "
+															styleClass="btn btn-default"
+															style="padding: 0% 10.5% !important; font-size: 1.5em !important;"
+															rendered="#{not empty entidadesUsuario and entidadesUsuario.size() eq 1 and !sesionBean.usuarioSesion.flgAceptoHabeasData}" />
+													</div>
+													<div class="col-md-2" align="right">
+														<p:commandButton value="${titles['TTL_CLOSE']}"
+															process="@this"
+															onclick="$('#habeasDataUsuarioDialog').modal('hide')"
+															update="@widgetVar(seleccionarEntidadDialog),@widgetVar(habeasDataUsuarioDialog)"
+															styleClass="btn btn-primary"
+															style="padding: 0% 10.5% !important; font-size: 1.5em !important;"
+															rendered="#{(not empty entidadesUsuario and entidadesUsuario.size() gt 1  or
+																	not empty entidadesUsuario and entidadesUsuario.size() eq 1 ) 
+																	and sesionBean.usuarioSesion.flgAceptoHabeasData}" />
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</h:form>
+							<!-- Mostrar Sidebar -->
+
+						</p:panelGrid>
+					</div>
+				</ui:fragment>
+
+				<ui:fragment rendered="#{not sesionBean.sesionValida}">
+					<ui:include src="/login.xhtml" />
+				</ui:fragment>
+
+				<!--                <h:outputText value="&#10;&#10;" style="white-space:pre;"/>-->
+
+
+			</f:view>
+
+			<p:dialog widgetVar="loadingDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false"
+				style="width:auto;height:auto">
+				<p:graphicImage dir="resources" name="/images/loading.gif"
+					rendered="#{progressBarView.progress eq 0}" height="45" width="70"
+					alt="${messages['DLG_PROCESANDO']}"
+					title="${messages['MSG_PROCESANDO']}" />
+			</p:dialog>
+
+			<p:dialog widgetVar="loadingDialogError" modal="true"
+				draggable="false" closable="true" resizable="false"
+				header="${messages['DLG_PROCESO_FALLIDO']}">
+				<h:outputText value="${messages['DLG_PAGE_EXCEPTION_ERROR']}" />
+			</p:dialog>
+
+			<p:dialog modal="true" widgetVar="statusDialog" showHeader="false"
+				draggable="false" closable="false" resizable="false">
+				<p:graphicImage dir="resources" name="/images/loading.gif"
+					height="45" width="45" alt="${messages['DLG_PROCESANDO']}"
+					title="${messages['MSG_PROCESANDO']}" />
+				<h:outputText value="${messages['MSG_PROCESANDO']}" />
+			</p:dialog>
+
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+				widgetVar="wvComprobarCambioContraste"
+				id="wvComprobarCambioContraste" minHeight="300" modal="true"
+				resizable="false" closeOnEscape="false" responsive="true"
+				draggable="false" closable="false" appendTo="@(body)">
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;"
+					align="center">
+					<center>
+						<h5>${messages['MSG_CONFIMRAR_CAMBIAR_CONTRASTE']}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+					<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+						process="@this" styleClass="btn btn-primary"
+						action="#{contrasteBean.cambiarContraste}"
+						onclick="PF('wvComprobarCambioContraste').hide();" />
+					<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('wvComprobarCambioContraste').hide();" />
+				</div>
+				<br />
+			</p:dialog>
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+				widgetVar="wvComprobarCambioIdiomaPT" id="wvComprobarCambioIdiomaPT"
+				minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false"
+				appendTo="@(body)">
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;"
+					align="center">
+					<center>
+						<h5>${messages['MSG_CONFIMRAR_CAMBIAR_CONTRASTE']}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+					<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+						process="@this" styleClass="btn btn-primary"
+						action="#{lenguajeBean.refrescarIdiomaConfirmacion}"
+						onclick="PF('wvComprobarCambioIdiomaPT').hide();" />
+					<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('wvComprobarCambioIdiomaPT').hide();" />
+				</div>
+				<br />
+			</p:dialog>
+
+		</div>
+
+		<div class="ui-fluid footerT">
+			<ui:include src="/resources/template/footerTemplate.xhtml" />
+		</div>
+
+		<script type="text/javascript">
+            $(window).on('load', function () {
+                if (#{not sesionBean.usuarioSesion.flgAceptoHabeasData}) {
+                    $('#habeasDataUsuarioDialog').modal({backdrop: 'static', keyboard: false});
+                }
+            });
+            $(window).on('load', function () {
+                x = document.getElementsByTagName("A");
+                var i;
+                for (i = 0; i &lt; x.length; i++) {
+                    x[i].setAttribute("draggable", "false");
+                }
+                //Evento para cerrar los modales abiertos antes de abrir un nuevo modal.
+                $('.modal').on('show.bs.modal', function () {
+                   
+                    $('.modal').not($(this)).each(function () {
+                        
+                        $(this).modal('hide');
+
+                    });
+                });
+            });
+			function contains(itemLabel, filterValue) {
+				return itemLabel.includes(filterValue) || specialCharacters(itemLabel).includes(filterValue);
+
+			}
+        </script>
+
+	</h:body>
+</ui:composition>

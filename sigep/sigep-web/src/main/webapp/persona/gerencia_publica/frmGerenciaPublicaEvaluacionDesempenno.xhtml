@@ -1,0 +1,267 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="pnlGerenciaPublicaEvaluacionDesempenno">
+		<br /><br />
+		<div class="col-md-12 row row-background-white">			
+			<p:dataTable id="tblEvsDesempenno" 
+	             paginator="true"
+	             reflow="true"
+	             rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+	             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+	             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	             var="ev" 
+	             value="#{gerenciaPublicaHVBean.lstEvsDedesempenno}"
+	             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+			 	
+			 	<p:column sortBy="#{ev.nombreEntidadPublica}"  style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}" /></f:facet>
+					<h:outputText value="#{ev.nombreEntidadPublica}" />
+				</p:column>
+			 	
+			 	<p:column sortBy="#{ev.escalaEvaluacion}"  style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_ESCALA_CALIFICACION']}" /></f:facet>
+					<h:outputText value="#{ev.escalaEvaluacion}" />
+				</p:column>
+			 
+			 	<p:column sortBy="#{ev.resultadoEvaluacion}"  style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_CALIFICACION_OBTENIDA']}" /></f:facet>
+					<h:outputText value="#{ev.resultadoEvaluacion}" />
+				</p:column>
+			 										
+				<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"  style="opacity: 1!important; text-align:center!important;">
+					<p:commandButton id="idModificarEvDesempenno" title="${titles['TTL_EDIT']}"
+						             icon="icon-edit" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.modificarEvDesempenno(ev)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlEvDesempennoNuevo"
+						            rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+						             oncomplete="datosModificados(1);">
+					</p:commandButton>	
+					<p:commandButton id="idConsultarEvDesempenno" title="${titles['TTL_CONSULT']}"
+						             icon="icon-view" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.consultarEvDesempenno(ev)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlEvDesempennoNuevo"
+						            >
+					</p:commandButton>	
+					<p:commandButton id="idEliminarEvDesempenno" title="${titles['TTL_DELETE']}"
+						             icon="icon-delete" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.solicitarConfirmacionEliminarEvDesempenno(ev)}"
+						             update="frmPrincipal:tabHojaDeVida frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaEvDesempenno"
+						            rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					</p:commandButton>								             
+				</p:column>					
+			</p:dataTable>	
+		</div>
+		<h:panelGroup id="pnlEvDesempennoNuevo">
+			<p:panel id="pnlFrmEvDesempenno"  rendered="#{gerenciaPublicaHVBean.flgHabilitaPanelEvDesempenno}"
+						 class="col-md-12 row row-background-white" style="margin-top: 3.3em!important;">
+				<p:spacer height="2" style="padding-top: 3em!important;"/>
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_MODIFICAR_EVALUACION']}</span> 
+				<br /> <br />
+				
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+									<p:outputLabel for="somNombreEntidadPublica"
+										value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+										styleClass="log-label form-label-formularios" />
+							<h:inputText id="somNombreEntidadPublica"
+								title="#{titles.TTL_INGRESE} LBL_NOMBRE_ENTIDAD_ORGANIZACION"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onkeypress="return numbervalida(event)"
+								value="#{gerenciaPublicaHVBean.evDesempennoProcesar.nombreEntidadPublica}"
+								styleClass="form-control-acti-usua form-control"
+								disabled="true">
+							</h:inputText>										
+									<p:message for="somNombreEntidadPublica" display="text" />
+						</div>
+						<div class="col-md-4">
+									<p:outputLabel value="#{titles.TTL_CARGO_ACTUAL}"
+										styleClass="log-label form-label-formularios" />
+									<h:inputText id="somCargoGrado"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_CARGO_ACTUAL} 2"
+										required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										onkeypress="return numbervalida(event)"
+										value="#{gerenciaPublicaHVBean.evDesempennoProcesar.cargoEntidadPrivada}"
+										styleClass="form-control-acti-usua form-control"
+										disabled="true">
+									</h:inputText>										
+						</div>	
+						<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_CALIFICACION_OBTENIDA']}:"
+									for="txtCalificacion"
+									styleClass="log-label form-label-formularios" />
+								<h:inputText id="txtCalificacion" maxlength="#{maxNumeros.gpEdTammaxCalificacionobtenida}"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_CALIFICACION_OBTENIDA} #{titles['TTL_TIPO_ALFANUMERICO']}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									required="true" styleClass="form-control-acti-usua form-control"
+									disabled="#{gerenciaPublicaHVBean.flgEvDesempennoEsConsulta}"
+									value="#{gerenciaPublicaHVBean.evDesempennoProcesar.resultadoEvaluacion}"
+									onkeypress="return numbervalida(event)"
+									onchange="datosModificados(1);">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpEdTammaxCalificacionobtenida}" name="maxLength" />
+								</h:inputText>
+								<p:message for="txtCalificacion" display="text" />
+							</div>
+					</div>							
+				</div>
+				<br/>
+				<div class="row">
+						<div class="col-md-12">						
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_ESCALA_CALIFICACION']}:"
+									for="txtEscala" styleClass="log-label form-label-formularios" />
+								<p:inputText id="txtEscala" maxlength="#{maxNumeros.gpEdTammaxCalificacionescala}"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_ESCALA_CALIFICACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+									styleClass="form-control-acti-usua form-control" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									disabled="#{gerenciaPublicaHVBean.flgEvDesempennoEsConsulta}"
+									value="#{gerenciaPublicaHVBean.evDesempennoProcesar.escalaEvaluacion}"
+									onchange="datosModificados(1);">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpEdTammaxCalificacionescala}" name="maxLength" />
+								</p:inputText>
+								<p:message for="txtEscala" display="text" />
+							</div>
+						
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_FECHA_INICIO_2']}:"
+												for="cldFechaInicioE"
+												styleClass="log-label form-label-formularios" />
+								<p:calendar id="cldFechaInicioE" navigator="true"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_INICIO_2} #{titles['TTL_TIPO_NUMERICO']} "
+									effect="slideDown" mask="true" mode="popup" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									style="font-size: 1em!important;"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+									value="#{gerenciaPublicaHVBean.evDesempennoProcesar.fechaInicioEvaluacion}"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									locale="#{lenguajeBean.localeCode}"
+									onselect="datosModificados(1);"
+									disabled="#{gerenciaPublicaHVBean.flgEvDesempennoEsConsulta}">
+									<f:attribute name="maxDate" value="#{fechaSistema}" />
+									<f:validator validatorId="maxDateValidator" />
+									<p:ajax event="dateSelect" update="cldFechaFinE" />
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="cldFechaInicioE" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_TABLA_FECHA_FIN']}:"
+									for="cldFechaFinE" styleClass="log-label form-label-formularios" />
+								<p:calendar id="cldFechaFinE" required="true" navigator="true"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_TABLA_FECHA_FIN} #{titles['TTL_TIPO_NUMERICO']}"
+									effect="slideDown" mask="true" mode="popup"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+									style="font-size: 1em!important;"
+									value="#{gerenciaPublicaHVBean.evDesempennoProcesar.fechaFinEvaluacion}"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									locale="#{lenguajeBean.localeCode}"
+									onselect="datosModificados(1);"
+									disabled="#{gerenciaPublicaHVBean.flgEvDesempennoEsConsulta}">
+									<f:attribute name="maxDate" value="#{fechaSistema}" />
+									<f:attribute name="startDateName"
+										value="${titles['LBL_FECHA_INICIO_2']}" />
+									<f:attribute name="endDateName"
+										value="${titles['LBL_TABLA_FECHA_FIN']}" />
+									<f:attribute name="startDate"
+										value="#{gerenciaPublicaHVBean.evDesempennoProcesar.fechaInicioEvaluacion}" />
+									<f:validator validatorId="maxDateValidator" />
+									<f:validator validatorId="dateRangeValidator" />
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="cldFechaFinE" display="text" />								
+							</div>								
+							
+						</div>
+					</div>
+				
+				
+				
+				
+					<div class="row" align="center">
+					<BR /><BR />
+						<div class="col-md-4 media-btn-gerencia"></div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton id="btnGuardarEvDesempenno" value="${titles['TTL_SAVE']}"
+												process="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"
+												update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida
+												        frmPrincipal:informacionPersonalUsuario"
+												styleClass="btn btn-primary"
+												style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+												oncomplete="datosModificados(0);"
+												actionListener="#{gerenciaPublicaHVBean.guardarGerenciaPublica()}"
+												disabled="#{gerenciaPublicaHVBean.flgEvDesempennoEsConsulta}">
+							</p:commandButton>							
+						</div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+								styleClass="btn btn-default"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								action="#{gerenciaPublicaHVBean.solicitarConfirmacionCancelarEvDesempenno()}"
+									update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaEvDesempenno"
+								>
+							</p:commandButton>
+						</div>
+					</div>
+			</p:panel>
+		</h:panelGroup>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionGerenciaPublicaEvDesempenno" id="dlgConfirmarAccionGerenciaPublicaEvDesempenno" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{gerenciaPublicaHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{gerenciaPublicaHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionGerenciaPublicaEvDesempenno').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica tblEvsDesempenno"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionGerenciaPublicaEvDesempenno').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>			
+	</p:panel>
+</ui:composition>
+
+

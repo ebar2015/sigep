@@ -1,0 +1,244 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_DEPARTAMENTO']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_DEPARTAMENTO} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="nombreDepartamento" maxlength="255"
+						placeholder="${titles['LBL_DEPARTAMENTO']}"
+						title="${titles['TTL_INGRESE']} ${titles['LBL_DEPARTAMENTO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						completeMethod="#{departamentoBean.listarDepartamentoFiltro}"
+						value="#{departamentoBean.strBusquedaDepartamento}">
+						<p:ajax event="itemSelect" listener="#{departamentoBean.filtrarDepartamento}"
+							update ="dataTableDepartamento"/>
+					</p:autoComplete>
+					<p:message for="nombreDepartamento" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonSearchDepartamento" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{departamentoBean.filtrarDepartamento}"
+						process="@this nombreDepartamento"
+						update ="dataTableDepartamento"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_DEPARTAMENTO}</span> <br /> <br />
+
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearDepartamento" process="@this"
+					update="panelDepartamento" actionListener="#{departamentoBean.crearDepartamento()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelDepartamento';"/>
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableDepartamento" paginator="true"
+					reflow="true" rowIndexVar="rowIndex"
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}" value="#{departamentoBean.lstDepartamento}"
+					var="dataDepartamento"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					<p:column headerText="${titles['LBL_PARAMETRICA_DEPARTAMENTO_NOMBRE']}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataDepartamento.nombreDepartamento}"
+						filterBy="#{dataDepartamento.nombreDepartamento}"  filterMatchMode="contains">
+						<h:outputText value="#{dataDepartamento.nombreDepartamento}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_INDICATIVO} #{titles.LBL_DEPARTAMENTO}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataDepartamento.indicativo}"
+						filterBy="#{dataDepartamento.indicativo}"  filterMatchMode="contains">
+						<h:outputText value="#{dataDepartamento.indicativo}" />
+					</p:column>
+					<p:column headerText="#{titles.TTL_ACTIVO}"
+						style="word-wrap: break-word!important;text-align: center!important;"
+						sortBy="#{dataDepartamento.flgActivo}">
+						<p:selectBooleanCheckbox
+							value="#{dataDepartamento.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarDepartamento" title="${titles['TTL_EDIT']}"
+							icon="icon-edit" styleClass="icon-btn btn-view-data"
+							process="@this" update="frmPrincipal:panelDepartamento"
+							immediate="true"
+							actionListener="#{departamentoBean.modificarDepartamento(dataDepartamento)}"
+                    		oncomplete="window.location.href='#frmPrincipal:panelDepartamento';">
+						</p:commandButton>
+						<p:commandButton id="btnVerDepartamento"
+							actionListener="#{departamentoBean.consultarDepartamento(dataDepartamento)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view" styleClass="icon-btn"
+							process="@this" update="frmPrincipal:panelDepartamento"
+                    		oncomplete="window.location.href='#frmPrincipal:panelDepartamento';">
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+							id="btnAdmonEliminarDepartamento" styleClass="icon-btn" process="@this" rendered="false"
+							actionListener="#{departamentoBean.eliminarDepartamento()}" update="frmPrincipal:dlgConfirmarDepartamento">
+							<f:setPropertyActionListener value="#{dataDepartamento}" target="#{departamentoBean.infoDepartamento}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelDepartamento">
+			<p:spacer height="2" />
+			<p:panel id="subpanelDepartamento" widgetVar="subPanelDepartamento"
+				rendered="#{departamentoBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<p:spacer height="3" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{departamentoBean.strAccionRealizada}</span>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PAIS']}:" for="txtPais"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="txtPais"
+								title="${titles['TTL_SELECT']} ${titles['LBL_PAIS']}"
+								disabled="true"
+								value="#{departamentoBean.infoDepartamento.codPais}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.pais}" />
+							</h:selectOneMenu>
+							<p:message for="txtPais" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_DEPARTAMENTO_NOMBRE}"
+								styleClass="log-label form-label-formularios"
+								for="txtNombreDepartamento" />
+							<p:inputText id="txtNombreDepartamento" required="true"
+								value="#{departamentoBean.infoDepartamento.nombreDepartamento}"
+								disabled="#{departamentoBean.blnConsultarDepartamento}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+								maxlength="50">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreDepartamento" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_INDICATIVO} #{titles.LBL_DEPARTAMENTO}"
+								styleClass="log-label form-label-formularios"
+								for="txtIndicativoDepartamento" />
+							<p:inputText id="txtIndicativoDepartamento" required="true"
+								value="#{departamentoBean.infoDepartamento.indicativo}"
+								disabled="#{departamentoBean.blnConsultarDepartamento}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+								onkeypress="return numbervalida(event)"
+								maxlength="4">
+								<f:validator validatorId="numberValidator" />
+							</p:inputText>
+							<p:message for="txtIndicativoDepartamento" display="text" />
+						</div>
+						
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoDepartamento"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true" id="activoDepartamento"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{departamentoBean.blnConsultarDepartamento}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{departamentoBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoDepartamento" display="text" />
+						</div>
+						
+					</div>
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							rendered="#{!departamentoBean.blnConsultarDepartamento}"
+							styleClass="btn btn-primary"
+							disabled="#{departamentoBean.blnConsultarDepartamento}" update="panelDepartamento dataTableDepartamento nombreDepartamento"
+							actionListener="#{departamentoBean.guardarDepartamento()}"
+							process="frmPrincipal:panelDepartamento"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!departamentoBean.blnConsultarDepartamento}"
+							styleClass="btn btn-default" update="dlgConfirmarDepartamento"
+							actionListener="#{departamentoBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{departamentoBean.blnConsultarDepartamento}"
+							styleClass="btn btn-primary" update="panelDepartamento nombreDepartamento"
+							actionListener="#{departamentoBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarDepartamento" id="dlgConfirmarDepartamento" minHeight="300"
+			modal="true" draggable="false" closable="false" 
+			resizable="false" responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center>
+					<h5>#{departamentoBean.strMensaje}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary" update="panelDepartamento dataTableDepartamento"
+						actionListener="#{departamentoBean.procesarRespuestaConfirmacion}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlgConfirmarDepartamento').hide();" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarDepartamento').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+</ui:composition>

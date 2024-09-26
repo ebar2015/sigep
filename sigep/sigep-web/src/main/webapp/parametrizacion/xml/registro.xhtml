@@ -1,0 +1,535 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/dialogTemplate.xhtml">
+	<ui:param name="pageTitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_PLANTILLA_XML_AGREGAR_REGISTRO']}" />
+
+	<ui:define name="main">
+		<p:importConstants type="co.gov.dafp.sigep2.util.xml.elemento.TipoCargue"
+			var="PFTipoCargue" />
+		<h:panelGroup id="agregarDetalleDialog">
+			<p:panelGrid columns="6"
+				columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1"
+				layout="grid" styleClass="ui-panelgrid-blank">
+				<p:outputLabel for="descripcion"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}" />
+				<p:inputText id="descripcion"
+					placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}"
+					value="#{plantillaBean.registroSeleccionado.descripcion}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="descripcion" display="icon" />
+
+				<p:outputLabel for="validarTipoRegistro"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALIDAR_TIPO_REGISTRO']}" />
+				<p:selectBooleanCheckbox id="validarTipoRegistro"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALIDAR_TIPO_REGISTRO']}"
+					value="#{plantillaBean.registroSeleccionado.validarTipoRegistro}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:ajax process="@this" update="posicionTipoRegistro"
+						event="change" />
+				</p:selectBooleanCheckbox>
+				<p:message for="validarTipoRegistro" display="icon" />
+
+				<p:outputLabel for="posicionTipoRegistro"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_POSICION_TIPO_REGISTRO']}" />
+				<p:selectOneMenu id="posicionTipoRegistro" filter="true"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_POSICION_TIPO_REGISTRO']}"
+					filterMatchMode="contains"
+					value="#{plantillaBean.registroSeleccionado.posicionTipoRegistro}"
+					var="t"
+					disabled="#{!plantillaBean.registroSeleccionado.validarTipoRegistro}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="1" />
+					<f:selectItems var="posicionTipoRegistro"
+						value="#{plantillaBean.registroSeleccionado.columna}"
+						itemLabel="#{posicionTipoRegistro.orden}"
+						itemValue="#{posicionTipoRegistro.orden}" />
+					<p:column>
+						<h:outputText value="#{t}" />
+					</p:column>
+					<p:clientValidator />
+				</p:selectOneMenu>
+				<p:message for="posicionTipoRegistro" display="icon" />
+
+				<p:outputLabel for="bcp"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_BCP']}" />
+				<p:selectBooleanCheckbox id="bcp" disabled="true"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_BCP']}"
+					value="#{plantillaBean.registroSeleccionado.BCP}" required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				</p:selectBooleanCheckbox>
+				<p:message for="bcp" display="icon" />
+
+				<p:outputLabel for="csv"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CSV']}" />
+				<p:selectBooleanCheckbox id="csv"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CSV']}"
+					value="#{plantillaBean.registroSeleccionado.csv}" required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:clientValidator />
+					<p:ajax event="change" process="@this" update="@this caracterCsv" />
+				</p:selectBooleanCheckbox>
+				<p:message for="csv" display="icon" />
+
+				<p:outputLabel for="caracterCsv"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CARACTER_CSV']}" />
+				<p:selectOneMenu id="caracterCsv" filter="true"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CARACTER_CSV']}"
+					filterMatchMode="contains"
+					disabled="#{!plantillaBean.registroSeleccionado.csv}"
+					value="#{plantillaBean.registroSeleccionado.caracterCsv}" var="t"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+						noSelectionOption="true" itemValue="${titles['TTL_SELECT']}" />
+					<f:selectItems var="caracterCsv" value="#{separadoresCSV}"
+						itemLabel="#{caracterCsv}" itemValue="#{caracterCsv}" />
+					<p:column>
+						<h:outputText value="#{t}" />
+					</p:column>
+					<p:clientValidator />
+				</p:selectOneMenu>
+				<p:message for="caracterCsv" display="icon" />
+
+				<p:outputLabel for="tipoRegistro"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_REGISTRO']}" />
+				<p:selectOneMenu id="tipoRegistro" filter="true"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_REGISTRO']}"
+					filterMatchMode="contains" required="true"
+					value="#{plantillaBean.registroSeleccionado.tipoRegistro}" var="t"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+						noSelectionOption="true" itemValue="${titles['TTL_SELECT']}" />
+					<f:selectItems var="tipoRegistro" value="#{tiposRegistro}"
+						itemLabel="#{tipoRegistro}" itemValue="#{tipoRegistro}" />
+					<p:column>
+						<h:outputText value="#{t}" />
+					</p:column>
+					<p:clientValidator />
+				</p:selectOneMenu>
+				<p:message for="tipoRegistro" display="icon" />
+
+				<p:outputLabel for="requerido"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}" />
+				<p:selectBooleanCheckbox id="requerido"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+					value="#{plantillaBean.registroSeleccionado.requerido}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:clientValidator />
+				</p:selectBooleanCheckbox>
+				<p:message for="requerido" display="icon" />
+
+				<p:outputLabel for="contieneSentenciaSQL"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CONTIENE_SQL']}" />
+				<p:selectBooleanCheckbox id="contieneSentenciaSQL"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CONTIENE_SQL']}"
+					value="#{plantillaBean.registroSeleccionado.contieneSentenciaSQL}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:ajax event="change" process="@this" update="@this sentenciaSQL" />
+				</p:selectBooleanCheckbox>
+				<p:message for="contieneSentenciaSQL" display="icon" />
+
+				<h:outputText />
+				<h:outputText />
+				<h:outputText />
+			</p:panelGrid>
+			<p:separator />
+			<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid"
+				styleClass="ui-panelgrid-blank">
+				<p:dataTable id="detalleColumna" editable="true" reflow="true"
+					rowKey="#{item}"
+					value="#{plantillaBean.registroSeleccionado.columna}" var="item"
+					emptyMessage="${messages['DLG_SIN_REGISTROS']}">
+					<f:facet name="header">
+						<h:outputText value="${titles['TTL_COLUMNAS']}" />
+					</f:facet>
+					<p:column sortBy="#{item.orden}" sortable="true"
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ORDEN']}">
+						<h:outputText value="#{item.orden}" />
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.descripcion}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="descripcion" value="#{item.descripcion}"
+									placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}">
+									<p:clientValidator />
+								</p:inputText>
+								<p:message for="descripcion" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA_COLUMNA']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.etiquetaColumna}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="etiquetaColumna"
+									value="#{item.etiquetaColumna}"
+									placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA_COLUMNA']}">
+									<p:clientValidator />
+								</p:inputText>
+								<p:message for="etiquetaColumna" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column sortBy="#{item.inicio}" sortable="true"
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_INICIO']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.inicio}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputNumber id="inicio" value="#{item.inicio}" minValue="1"
+									decimalPlaces="0" decimalSeparator="" thousandSeparator=""
+									placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_INICIO']}">
+									<p:clientValidator />
+									<p:ajax process="@this" update="@this fin longitud" />
+								</p:inputNumber>
+								<p:message for="inicio" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FIN']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.fin}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputNumber id="fin" value="#{item.fin}"
+									minValue="#{item.inicio}" decimalPlaces="0" decimalSeparator=""
+									thousandSeparator=""
+									placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FIN']}">
+									<p:clientValidator />
+									<p:ajax event="change" process="@this" update="@this longitud" />
+								</p:inputNumber>
+								<p:message for="fin" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LONGITUD']}">
+						<p:cellEditor id="longitud">
+							<f:facet name="output">
+								<h:outputText
+									value="#{item.fin ne null and item.fin gt 0 ? (item.fin.add(item.inicio ne null ? item.inicio.negate() : -1).add(1)) : 1}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:outputText
+									value="#{item.fin ne null and item.fin gt 0 ? (item.fin.add(item.inicio ne null ? item.inicio.negate() : -1).add(1)) : 1}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LLAVE']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.parametro}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu id="parametro" filter="true"
+									filterMatchMode="contains"
+									title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LLAVE']}"
+									value="#{item.parametro}" var="t">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="${titles['TTL_SELECT']}" />
+									<f:selectItems var="#{parametro}"
+										value="#{plantillaBean.parametrosSQL}"
+										itemLabel="#{parametro}" itemValue="#{parametro}" />
+									<p:column>
+										<h:outputText value="#{t}" />
+									</p:column>
+									<p:clientValidator />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MASCARA']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.mascara}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="mascara" value="#{item.mascara}"
+									placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MASCARA']}">
+									<p:clientValidator />
+								</p:inputText>
+								<p:message for="mascara" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_RENDERIZADO']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText
+									value="#{item.renderizado ? titles['TTL_YES'] : titles['TTL_NO']}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectBooleanCheckbox id="renderizado"
+									title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_RENDERIZADO']}"
+									value="#{item.renderizado}" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+									<p:clientValidator />
+								</p:selectBooleanCheckbox>
+								<p:message for="renderizado" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText
+									value="#{item.requerido ? titles['TTL_YES'] : titles['TTL_NO']}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectBooleanCheckbox id="requerido"
+									title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+									value="#{item.requerido}" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+									<p:clientValidator />
+								</p:selectBooleanCheckbox>
+								<p:message for="requerido" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.tipoDato}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu id="tipoDato" filter="true" required="true"
+									filterMatchMode="contains"
+									title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}"
+									value="#{item.tipoDato}" var="t"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										noSelectionOption="true" itemValue="${titles['TTL_SELECT']}" />
+									<f:selectItems var="#{tipoDato}" value="#{tiposDato}"
+										itemLabel="#{tipoDato.value()}" itemValue="#{tipoDato}" />
+									<p:column>
+										<h:outputText value="#{t.value()}" />
+									</p:column>
+									<p:clientValidator />
+								</p:selectOneMenu>
+								<p:message for="tipoDato" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column
+						headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALOR_DEFECTO']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.valorPorDefecto}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="valorPorDefecto"
+									value="#{item.valorPorDefecto}"
+									placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALOR_DEFECTO']}">
+									<p:clientValidator />
+								</p:inputText>
+								<p:message for="valorPorDefecto" display="icon" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:32px">
+						<p:rowEditor />
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+			<p:separator
+				rendered="#{plantillaBean.registroSeleccionado.contieneSentenciaSQL}" />
+			<h:panelGroup id="sentenciaSQL">
+				<p:panelGrid columns="3"
+					rendered="#{plantillaBean.registroSeleccionado.contieneSentenciaSQL}"
+					columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2"
+					layout="grid" styleClass="ui-panelgrid-blank">
+					<p:outputLabel for="sentencia"
+						value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SQL']}" />
+					<p:inputTextarea id="sentencia"
+						placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SQL']}"
+						value="#{plantillaBean.registroSeleccionado.SQL.sentencia}"
+						required="true"
+						requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+						<p:clientValidator />
+						<p:ajax event="change" process="@this"
+							update="@this agregarDetalleDialog" />
+					</p:inputTextarea>
+					<p:message for="sentencia" display="icon" />
+
+					<h:outputText />
+					<h:outputText />
+					<h:outputText />
+				</p:panelGrid>
+				<p:separator
+					rendered="#{plantillaBean.registroSeleccionado.contieneSentenciaSQL}" />
+				<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+					layout="grid" styleClass="ui-panelgrid-blank"
+					rendered="#{plantillaBean.registroSeleccionado.contieneSentenciaSQL}">
+					<h:panelGroup>
+						<h:outputText style="float:right"
+							value="${messages['MSG_INFO_TRANSVERSAL_PLANTILLA_XML_PARAMETRO']}" />
+						<p:outputLabel value="${titles['TTL_NOTE']} : " />
+					</h:panelGroup>
+					<p:dataTable id="detalleParametro" editable="true" reflow="true"
+						rowKey="#{item}"
+						value="#{plantillaBean.registroSeleccionado.SQL.parametro}"
+						var="item" emptyMessage="${messages['DLG_SIN_REGISTROS']}">
+						<f:facet name="header">
+							<h:outputText value="${titles['TTL_PARAMETROS']}" />
+						</f:facet>
+						<p:column sortBy="#{item.nombre}" sortable="true"
+							headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LLAVE']}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.nombre}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="nombre" value="#{item.nombre}"
+										placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_LLAVE']}"
+										required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+										<p:clientValidator />
+									</p:inputText>
+									<p:message for="nombre" display="icon" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column sortBy="#{item.tipoDato}" sortable="true"
+							headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.tipoDato}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:selectOneMenu id="tipoDato" filter="true" required="true"
+										filterMatchMode="contains"
+										title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}"
+										value="#{item.tipoDato}" var="t"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+											noSelectionOption="true" itemValue="${titles['TTL_SELECT']}" />
+										<f:selectItems var="#{tipoDato}" value="#{tiposDato}"
+											itemLabel="#{tipoDato}" itemValue="#{tipoDato}" />
+										<p:column>
+											<h:outputText value="#{t}" />
+										</p:column>
+										<p:clientValidator />
+									</p:selectOneMenu>
+									<p:message for="tipoDato" display="icon" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column sortBy="#{item.etiquetaColumna}" sortable="true"
+							headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA']}"
+							rendered="#{tipoCargue eq PFTipoCargue.REPORTE}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.etiquetaColumna}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="etiquetaColumna"
+										placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA']}"
+										value="#{item.etiquetaColumna}" required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+										<p:clientValidator />
+									</p:inputText>
+									<p:message for="etiquetaColumna" display="icon" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column
+							headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+							rendered="#{tipoCargue eq PFTipoCargue.REPORTE}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText
+										value="#{item.requerido ? titles['TTL_YES'] : titles['TTL_NO']}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:selectBooleanCheckbox id="requerido"
+										value="#{item.requerido}" required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										rendered="#{tipoCargue eq PFTipoCargue.REPORTE}" />
+									<p:message for="requerido" display="icon" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column
+							headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}"
+							rendered="#{tipoCargue eq PFTipoCargue.REPORTE}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.sentencia}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputTextarea id="sentencia"
+										placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_SENTENCIA']}"
+										value="#{item.sentencia}">
+									</p:inputTextarea>
+									<p:message for="sentencia" display="icon" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:32px">
+							<p:rowEditor />
+						</p:column>
+					</p:dataTable>
+				</p:panelGrid>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton icon="ui-icon-plus" title="${titles['TTL_OK']}"
+			value="${titles['TTL_OK']}" process="@this agregarDetalleDialog"
+			update="agregarDetalleDialog"
+			actionListener="#{plantillaBean.seleccionarRegistroDialogo}" />
+		<p:commandButton id="botonMasColumna" icon="ui-icon-plus"
+			value="${titles['TTL_ADD_COLUMNA']}"
+			actionListener="#{plantillaBean.addColumna}" process="@this"
+			update="@this">
+			<f:setPropertyActionListener value="#{archivo}"
+				target="#{plantillaBean.archivoSeleccionado}" />
+			<f:setPropertyActionListener value="#{registro}"
+				target="#{plantillaBean.registroSeleccionado}" />
+			<p:ajax event="dialogReturn" process="@this"
+				listener="#{plantillaBean.seleccionarDetalle}"
+				update="detalleColumna" />
+		</p:commandButton>
+		<p:commandButton id="botonMasParametro" icon="ui-icon-plus"
+			value="${titles['TTL_ADD_PARAMETRO']}"
+			actionListener="#{plantillaBean.addParametro}" process="@this"
+			update="@this">
+			<f:setPropertyActionListener
+				value="#{plantillaBean.registroSeleccionado.SQL}"
+				target="#{plantillaBean.sqlSeleccionada}" />
+			<p:ajax event="dialogReturn" process="@this"
+				listener="#{plantillaBean.seleccionarDetalle}"
+				update="detalleParametro" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

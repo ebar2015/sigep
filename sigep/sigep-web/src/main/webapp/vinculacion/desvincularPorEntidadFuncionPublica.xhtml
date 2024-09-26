@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/basicTemplate.xhtml">
+	
+	<f:metadata>
+		<f:viewParam name="id" value="#{desvincularPersonaBean.id}" />
+		<f:viewParam name="dialog" value="#{desvincularPersonaBean.dialog}" />
+		<f:event listener="#{desvincularPersonaBean.retrieve}" type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['TTL_HOJA_VIDA2']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_VINCULAR_DESVINCULAR']}" />
+	
+	<ui:define name="content">
+		<div class="row">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="•  ${titles['TTL_DESVINCULAR_SERVIDOR_PUBLICO']} •" styleClass="page-subtitle" /> </h2>
+				</div>
+			</div>
+		</div>
+		<br/>
+		
+		<h:form id="frmPrincipalDesvincular" enctype="multipart/form-data">
+			<div class="row row-background-white" id="child-tab-data-basic">
+				<br />
+
+				<br /> <br /> <span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_DATOS_BASICOS_IDENTI']} </span> <br /> <br />
+				<div class="col-md-3" align="center">
+					<div class="col-md-12">
+						<h:graphicImage url="#{desvincularPersonaBean.persona.imagenUsuario}"
+							height="150" width="150" style="border-radius:75px; margin-bottom:3%;" />
+					</div>
+				</div>
+				<div class="col-md-9">
+					<h4 class="h4-perfil h4-perfil-media">
+						<p:outputLabel class="title-datos-basicos" value="#{desvincularPersonaBean.persona.nombreUsuario}" />
+					</h4>
+					<br />
+					<div class="col-md-12"
+						style="margin-left: -1%; border-top: 1px solid #B3B3B3 !important;">
+						<br />
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['TTL_TIPO_IDENTIFICACION']}&#58;&#160;"
+								styleClass="log-label form-label" style="color: #263948!important; font-weight:600!important;" />
+							<p:outputLabel value=" #{desvincularPersonaBean.persona.nombreTipoDocuento}"
+								styleClass="log-label form-label" style="text-transform: capitalize!important; ">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['TTL_NICK_NAME']}&#58;&#160;"
+								styleClass="log-label form-label" style="color: #263948!important; font-weight:600;" />
+							<p:outputLabel value="#{desvincularPersonaBean.persona.numeroIdentificacion}" styleClass="log-label form-label" />
+						</div>
+					</div>
+					<div class="col-md-12" style="margin-left: -1%;">
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_FECHA_NACIMIENTO']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600!important;;">
+							</p:outputLabel>
+							<p:outputLabel
+								value="#{desvincularPersonaBean.persona.fechaNacimientoString}"
+								styleClass="log-label form-label">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="Correo Electrónico&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel
+								value="#{desvincularPersonaBean.persona.correoElectronico}"
+								styleClass="log-label form-label labelEmailPersonal"
+								style="text-transform: lowercase!important;">
+							</p:outputLabel>
+						</div>
+					</div>
+					<div class="col-md-12"
+						style="margin-left: -1%; border-bottom: 1px solid #B3B3B3 !important;">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['TTL_TRANSVERSAL_TIPO_GENERO']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel
+								value="#{desvincularPersonaBean.persona.nombreGenero}"
+								styleClass="log-label form-label"
+								style="text-transform: capitalize!important;">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br /> <br />
+				<br />
+				<p:panel id="panelDesvincularServidor">
+					<div class="row row-background-white">
+						<br />
+						<div class="col-md-12" align="center">
+							<p:outputLabel value="Desvincular a #{desvincularPersonaBean.persona.nombreUsuario} de la entidad #{desvincularPersonaBean.desvinculacion.nombreEntidad}" styleClass="advisor" />
+							<hr
+								style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+							<br />
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-1"></div>
+								<div class="col-md-5">
+									<p:outputLabel styleClass="log-label form-label-formularios"
+										for="fechaFinalVinculacion"
+										value="${titles['LBL_FECHA_EFECTIVA_DESVINCULACION']}:" />
+									<p:calendar id="fechaFinalVinculacion" mask="true"
+										yearRange="#{rangoAnios}" navigator="true"
+										placeholder="${titles['LBL_FORMATO_FECHA']}" required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+										maxdate="#{fechaSistema}" mode="popup"
+										pattern="#{fechaFormato}" effect="slideDown"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+										title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_EFECTIVA_DESVINCULACION']}"
+										value="#{desvincularPersonaBean.desvinculacion.fechaFinalizacion}">
+										<f:attribute name="maxDate" value="#{fechaSistema}" />
+										<f:attribute name="startDateName" value="${titles['LBL_FECHA_POSESION']}" />
+										<f:attribute name="endDateName" value="${titles['LBL_FECHA_EFECTIVA_DESVINCULACION']}" />
+										<f:attribute name="startDate" value="#{desvincularPersonaBean.fechaPosesion}" />
+										<f:validator validatorId="maxDateValidator" />
+										<f:validator validatorId="dateRangeValidator" />
+									</p:calendar>
+									<h:outputText>
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<p:message for="fechaFinalVinculacion" display="text" />
+								</div>
+								<div class="col-md-5">
+									<p:outputLabel for="causalDesvinculacion" styleClass="log-label form-label-formularios" value="${titles['LBL_CAUSAL_DESVINCULACION_SP']}:" />
+									<p:selectOneMenu id="causalDesvinculacion"
+										filter="true" style="width: 100%"
+										value="#{desvincularPersonaBean.desvinculacion.codCausalDesvinculacion}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+										styleClass="form-control-form-act-usua"
+										title="${titles['TTL_SELECT']}${titles['LBL_CAUSAL_DESVINCULACION_SP']}">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']} " />
+										<f:selectItems value="#{webUtils.causalDesvinculacion}" />
+									</p:selectOneMenu>
+									<p:message for="causalDesvinculacion" display="text" />
+								</div>
+								<div class="col-md-12">
+									<div class="col-md-1"/>
+									<div class="col-md-5">
+										<p:outputPanel id="panelUtl">
+											<p:panel rendered="#{desvincularPersonaBean.blnDesvinculacionPorUTL}">
+												<p:outputLabel for="listaUtl" styleClass="log-label form-label-formularios" value="Planta UTL/UAN:" />
+												<h:selectOneMenu id="listaUtl"
+													required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+													styleClass="form-control-form-act-usua"
+													value="#{desvincularPersonaBean.desvinculacion.codUtlUan}"
+													title="${titles['TTL_SELECT']}${titles['LBL_CAUSAL_DESVINCULACION_SP']}">
+													<f:selectItem itemLabel="${titles['TTL_SELECT']} " />
+													<f:selectItems value="#{desvincularPersonaBean.getUtlUanDesvincular()}" />
+												</h:selectOneMenu>
+										</p:panel>
+									</p:outputPanel>
+									</div>
+									<div class="col-md-5"/>
+									<div class="col-md-1"/>
+								</div>
+								<div class="col-md-12">
+									<br /> <br />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<br /> <br />
+						</div>
+						<div class="row" align="center">
+							<div class="col-md-4"></div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton id="btnDesvincularPersona"
+									value="${titles['LBL_DESVINCULAR']}"
+									styleClass="btn btn-primary"
+									style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									process="frmPrincipalDesvincular:panelDesvincularServidor"
+									actionListener="#{desvincularPersonaBean.abrirDialogoConfirmacion}"
+									update="frmPrincipalDesvincular:panelDesvincularServidor">
+								</p:commandButton>
+							</div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton id="btnCancelarRegVinc"
+									value="${titles['TTL_CANCEL']}"
+									process="@this"
+									actionListener="#{desvincularPersonaBean.redireccionarBusquedaServidor}"
+									styleClass="btn btn-default"
+									style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div>
+				</p:panel>
+				<!-- Inicia Dialog Cancelacion Vinculacion -->
+			<div id="desvincularServidor" class="modal fade" role="dialog">
+				<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+					<div class="modal-content">
+						<div class="modal-body">
+							<p:panel id="panelConfirmacionServidor" style="background: transparent!important;">
+								<div class="col-md-12" align="center"
+									style="margin-top: 4%; margin-bottom: 4%;">
+									<p:outputLabel
+										value="¿Esta seguro que desea desvincular esta persona de la entidad #{desvincularPersonaBean.desvinculacion.nombreEntidad} ?"
+										style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+										escape="false" />
+								</div>
+								<div class="row" align="center">
+									<div class="col-md-2"></div>
+									<div class="col-md-4">
+										<p:commandButton id="btnDescvincularServidor" value="Si" styleClass="btn btn-primary" style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											process="@this"
+											onclick="$('#desvincularServidor').modal('hide')"
+											resetValues="true"
+											actionListener="#{desvincularPersonaBean.desvincularServidorPublico}"/>
+									</div>
+									<div class="col-md-4">
+										<p:commandButton value="No" 
+											styleClass="btn btn-default" style="padding-left:13.5%!important;padding-right:13.5%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+											onclick="$('#desvincularServidor').modal('hide')"
+											process="@this" 
+											resetValues="true" update="panelDesvincularServidor" />
+									</div>
+									<div class="col-md-2"></div>
+								</div>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Finaliza Dialog Cancelacion Vinculacionn -->
+		</h:form>
+	</ui:define>
+</ui:composition>

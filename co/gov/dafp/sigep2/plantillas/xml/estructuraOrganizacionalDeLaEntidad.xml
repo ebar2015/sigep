@@ -1,0 +1,1243 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:reporte xmlns:ns2="http://reporte.xml.util.sigep2.dafp.gov.co/config">
+    <ns2:id>1593738193033</ns2:id>
+    <ns2:nombre>Estructura Organizacional De La Entidad</ns2:nombre>
+    <ns2:descripcion>Estructura Organizacional de la Entidad</ns2:descripcion>
+    <ns2:periodoGeneracion>TTL_REPORTES_PERIODO_SEMANAL</ns2:periodoGeneracion>
+    <ns2:formatoReporte>TTL_REPORTES_FORMATO_EXCEL</ns2:formatoReporte>
+    <ns2:formaConsulta>TTL_REPORTES_FORMA_CONSULTA_PORTAL</ns2:formaConsulta>
+    <ns2:tipoPlantilla>REPORTE</ns2:tipoPlantilla>
+    <ns2:versionEsquema>1.0</ns2:versionEsquema>
+    <ns2:publicado>true</ns2:publicado>
+    <ns2:eliminado>false</ns2:eliminado>
+    <ns2:usuarioSolicita>
+        <ns2:bandeja>A</ns2:bandeja>
+        <ns2:nombreCuenta>sigep2@ada.co</ns2:nombreCuenta>
+    </ns2:usuarioSolicita>
+    <ns2:rol>ADMINENT</ns2:rol>
+    <ns2:rol>ADMINFUNC</ns2:rol>
+    <ns2:rol>ADMINTEC</ns2:rol>
+    <ns2:rol>AUDITOR</ns2:rol>
+    <ns2:rol>JEFECONTROLINTERNO</ns2:rol>
+    <ns2:rol>JEFETH</ns2:rol>
+    <ns2:mallaReporte>
+        <ns2:id>1593719074380</ns2:id>
+        <ns2:nombre>Dependencias Entidad</ns2:nombre>
+        <ns2:valorMalla>
+            <ns2:id>1593719117212</ns2:id>
+            <ns2:nombre>Dependencia</ns2:nombre>
+            <ns2:nombreColumna>DEPENDENCIA_NOMBRE_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>12</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593719117214</ns2:id>
+            <ns2:nombre>Dependencia Padre</ns2:nombre>
+            <ns2:nombreColumna>DEPENDENCIAPADRE_NOMBRE_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>14</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593719117196</ns2:id>
+            <ns2:nombre>Dependencia Especial (Si / No)</ns2:nombre>
+            <ns2:nombreColumna>DEPENDENCIA_ESPECIAL</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>15</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGUAL</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593719117210</ns2:id>
+            <ns2:nombre>Regional Seccional Zonal</ns2:nombre>
+            <ns2:nombreColumna>DEPENDENCIA_ESPECIAL_TIPO_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>16</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593719117211</ns2:id>
+            <ns2:nombre>Número de Jerarquía</ns2:nombre>
+            <ns2:nombreColumna>DEPENDENCIA_NUMERO_JERARQUIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>11</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1600886619564</ns2:id>
+            <ns2:nombre>Grupo Interno de trabajo</ns2:nombre>
+            <ns2:nombreColumna>GRUPO_NOMBRE_GRUPO_INTERNO_TRABAJO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>17</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1603459522628</ns2:id>
+            <ns2:nombre>Grupo al que pertenece</ns2:nombre>
+            <ns2:nombreColumna>GRUPO_NOMBRE_GRUPO_PERTENECE</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>18</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1603458596152</ns2:id>
+            <ns2:nombre>Número de Jerarquía Padre</ns2:nombre>
+            <ns2:nombreColumna>DEPENDENCIAPADRE_NUMERO_JERARQUIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>13</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+    </ns2:mallaReporte>
+    <ns2:mallaReporte>
+        <ns2:id>1593123424567</ns2:id>
+        <ns2:nombre>Entidad Caracterizacion</ns2:nombre>
+        <ns2:valorMalla>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:nombre>Nombre de la Entidad</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ENTIDAD</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>3</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:nombre>Clasificación Orgánica</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_CLASIFICACION_ORGANICA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>6</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:nombre>Orden</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ORDEN</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>7</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593729378169</ns2:id>
+            <ns2:nombre>Suborden</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SUBORDEN</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>8</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:nombre>Sector Administrativo</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SECTOR_ADMINISTRATIVO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>9</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:nombre>Naturaleza Jurídica</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_NATURALEZA_JURIDICA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>5</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593802432265</ns2:id>
+            <ns2:nombre>Categoria</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_CATEGORIA</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>21</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593729277429</ns2:id>
+            <ns2:nombre>Código DANE</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_DANE</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>2</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGUAL</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593802466185</ns2:id>
+            <ns2:nombre>Estado de la Entidad</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_ESTADO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>false</ns2:mostrarEnReporte>
+            <ns2:orden>10</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593800730063</ns2:id>
+            <ns2:nombre>Departamento</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_DEPARTAMENTO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>19</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593802266268</ns2:id>
+            <ns2:nombre>Municipio</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_MUNICIPIO</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>20</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:nombre>Código SIGEP</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_SIGEP</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>1</ns2:orden>
+            <ns2:esParametro>true</ns2:esParametro>
+            <ns2:calificadorParametro>TTL_REPORTES_IGNORAR</ns2:calificadorParametro>
+            <ns2:valorComparacionParametro></ns2:valorComparacionParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+        <ns2:valorMalla>
+            <ns2:id>1593123429379</ns2:id>
+            <ns2:nombre>NIT</ns2:nombre>
+            <ns2:nombreColumna>ENTIDAD_NIT</ns2:nombreColumna>
+            <ns2:mostrarEnReporte>true</ns2:mostrarEnReporte>
+            <ns2:orden>4</ns2:orden>
+            <ns2:esParametro>false</ns2:esParametro>
+            <ns2:permiteOperacionesAgrupamiento>true</ns2:permiteOperacionesAgrupamiento>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:valorMalla>
+    </ns2:mallaReporte>
+    <ns2:SQL>
+        <ns2:parametro>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:nombre>:entidad_codigo_sigep</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593729277429</ns2:id>
+            <ns2:nombre>:entidad_codigo_dane</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Código DANE</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:nombre>:entidad_nombre_entidad</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:nombre>:entidad_nombre_naturaleza_juridica</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:nombre>:entidad_nombre_clasificacion_organica</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Clasificación Orgánica</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:nombre>:entidad_nombre_orden</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:nombre>:entidad_nombre_sector_administrativo</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593802466185</ns2:id>
+            <ns2:nombre>:entidad_estado</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Estado de la Entidad</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593719117211</ns2:id>
+            <ns2:nombre>:dependencia_numero_jerarquia</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Número de Jerarquía</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593719117212</ns2:id>
+            <ns2:nombre>:dependencia_nombre_dependencia</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Dependencia</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593719117214</ns2:id>
+            <ns2:nombre>:dependenciapadre_nombre_dependencia</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Dependencia Padre</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593719117196</ns2:id>
+            <ns2:nombre>:dependencia_especial</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Dependencia Especial (Si / No)</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593719117210</ns2:id>
+            <ns2:nombre>:dependencia_especial_tipo_dependencia</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Regional Seccional Zonal</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593800730063</ns2:id>
+            <ns2:nombre>:entidad_nombre_departamento</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Departamento</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593802266268</ns2:id>
+            <ns2:nombre>:entidad_nombre_municipio</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Municipio</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:parametro>
+            <ns2:id>1593802432265</ns2:id>
+            <ns2:nombre>:entidad_categoria</ns2:nombre>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:etiquetaColumna>Categoria</ns2:etiquetaColumna>
+            <ns2:requerido>false</ns2:requerido>
+        </ns2:parametro>
+        <ns2:sentencia>select * from (select distinct ecar.entidad_codigo_sigep entidad_codigo_sigep_1, ecar.entidad_codigo_dane entidad_codigo_dane_2, ecar.entidad_nombre_entidad entidad_nombre_entidad_3, ecar.entidad_nit entidad_nit_4, ecar.entidad_nombre_naturaleza_juridica entidad_nombre_naturaleza_juridica_5, ecar.entidad_nombre_clasificacion_organica entidad_nombre_clasificacion_organica_6, ecar.entidad_nombre_orden entidad_nombre_orden_7, ecar.entidad_nombre_suborden entidad_nombre_suborden_8, ecar.entidad_nombre_sector_administrativo entidad_nombre_sector_administrativo_9, dent.dependencia_numero_jerarquia dependencia_numero_jerarquia_10, dent.dependencia_nombre_dependencia dependencia_nombre_dependencia_11, dent.dependenciapadre_numero_jerarquia dependenciapadre_numero_jerarquia_12, dent.dependenciapadre_nombre_dependencia dependenciapadre_nombre_dependencia_13, dent.dependencia_especial dependencia_especial_14, dent.dependencia_especial_tipo_dependencia dependencia_especial_tipo_dependencia_15, dent.grupo_nombre_grupo_interno_trabajo grupo_nombre_grupo_interno_trabajo_16, dent.grupo_nombre_grupo_pertenece grupo_nombre_grupo_pertenece_17, ecar.entidad_nombre_departamento entidad_nombre_departamento_18, ecar.entidad_nombre_municipio entidad_nombre_municipio_19, ecar.entidad_categoria entidad_categoria_20 from v_gi_m_dependencias_entidad dent inner join v_gi_m_entidad_caracterizacion ecar on dent.cod_entidad = ecar.cod_entidad ) reporte</ns2:sentencia>
+    </ns2:SQL>
+    <ns2:registro>
+        <ns2:descripcion>Estructura Organizacional De La Entidad</ns2:descripcion>
+        <ns2:csv>false</ns2:csv>
+        <ns2:tipoRegistro>CABECERA</ns2:tipoRegistro>
+        <ns2:contieneSentenciaSQL>false</ns2:contieneSentenciaSQL>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:descripcion>Entidad Codigo Sigep</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_SIGEP</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Codigo Sigep</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Código DANE</ns2:etiquetaColumna>
+            <ns2:id>1593729277429</ns2:id>
+            <ns2:descripcion>Codigo Dane</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_DANE</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Codigo Dane</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:descripcion>Entidad Nombre Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ENTIDAD</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Nombre Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>NIT</ns2:etiquetaColumna>
+            <ns2:id>1593123429379</ns2:id>
+            <ns2:descripcion>Entidad Nit</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NIT</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Nit</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:descripcion>Nombre Naturaleza Juridica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_NATURALEZA_JURIDICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Naturaleza Juridica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Clasificación Orgánica</ns2:etiquetaColumna>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:descripcion>Nombre Clasificacion Organica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_CLASIFICACION_ORGANICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Clasificacion Organica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:descripcion>Nombre Orden</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ORDEN</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>false</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Orden</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Suborden</ns2:etiquetaColumna>
+            <ns2:id>1593729378169</ns2:id>
+            <ns2:descripcion>Nombre Suborden</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SUBORDEN</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Suborden</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:descripcion>Sector Administrativo</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SECTOR_ADMINISTRATIVO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Sector Administrativo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Número de Jerarquía</ns2:etiquetaColumna>
+            <ns2:id>1593719117211</ns2:id>
+            <ns2:descripcion>Número de Jerarquía</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_NUMERO_JERARQUIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Número de Jerarquía</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dependencia</ns2:etiquetaColumna>
+            <ns2:id>1593719117212</ns2:id>
+            <ns2:descripcion>Dependencia Nombre Dependencia</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_NOMBRE_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependencia Nombre Dependencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Número de Jerarquía Padre</ns2:etiquetaColumna>
+            <ns2:id>1603458596152</ns2:id>
+            <ns2:descripcion>Número de Jerarquía Padre</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIAPADRE_NUMERO_JERARQUIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Número de Jerarquía Padre</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dependencia Padre</ns2:etiquetaColumna>
+            <ns2:id>1593719117214</ns2:id>
+            <ns2:descripcion>Dependenciapadre Nombre Dependencia</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIAPADRE_NOMBRE_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependenciapadre Nombre Dependencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dependencia Especial (Si / No)</ns2:etiquetaColumna>
+            <ns2:id>1593719117196</ns2:id>
+            <ns2:descripcion>Dependencia Especial</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_ESPECIAL</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependencia Especial</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Regional Seccional Zonal</ns2:etiquetaColumna>
+            <ns2:id>1593719117210</ns2:id>
+            <ns2:descripcion>Dependencia Especial Tipo Dependencia</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_ESPECIAL_TIPO_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependencia Especial Tipo Dependencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Grupo Interno de trabajo</ns2:etiquetaColumna>
+            <ns2:id>1600886619564</ns2:id>
+            <ns2:descripcion>Nombre del Grupo Interno de trabajo</ns2:descripcion>
+            <ns2:nombreColumna>GRUPO_NOMBRE_GRUPO_INTERNO_TRABAJO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre del Grupo Interno de trabajo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Grupo al que pertenece</ns2:etiquetaColumna>
+            <ns2:id>1603459522628</ns2:id>
+            <ns2:descripcion>Grupo al que pertenece</ns2:descripcion>
+            <ns2:nombreColumna>GRUPO_NOMBRE_GRUPO_PERTENECE</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Grupo al que pertenece</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Departamento</ns2:etiquetaColumna>
+            <ns2:id>1593800730063</ns2:id>
+            <ns2:descripcion>Departamento Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_DEPARTAMENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Departamento Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Municipio</ns2:etiquetaColumna>
+            <ns2:id>1593802266268</ns2:id>
+            <ns2:descripcion>Municipio Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_MUNICIPIO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Municipio Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Categoria</ns2:etiquetaColumna>
+            <ns2:id>1593802432265</ns2:id>
+            <ns2:descripcion>Categoria Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CATEGORIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Categoria Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+    </ns2:registro>
+    <ns2:registro>
+        <ns2:descripcion>Estructura Organizacional De La Entidad</ns2:descripcion>
+        <ns2:SQL>
+            <ns2:parametro>
+                <ns2:id>1593123429357</ns2:id>
+                <ns2:nombre>:entidad_codigo_sigep</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593729277429</ns2:id>
+                <ns2:nombre>:entidad_codigo_dane</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Código DANE</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593123429380</ns2:id>
+                <ns2:nombre>:entidad_nombre_entidad</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593546684820</ns2:id>
+                <ns2:nombre>:entidad_nombre_naturaleza_juridica</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593546551672</ns2:id>
+                <ns2:nombre>:entidad_nombre_clasificacion_organica</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Clasificación Orgánica</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593546605392</ns2:id>
+                <ns2:nombre>:entidad_nombre_orden</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593730932786</ns2:id>
+                <ns2:nombre>:entidad_nombre_sector_administrativo</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593802466185</ns2:id>
+                <ns2:nombre>:entidad_estado</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Estado de la Entidad</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593719117211</ns2:id>
+                <ns2:nombre>:dependencia_numero_jerarquia</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Número de Jerarquía</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593719117212</ns2:id>
+                <ns2:nombre>:dependencia_nombre_dependencia</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Dependencia</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593719117214</ns2:id>
+                <ns2:nombre>:dependenciapadre_nombre_dependencia</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Dependencia Padre</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593719117196</ns2:id>
+                <ns2:nombre>:dependencia_especial</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Dependencia Especial (Si / No)</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593719117210</ns2:id>
+                <ns2:nombre>:dependencia_especial_tipo_dependencia</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Regional Seccional Zonal</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593800730063</ns2:id>
+                <ns2:nombre>:entidad_nombre_departamento</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Departamento</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593802266268</ns2:id>
+                <ns2:nombre>:entidad_nombre_municipio</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Municipio</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:parametro>
+                <ns2:id>1593802432265</ns2:id>
+                <ns2:nombre>:entidad_categoria</ns2:nombre>
+                <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+                <ns2:etiquetaColumna>Categoria</ns2:etiquetaColumna>
+                <ns2:requerido>false</ns2:requerido>
+            </ns2:parametro>
+            <ns2:sentencia>select * from (select distinct ecar.entidad_codigo_sigep entidad_codigo_sigep_1, ecar.entidad_codigo_dane entidad_codigo_dane_2, ecar.entidad_nombre_entidad entidad_nombre_entidad_3, ecar.entidad_nit entidad_nit_4, ecar.entidad_nombre_naturaleza_juridica entidad_nombre_naturaleza_juridica_5, ecar.entidad_nombre_clasificacion_organica entidad_nombre_clasificacion_organica_6, ecar.entidad_nombre_orden entidad_nombre_orden_7, ecar.entidad_nombre_suborden entidad_nombre_suborden_8, ecar.entidad_nombre_sector_administrativo entidad_nombre_sector_administrativo_9, dent.dependencia_numero_jerarquia dependencia_numero_jerarquia_10, dent.dependencia_nombre_dependencia dependencia_nombre_dependencia_11, dent.dependenciapadre_numero_jerarquia dependenciapadre_numero_jerarquia_12, dent.dependenciapadre_nombre_dependencia dependenciapadre_nombre_dependencia_13, dent.dependencia_especial dependencia_especial_14, dent.dependencia_especial_tipo_dependencia dependencia_especial_tipo_dependencia_15, dent.grupo_nombre_grupo_interno_trabajo grupo_nombre_grupo_interno_trabajo_16, dent.grupo_nombre_grupo_pertenece grupo_nombre_grupo_pertenece_17, ecar.entidad_nombre_departamento entidad_nombre_departamento_18, ecar.entidad_nombre_municipio entidad_nombre_municipio_19, ecar.entidad_categoria entidad_categoria_20 from v_gi_m_dependencias_entidad dent inner join v_gi_m_entidad_caracterizacion ecar on dent.cod_entidad = ecar.cod_entidad ) reporte</ns2:sentencia>
+        </ns2:SQL>
+        <ns2:csv>false</ns2:csv>
+        <ns2:tipoRegistro>DETALLE</ns2:tipoRegistro>
+        <ns2:contieneSentenciaSQL>true</ns2:contieneSentenciaSQL>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Código SIGEP</ns2:etiquetaColumna>
+            <ns2:id>1593123429357</ns2:id>
+            <ns2:descripcion>Entidad Codigo Sigep</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_SIGEP</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Codigo Sigep</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Código DANE</ns2:etiquetaColumna>
+            <ns2:id>1593729277429</ns2:id>
+            <ns2:descripcion>Codigo Dane</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CODIGO_DANE</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Codigo Dane</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Nombre de la Entidad</ns2:etiquetaColumna>
+            <ns2:id>1593123429380</ns2:id>
+            <ns2:descripcion>Entidad Nombre Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ENTIDAD</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Nombre Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>NIT</ns2:etiquetaColumna>
+            <ns2:id>1593123429379</ns2:id>
+            <ns2:descripcion>Entidad Nit</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NIT</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Entidad Nit</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Naturaleza Jurídica</ns2:etiquetaColumna>
+            <ns2:id>1593546684820</ns2:id>
+            <ns2:descripcion>Nombre Naturaleza Juridica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_NATURALEZA_JURIDICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Naturaleza Juridica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Clasificación Orgánica</ns2:etiquetaColumna>
+            <ns2:id>1593546551672</ns2:id>
+            <ns2:descripcion>Nombre Clasificacion Organica</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_CLASIFICACION_ORGANICA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Clasificacion Organica</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Orden</ns2:etiquetaColumna>
+            <ns2:id>1593546605392</ns2:id>
+            <ns2:descripcion>Nombre Orden</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_ORDEN</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>false</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Orden</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Suborden</ns2:etiquetaColumna>
+            <ns2:id>1593729378169</ns2:id>
+            <ns2:descripcion>Nombre Suborden</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SUBORDEN</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre Suborden</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Sector Administrativo</ns2:etiquetaColumna>
+            <ns2:id>1593730932786</ns2:id>
+            <ns2:descripcion>Sector Administrativo</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_SECTOR_ADMINISTRATIVO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Sector Administrativo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Número de Jerarquía</ns2:etiquetaColumna>
+            <ns2:id>1593719117211</ns2:id>
+            <ns2:descripcion>Número de Jerarquía</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_NUMERO_JERARQUIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Número de Jerarquía</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dependencia</ns2:etiquetaColumna>
+            <ns2:id>1593719117212</ns2:id>
+            <ns2:descripcion>Dependencia Nombre Dependencia</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_NOMBRE_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependencia Nombre Dependencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Número de Jerarquía Padre</ns2:etiquetaColumna>
+            <ns2:id>1603458596152</ns2:id>
+            <ns2:descripcion>Número de Jerarquía Padre</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIAPADRE_NUMERO_JERARQUIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Número de Jerarquía Padre</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dependencia Padre</ns2:etiquetaColumna>
+            <ns2:id>1593719117214</ns2:id>
+            <ns2:descripcion>Dependenciapadre Nombre Dependencia</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIAPADRE_NOMBRE_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependenciapadre Nombre Dependencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Dependencia Especial (Si / No)</ns2:etiquetaColumna>
+            <ns2:id>1593719117196</ns2:id>
+            <ns2:descripcion>Dependencia Especial</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_ESPECIAL</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependencia Especial</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Regional Seccional Zonal</ns2:etiquetaColumna>
+            <ns2:id>1593719117210</ns2:id>
+            <ns2:descripcion>Dependencia Especial Tipo Dependencia</ns2:descripcion>
+            <ns2:nombreColumna>DEPENDENCIA_ESPECIAL_TIPO_DEPENDENCIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:calificadorValidacionContraFechaSistema>TTL_REPORTES_MENOR_IGUAL_QUE</ns2:calificadorValidacionContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Dependencia Especial Tipo Dependencia</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Grupo Interno de trabajo</ns2:etiquetaColumna>
+            <ns2:id>1600886619564</ns2:id>
+            <ns2:descripcion>Nombre del Grupo Interno de trabajo</ns2:descripcion>
+            <ns2:nombreColumna>GRUPO_NOMBRE_GRUPO_INTERNO_TRABAJO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Nombre del Grupo Interno de trabajo</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Grupo al que pertenece</ns2:etiquetaColumna>
+            <ns2:id>1603459522628</ns2:id>
+            <ns2:descripcion>Grupo al que pertenece</ns2:descripcion>
+            <ns2:nombreColumna>GRUPO_NOMBRE_GRUPO_PERTENECE</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Grupo al que pertenece</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Departamento</ns2:etiquetaColumna>
+            <ns2:id>1593800730063</ns2:id>
+            <ns2:descripcion>Departamento Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_DEPARTAMENTO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Departamento Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Municipio</ns2:etiquetaColumna>
+            <ns2:id>1593802266268</ns2:id>
+            <ns2:descripcion>Municipio Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_NOMBRE_MUNICIPIO</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Municipio Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+        <ns2:columna>
+            <ns2:etiquetaColumna>Categoria</ns2:etiquetaColumna>
+            <ns2:id>1593802432265</ns2:id>
+            <ns2:descripcion>Categoria Entidad</ns2:descripcion>
+            <ns2:nombreColumna>ENTIDAD_CATEGORIA</ns2:nombreColumna>
+            <ns2:tipoDato>TTL_REPORTES_FORMA_TIPO_DATO_STRING</ns2:tipoDato>
+            <ns2:requerido>true</ns2:requerido>
+            <ns2:valorPorDefecto></ns2:valorPorDefecto>
+            <ns2:validarContraFechaSistema>false</ns2:validarContraFechaSistema>
+            <ns2:mascara>.*</ns2:mascara>
+            <ns2:observaciones>Categoria Entidad</ns2:observaciones>
+            <ns2:totalizado>false</ns2:totalizado>
+            <ns2:agrupamiento>false</ns2:agrupamiento>
+            <ns2:conteo>false</ns2:conteo>
+            <ns2:graficar>false</ns2:graficar>
+        </ns2:columna>
+    </ns2:registro>
+</ns2:reporte>

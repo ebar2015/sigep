@@ -1,0 +1,442 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+
+	<p:outputPanel id="panelMensaje">
+		<p:panel id="subPanelMensajeCrear" rendered="#{gestionarNomenclaturaEscalaBean.blnVisibleMensajeCrear}">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="• #{titles.LBL_NOMENCLATURA_CREAR} •" styleClass="page-subtitle" /></h2>
+				</div>
+			</div>
+		</p:panel>
+		<p:panel id="subPanelMensajeModificar" rendered="#{gestionarNomenclaturaEscalaBean.blnVisibleMensajeModificar}">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="• #{titles.TTL_ENTIDADES_NOMENCLATURA_MODIFICAR} •" styleClass="page-subtitle" /></h2>
+				</div>
+			</div>
+		</p:panel>
+		<p:panel id="subPanelMensajeConsultar" rendered="#{gestionarNomenclaturaEscalaBean.blnVisibleMensajeConsultar}">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="• #{titles.TTL_ENTIDADES_NOMENCLATURA_CONSULTAR} •" styleClass="page-subtitle" /> </h2>
+				</div>
+			</div>
+		</p:panel>
+		<p:panel id="subPanelMensajeIncrementoSalarial" rendered="#{gestionarNomenclaturaEscalaBean.blnAccionIncrementoSalarial}">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="• #{titles.TTL_INCREMENTAR_ESCALA_SALARIAL} •" styleClass="page-subtitle" /> </h2>
+				</div>
+			</div>
+		</p:panel>
+		<p:panel id="subPanelMensajeEquivalencias" rendered="#{gestionarNomenclaturaEscalaBean.blnAccionEquivalencia}">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="• #{titles.TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS} •" styleClass="page-subtitle" /> </h2>
+				</div>
+			</div>
+		</p:panel>
+		<p:panel id="subPanelMensajePersonalizarNomenclaturaGeneral" rendered="#{gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<h2> <p:outputLabel value="• #{titles.TTL_NOMENCLATURA_PERSONALIZAR} •" styleClass="page-subtitle" /> </h2>
+				</div>
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	<h:form id="formCrearNomenclatura"> 
+	<p:outputPanel id="panelFormularioNomenclatura">
+		<p:panel id="subPanelFormularioNomenclatura" rendered="#{gestionarNomenclaturaEscalaBean.blnVisibleFormularioNomenclatura}">
+			<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">#{titles.TTL_REQUIRED}</label>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_NOMENCLATURA_NOMBRE']}:"
+							for="txtNombreNomenclatura"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="txtNombreNomenclatura" required="true"
+							value="#{gestionarNomenclaturaEscalaBean.nomenclaturaExt.nombreNomenclatura}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_NOMENCLATURA_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							maxlength="255" class="form-control-acti-usua"
+							disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+							<f:validator validatorId="maxByteLengthValidator" />
+							<f:validator validatorId="textOnlyTildesValidator" />
+						</p:inputText>
+						<p:message for="txtNombreNomenclatura" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_NOMENCLATURA_RAMA']}:"
+							for="txtRamaOrganizacionEnte"
+							styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu id="txtRamaOrganizacionEnte" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							filter="true"
+							title="${titles['TTL_SELECT']} ${titles['LBL_NOMENCLATURA_RAMA']}"
+							styleClass="form-control-form-act-usua"
+							value="#{gestionarNomenclaturaEscalaBean.nomenclaturaExt.codRamaOrganizacional}"
+							disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getTipoClasificacionOrganica()}" />
+						</p:selectOneMenu>
+						<p:message for="txtRamaOrganizacionEnte" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_NOMENCLATURA_SISTEMA_CARRERA']}:"
+							for="txtSistemaCarrera"
+							styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu id="txtSistemaCarrera" required="true"
+							filter="true"
+							styleClass="form-control-form-act-usua"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_SISTEMA_CARRERA']}"
+							value="#{gestionarNomenclaturaEscalaBean.nomenclaturaExt.codSistemaCarrera}"
+							disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							 <f:selectItems value="#{webUtils.getTipoSistemaCarrera()}" />
+						</p:selectOneMenu>
+						<p:message for="txtSistemaCarrera" display="text" />
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_NOMENCLATURA_TIPO_NORMA']}:"
+							for="txtTipoNorma" styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu id="txtTipoNorma"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_TIPO_NORMA']}"
+							filter="true"
+							value="#{gestionarNomenclaturaEscalaBean.normaNomenclatura.codTipoNorma}"
+							disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.tiposNormaEntidad}" />
+							<p:ajax event="change" process="@this"/>
+						</p:selectOneMenu>
+						<p:message for="txtTipoNorma" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_FECHA_NORMA']}:"
+							for="txtFechaNorma" styleClass="log-label form-label-formularios" />
+						<p:calendar id="txtFechaNorma"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_NORMA']}"
+							navigator="true"
+							validatorMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							yearRange="#{rangoAnios}" mode="popup"
+							placeholder="${titles['LBL_FORMATO_FECHA']}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							locale="#{lenguajeBean.localeCode}" mask="true"
+							value="#{gestionarNomenclaturaEscalaBean.normaNomenclatura.fechaNorma}"
+							pattern="#{fechaFormato}"
+							disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+							<p:ajax event="dateSelect"></p:ajax>
+						</p:calendar>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_NUMERO_NORMA']}:"
+							for="txtNumeroNorma"
+							styleClass="log-label form-label-formularios" />
+							<p:autoComplete id="txtNumeroNorma"
+								dropdown="true"
+								value="#{gestionarNomenclaturaEscalaBean.normaNomenclaturaSeleccionada}"
+								converter="normaBdConverter" var="normSelect"
+								itemLabel="#{normSelect.numeroNorma}" itemValue="#{normSelect}"
+								completeMethod="#{gestionarNomenclaturaEscalaBean.completeMethodNorma}"
+								valueChangeListener="#{gestionarNomenclaturaEscalaBean.vclNorma}"
+								minQueryLength="1" maxResults="20"
+								onkeypress="return numbervalida(event)"
+								disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+							</p:autoComplete>
+					</div>
+				</div>
+				<div class="col-md-12" style ="margin-bottom: 2%!important;">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}:"
+							for="txtJustificacionNorma"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="txtJustificacionNorma"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']}"
+							disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar or gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}"
+							maxlength="255" value="#{gestionarNomenclaturaEscalaBean.nomenclaturaExt.justificacion}">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="txtJustificacionNorma" display="text" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+
+		
+		      	
+				<!-- formularioEscalaSalarial -->
+				<ui:include src="frmEscalaSalarial.xhtml" />
+				<!-- Tabla de Denominaciones -->
+				<ui:include src="tablaDenominaciones.xhtml" />
+				<!-- Formulario Otras Asignaciones -->
+				<ui:include src="frmOtrasAsignaciones.xhtml" />
+				<!-- Botones de Crear Nomenclatura -->
+			<p:panel id="panelBotones" rendered="#{!gestionarNomenclaturaEscalaBean.blnAccionIncrementoSalarial 
+												and !gestionarNomenclaturaEscalaBean.blnAccionEquivalencia}">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<br /><br />
+						<div class="col-md-2"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_GUARDADO_PARCIAL']}"
+								id="btnGuarParcialNomenclatura" styleClass="btn btn-primary"
+								style="width: 12.3em!important;"
+								process="panelFormularioNomenclatura" update="panelFormularioNomenclatura dtNomenclaturas panelMensaje"
+								actionListener ="#{gestionarNomenclaturaEscalaBean.guardarNomenclatura('0')}"
+								disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar 
+									or gestionarNomenclaturaEscalaBean.nomenclaturaExt.flgDefinitivo == 1 ? true : false}"
+								onstart="PF('dlgCargaNomenclatura').show()"
+                            	oncomplete="PF('dlgCargaNomenclatura').hide()"
+                            	onsuccess="PF('dlgCargaNomenclatura').hide()">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_GUARDADO_DEFINITIVO']}"
+								id="btnGuardadoDefNomenclatura" styleClass="btn btn-secondary"
+								style="width: 12.3em!important;"
+								process="panelFormularioNomenclatura" update="panelFormularioNomenclatura"
+								actionListener ="#{gestionarNomenclaturaEscalaBean.abrirDialogoConfirmacionGuardadoDefinitivo()}"
+								disabled="#{gestionarNomenclaturaEscalaBean.blnAccionConsultar}"
+								onstart="PF('dlgCargaNomenclatura').show()"
+                            	oncomplete="PF('dlgCargaNomenclatura').hide()"
+                            	onsuccess="PF('dlgCargaNomenclatura').hide()">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}"
+								id="btnCancelarNomenclatura" styleClass="btn btn-default"
+								style="width: 12.3em!important;"
+								actionListener="#{gestionarNomenclaturaEscalaBean.abrirDialogoCancelarNomenclatura()}"
+								process="@this">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+			<!-- Botones de incremento salarial -->
+			<p:panel id="panelBotonesIncrementar" rendered="#{gestionarNomenclaturaEscalaBean.blnAccionIncrementoSalarial}">
+				<div class="row" align="center">
+					<div class="col-md-12">
+					  <div class="col-md-4"></div>
+						<div class="col-md-2  btn-incrementar">
+							<p:commandButton value="${titles['TTL_INCREMENTAR']}"
+								onclick="PF('dlgConfirmarIncrementoDefinitivo').show();"
+								id="btnIncrementarEscalaSalarial" styleClass="btn btn-primary"
+								process="panelFormularioNomenclatura" >
+							</p:commandButton>
+						</div>
+						<div class="col-md-2 btn-incrementar">
+							<p:commandButton value="${titles['TTL_CANCEL']}"
+								id="btnCancelarEscalaSalarial" styleClass="btn btn-default"
+								process="panelFormularioNomenclatura" update="panelFormularioNomenclatura dtNomenclaturas panelMensaje"
+								actionListener="#{gestionarNomenclaturaEscalaBean.cancelarEscalaSalarial()}">
+							</p:commandButton>
+						</div>
+				     <div class="col-md-4"></div>
+					</div>
+				</div>
+				</p:panel>
+	
+				<!-- Botones de Equivalencias -->
+				<p:panel id="panelBotonesEquivalencia"
+					rendered="#{gestionarNomenclaturaEscalaBean.blnAccionEquivalencia}">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<br /><br />
+							<div class="col-md-6" style="margin-bottom: 2%;">
+								<p:commandButton value="Equivalencias"
+									id="btnEquivalenciasNomenclatura" styleClass="btn btn-primary"
+									style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+									actionListener="#{gestionarNomenclaturaEscalaBean.validarDenominacionesEquivalencia()}"
+									process="@this formCrearNomenclatura:dtDenominacionesNomenclatura"
+									update="formCrearNomenclatura panelMensaje">
+								</p:commandButton>
+							</div>
+							<div class="col-md-6" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}"
+									id="btnCancelarEquivalenciasNomenclatura"
+									actionListener="#{gestionarNomenclaturaEscalaBean.reiniciarCampos()}"
+									styleClass="btn btn-default"
+									update="formCrearNomenclatura panelMensaje"
+									style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+									process="@this">
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+				</p:panel>	
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	
+	
+		
+	<!-- Dialogo de confirmacion de Guardado definitivo -->
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+		widgetVar="dlgConfirmarGuardoDefinivo"
+		id="dlgConfirmarGuardoDefinivo" minHeight="300" modal="true"
+		resizable="false" closeOnEscape="false" responsive="true"
+		draggable="false" closable="false" appendTo="@(body)">
+		<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"
+			align="center">
+			<center>
+				<h5>#{messages.MSG_ENTIDAD_NOMENCLATURA_CONF_GUARDADO_DEFINITIVO}</h5>
+			</center>
+		</div>
+		<br />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					update="panelFormularioNomenclatura dtNomenclaturas panelMensaje"
+					actionListener ="#{gestionarNomenclaturaEscalaBean.guardarNomenclatura('1')}"
+					style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+					onclick="PF('dlgConfirmarGuardoDefinivo').hide();"
+					onstart="PF('dlgCargaNomenclatura').show()"
+                    oncomplete="PF('dlgCargaNomenclatura').hide()"
+                    onsuccess="PF('dlgCargaNomenclatura').hide()"/>
+			</div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_CANCEL}" process="@this"
+					styleClass="btn btn-default"
+					onclick="PF('dlgConfirmarGuardoDefinivo').hide();"
+					style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+		<br />
+	</p:dialog>
+	<!-- Dialogo de confirmacion de incremento  -->
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+		widgetVar="dlgConfirmarIncrementoDefinitivo"
+		id="dlgConfirmarIncrementoDefinitivo" minHeight="300" modal="true"
+		resizable="false" closeOnEscape="false" responsive="true"
+		draggable="false" closable="false" appendTo="@(body)">
+		<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"
+			align="center">
+			<center>
+				<h5>#{messages.MSG_ENTIDAD_NOMENCLATURA_CON_GUARDADO_INCREMENTO}
+				</h5>
+			</center>
+		</div>
+		<br />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+					onclick="PF('dlgConfirmarIncrementoDefinitivo').hide();"
+					actionListener="#{gestionarNomenclaturaEscalaBean.guardarIncrementoSalarial()}"
+					update="panelFormularioNomenclatura dtNomenclaturas panelMensaje formCrearNomenclatura" />
+			</div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_CANCEL}" process="@this"
+					styleClass="btn btn-default"
+					onclick="PF('dlgConfirmarIncrementoDefinitivo').hide();"
+					style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+		<br />
+	</p:dialog>
+
+	<!-- Dialogo de confirmacion de cancelacion creacion/modificacion de entidad  -->
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+		widgetVar="dlgConfirmarCancelacionNomenclatura"
+		id="dlgConfirmarCancelacionNomenclatura" minHeight="300" modal="true"
+		resizable="false" closeOnEscape="false" responsive="true"
+		draggable="false" closable="false" appendTo="@(body)">
+		<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"
+			align="center">
+			<center>
+				<h5>#{messages.MSG_ENTIDAD_NOMENCLATURA_CANCELAR_NOMENCLATURA}
+				</h5>
+			</center>
+		</div>
+		<br />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+					onclick="PF('dlgConfirmarCancelacionNomenclatura').hide();"
+					actionListener ="#{gestionarNomenclaturaEscalaBean.cancelarEdicionNomenclatura()}"
+					update="panelFormularioNomenclatura dtNomenclaturas panelMensaje formCrearNomenclatura"/>
+			</div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_CANCEL}" process="@this"
+					styleClass="btn btn-default"
+					onclick="PF('dlgConfirmarCancelacionNomenclatura').hide();"
+					style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+		<br />
+	</p:dialog>
+	
+	<!-- Dialogo de confirmacion de asignacion de equivalencia  -->
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+		widgetVar="dlgConfirmarEquivalencia"
+		id="dlgConfirmarEquivalencia" minHeight="300" modal="true"
+		resizable="false" closeOnEscape="false" responsive="true"
+		draggable="false" closable="false" appendTo="@(body)">
+		<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"
+			align="center">
+			<center> <h5>#{messages.MSG_ENTIDAD_NOMENCLATURA_FUSIONAR_CONFIRMAR} </h5> </center>
+		</div>
+		<br />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					update="formCrearNomenclatura panelMensaje"
+					actionListener="#{gestionarNomenclaturaEscalaBean.equivalenciasFusionar()}"
+					style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+					onclick="PF('dlgConfirmarEquivalencia').hide();"
+					/>
+			</div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_CANCEL}" process="@this"
+					styleClass="btn btn-default"
+					onclick="PF('dlgConfirmarEquivalencia').hide();"
+					actionListener="#{gestionarNomenclaturaEscalaBean.reiniciarCampos()}"
+					update="panelMensaje formCrearNomenclatura"
+					style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+		<br />
+	</p:dialog>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,275 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_MUNICIPIO']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_MUNICIPIO} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="nombreMunicipio" maxlength="255"
+						placeholder="${titles['LBL_MUNICIPIO']}"
+						title="${titles['TTL_INGRESE']} ${titles['LBL_PAIS']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						completeMethod="#{municipioBean.listarMunicipioFiltro}"
+						value="#{municipioBean.strBusquedaMunicipio}">
+						<p:ajax event="itemSelect" listener="#{municipioBean.filtrarMunicipio()}"
+							update ="dataTableMunicipio"/>
+					</p:autoComplete>
+					<p:message for="nombreMunicipio" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonSearchPais" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{municipioBean.filtrarMunicipio()}"
+						process="@this nombreMunicipio"
+						update ="dataTableMunicipio"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_MUNICIPIO}</span> <br /> <br />
+
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearMunicipio" process="@this"
+					update="panelMunicipio" actionListener="#{municipioBean.crearMunicipio()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelMunicipio';"/>
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableMunicipio" paginator="true"
+					reflow="true" rowIndexVar="rowIndex" 
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+					value="#{municipioBean.lstMunicipio}"
+					var="dataMunicipio"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					<p:column headerText="${titles['LBL_DEPARTAMENTO']}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataMunicipio.codDepartamento}">
+						<h:outputText value="#{dataMunicipio.codDepartamento}" converter="departamentoIDConverter" />
+					</p:column>
+					<p:column headerText="${titles['LBL_MUNICIPIO']}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataMunicipio.nombreMunicipio}"
+						filterBy="#{dataMunicipio.nombreMunicipio}"  filterMatchMode="contains">
+						<h:outputText value="#{dataMunicipio.nombreMunicipio}" />
+					</p:column>
+					<p:column headerText="${titles['LBL_PARAMETRICA_MUNICIPIO_CODIGO_DANE']}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataMunicipio.codMunicipioDane}"
+						filterBy="#{dataMunicipio.codMunicipioDane}"  filterMatchMode="contains">
+						<h:outputText value="#{dataMunicipio.codMunicipioDane}" />
+					</p:column>
+					<p:column headerText="${titles['LBL_PARAMETRICA_MUNICIPIO_CODIGO_POSTAL']}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataMunicipio.codigoPostal}"
+						filterBy="#{dataMunicipio.codigoPostal}"  filterMatchMode="contains">
+						<h:outputText value="#{dataMunicipio.codigoPostal}" />
+					</p:column>
+					<p:column headerText="#{titles.TTL_ACTIVO}"
+						style="word-wrap: break-word!important;text-align: center!important;"
+						sortBy="#{dataMunicipio.flgActivo}">
+						<p:selectBooleanCheckbox
+							value="#{dataMunicipio.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarMunicipio" title="${titles['TTL_EDIT']}"
+							icon="icon-edit" styleClass="icon-btn btn-view-data"
+							process="@this" update="frmPrincipal:panelMunicipio"
+							immediate="true"
+							actionListener="#{municipioBean.modificarMunicipio(dataMunicipio)}"
+                    		oncomplete="window.location.href='#frmPrincipal:panelMunicipio';">
+						</p:commandButton>
+						<p:commandButton id="btnVerMunicipio"
+							actionListener="#{municipioBean.consultarMunicipio(dataMunicipio)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view" styleClass="icon-btn"
+							process="@this" update="frmPrincipal:panelMunicipio"
+                    		oncomplete="window.location.href='#frmPrincipal:panelMunicipio';">
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+							rendered="false"
+							id="btnAdmonEliminarMunicipio" styleClass="icon-btn" process="@this"
+							actionListener="#{municipioBean.eliminarMunicipio()}" update="frmPrincipal:dlgConfirmarMunicipio">
+							<f:setPropertyActionListener value="#{dataMunicipio}" target="#{municipioBean.infoMunicipio}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelMunicipio">
+			<p:spacer height="2" />
+			<p:panel id="subpanelMunicipio" widgetVar="subPanelMunicipio"
+				rendered="#{municipioBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<p:spacer height="3" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{municipioBean.strAccionRealizada}</span>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+								for="txtDepartamento"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="txtDepartamento"
+								title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}"
+								required="true"
+								filter="true"
+								disabled="#{municipioBean.blnConsultarMunicipio}"
+								value="#{municipioBean.infoMunicipio.codDepartamento}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getDeptos(169)}" />
+							</p:selectOneMenu>
+							<p:message for="txtDepartamento" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_MUNICIPIO_NOMBRE}"
+								styleClass="log-label form-label-formularios"
+								for="txtNombreMunicipio" />
+							<p:inputText id="txtNombreMunicipio" required="true"
+								value="#{municipioBean.infoMunicipio.nombreMunicipio}"
+								disabled="#{municipioBean.blnConsultarMunicipio}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+								maxlength="30">
+								<f:validator validatorId="textAlfanumericoValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreMunicipio" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PARAMETRICA_MUNICIPIO_CODIGO_DANE']}"
+								styleClass="log-label form-label-formularios"
+								for="txtCodigoDane" />
+							<p:inputText id="txtCodigoDane" required="true"
+								value="#{municipioBean.infoMunicipio.codMunicipioDane}"
+								disabled="#{municipioBean.blnConsultarMunicipio}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+								onkeypress="return numbervalida(event)"
+								maxlength="6">
+								<f:validator validatorId="numberValidator" />
+							</p:inputText>
+							<p:message for="txtCodigoDane" display="text" />
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PARAMETRICA_MUNICIPIO_CODIGO_POSTAL']}"
+								styleClass="log-label form-label-formularios"
+								for="txtCodigoPostal" />
+							<p:inputText id="txtCodigoPostal" 
+								value="#{municipioBean.infoMunicipio.codigoPostal}"
+								disabled="#{municipioBean.blnConsultarMunicipio}"
+								onkeypress="return numbervalida(event)"
+								maxlength="10">
+								<f:validator validatorId="numberValidator" />
+							</p:inputText>
+							<p:message for="txtCodigoPostal" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:"
+								for="activoMunicipio"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true" id="activoMunicipio"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{municipioBean.blnConsultarMunicipio}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{municipioBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoMunicipio" display="text" />
+						</div>
+					</div>
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							rendered="#{!municipioBean.blnConsultarMunicipio}"
+							styleClass="btn btn-primary"
+							disabled="#{municipioBean.blnConsultarMunicipio}" update="panelMunicipio dataTableMunicipio nombreMunicipio"
+							actionListener="#{municipioBean.guardarMunicipio()}"
+							process="frmPrincipal:panelMunicipio"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!municipioBean.blnConsultarMunicipio}"
+							styleClass="btn btn-default" update="dlgConfirmarMunicipio"
+							actionListener="#{municipioBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{municipioBean.blnConsultarMunicipio}"
+							styleClass="btn btn-primary" update="panelMunicipio nombreMunicipio"
+							actionListener="#{municipioBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+				</div>
+				</div>
+				
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarMunicipio" id="dlgConfirmarMunicipio" minHeight="300"
+			modal="true" draggable="false" closable="false" 
+			resizable="false" responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center>
+					<h5>#{municipioBean.strMensaje}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary" update="panelMunicipio dataTableMunicipio"
+						actionListener="#{municipioBean.procesarRespuestaConfirmacion}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlgConfirmarMunicipio').hide();" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarMunicipio').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+</ui:composition>

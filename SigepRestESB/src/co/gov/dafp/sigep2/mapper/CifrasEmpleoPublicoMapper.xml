@@ -1,0 +1,1091 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.gov.dafp.sigep2.interfaces.CifrasEmpleoPublicoMapper">
+	<resultMap id="CifraEmpleoResultMap" type="co.gov.dafp.sigep2.bean.CifrasEmpleoPublico">
+		<id column="cod_entidad" jdbcType="NUMERIC" property="codCifrasEmpleoPublico" />
+		<result column="codigo_sigep" jdbcType="VARCHAR" property="codEntidad" />
+		<result column="nombre_entidad" jdbcType="VARCHAR" property="entidad" />
+		<result column="cod_sector_administrativo" jdbcType="NUMERIC"
+			property="codSector" />
+		<result column="sector_administrativo" jdbcType="VARCHAR"
+			property="sector" />
+		<result column="cod_orden" jdbcType="NUMERIC" property="codOrden" />
+		<result column="orden" jdbcType="VARCHAR" property="orden" />
+		<result column="suborden" jdbcType="VARCHAR" property="suborden" />
+		<result column="cod_suborden" jdbcType="NUMERIC" property="codSuborden" />		
+		<result column="cod_clasificacion_organica" jdbcType="NUMERIC"
+			property="codClasificacionOrganica" />
+		<result column="clasificacion_organica" jdbcType="VARCHAR"
+			property="clasificacionOrganica" />
+		<result column="cod_naturaleza" jdbcType="NUMERIC"
+			property="codNaturalezaJuridica" />
+		<result column="naturaleza" jdbcType="VARCHAR" property="naturalezaJuridica" />
+		<result column="cod_sistema_carrera" jdbcType="NUMERIC"
+			property="codSistemaCarrera" />
+		<result column="sistema_carrera" jdbcType="VARCHAR" property="sistemaCarrera" />
+		<result column="cod_regimen_salarial" jdbcType="NUMERIC"
+			property="codRegimenSalarial" />
+		<result column="regimen_salarial" jdbcType="VARCHAR" property="regimenSalarial" />
+		<result column="situacion" jdbcType="VARCHAR" property="situacion" />
+
+		<result column="cod_departamento" jdbcType="NUMERIC" property="codDepartamento" />
+		<result column="departamento" jdbcType="VARCHAR" property="departamento" />
+		<result column="cod_municipio" jdbcType="NUMERIC" property="codMunicipio" />
+		<result column="municipio" jdbcType="VARCHAR" property="municipio" />
+		<result column="categoria_municipio" jdbcType="NUMERIC" property="categoriaMunicipio" />
+		<result column="nombre_responsable" jdbcType="VARCHAR" property="nombreAsesor" />
+		<result column="fecha_cumplimiento_meta" jdbcType="TIMESTAMP" property="fechaCumplimientoMeta" />
+		<result column="cod_categoria" jdbcType="NUMERIC" property="codCategoria" />
+		<result column="categoria" jdbcType="VARCHAR" property="categoria" />		
+		<result column="flg_dependencia_especial" jdbcType="VARCHAR" property="flgDependenciaEspecial" />
+		
+		<!-- Plan Anual de Vacantes -->
+		<result column="debe_reportar_pav" jdbcType="VARCHAR" property="debeReportarPAV" />
+		<result column="reporto_pav" jdbcType="VARCHAR" property="reportoPAV" />
+		<result column="vacancia_definitiva_asesor" jdbcType="NUMERIC"
+			property="vacDefinitivaAsesor" />
+		<result column="vacancia_definitiva_profesional" jdbcType="NUMERIC"
+			property="vacDefinitivaProfesional" />
+		<result column="vacancia_definitiva_tecnico" jdbcType="NUMERIC"
+			property="vacDefinitivaTecnico" />
+		<result column="vacancia_definitiva_asistencial" jdbcType="NUMERIC"
+			property="vacDefinitivaAsistencial" />
+		<result column="vacancia_definitiva_otro" jdbcType="NUMERIC"
+			property="vacDefinitivaOtro" />
+		<result column="vacancia_definitiva_total" jdbcType="NUMERIC"
+			property="vacDefinitivaTotal" />
+		<result column="encargo_asesor" jdbcType="NUMERIC" property="encargoAsesor" />
+		<result column="encargo_profesional" jdbcType="NUMERIC"
+			property="encargoProfesional" />
+		<result column="encargo_tecnico" jdbcType="NUMERIC" property="encargoTecnico" />
+		<result column="encargo_asistencial" jdbcType="NUMERIC"
+			property="encargoAsistencial" />
+		<result column="encargo_otro" jdbcType="NUMERIC" property="encargoOtro" />
+		<result column="encargo_total" jdbcType="NUMERIC" property="encargoTotal" />
+		<result column="provisionalidad_asesor" jdbcType="NUMERIC"
+			property="provisionalidadAsesor" />
+		<result column="provisionalidad_profesional" jdbcType="NUMERIC"
+			property="provisionalidadProfesional" />
+		<result column="provisionalidad_tecnico" jdbcType="NUMERIC"
+			property="provisionalidadTecnico" />
+		<result column="provisionalidad_asistencial" jdbcType="NUMERIC"
+			property="provisionalidadAsistencial" />
+		<result column="provisionalidad_otro" jdbcType="NUMERIC"
+			property="provisionalidadOtro" />
+		<result column="provisionalidad_total" jdbcType="NUMERIC"
+			property="provisionalidadTotal" />
+		<result column="por_proveer_asesor" jdbcType="NUMERIC"
+			property="porProveerAsesor" />
+		<result column="por_proveer_profesional" jdbcType="NUMERIC"
+			property="porProveerProfesional" />
+		<result column="por_proveer_tecnico" jdbcType="NUMERIC"
+			property="porProveerTecnico" />
+		<result column="por_proveer_asistencial" jdbcType="NUMERIC"
+			property="porProveerAsistencial" />
+		<result column="por_proveer_otro" jdbcType="NUMERIC" property="porProveerOtro" />
+		<result column="por_proveer_total" jdbcType="NUMERIC" property="porProveerTotal" />
+		<result column="observacionPAV" jdbcType="VARCHAR" property="observacionPAV" />
+		<!-- Ley de Cuotas -->
+		<result column="debe_reportar_lc" jdbcType="VARCHAR" property="debeReportarLC" />
+		<result column="reporto_lc" jdbcType="VARCHAR" property="reportoLC" />
+		<result column="maximo_nivel_decisorio_total" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioTotal" />
+		<result column="maximo_nivel_decisorio_vacantes" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioVacantes" />
+		<result column="maximo_nivel_decisorio_provistos" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioProvistos" />
+		<result column="maximo_nivel_decisorio_mujeres" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioMujeres" />
+		<result column="maximo_nivel_decisorio_hombres" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioHombres" />
+		<result column="maximo_nivel_decisorio_p_mujeres" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioPMujeres" />
+		<result column="maximo_nivel_decisorio_p_hombres" jdbcType="NUMERIC"
+			property="maximoNivelDecisorioPHombres" />
+		<result column="otro_nivel_decisorio_total" jdbcType="NUMERIC"
+			property="otroNivelDecisorioTotal" />
+		<result column="otro_nivel_decisorio_vacantes" jdbcType="NUMERIC"
+			property="otroNivelDecisorioVacantes" />
+		<result column="otro_nivel_decisorio_provistos" jdbcType="NUMERIC"
+			property="otroNivelDecisorioProvistos" />
+		<result column="otro_nivel_decisorio_mujeres" jdbcType="NUMERIC"
+			property="otroNivelDecisorioMujeres" />
+		<result column="otro_nivel_decisorio_hombres" jdbcType="NUMERIC"
+			property="otroNivelDecisorioHombres" />
+		<result column="otro_nivel_decisorio_p_mujeres" jdbcType="NUMERIC"
+			property="otroNivelDecisorioPMujeres" />
+		<result column="otro_nivel_decisorio_p_hombres" jdbcType="NUMERIC"
+			property="otroNivelDecisorioPHombres" />
+		<result column="observacion_lc" jdbcType="VARCHAR" property="observacionLC" />
+
+		<!-- Empleos -->
+		<result column="debe_reportar_emp" jdbcType="VARCHAR" property="debeReportarEmp" />
+		<result column="seguimiento_sigep_emp" jdbcType="VARCHAR"
+			property="seguimientoSigepEmp" />
+		<result column="total_planta_emp" jdbcType="NUMERIC" property="totalPlantaEmp" />
+		<result column="planta_permanente_emp" jdbcType="NUMERIC"
+			property="plantaPermanenteEmp" />
+		<result column="planta_temporal_emp" jdbcType="NUMERIC"
+			property="plantaTemporalEmp" />
+		<result column="planta_transitoria_emp" jdbcType="NUMERIC"
+			property="plantaTransitoriaEmp" />
+		<result column="trabajadores_oficiales_emp" jdbcType="NUMERIC"
+			property="trabajadoresOficialesEmp" />
+		<result column="planta_privada_emp" jdbcType="NUMERIC"
+			property="plantaPrivadaEmp" />
+		<result column="planta_docentes_emp" jdbcType="NUMERIC"
+			property="plantaDocentesEmp" />
+		<result column="sistema_carrera_emp" jdbcType="NUMERIC"
+			property="sistemaCarreraEmp" />
+		<result column="decreto_salarial_emp" jdbcType="NUMERIC"
+			property="decretoSalarialEmp" />
+		<result column="escala_salarial_emp" jdbcType="NUMERIC"
+			property="escalaSalarialEmp" />
+		<result column="sistema_nomenclatura_emp" jdbcType="NUMERIC"
+			property="sistemaNomenclaturaEmp" />
+		<result column="decreto_nomenclatura_emp" jdbcType="NUMERIC"
+			property="decretoNomenclaturaEmp" />
+		<result column="nomenclatura_empleos_emp" jdbcType="NUMERIC"
+			property="nomenclaturaEmpleosEmp" />
+
+		<!-- Naturaleza -->
+		<result column="eleccion_popular_emp" jdbcType="NUMERIC"
+			property="eleccionPopularEmp" />
+		<result column="empleos_libre_nom_rem_emp" jdbcType="NUMERIC"
+			property="empleosLibreNomRemEmp" />
+		<result column="empleos_carrera_emp" jdbcType="NUMERIC"
+			property="empleosCarreraEmp" />
+		<result column="empleos_carrera_dip_emp" jdbcType="NUMERIC"
+			property="empleosCarreraDipEmp" />
+		<result column="periodo_fijo_emp" jdbcType="NUMERIC" property="periodoFijoEmp" />
+		<result column="empleos_temporales_emp" jdbcType="NUMERIC"
+			property="empleosTemporalesEmp" />
+		<result column="total_emp" jdbcType="NUMERIC" property="totalEmp" />
+		<result column="gran_total_emp" jdbcType="NUMERIC" property="granTotalEmp" />
+		<result column="observacion_emp" jdbcType="VARCHAR" property="observacionEmp" />
+
+		<!-- Seguimiento -->
+		<result column="total_planta_norma" jdbcType="NUMERIC"
+			property="totalPlantaNorma" />
+		<result column="plata_aprobada_real" jdbcType="NUMERIC"
+			property="plataAprobadaReal" />
+		<result column="planta_permanente_distribuida" jdbcType="NUMERIC"
+			property="plantaPermanenteDistribuida" />
+		<result column="planta_temporal_distribuida" jdbcType="NUMERIC"
+			property="plantaTemporalDistribuida" />
+		<result column="planta_transitoria_distribuida" jdbcType="NUMERIC"
+			property="plantaTransitoriaDistribuida" />
+		<result column="total_numero_empleos_planta_distribuida"
+			jdbcType="NUMERIC" property="totalNumeroEmpleosPlantaDistribuida" />
+		<result column="numero_empleados_vinculados" jdbcType="NUMERIC"
+			property="numeroEmpleadosVinculados" />
+		<result column="vacantes_reporta_entidad" jdbcType="NUMERIC"
+			property="vacantesReportaEntidad" />
+		<result column="total_hv_activas_ep" jdbcType="NUMERIC"
+			property="totalHVActivasEmpleadosPublicos" />
+		<result column="numero_dec_bienes_rentas_vigencia" jdbcType="NUMERIC"
+			property="numeroDeclaracionesBienesRentasVigencia" />
+		<result column="total_hv_activas_c" jdbcType="NUMERIC"
+			property="totalActivasContratistas" />
+		<result column="numero_contratos_vigentes" jdbcType="NUMERIC"
+			property="numeroContratosVigentes" />
+		<result column="numero_vinculados_sobre_cargos_planta"
+			jdbcType="NUMERIC" property="numeroVinculadosSobreNumeroCargosPlanta" />
+		<result column="peso_porcentaje_vinculacion" jdbcType="NUMERIC"
+			property="pesoPorcentajeVinculacion" />
+		<result column="porcentaje_vinculacion" jdbcType="NUMERIC"
+			property="porcentajeVinculacion" />
+		<result column="numero_cont_vig_sobre_hv_act_cont" jdbcType="NUMERIC"
+			property="numeroContratosVigentesSobreNumeroHVActivasContratistas" />
+		<result column="peso_porcentaje_contrato" jdbcType="NUMERIC"
+			property="pesoPorcentajeContrato" />
+		<result column="porcentaje_contratos" jdbcType="NUMERIC" property="porcentajeContratos" />
+		<result column="ipvc" jdbcType="NUMERIC" property="ipvc" />
+		<result column="observaciones_seg" jdbcType="VARCHAR" property="observacionesSEG" />
+ 		
+		<!-- Acuerdos de Gestion -->
+		<result column="debe_reportar_ag" jdbcType="VARCHAR" property="debeReportarAG" />
+		<result column="reporto_ag" jdbcType="VARCHAR" property="reportoAG" />
+		<result column="numero_gerentes_publicos" jdbcType="NUMERIC"
+			property="numeroGerentesPublicos" />
+		<result column="observacion_ag" jdbcType="VARCHAR" property="observacionAG" />
+
+		<!-- Capacitacion -->
+		<result column="debe_reportar_cap" jdbcType="VARCHAR" property="debeReportarCap" />
+		<result column="adopto_cap" jdbcType="VARCHAR" property="adoptoCap" />
+		<result column="acto_administrativo_cap" jdbcType="VARCHAR"
+			property="actoAdministrativoCap" />
+		<result column="entidades_pic" jdbcType="VARCHAR" property="entidadesPIC" />
+		<result column="cantidad_pae" jdbcType="NUMERIC" property="cantidadPAE" />
+		<result column="describa_pae" jdbcType="VARCHAR" property="describaPAE" />
+		<result column="presupuesto_anual_pic" jdbcType="NUMERIC"
+			property="presupuestoAnualPIC" />
+		<result column="cantidad_servidores_diplomados_dafp" jdbcType="VARCHAR"
+			property="cantidadServidoresDiplomadosDAFP" />
+		<result column="cuantos_servidores_diplomados" jdbcType="NUMERIC"
+			property="cuantosServidoresDiplomados" />
+		<result column="diplomados_tomados_dafp" jdbcType="NUMERIC"
+			property="diplomadosTomadosDAFP" />
+		<result column="ofertas_capacitacion_entidad" jdbcType="VARCHAR"
+			property="ofertasCapacitacionEntidad" />
+		<result column="cuenta_servidores_ben_becas_dafp" jdbcType="VARCHAR"
+			property="cuentaServidoresBenBecasDAFP" />
+		<result column="cuantos_servidores_ben_becas" jdbcType="NUMERIC"
+			property="cuantosServidoresBenBecas" />
+		<result column="becas_dafp_otorgadas" jdbcType="VARCHAR"
+			property="becasDAFPOtorgadas" />
+		<result column="observacion_cap" jdbcType="VARCHAR" property="observacionCap" />
+
+		<!-- Bienestar e incentivos -->
+		<result column="debe_reportar_bei" jdbcType="VARCHAR" property="debeReportarBeI" />
+		<result column="adopto_bei" jdbcType="VARCHAR" property="adoptoBeI" />
+		<result column="manifesto_bei" jdbcType="VARCHAR" property="manifestoBeI" />
+		<result column="cantidad_servidores_bei" jdbcType="NUMERIC"
+			property="cantidadServidoresBeI" />
+		<result column="observacion_bei" jdbcType="VARCHAR" property="observacionBeI" />
+
+		<!-- Horarios flexibles -->
+		<result column="adopto_hf" jdbcType="VARCHAR" property="adoptoHF" />
+		<result column="acto_administrativo_hf" jdbcType="VARCHAR"
+			property="actoAdministrativoHF" />
+		<result column="cantidad_servidores_hf" jdbcType="NUMERIC"
+			property="cantidadServidoresHF" />
+		<result column="observacion_hf" jdbcType="VARCHAR" property="observacionHF" />
+
+		<!-- Teletrabajo -->
+		<result column="adopto_tel" jdbcType="VARCHAR" property="adoptoTel" />
+		<result column="acto_administrativo_tel" jdbcType="VARCHAR"
+			property="actoAdministrativoTel" />
+		<result column="cantidad_servidores_tel" jdbcType="NUMERIC"
+			property="cantidadServidoresTel" />
+		<result column="observacion_tel" jdbcType="VARCHAR" property="observacionTel" />
+
+		<!-- Bilinguismo -->
+		<result column="carta_bil" jdbcType="VARCHAR" property="cartaBil" />
+		<result column="inicio_bil" jdbcType="DATE" property="inicioBil" />
+		<result column="cantidad_pre_insc_beguinner" jdbcType="NUMERIC"
+			property="cantidadPreInscBeguinner" />
+		<result column="cantidad_pre_insc_a11" jdbcType="NUMERIC" property="cantidadPreInscA11" />
+		<result column="cantidad_pre_insc_a12" jdbcType="NUMERIC" property="cantidadPreInscA12" />
+		<result column="cantidad_pre_insc_a13" jdbcType="NUMERIC" property="cantidadPreInscA13" />
+		<result column="total_pre_insc_a1" jdbcType="NUMERIC" property="totalPreInscA1" />
+		<result column="cantidad_pre_insc_a21" jdbcType="NUMERIC" property="cantidadPreInscA21" />
+		<result column="cantidad_pre_insc_a22" jdbcType="NUMERIC" property="cantidadPreInscA22" />
+		<result column="cantidad_pre_insc_a23" jdbcType="NUMERIC" property="cantidadPreInscA23" />
+		<result column="total_pre_insc_a2" jdbcType="NUMERIC" property="totalPreInscA2" />
+		<result column="cantidad_pre_insc_b11" jdbcType="NUMERIC"
+			property="cantidadPreInscB11" />
+		<result column="cantidad_pre_insc_b12" jdbcType="NUMERIC"
+			property="cantidadPreInscB12" />
+		<result column="cantidad_pre_insc_b13" jdbcType="NUMERIC"
+			property="cantidadPreInscB13" />
+		<result column="total_pre_insc_b1" jdbcType="NUMERIC" property="totalPreInscB1" />
+		<result column="cantidad_ini_beguinner" jdbcType="NUMERIC"
+			property="cantidadIniBeguinner" />
+		<result column="cantidad_ini_a11" jdbcType="NUMERIC" property="cantidadIniA11" />
+		<result column="cantidad_ini_a12" jdbcType="NUMERIC" property="cantidadIniA12" />
+		<result column="cantidad_ini_a13" jdbcType="NUMERIC" property="cantidadIniA13" />
+		<result column="total_ini_a1" jdbcType="NUMERIC" property="totalIniA1" />
+		<result column="cantidad_ini_a21" jdbcType="NUMERIC" property="cantidadIniA21" />
+		<result column="cantidad_ini_a22" jdbcType="NUMERIC" property="cantidadIniA22" />
+		<result column="cantidad_ini_a23" jdbcType="NUMERIC" property="cantidadIniA23" />
+		<result column="total_ini_a2" jdbcType="NUMERIC" property="totalIniA2" />
+		<result column="cantidad_ini_b11" jdbcType="NUMERIC" property="cantidadIniB11" />
+		<result column="cantidad_ini_b12" jdbcType="NUMERIC" property="cantidadIniB12" />
+		<result column="cantidad_ini_b13" jdbcType="NUMERIC" property="cantidadIniB13" />
+		<result column="total_ini_b1" jdbcType="NUMERIC" property="totalIniB1" />
+		<result column="cantidad_ter_beguinner" jdbcType="NUMERIC"
+			property="cantidadTerBeguinner" />
+		<result column="cantidad_ter_a11" jdbcType="NUMERIC" property="cantidadTerA11" />
+		<result column="cantidad_ter_a12" jdbcType="NUMERIC" property="cantidadTerA12" />
+		<result column="cantidad_ter_a13" jdbcType="NUMERIC" property="cantidadTerA13" />
+		<result column="total_ter_a1" jdbcType="NUMERIC" property="totalTerA1" />
+		<result column="cantidad_ter_a21" jdbcType="NUMERIC" property="cantidadTerA21" />
+		<result column="cantidad_ter_a22" jdbcType="NUMERIC" property="cantidadTerA22" />
+		<result column="cantidad_ter_a23" jdbcType="NUMERIC" property="cantidadTerA23" />
+		<result column="total_ter_a2" jdbcType="NUMERIC" property="totalTerA2" />
+		<result column="cantidad_ter_b11" jdbcType="NUMERIC" property="cantidadTerB11" />
+		<result column="cantidad_ter_b12" jdbcType="NUMERIC" property="cantidadTerB12" />
+		<result column="cantidad_ter_b13" jdbcType="NUMERIC" property="cantidadTerB13" />
+		<result column="total_ter_b1" jdbcType="NUMERIC" property="totalTerB1" />
+		<result column="cantidad_apro_beguinner" jdbcType="NUMERIC"
+			property="cantidadAproBeguinner" />
+		<result column="cantidad_apro_a11" jdbcType="NUMERIC" property="cantidadAproA11" />
+		<result column="cantidad_apro_a12" jdbcType="NUMERIC" property="cantidadAproA12" />
+		<result column="cantidad_apro_a13" jdbcType="NUMERIC" property="cantidadAproA13" />
+		<result column="total_apro_a1" jdbcType="NUMERIC" property="totalAproA1" />
+		<result column="cantidad_apro_a21" jdbcType="NUMERIC" property="cantidadAproA21" />
+		<result column="cantidad_apro_a22" jdbcType="NUMERIC" property="cantidadAproA22" />
+		<result column="cantidad_apro_a23" jdbcType="NUMERIC" property="cantidadAproA23" />
+		<result column="total_apro_a2" jdbcType="NUMERIC" property="totalAproA2" />
+		<result column="cantidad_apro_b11" jdbcType="NUMERIC" property="cantidadAproB11" />
+		<result column="cantidad_apro_b12" jdbcType="NUMERIC" property="cantidadAproB12" />
+		<result column="cantidad_apro_b13" jdbcType="NUMERIC" property="cantidadAproB13" />
+		<result column="total_apro_b1" jdbcType="NUMERIC" property="totalAproB1" />
+		<result column="observaciones_bil" jdbcType="VARCHAR" property="observacionesBil" />
+
+		<!-- Avace asesor -->
+		<result column="asesor" jdbcType="VARCHAR" property="nombreAsesor" />
+		<result column="cantidad_entidades" jdbcType="NUMERIC"
+			property="cantidadEntidades" />
+
+		<!-- Consolidado Gestion -->
+		<result column="consolidado" jdbcType="VARCHAR" property="consolidado" />
+		<result column="meta_territorial_anual" jdbcType="NUMERIC"
+			property="metaTerritorialAnual" />
+		<result column="meta_trimestral" jdbcType="NUMERIC" property="metaPrimerTrimestre" />
+		<result column="porcentaje_avance" jdbcType="NUMERIC" property="avance" />
+	</resultMap>
+
+	<resultMap id="TablaResultMap"
+		type="co.gov.dafp.sigep2.bean.TablaGestionInformacion">
+		<id column="table_name" jdbcType="VARCHAR" property="codTabla" />
+		<result column="table_name" jdbcType="VARCHAR" property="nombre" />
+		<result column="type" jdbcType="VARCHAR" property="tipo" />
+	</resultMap>
+
+	<resultMap id="ColumnaTablaResultMap"
+		type="co.gov.dafp.sigep2.bean.ColumnaTablaGestionInformacion">
+		<id column="column_name" jdbcType="VARCHAR" property="codColumna" />
+		<result column="column_name" jdbcType="VARCHAR" property="nombre" />
+		<result column="data_type" jdbcType="VARCHAR" property="tipoDato" />
+	</resultMap>
+
+	<select id="selectCifras" parameterType="map" resultMap="CifraEmpleoResultMap">
+		select
+		*
+		from (select distinct
+		<include refid="Cifra_Empleo_Select" />
+		<include refid="From_Clause" />
+		<include refid="Where_Clause" />
+		<if
+			test="not cifrasEmpleoPublico.consolidadoGestion and not cifrasEmpleoPublico.avanceAsesor">
+			order by cep.nombre_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.avanceAsesor">
+			order by aa.asesor
+		</if>
+		) cep
+		OFFSET #{cifrasEmpleoPublico.limitIni, jdbcType=VARCHAR} ROWS FETCH
+		NEXT #{cifrasEmpleoPublico.limitFin, jdbcType=VARCHAR} ROWS ONLY
+	</select>
+
+	<select id="selectTotalCifras" parameterType="map"
+		resultMap="CifraEmpleoResultMap">
+		select
+		*
+		from (select
+		<include refid="Total_Select" />
+		<include refid="From_Clause" />
+		<include refid="Where_Clause" />
+		) cep
+	</select>
+
+	<select id="selectTablaResultados" parameterType="map"
+		resultMap="CifraEmpleoResultMap">
+		select
+		*
+		from (select
+		<include refid="Total_Select" />
+		<include refid="From_Clause" />
+		<include refid="Where_Clause" />
+		) cep
+	</select>
+
+	<select id="selectTablas" parameterType="map" resultMap="TablaResultMap">
+		select
+		*
+		from (SELECT owner,
+		view_name table_name,
+		'VIEW' type
+		FROM all_views
+		where
+		owner = upper('sigep2')
+		and
+		view_name like
+		'V_GI_M_%' order by
+		table_name)
+		tab
+	</select>
+
+	<select id="selectColumnasTabla" parameterType="map"
+		resultMap="ColumnaTablaResultMap">
+		select
+		*
+		from (
+		select column_name,
+		case when data_type =
+		'VARCHAR2' or data_type = 'VARCHAR' or data_type =
+		'CHAR' then
+		'TTL_REPORTES_FORMA_TIPO_DATO_STRING'
+		when data_type = 'DATE' then
+		'TTL_REPORTES_FORMA_TIPO_DATO_DATE'
+		when data_type = 'NUMBER' and
+		instr(column_name, 'COD_') = 1 then
+		'TTL_REPORTES_FORMA_TIPO_DATO_QUERY'
+		when data_type = 'NUMBER' and
+		instr(column_name, 'FLG_') = 1 then
+		'TTL_REPORTES_FORMA_TIPO_DATO_BOOLEAN'
+		when data_type = 'NUMBER' and
+		data_precision >= 1 then
+		'TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL'
+		when
+		data_type = 'NUMBER' then
+		'TTL_REPORTES_FORMA_TIPO_DATO_INTEGER'
+		else
+		'TTL_REPORTES_FORMA_TIPO_DATO_STRING'
+		end data_type
+		FROM
+		user_tab_columns
+		where
+		table_name =
+		upper(#{tablaGestionInformacion.nombre,jdbcType=VARCHAR})
+		order by
+		column_name) tab
+	</select>
+
+	<sql id="Cifra_Empleo_Select">
+		<if
+			test="not cifrasEmpleoPublico.consolidadoGestion and not cifrasEmpleoPublico.avanceAsesor">
+			cep.cod_entidad,
+			cep.codigo_sigep,
+			cep.nombre_entidad,
+			cep.cod_sector_administrativo,
+			cep.sector_administrativo,
+			cep.cod_orden,
+			cep.orden,
+			cep.cod_suborden,
+			cep.suborden,
+			cep.cod_clasificacion_organica,
+			cep.clasificacion_organica,
+			cep.cod_naturaleza,
+			cep.naturaleza,
+			cep.cod_adscrita_vinculada,
+			cep.adscrita_vinculada,
+			cep.cod_sistema_carrera,
+			cep.sistema_carrera,
+			<if test="not cifrasEmpleoPublico.tableroSeguimiento">
+				cep.cod_regimen_salarial,
+				cep.regimen_salarial,
+			</if>
+			cep.situacion,
+			cep.cod_departamento,
+			cep.departamento,
+			cep.cod_municipio,
+			cep.municipio,
+			cep.nombre_responsable,
+			cep.fecha_cumplimiento_meta,
+			cep.cod_categoria,
+			cep.categoria,
+			cep.categoria_municipio,
+			cep.flg_dependencia_especial
+		</if>
+		<if test="cifrasEmpleoPublico.planAnualVacantes">
+			,
+			pav.debe_reportar_pav,
+			pav.reporto_pav,
+			pav.vacancia_definitiva_asesor,
+			pav.vacancia_definitiva_profesional,
+			pav.vacancia_definitiva_tecnico,
+			pav.vacancia_definitiva_asistencial,
+			pav.vacancia_definitiva_otro,
+			pav.vacancia_definitiva_total,
+			pav.encargo_asesor,
+			pav.encargo_profesional,
+			pav.encargo_tecnico,
+			pav.encargo_asistencial,
+			pav.encargo_otro,
+			pav.encargo_total,
+			pav.provisionalidad_asesor,
+			pav.provisionalidad_profesional,
+			pav.provisionalidad_tecnico,
+			pav.provisionalidad_asistencial,
+			pav.provisionalidad_otro,
+			pav.provisionalidad_total,
+			pav.por_proveer_asesor,
+			pav.por_proveer_profesional,
+			pav.por_proveer_tecnico,
+			pav.por_proveer_asistencial,
+			pav.por_proveer_otro,
+			pav.por_proveer_total,
+			pav.observacionPAV
+		</if>
+		<if test="cifrasEmpleoPublico.leyCuotas">
+			,
+			lc.debe_reportar_lc,
+			lc.reporto_lc,
+			lc.maximo_nivel_decisorio_total,
+			lc.maximo_nivel_decisorio_vacantes,
+			lc.maximo_nivel_decisorio_provistos,
+			lc.maximo_nivel_decisorio_mujeres,
+			lc.maximo_nivel_decisorio_hombres,
+			lc.maximo_nivel_decisorio_p_mujeres,
+			lc.maximo_nivel_decisorio_p_hombres,
+			lc.otro_nivel_decisorio_total,
+			lc.otro_nivel_decisorio_vacantes,
+			lc.otro_nivel_decisorio_provistos,
+			lc.otro_nivel_decisorio_mujeres,
+			lc.otro_nivel_decisorio_hombres,
+			lc.otro_nivel_decisorio_p_mujeres,
+			lc.otro_nivel_decisorio_p_hombres,
+			lc.observacion_lc
+		</if>
+		<if test="cifrasEmpleoPublico.empleos">
+			,
+			emp.debe_reportar_emp,
+			emp.seguimiento_sigep_emp,
+			emp.total_planta_emp,
+			emp.planta_permanente_emp,
+			emp.planta_temporal_emp,
+			emp.planta_transitoria_emp,
+			emp.trabajadores_oficiales_emp,
+			emp.planta_privada_emp,
+			emp.planta_docentes_emp,
+			emp.sistema_carrera_emp,
+			emp.decreto_salarial_emp,
+			emp.escala_salarial_emp,
+			emp.sistema_nomenclatura_emp,
+			emp.decreto_nomenclatura_emp,
+			emp.nomenclatura_empleos_emp
+
+		</if>
+		<if test="cifrasEmpleoPublico.naturaleza">
+			,
+			emp_nat.eleccion_popular_emp,
+			emp_nat.empleos_libre_nom_rem_emp,
+			emp_nat.empleos_carrera_emp,
+			emp_nat.empleos_carrera_dip_emp,
+			emp_nat.periodo_fijo_emp,
+			emp_nat.empleos_temporales_emp,
+			emp_nat.total_emp,
+			emp_nat.observacion_emp
+		</if>
+		<if test="cifrasEmpleoPublico.seguimiento">
+			,
+			seg.total_planta_norma,			
+			seg.plata_aprobada_real,
+			seg.planta_permanente_distribuida,
+			seg.planta_temporal_distribuida,
+			seg.planta_transitoria_distribuida,
+			seg.total_numero_empleos_planta_distribuida,
+			seg.numero_empleados_vinculados,
+			seg.vacantes_reporta_entidad,
+			seg.total_hv_activas_ep,
+			seg.numero_dec_bienes_rentas_vigencia,
+			seg.total_hv_activas_c,
+			seg.numero_contratos_vigentes,
+			seg.numero_vinculados_sobre_cargos_planta / 100
+			numero_vinculados_sobre_cargos_planta,
+			seg.peso_porcentaje_vinculacion peso_porcentaje_vinculacion,
+			seg.porcentaje_vinculacion / 100 porcentaje_vinculacion,
+			seg.numero_cont_vig_sobre_hv_act_cont / 100
+			numero_cont_vig_sobre_hv_act_cont,
+			seg.peso_porcentaje_contrato
+			peso_porcentaje_contrato,
+			seg.porcentaje_contratos / 100
+			porcentaje_contratos,
+			ipvc,
+			seg.observaciones_seg
+		</if>
+		<if test="cifrasEmpleoPublico.acuerdosGestion">
+			,
+			debe_reportar_ag,
+			reporto_ag,
+			ag.numero_gerentes_publicos,
+			ag.observacion_ag
+		</if>
+		<if test="cifrasEmpleoPublico.capacitacion">
+			,
+			cap.debe_reportar_cap,
+			cap.adopto_cap,
+			cap.acto_administrativo_cap,
+			cap.entidades_pic,
+			cap.cantidad_pae,
+			cap.describa_pae,
+			cap.presupuesto_anual_pic,
+			cap.cantidad_servidores_diplomados_dafp,
+			cap.cuantos_servidores_diplomados,
+			cap.diplomados_tomados_dafp,
+			cap.ofertas_capacitacion_entidad,
+			cap.cuenta_servidores_ben_becas_dafp,
+			cap.cuantos_servidores_ben_becas,
+			cap.becas_dafp_otorgadas,
+			cap.observacion_cap
+		</if>
+		<if test="cifrasEmpleoPublico.bienestarIncentivos">
+			,
+			bei.debe_reportar_bei,
+			bei.adopto_bei,
+			bei.manifesto_bei,
+			bei.cantidad_servidores_bei,
+			bei.observacion_bei
+		</if>
+		<if test="cifrasEmpleoPublico.horariosFlexibles">
+			,
+			hf.adopto_hf,
+			hf.acto_administrativo_hf,
+			hf.cantidad_servidores_hf,
+			hf.observacion_hf
+		</if>
+		<if test="cifrasEmpleoPublico.teletrabajo">
+			,
+			tel.adopto_tel,
+			tel.acto_administrativo_tel,
+			tel.cantidad_servidores_tel,
+			tel.observacion_tel
+		</if>
+		<if test="cifrasEmpleoPublico.bilinguismo">
+			,
+			bil.carta_bil,
+			bil.inicio_bil,
+			bil.cantidad_pre_insc_beguinner,
+			bil.cantidad_pre_insc_a11,
+			bil.cantidad_pre_insc_a12,
+			bil.cantidad_pre_insc_a13,
+			bil.total_pre_insc_a1,
+			bil.cantidad_pre_insc_a21,
+			bil.cantidad_pre_insc_a22,
+			bil.cantidad_pre_insc_a23,
+			bil.total_pre_insc_a2,
+			bil.cantidad_pre_insc_b11,
+			bil.cantidad_pre_insc_b12,
+			bil.cantidad_pre_insc_b13,
+			bil.total_pre_insc_b1,
+			bil.cantidad_ini_beguinner,
+			bil.cantidad_ini_a11,
+			bil.cantidad_ini_a12,
+			bil.cantidad_ini_a13,
+			bil.total_ini_a1,
+			bil.cantidad_ini_a21,
+			bil.cantidad_ini_a22,
+			bil.cantidad_ini_a23,
+			bil.total_ini_a2,
+			bil.cantidad_ini_b11,
+			bil.cantidad_ini_b12,
+			bil.cantidad_ini_b13,
+			bil.total_ini_b1,
+			bil.cantidad_ter_beguinner,
+			bil.cantidad_ter_a11,
+			bil.cantidad_ter_a12,
+			bil.cantidad_ter_a13,
+			bil.total_ter_a1,
+			bil.cantidad_ter_a21,
+			bil.cantidad_ter_a22,
+			bil.cantidad_ter_a23,
+			bil.total_ter_a2,
+			bil.cantidad_ter_b11,
+			bil.cantidad_ter_b12,
+			bil.cantidad_ter_b13,
+			bil.total_ter_b1,
+			bil.cantidad_apro_beguinner,
+			bil.cantidad_apro_a11,
+			bil.cantidad_apro_a12,
+			bil.cantidad_apro_a13,
+			bil.total_apro_a1,
+			bil.cantidad_apro_a21,
+			bil.cantidad_apro_a22,
+			bil.cantidad_apro_a23,
+			bil.total_apro_a2,
+			bil.cantidad_apro_b11,
+			bil.cantidad_apro_b12,
+			bil.cantidad_apro_b13,
+			bil.total_apro_b1,
+			bil.observaciones_bil
+		</if>
+		<if test="cifrasEmpleoPublico.avanceAsesor">
+			aa.consolidado,
+			aa.asesor,
+			aa.cantidad_entidades
+		</if>
+		<if test="cifrasEmpleoPublico.consolidadoGestion">
+			cg.consolidado,
+			cg.meta_territorial_anual,
+			cg.meta_trimestral,
+			cg.porcentaje_avance,
+			cg.cantidad_entidades
+		</if>
+	</sql>
+
+	<sql id="Total_Select">
+		<if test="not cifrasEmpleoPublico.avanceAsesor">
+			count(cep.cod_entidad) total
+		</if>
+		<if test="cifrasEmpleoPublico.planAnualVacantes">
+			,
+			sum(pav.vacancia_definitiva_asesor)
+			vacancia_definitiva_asesor,
+			sum(pav.vacancia_definitiva_profesional)
+			vacancia_definitiva_profesional,
+			sum(pav.vacancia_definitiva_tecnico)
+			vacancia_definitiva_tecnico,
+			sum(pav.vacancia_definitiva_asistencial)
+			vacancia_definitiva_asistencial,
+			sum(pav.vacancia_definitiva_otro)
+			vacancia_definitiva_otro,
+			sum(pav.vacancia_definitiva_total)
+			vacancia_definitiva_total,
+			sum(pav.encargo_asesor) encargo_asesor,
+			sum(pav.encargo_profesional) encargo_profesional,
+			sum(pav.encargo_tecnico) encargo_tecnico,
+			sum(pav.encargo_asistencial) encargo_asistencial,
+			sum(pav.encargo_otro) encargo_otro,
+			sum(pav.encargo_total)
+			encargo_total,
+			sum(pav.provisionalidad_asesor) provisionalidad_asesor,
+			sum(pav.provisionalidad_profesional) provisionalidad_profesional,
+			sum(pav.provisionalidad_tecnico) provisionalidad_tecnico,
+			sum(pav.provisionalidad_asistencial) provisionalidad_asistencial,
+			sum(pav.provisionalidad_otro) provisionalidad_otro,
+			sum(pav.provisionalidad_total) provisionalidad_total,
+			sum(pav.por_proveer_asesor) por_proveer_asesor,
+			sum(pav.por_proveer_profesional) por_proveer_profesional,
+			sum(pav.por_proveer_tecnico) por_proveer_tecnico,
+			sum(pav.por_proveer_asistencial) por_proveer_asistencial,
+			sum(pav.por_proveer_otro) por_proveer_otro,
+			sum(pav.por_proveer_total) por_proveer_total
+		</if>
+		<if test="cifrasEmpleoPublico.leyCuotas">
+			,
+			sum(lc.maximo_nivel_decisorio_total)
+			maximo_nivel_decisorio_total,
+			sum(lc.maximo_nivel_decisorio_vacantes)
+			maximo_nivel_decisorio_vacantes,
+			sum(lc.maximo_nivel_decisorio_provistos)
+			maximo_nivel_decisorio_provistos,
+			sum(lc.maximo_nivel_decisorio_mujeres)
+			maximo_nivel_decisorio_mujeres,
+			sum(lc.maximo_nivel_decisorio_hombres)
+			maximo_nivel_decisorio_hombres,
+			case when
+			sum(lc.maximo_nivel_decisorio_provistos)
+			> 0 then
+			sum(lc.maximo_nivel_decisorio_mujeres) /
+			sum(lc.maximo_nivel_decisorio_provistos) else
+			0 end
+			maximo_nivel_decisorio_p_mujeres,
+			case when
+			sum(lc.maximo_nivel_decisorio_provistos)
+			> 0 then
+			sum(lc.maximo_nivel_decisorio_hombres) /
+			sum(lc.maximo_nivel_decisorio_provistos) else
+			0 end
+			maximo_nivel_decisorio_p_hombres,
+			sum(lc.otro_nivel_decisorio_total)
+			otro_nivel_decisorio_total,
+			sum(lc.otro_nivel_decisorio_vacantes)
+			otro_nivel_decisorio_vacantes,
+			sum(lc.otro_nivel_decisorio_provistos)
+			otro_nivel_decisorio_provistos,
+			sum(lc.otro_nivel_decisorio_mujeres)
+			otro_nivel_decisorio_mujeres,
+			sum(lc.otro_nivel_decisorio_hombres)
+			otro_nivel_decisorio_hombres,
+			case when
+			sum(lc.otro_nivel_decisorio_provistos) > 0 then
+			sum(lc.otro_nivel_decisorio_mujeres) /
+			sum(lc.otro_nivel_decisorio_provistos) else 0 end
+			otro_nivel_decisorio_p_mujeres,
+			case when
+			sum(lc.otro_nivel_decisorio_provistos) > 0 then
+			sum(lc.otro_nivel_decisorio_hombres) /
+			sum(lc.otro_nivel_decisorio_provistos) else 0 end
+			otro_nivel_decisorio_p_hombres
+		</if>
+		<if test="cifrasEmpleoPublico.empleos">
+			,
+			sum(emp.total_planta_emp) total_planta_emp,
+			sum(emp.planta_permanente_emp) planta_permanente_emp,
+			sum(emp.planta_temporal_emp) planta_temporal_emp,
+			sum(emp.planta_transitoria_emp) planta_transitoria_emp,
+			sum(emp.trabajadores_oficiales_emp) trabajadores_oficiales_emp,
+			sum(emp.planta_privada_emp) planta_privada_emp,
+			sum(emp.planta_docentes_emp) planta_docentes_emp,
+			sum(emp.sistema_carrera_emp) sistema_carrera_emp,
+			sum(emp.decreto_salarial_emp) decreto_salarial_emp,
+			sum(emp.escala_salarial_emp) escala_salarial_emp,
+			sum(sistema_nomenclatura_emp) sistema_nomenclatura_emp,
+			sum(decreto_nomenclatura_emp) decreto_nomenclatura_emp,
+			sum(nomenclatura_empleos_emp) nomenclatura_empleos_emp
+		</if>
+		<if test="cifrasEmpleoPublico.naturaleza">
+			,
+			sum(emp_nat.eleccion_popular_emp) eleccion_popular_emp,
+			sum(emp_nat.empleos_libre_nom_rem_emp) empleos_libre_nom_rem_emp,
+			sum(emp_nat.empleos_carrera_emp) empleos_carrera_emp,
+			sum(emp_nat.empleos_carrera_dip_emp) empleos_carrera_dip_emp,
+			sum(emp_nat.periodo_fijo_emp) periodo_fijo_emp,
+			sum(emp_nat.empleos_temporales_emp) empleos_temporales_emp,
+			sum(emp_nat.total_emp)
+			total_emp
+		</if>
+		<if test="cifrasEmpleoPublico.seguimiento">
+			,
+			sum(seg.total_planta_norma) total_planta_norma,
+			sum(seg.plata_aprobada_real) plata_aprobada_real,
+			sum(seg.planta_permanente_distribuida) planta_permanente_distribuida,
+			sum(seg.planta_temporal_distribuida) planta_temporal_distribuida,
+			sum(seg.planta_transitoria_distribuida)
+			planta_transitoria_distribuida,
+			sum(seg.total_numero_empleos_planta_distribuida)
+			total_numero_empleos_planta_distribuida,
+			sum(seg.numero_empleados_vinculados) numero_empleados_vinculados,
+			sum(seg.vacantes_reporta_entidad) vacantes_reporta_entidad,
+			sum(seg.total_hv_activas_ep) total_hv_activas_ep,
+			sum(seg.numero_dec_bienes_rentas_vigencia)
+			numero_dec_bienes_rentas_vigencia,
+			sum(seg.total_hv_activas_c)
+			total_hv_activas_c,
+			sum(seg.numero_contratos_vigentes)
+			numero_contratos_vigentes,
+			case when sum(seg.plata_aprobada_real) -
+			sum(seg.vacantes_reporta_entidad) > 0 then
+			sum(seg.numero_empleados_vinculados) / (sum(seg.plata_aprobada_real)
+			- sum(seg.vacantes_reporta_entidad)) else -1 end
+			numero_vinculados_sobre_cargos_planta,
+			avg(seg.peso_porcentaje_vinculacion) / 100
+			peso_porcentaje_vinculacion,
+			case when sum(seg.plata_aprobada_real) -
+			sum(seg.vacantes_reporta_entidad) > 0 then
+			sum(seg.numero_empleados_vinculados) / (sum(seg.plata_aprobada_real)
+			- sum(seg.vacantes_reporta_entidad)) *
+			avg(seg.peso_porcentaje_vinculacion) else 0 end / 100
+			porcentaje_vinculacion,
+			case when sum(seg.total_hv_activas_c) > 0 then
+			sum(seg.numero_contratos_vigentes) / sum(seg.total_hv_activas_c) *
+			100 else 0 end / 100 numero_cont_vig_sobre_hv_act_cont,
+			avg(seg.peso_porcentaje_contrato) / 100 peso_porcentaje_contrato,
+			case when sum(seg.total_hv_activas_c) > 0 then
+			sum(seg.numero_contratos_vigentes) / sum(seg.total_hv_activas_c) *
+			avg(seg.peso_porcentaje_contrato) else 0 end / 100
+			porcentaje_contratos
+		</if>
+		<if test="cifrasEmpleoPublico.acuerdosGestion">
+			,
+			sum(ag.numero_gerentes_publicos) numero_gerentes_publicos
+		</if>
+		<if test="cifrasEmpleoPublico.capacitacion">
+			,
+			COALESCE(sum((select sum(1) entidades_pic from
+			v_gi_capacitacion cap where cap.cod_entidad = cep.cod_entidad group
+			by cap.entidades_pic having cap.entidades_pic = 'TTL_YES')), 0)
+			entidades_pic,
+			sum(cap.cantidad_pae) cantidad_pae,
+			sum(cap.presupuesto_anual_pic) presupuesto_anual_pic,
+			sum(cap.cuantos_servidores_diplomados)
+			cuantos_servidores_diplomados,
+			sum(cap.cuantos_servidores_ben_becas)
+			cuantos_servidores_ben_becas
+
+		</if>
+		<if test="cifrasEmpleoPublico.bienestarIncentivos">
+			,
+			COALESCE(sum((select sum(1) adopto_bei from v_gi_bienestar bei
+			where cep.cod_entidad = bei.cod_entidad group by bei.adopto_bei
+			having bei.adopto_bei = 'TTL_YES')), 0) adopto_bei,
+			sum(bei.cantidad_servidores_bei) cantidad_servidores_bei
+		</if>
+		<if test="cifrasEmpleoPublico.horariosFlexibles">
+			,
+			COALESCE(sum((select sum(1) adopto_hf from
+			v_gi_horario_flexible hf where cep.cod_entidad = hf.cod_entidad group
+			by hf.adopto_hf having hf.adopto_hf = 'TTL_YES')), 0) adopto_hf,
+			sum(hf.cantidad_servidores_hf) cantidad_servidores_hf
+		</if>
+		<if test="cifrasEmpleoPublico.teletrabajo">
+			,
+			COALESCE(sum((select sum(1) adopto_tel from v_gi_teletrabajo
+			tel where cep.cod_entidad = tel.cod_entidad group by tel.adopto_tel
+			having tel.adopto_tel = 'TTL_YES')), 0) adopto_tel,
+			sum(tel.cantidad_servidores_tel) cantidad_servidores_tel
+		</if>
+		<if test="cifrasEmpleoPublico.bilinguismo">
+			,
+			COALESCE(sum((select sum(1) carta_bil from v_gi_bilinguismo
+			bil where cep.cod_entidad = bil.cod_entidad group by bil.carta_bil
+			having bil.carta_bil = 'TTL_YES')), 0) carta_bil,
+			sum(bil.cantidad_pre_insc_beguinner)
+			cantidad_pre_insc_beguinner,
+			sum(bil.cantidad_pre_insc_a11) cantidad_pre_insc_a11,
+			sum(bil.cantidad_pre_insc_a12) cantidad_pre_insc_a12,
+			sum(bil.cantidad_pre_insc_a13) cantidad_pre_insc_a13,
+			sum(bil.total_pre_insc_a1) total_pre_insc_a1,
+			sum(bil.cantidad_pre_insc_a21) cantidad_pre_insc_a21,
+			sum(bil.cantidad_pre_insc_a22) cantidad_pre_insc_a22,
+			sum(bil.cantidad_pre_insc_a23) cantidad_pre_insc_a23,
+			sum(bil.total_pre_insc_a2) total_pre_insc_a2,
+			sum(bil.cantidad_pre_insc_b11) cantidad_pre_insc_b11,
+			sum(bil.cantidad_pre_insc_b12) cantidad_pre_insc_b12,
+			sum(bil.cantidad_pre_insc_b13) cantidad_pre_insc_b13,
+			sum(bil.total_pre_insc_b1) total_pre_insc_b1,
+			sum(bil.cantidad_ini_beguinner) cantidad_ini_beguinner,
+			sum(bil.cantidad_ini_a11) cantidad_ini_a11,
+			sum(bil.cantidad_ini_a12)
+			cantidad_ini_a12,
+			sum(bil.cantidad_ini_a13) cantidad_ini_a13,
+			sum(bil.total_ini_a1) total_ini_a1,
+			sum(bil.cantidad_ini_a21)
+			cantidad_ini_a21,
+			sum(bil.cantidad_ini_a22) cantidad_ini_a22,
+			sum(bil.cantidad_ini_a23) cantidad_ini_a23,
+			sum(bil.total_ini_a2)
+			total_ini_a2,
+			sum(bil.cantidad_ini_b11) cantidad_ini_b11,
+			sum(bil.cantidad_ini_b12) cantidad_ini_b12,
+			sum(bil.cantidad_ini_b13)
+			cantidad_ini_b13,
+			sum(bil.total_ini_b1) total_ini_b1,
+			sum(bil.cantidad_ter_beguinner) cantidad_ter_beguinner,
+			sum(bil.cantidad_ter_a11) cantidad_ter_a11,
+			sum(bil.cantidad_ter_a12)
+			cantidad_ter_a12,
+			sum(bil.cantidad_ter_a13) cantidad_ter_a13,
+			sum(bil.total_ter_a1) total_ter_a1,
+			sum(bil.cantidad_ter_a21)
+			cantidad_ter_a21,
+			sum(bil.cantidad_ter_a22) cantidad_ter_a22,
+			sum(bil.cantidad_ter_a23) cantidad_ter_a23,
+			sum(bil.total_ter_a2)
+			total_ter_a2,
+			sum(bil.cantidad_ter_b11) cantidad_ter_b11,
+			sum(bil.cantidad_ter_b12) cantidad_ter_b12,
+			sum(bil.cantidad_ter_b13)
+			cantidad_ter_b13,
+			sum(bil.total_ter_b1) total_ter_b1,
+			sum(bil.cantidad_apro_beguinner) cantidad_apro_beguinner,
+			sum(bil.cantidad_apro_a11) cantidad_apro_a11,
+			sum(bil.cantidad_apro_a12) cantidad_apro_a12,
+			sum(bil.cantidad_apro_a13) cantidad_apro_a13,
+			sum(bil.total_apro_a1)
+			total_apro_a1,
+			sum(bil.cantidad_apro_a21) cantidad_apro_a21,
+			sum(bil.cantidad_apro_a22) cantidad_apro_a22,
+			sum(bil.cantidad_apro_a23) cantidad_apro_a23,
+			sum(bil.total_apro_a2)
+			total_apro_a2,
+			sum(bil.cantidad_apro_b11) cantidad_apro_b11,
+			sum(bil.cantidad_apro_b12) cantidad_apro_b12,
+			sum(bil.cantidad_apro_b13) cantidad_apro_b13,
+			sum(bil.total_apro_b1)
+			total_apro_b1
+		</if>
+		<if test="cifrasEmpleoPublico.avanceAsesor">
+			count(aa.asesor) total
+		</if>
+	</sql>
+
+	<sql id="Count_Select">
+		count(cep.cod_entidad) total
+	</sql>
+	<sql id="From_Clause">
+		<if
+			test="not cifrasEmpleoPublico.consolidadoGestion and not cifrasEmpleoPublico.avanceAsesor">
+			from v_gi_cifras_empleo_publico cep
+		</if>
+		<if test="cifrasEmpleoPublico.planAnualVacantes">
+			inner join v_gi_plan_anual_vacantes pav on cep.cod_entidad
+			= pav.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.leyCuotas">
+			inner join v_gi_ley_cuotas lc on cep.cod_entidad =
+			lc.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.empleos">
+			left join v_gi_empleo emp on cep.cod_entidad =
+			emp.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.naturaleza">
+			inner join v_gi_naturaleza_empleo emp_nat on
+			cep.cod_entidad =
+			emp_nat.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.seguimiento">
+			inner join v_gi_seguimiento seg on cep.cod_entidad =
+			seg.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.acuerdosGestion">
+			left join v_gi_acuerdo_gestion ag on cep.cod_entidad =
+			ag.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.capacitacion">
+			inner join v_gi_capacitacion cap on cep.cod_entidad =
+			cap.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.bienestarIncentivos">
+			inner join v_gi_bienestar bei on cep.cod_entidad =
+			bei.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.horariosFlexibles">
+			inner join v_gi_horario_flexible hf on cep.cod_entidad =
+			hf.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.teletrabajo">
+			inner join v_gi_teletrabajo tel on cep.cod_entidad =
+			tel.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.bilinguismo">
+			inner join v_gi_bilinguismo bil on cep.cod_entidad =
+			bil.cod_entidad
+		</if>
+		<if test="cifrasEmpleoPublico.avanceAsesor">
+			from v_gi_avance_asesor aa
+		</if>
+		<if test="cifrasEmpleoPublico.consolidadoGestion">
+			from v_gi_consolidado_gestion cg
+		</if>
+	</sql>
+	<sql id="Where_Clause">
+		where
+		1 = 1
+		<if test="cifrasEmpleoPublico.codCifrasEmpleoPublico != 0">
+			and cep.cod_entidad =
+			#{cifrasEmpleoPublico.codCifrasEmpleoPublico,jdbcType=NUMERIC}
+		</if>
+		<if test="cifrasEmpleoPublico.codEntidad != null">
+			and regexp_like (upper(cep.codigo_sigep),
+			upper(#{cifrasEmpleoPublico.codEntidad,jdbcType=VARCHAR}))
+		</if>
+		<if test="cifrasEmpleoPublico.entidad != null">
+			and regexp_like (upper(cep.nombre_entidad),
+			upper(#{cifrasEmpleoPublico.entidad,jdbcType=VARCHAR}))
+		</if>
+		<if test="cifrasEmpleoPublico.codSector != null">
+			and cep.cod_sector_administrativo =
+			#{cifrasEmpleoPublico.codSector,jdbcType=NUMERIC}
+		</if>
+		<if
+			test="cifrasEmpleoPublico.codOrden != null and cifrasEmpleoPublico.codOrden > 0">
+			and cep.cod_orden =
+			#{cifrasEmpleoPublico.codOrden,jdbcType=NUMERIC}
+		</if>
+		<if test="cifrasEmpleoPublico.codClasificacionOrganica != null">
+			and cep.cod_clasificacion_organica =
+			#{cifrasEmpleoPublico.codClasificacionOrganica,jdbcType=NUMERIC}
+		</if>
+		<if test="cifrasEmpleoPublico.codNaturalezaJuridica != null">
+			and cep.cod_naturaleza =
+			#{cifrasEmpleoPublico.codNaturalezaJuridica,jdbcType=NUMERIC}
+		</if>
+		<if test="cifrasEmpleoPublico.codDepartamento != null">
+			and cep.cod_departamento =
+			#{cifrasEmpleoPublico.codDepartamento,jdbcType=NUMERIC}
+		</if>
+		<if test="cifrasEmpleoPublico.codMunicipio != null">
+			and cep.cod_municipio =
+			#{cifrasEmpleoPublico.codMunicipio,jdbcType=NUMERIC}
+		</if>
+		<if test="cifrasEmpleoPublico.codCategoria != null">
+			and cep.cod_categoria =
+			#{cifrasEmpleoPublico.codCategoria,jdbcType=NUMERIC}
+		</if>
+		<if
+			test="cifrasEmpleoPublico.consolidado != null and cifrasEmpleoPublico.consolidadoGestion">
+			and cg.consolidado =
+			#{cifrasEmpleoPublico.consolidado,jdbcType=VARCHAR}
+		</if>
+		<if
+			test="cifrasEmpleoPublico.consolidado != null and cifrasEmpleoPublico.avanceAsesor">
+			and aa.consolidado =
+			#{cifrasEmpleoPublico.consolidado,jdbcType=VARCHAR}
+		</if>
+	</sql>
+</mapper>

@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"  xmlns:p="http://primefaces.org/ui" template="/resources/template/basicTemplate.xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core">
+    <ui:param name="pageTitle" value="${titles['TTL_ENTIDADES']}" />
+    <ui:param name="pageSubtitle" value="${titles['TTL_ASIGNAR_RESPONSABLE_A_ENTIDAD']}" />
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>
+                    <p:outputLabel value="• ${titles['TTL_ASIGNAR_RESPONSABLE_A_ENTIDAD']} •" 
+                    styleClass="page-subtitle" style="text-transform: capitalize!important;" />
+                </h2>
+            </div>
+        </div>
+       <h:form id="frmAsignar">
+	       	<p:panel id="resultadosBusqueda" >
+	       		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left" style="padding-top: 20px!important; margin-bottom: 10px!important;">
+	       				<p:commandButton value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_APLICA_FIL']}" process="entidadesTabla" 
+	       					update="entidadesTabla frmAsignar:ResultEntidades" actionListener="#{responsableEntidadBean.realizarBusqueda()}" 
+	       					styleClass="btn btn-primary" style="text-transform: capitalize!important;" oncomplete="configurarAltura();" >
+						</p:commandButton>
+				</div>
+	       		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right" style="padding-top: 20px!important; margin-bottom: 10px!important;">
+						<p:commandButton value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_QUIT_FIL']}" process="@this" 
+							update="frmAsignar" actionListener="#{responsableEntidadBean.quitarFiltros()}" styleClass="btn btn-secondary" 
+							style="text-transform: capitalize!important;" oncomplete="configurarAltura();">
+						</p:commandButton>
+				</div>
+				<div id="longitud" style="display: none!important">
+					<h:outputText value="#{responsableEntidadBean.listaEntidades.size()}" />
+				</div>
+	       		<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+					<p:scrollPanel mode="native"  id="areaScroll">
+							<p:dataTable id="entidadesTabla" style="width:2000px!important" var="entidad" 
+								value="#{responsableEntidadBean.listaEntidades}" paginator="true" reflow="true" 
+								rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+								styleClass="tablaResp"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}" selection="#{responsableEntidadBean.entidadesSeleccionadas}" 
+								rowKey="#{entidad.codEntidad}" >
+								<p:column selectionMode="multiple" style="width:50px!important;text-align:center" />
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_CODSIGEP']}" style="text-transform: capitalize!important;" 
+										  filterBy="#{entidad.codigoSigep}" filterMatchMode="lte" >
+									<f:facet name="filter">
+	               						<p:inputText title="${titles['TTL_INGRESE']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_CODSIGEP']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+	               							styleClass="form-control-acti-usua form-control filter" value="#{responsableEntidadBean.filtroBusqueda.codigoSigep}">
+	               							<p:ajax event="blur" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+	               								listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+						                </p:inputText>
+									</f:facet>
+									<h:outputText style="display: inline-block; margin-right: 5px;" value="#{entidad.codigoSigep}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}" style="text-transform: capitalize!important;" 
+									filterBy="#{entidad.nombreEntidad}" filterMatchMode="lte">
+									<f:facet name="filter">
+	               						<p:inputText title="${titles['TTL_INGRESE']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+	               							styleClass="form-control-acti-usua form-control filter" value="#{responsableEntidadBean.filtroBusqueda.nombreEntidad}">
+	               							<p:ajax event="blur" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+	               								listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+						                </p:inputText>
+									</f:facet>
+									<h:outputText value="#{entidad.nombreEntidad}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_ORDEN']}" style="text-transform: capitalize!important;" 
+									filterBy="#{entidad.codOrden}" filterMatchMode="exact">
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_ORDEN']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codOrden}">
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getListasParametricas(1362)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codOrden)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_SUBORDEN']}" style="text-transform: capitalize!important;" 
+									filterBy="#{entidad.nombreEntidad}" filterMatchMode="exact" >
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_SUBORDEN']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codSuborden}">
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getListasParametricas(1365)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codSuborden)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_DEPARTAMENTO']}" filterBy="#{entidad.codDepartamento}" 
+									filterMatchMode="exact" style="word-wrap: break-word!important;">
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_DEPARTAMENTO']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codDepartamento}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getDeptos(169)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreDepto(entidad.codDepartamento)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_MUNICIPIO']}" filterBy="#{entidad.codMunicipio}" filterMatchMode="exact">
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_MUNICIPIO']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codMunicipio}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getMunicipios(responsableEntidadBean.filtroBusqueda.codDepartamento)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreMun(entidad.codMunicipio)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_CAT_MUNICIPIO']}" style="text-transform: capitalize!important;" 
+									filterBy="#{entidad.codCategoria}" filterMatchMode="exact" >
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_CAT_MUNICIPIO']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codCategoriaMunicipio}">
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getListasParametricas(2204)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codCategoria)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_CLASIFICACION']}" style="text-transform: capitalize!important;" 
+									filterBy="#{entidad.codClasificacionOrganica}" filterMatchMode="exact">
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_CLASIFICACION']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codClasificacionOrganica}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getListasParametricas(1370)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codClasificacionOrganica)}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NATURALEZA']}" style="text-transform: capitalize!important; word-wrap: break-word!important;" 
+									filterBy="#{entidad.codNaturaleza}" filterMatchMode="exact" >
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NATURALEZA']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codNaturaleza}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getListasParametricas(1707)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codNaturaleza)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_DEPENDENCIA_ESPECIAL']}" style="text-transform: capitalize!important;" 
+									filterBy="#{entidad.flgDependenciaEspecial}" filterMatchMode="exact">
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_DEPENDENCIA_ESPECIAL']}" styleClass="form-control-form-act-usua filter" 
+	               							value="#{responsableEntidadBean.filtroBusqueda.flgDependenciaEspecial}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItem itemLabel="#{titles.TTL_YES}" itemValue="#{1}" />
+											<f:selectItem itemLabel="#{titles.TTL_NO}" itemValue="#{0}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codClasificacionOrganica)}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_ESTADO_ENTI']}" style="text-transform: capitalize!important; word-wrap: break-word!important;" 
+									filterBy="#{entidad.codEstadoEntidad}" >
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_ESTADO_ENTI']}" 
+	               							styleClass="form-control-form-act-usua filter" value="#{responsableEntidadBean.filtroBusqueda.codEstadoEntidad}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getListasParametricas(1479)}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreParametrica(entidad.codEstadoEntidad)}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_RESPONSABLE']}" style="text-transform: capitalize!important; word-wrap: break-word!important;"
+									 filterBy="#{entidad.codResponsableGestion}">
+									<f:facet name="filter">
+	               						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_RESPONSABLE']}" styleClass="form-control-form-act-usua filter" 
+	               							value="#{responsableEntidadBean.filtroBusqueda.codResponsableGestion}" >
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{responsableEntidadBean.responsablesEntidad}" />
+											<p:ajax event="change" process="entidadesTabla" update="entidadesTabla frmAsignar:ResultEntidades" 
+												listener="#{responsableEntidadBean.realizarBusqueda}" oncomplete="configurarAltura();">
+	               							</p:ajax>
+										</h:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{responsableEntidadBean.obtenerNombreResponsable(entidad.codResponsableGestion)}" >
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:scrollPanel>
+					</div>
+				</div>			
+			</p:panel>
+			<script>
+				function configurarAltura(){
+					var elementos = parseInt(document.getElementById("longitud").innerText);
+					if(elementos > 10)
+						document.getElementById("frmAsignar:areaScroll").setAttribute("style", "max-height: 1000px!important; overflow: auto!important");
+					else
+						document.getElementById("frmAsignar:areaScroll").setAttribute("style", "");
+				}
+				configurarAltura();
+			</script>
+			<p:panel id="opciones" >
+				<div class="row" style="margin-top: 10px!important;margin-bottom: 20px!important; padding-bottom: 20px!important;" >
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-right" >
+						<p:outputLabel for="NuevoRespon" styleClass="log-label form-label-formularios display-block" 
+							style="display: inline-block; text-transform: capitalize!important; margin-right: 5px; margin-top: 15px!important;" 
+							value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NUEVO_RESPONSABLE']}" >
+						</p:outputLabel>
+					</div>
+	        		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-left" style="padding-top: 10px!important;">
+						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NUEVO_RESPONSABLE']}" 
+							id="NuevoRespon" styleClass="form-control-form-act-usua" required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+							value="#{responsableEntidadBean.codResponsable}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{responsableEntidadBean.responsablesEntidad}" />
+						</h:selectOneMenu>
+						<p:message for="NuevoRespon" display="text" />
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-right" style="padding-top: 10px!important;">
+						<h:outputText id="ResultEntidades" styleClass="log-label form-label-formularios display-block" 
+							style="display: inline-block; margin-right: 5px; text-transform: capitalize!important;" 
+							value="#{titles.TTL_ASIGNAR_RESPONSABLE_ENT_TOT_ENTI} #{responsableEntidadBean.retornarTamanio()}" >
+						</h:outputText>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px!important">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="padding-top: 10px!important;">
+						<p:commandButton value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_GUARDAR']}" process="frmAsignar" 
+							update="frmAsignar" actionListener="#{responsableEntidadBean.asignarResponsable()}" 
+							styleClass="btn btn-primary">
+						</p:commandButton>
+					</div>
+				</div>
+				<hr style="margin-top: 30px!important;">
+				</hr>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<p:dataTable
+								id="tablaResponsables" var="responsable" value="#{responsableEntidadBean.lstResponsableEntidad}" 
+								reflow="true" currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true"
+								rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+								emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOM_RES']}" 
+									style="text-transform: capitalize!important; word-wrap: break-word!important; " 
+									sortBy="#{responsable.numeroIdentificacion}">
+									<h:outputText value=" #{responsable.nombreTipoDocuento} #{null} #{responsable.numeroIdentificacion} #{null} #{responsable.primerNombre} #{null} #{responsable.segundoNombre} #{null} #{responsable.primerApellido} #{null} #{responsable.segundoApellido}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_TOT_NAL']}" 
+									style="word-wrap: break-word!important; text-transform: capitalize!important;" 
+									sortBy="#{responsable.totalResponsableNacional}">
+									<h:outputText value="#{responsable.totalResponsableNacional}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_TOT_TERR']}" 
+									style="word-wrap: break-word!important; text-transform: capitalize!important;" 
+									sortBy="#{responsable.totalResponsableTerritorial}">
+									<h:outputText value="#{responsable.totalResponsableTerritorial}"/>
+								</p:column>
+								<p:column headerText="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_TOT_GEN']}" 
+									style="word-wrap: break-word!important; text-transform: capitalize!important;"
+									sortBy="#{responsable.totalResponsable}">
+									<h:outputText value="#{responsable.totalResponsable}" style="display: inline-block; margin-right: 5px;" >
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+					</div>
+				</div>
+			</p:panel>
+       </h:form>
+      
+    </ui:define>
+</ui:composition>

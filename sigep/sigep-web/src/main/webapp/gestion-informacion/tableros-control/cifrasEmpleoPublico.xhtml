@@ -1,0 +1,2255 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{cifrasEmpleoPublicoBean.id}" />
+		<f:viewParam name="recursoId"
+			value="#{cifrasEmpleoPublicoBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{cifrasEmpleoPublicoBean.dialog}" />
+		<f:event listener="#{cifrasEmpleoPublicoBean.retrieve}"
+			type="preRenderView" />
+		<f:event listener="#{cifrasEmpleoPublicoBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_GI_BREADCRUMBS']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_REPORTES_CATALOGO']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO']}" />
+
+	<ui:define name="main">
+		<h:messages globalOnly="true" styleClass="error" />
+		<f:event listener="#{cifrasEmpleoPublicoBean.validateForm}"
+			type="postValidate" />
+		<br /><br />
+		<div class="row ">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• ${titles['TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<h:panelGroup id="parametros">
+			<div class="row-background-white panel-body form-horizontal">
+				<div class="row">
+					<div class="col-md-12" align="center" style="margin-top: -1%;">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO']}"
+								style="color: #235379; font-size: 1.8em; font-weight: 500;" />
+						</div>
+
+						<div class="col-md-3"></div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_COD_ENTIDAD']}"
+								styleClass="log-label form-label-formularios" for="codEntidad" />
+							<p:inputText id="codEntidad" class="form-control"
+								required="false" autocomplete="off"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_COD_ENTIDAD']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{cifrasEmpleoPublicoBean.filtro.codEntidad}"
+								styleClass="form-control-form-act-usua">
+								<f:attribute value="1" name="minValue" />
+								<f:attribute value="9999999" name="maxValue" />
+								<f:validator validatorId="numberValidator" />
+							</p:inputText>
+							<p:message for="codEntidad" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']}"
+								styleClass="log-label form-label-formularios" for="entidad" />
+							<p:inputText id="entidad" class="form-control" required="false"
+								autocomplete="off"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{cifrasEmpleoPublicoBean.filtro.entidad}">
+								<f:attribute value="3" name="minLength" />
+								<f:attribute value="255" name="maxLength" />
+								<f:validator validatorId="textOnlyTildesValidator" />
+							</p:inputText>
+							<p:message for="entidad" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+								styleClass="log-label form-label-formularios" for="codSector" />
+							<h:selectOneMenu id="codSector"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+								value="#{cifrasEmpleoPublicoBean.filtro.codSector}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{cifrasEmpleoPublicoBean.listaSectores}"
+									var="sector" itemLabel="#{sector.nombreParametro}"
+									itemValue="#{sector.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				
+				<br /><br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+								styleClass="log-label form-label-formularios" for="codOrden" />
+							<h:selectOneMenu id="codOrden"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+								value="#{cifrasEmpleoPublicoBean.filtro.codOrden}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{cifrasEmpleoPublicoBean.listaOrden}"
+									var="orden" itemLabel="#{orden.nombreParametro}"
+									itemValue="#{orden.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+								styleClass="log-label form-label-formularios"
+								for="codClasificacionOrganica" />
+							<h:selectOneMenu id="codClasificacionOrganica"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+								value="#{cifrasEmpleoPublicoBean.filtro.codClasificacionOrganica}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{cifrasEmpleoPublicoBean.listaClasificacionOrganica}"
+									var="clasificacionOrganica"
+									itemLabel="#{clasificacionOrganica.nombreParametro}"
+									itemValue="#{clasificacionOrganica.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+								styleClass="log-label form-label-formularios"
+								for="codNaturalezaJuridica" />
+							<h:selectOneMenu id="codNaturalezaJuridica"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+								value="#{cifrasEmpleoPublicoBean.filtro.codNaturalezaJuridica}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{cifrasEmpleoPublicoBean.listaNaturalezaJuridica}"
+									var="naturalezaJuridica"
+									itemLabel="#{naturalezaJuridica.nombreParametro}"
+									itemValue="#{naturalezaJuridica.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>					
+					</div>
+				</div>
+				
+				<div class="row" style="margin-top: 2.3em!important; margin-bottom: 1.3em!important;" >
+					<div class="col-md-12" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS']}"
+								style="color: #235379; font-size: 1.8em; font-weight: 500;" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+				</div>
+				<h:panelGroup id="tematicas">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="planAnualVacantes" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_PLAN_ANUAL_VACANTES']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_PLAN_ANUAL_VACANTES']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.planAnualVacantes}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="leyCuotas" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_LEY_CUOTAS']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_LEY_CUOTAS']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.leyCuotas}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="empleos" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_EMPLEOS']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_EMPLEOS']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.empleos}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="naturaleza" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_NATURALEZA']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_NATURALEZA']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.naturaleza}" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="seguimiento" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_SEGUIMIENTO']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_SEGUIMIENTO']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.seguimiento}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="acuerdosGestion" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_ACUERDOS_GESTION']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_ACUERDOS_GESTION']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.acuerdosGestion}"/>
+								<p:commandButton value="Con." type="button" onclick="PF('dlg').show();" rendered="#{cifrasEmpleoPublicoBean.filtro.acuerdosGestion}"/>
+								
+								 
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="capacitacion" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_CAPACITACION']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_CAPACITACION']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.capacitacion}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="bienestarIncentivos"
+									required="false" styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BIENESTAR']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BIENESTAR']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.bienestarIncentivos}" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="horariosFlexibles" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_HORARIOS']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_HORARIOS']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.horariosFlexibles}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="teletrabajo" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TELETRABAJO']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TELETRABAJO']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.teletrabajo}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="bilinguismo" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BILINGUISMO']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BILINGUISMO']}"
+									value="#{cifrasEmpleoPublicoBean.filtro.bilinguismo}" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="todos" required="false"
+									styleClass="log-label form-label-formularios"
+									itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TODOS']}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TODOS']}"
+									value="#{cifrasEmpleoPublicoBean.todos}">
+									<p:ajax process="@this" update="tematicas"
+										listener="#{cifrasEmpleoPublicoBean.marcarTodos()}"
+										event="change" />
+								</p:selectBooleanCheckbox>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<p:message for="todos" display="text" />
+						</div>
+					</div>
+				</h:panelGroup>
+			</div>
+		</h:panelGroup>
+
+		<!-- DataTable  -->
+		<br />
+		<h:panelGroup>
+			<div class="row row-background-white">
+				<br />
+				<div class="col-md-12" align="right">
+					<p:commandButton id="cancelBtn" value="${titles['TTL_FINALIZE']}"
+						title="${titles['TTL_FINALIZE']}" process="@this" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{cifrasEmpleoPublicoBean.cancelar()}"
+						icon="fa fa-fw fa-backward">
+					</p:commandButton>
+					<p:spacer width="2" />
+					<p:commandButton id="searchBtn" value="${titles['TTL_CONSULT']}"
+						title="${titles['TTL_CONSULT']}" process="@form" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{cifrasEmpleoPublicoBean.montarDatos()}"
+						icon="fa fa-fw fa-search">
+					</p:commandButton>
+					<h:panelGroup id="exportarBtn"
+						rendered="#{cifrasEmpleoPublicoBean.habilitarConsulta}">
+						<p:spacer width="2" />
+						<p:commandButton id="exportXLSXBtn"
+							value="${titles['TTL_DOWNLOAD']} Excel"
+							title="${titles['TTL_DOWNLOAD']} Excel"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false">
+							<pe:exporter type="xlsx" target="dataTableCifras"
+								fileName="#{titles.TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO} #{fechaSistemaString}"
+								orientation="Landscape" facetFontSize="12" facetFontStyle="BOLD"
+								cellFontSize="12" cellFontStyle="NORMAL"
+								/>
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="exportPDFBtn"
+							value="${titles['TTL_DOWNLOAD']} PDF"
+							title="${titles['TTL_DOWNLOAD']} PDF"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false" rendered="false">
+							<pe:exporter type="pdf" target="dataTableCifras"
+								fileName="#{titles.TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO} #{fechaSistemaString}"
+								tableTitle="${titles['TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO']}"
+								orientation="Landscape" facetFontSize="12" facetFontStyle="BOLD"
+								cellFontSize="12" cellFontStyle="NORMAL" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="exportCSVBtn"
+							value="${titles['TTL_DOWNLOAD']} CSV"
+							title="${titles['TTL_DOWNLOAD']} CSV"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false" rendered="false">
+							<p:dataExporter type="csv" target="dataTableCifras"
+								fileName="#{titles.TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO} #{fechaSistemaString}"
+								tableTitle="${titles['TTL_GI_BREADCRUMB_CIFRAS_EMPLEO_PUBLICO']}" />
+						</p:commandButton>
+					</h:panelGroup>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableCifra" widgetVar="panelTableCifra"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable id="dataTableCifras" lazy="true" var="dataCifra"
+								paginator="true"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								value="#{cifrasEmpleoPublicoBean.listaCifras}"
+								rowKey="#{item.id}" rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}">
+								<!-- Inicio Cabeceras -->
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_COD_ENTIDAD']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SUBORDEN']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SITUACION']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SISTEMA_CARRERA']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column rowspan="2" colspan="1" style="background-color:#245379!important; color:white!important;"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_REGIMEN_SALARIAL']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.planAnualVacantes}">
+												<p:column colspan="27"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_PLAN_ANUAL_VACANTES']}"
+													styleClass="tematica plan-anual-vacantes" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.leyCuotas}">
+												<p:column colspan="17"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_LEY_CUOTAS']}"
+													styleClass="tematica ley-cuotas" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.empleos}">
+												<p:column colspan="15"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_EMPLEOS']}"
+													styleClass="tematica empleos" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.naturaleza}">
+												<p:column colspan="8"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_NATURALEZA']}"
+													styleClass="tematica empleos-planta" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.seguimiento}">
+												<p:column colspan="20"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_SEGUIMIENTO']}"
+													styleClass="tematica seguimiento" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.acuerdosGestion}">
+												<p:column colspan="4"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_ACUERDOS_GESTION']}"
+													styleClass="tematica acuerdos-gestion" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.capacitacion}">
+												<p:column colspan="14"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_CAPACITACION']}"
+													styleClass="tematica capacitacion" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.bienestarIncentivos}">
+												<p:column colspan="5"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BIENESTAR']}"
+													styleClass="tematica bienestar-incentivos" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.horariosFlexibles}">
+												<p:column colspan="4"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_HORARIOS']}"
+													styleClass="tematica horarios-flexibles" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.teletrabajo}">
+												<p:column colspan="4"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TELETRABAJO']}"
+													styleClass="tematica teletrabajo" />
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.bilinguismo}">
+												<p:column colspan="55"
+													headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BILINGUISMO']}"
+													styleClass="tematica bilinguismo" />
+											</c:when>
+										</c:choose>
+									</p:row>
+
+									<p:row>
+										<!-- Inicio Plan Anual Vacantes -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.planAnualVacantes}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_REPORTA']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_REPORTO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_VAC_DEF_ASESOR']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_VAC_DEF_PROFESIONAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_VAC_DEF_TECNICO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_VAC_DEF_ASISTENCIAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_VAC_DEF_OTRO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_VAC_DEF_TOTAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_ENCARGO_ASESOR']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_ENCARGO_PROFESIONAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_ENCARGO_TECNICO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_ENCARGO_ASISTENCIAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_ENCARGO_OTRO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_ENCARGO_TOTAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROV_ASESOR']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROV_PROFESIONAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROV_TECNICO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROV_ASISTENCIAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROV_OTRO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROV_TOTAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROVEER_ASESOR']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROVEER_PROFESIONAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROVEER_TECNICO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROVEER_ASISTENCIAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROVEER_OTRO']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_PROVEER_TOTAL']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_OBSERVACIONES']}"
+													styleClass="tematica-col plan-anual-vacantes" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Plan Anual Vacantes -->
+										<!-- Inicio Ley Cuotas -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.leyCuotas}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_REPORTA']}"
+													styleClass="tematica-col ley-cuotas" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_REPORTO']}"
+													styleClass="tematica-col ley-cuotas" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_TOTAL']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_VACANTES']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_PROVISTOS']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_MUJERES']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_HOMBRES']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_P_HOMBRES']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_MND_P_MUJERES']}"
+													styleClass="tematica-col ley-cuotas-max" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_TOTAL']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_VACANTES']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_PROVISTOS']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_MUJERES']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_HOMBRES']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_P_HOMBRES']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OND_P_MUJERES']}"
+													styleClass="tematica-col ley-cuotas-otro" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_LC_OBSERVACIONES']}"
+													styleClass="tematica-col ley-cuotas" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Ley Cuotas -->
+										<!-- Inicio Empleos -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.empleos}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_PAV_REPORTA']}"
+													styleClass="tematica-col empleos" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_SEGUIMIENTO']}"
+													styleClass="tematica-col empleos" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_PLANTA_PERMANENTE']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_PLANTA_TEMPORAL']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_PLANTA_TRANSITORIA']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_TRABAJADORES_OFICIALES']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_PLANTA_PRIVADA']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_PLANTA_DOCENTES']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_SISTEMA_CARRERA']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_DECRETO_SALARIAL']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_ESCALA_SALARIAL']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_SISTEMA_NOMENCLATURA']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_DECRETO_NOMENCLATURA']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_NOMENCLATURA_EMPLEO']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_TOTAL_PLANTA_EMPLEADOS_PUBLICOS']}"
+													styleClass="tematica-col empleos" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Empleos -->
+										<!-- Inicio Naturaleza -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.naturaleza}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_ELECCION_POPULAR']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_EMPLEOS_LIB_NOMBRAMIENTO']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_EMPLEOS_CARRERA']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_EMPLEOS_CARRERA_DIP']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_PERIODO_FIJO']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_TEMPORAL']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_TOTAL']}"
+													styleClass="tematica-col empleos-planta" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_EMP_OBSERVACIONES']}"
+													styleClass="tematica-col empleos-planta" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Naturaleza -->
+										<!-- Inicio Seguimiento -->
+
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.seguimiento}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_PLANTA_NORMA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLATA_APROBADA_REAL']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLANTA_PERMANENTE_DISTRIBUIDA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLANTA_TEMPORAL_DISTRIBUIDA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLANTA_TRANSITORIA_DISTRIBUIDA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_NUMERO_EMPLEOS_PLANTA_DISTRIBUIDA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_EMPLEADOS_VINCULADOS']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_VACANTES_REPORTA_ENTIDAD']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_HV_ACTIVAS_EP']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_DEC_BIENES_RENTAS_VIGENCIA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_HV_ACTIVAS_C']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_CONTRATOS_VIGENTES']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_VINCULADOS_SOBRE_CARGOS_PLANTA']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PESO_PORCENTAJE_VINCULACION']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PORCENTAJE_VINCULACION']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_CONT_VIG_SOBRE_HV_ACT_CONT']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PESO_PORCENTAJE_CONTRATO']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PORCENTAJE_CONTRATOS']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_IPVC']}"
+													styleClass="tematica-col seguimiento" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_SEG_OBSERVACIONES']}"
+													styleClass="tematica-col seguimiento" />
+
+											</c:when>
+										</c:choose>
+										<!-- Fin Seguimiento -->
+										<!-- Inicio Acuerdos de Gestion -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.acuerdosGestion}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_AG_REPORTA']}"
+													styleClass="tematica-col acuerdos-gestion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_AG_REPORTO']}"
+													styleClass="tematica-col acuerdos-gestion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_AG_NUMERO_GERENTES_PUBLICOS']}"
+													styleClass="tematica-col acuerdos-gestion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_AG_OBSERVACIONES']}"
+													styleClass="tematica-col acuerdos-gestion" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Acuerdos de Gestion -->
+										<!-- Inicio Capacitacion -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.capacitacion}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_REPORTA']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_REPORTO']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_ACTO_ADMINISTRATIVO_CAP']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_ENTIDADES_PIC']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_CANTIDAD_PAE']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_DESCRIBA_PAE']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_PRESUPUESTO_ANUAL_PIC']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_CANTIDAD_SERVIDORES_DIPLOMADOS_DAFP']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_CUANTOS_SERVIDORES_DIPLOMADOS']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_DIPLOMADOS_TOMADOS_DAFP']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_CUENTA_SERVIDORES_BEN_BECAS_DAFP']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_CUANTOS_SERVIDORES_BEN_BECAS']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_BECAS_DAFP_OTORGADAS']}"
+													styleClass="tematica-col capacitacion" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_CAP_OBSERVACIONES']}"
+													styleClass="tematica-col capacitacion" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Capacitacion -->
+										<!-- Inicio Bienestar e Incentivos -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.bienestarIncentivos}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BEI_REPORTA']}"
+													styleClass="tematica-col bienestar-incentivos" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BEI_ADOPTO']}"
+													styleClass="tematica-col bienestar-incentivos" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BEI_MANIFESTO']}"
+													styleClass="tematica-col bienestar-incentivos" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BEI_CANTIDAD_SERVIDORES']}"
+													styleClass="tematica-col bienestar-incentivos" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BEI_OBSERVACIONES']}"
+													styleClass="tematica-col bienestar-incentivos" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Bienestar e Incentivos -->
+										<!-- Inicio Horarios flexibles -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.horariosFlexibles}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_HF_ADOPTO']}"
+													styleClass="tematica-col horarios-flexibles" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_HF_ACTO_ADMINISTRATIVO']}"
+													styleClass="tematica-col horarios-flexibles" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_HF_CANTIDAD_SERVIDORES']}"
+													styleClass="tematica-col horarios-flexibles" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_HF_OBSERVACIONES']}"
+													styleClass="tematica-col horarios-flexibles" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Horarios flexibles -->
+										<!-- Inicio Teletrabajo -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.teletrabajo}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_TEL_ADOPTO']}"
+													styleClass="tematica-col teletrabajo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_TEL_ACTO_ADMINISTRATIVO']}"
+													styleClass="tematica-col teletrabajo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_TEL_CANTIDAD_SERVIDORES']}"
+													styleClass="tematica-col teletrabajo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_TEL_OBSERVACIONES']}"
+													styleClass="tematica-col teletrabajo" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Teletrabajo -->
+										<!-- Inicio Bilinguismo -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.bilinguismo}">
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CARTA']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_INICIO']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_BEGUINNER']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_A11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_A12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_A13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_PRE_INSC_A1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_A21']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_A22']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_A23']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_PRE_INSC_A2']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_B11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_B12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC_B13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_PRE_INSC_B1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_BEGUINNER']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_A11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_A12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_A13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_INI_A1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_A21']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_A22']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_A23']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_INI_A2']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_B11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_B12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI_B13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_INI_B1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_BEGUINNER']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_A11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_A12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_A13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_TER_A1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_A21']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_A22']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_A23']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_TER_A2']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_B11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_B12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TER_B13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_TER_B1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_BEGUINNER']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_A11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_A12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_A13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_APRO_A1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_A21']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_A22']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_A23']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_APRO_A2']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_B11']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_B12']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APRO_B13']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_TOTAL_APRO_B1']}"
+													styleClass="tematica-col bilinguismo" />
+												<p:column
+													headerText="${titles['TTL_GI_TABLERO_CEP_BIL_OBSERVACIONES']}"
+													styleClass="tematica-col bilinguismo" />
+											</c:when>
+										</c:choose>
+										<!-- Fin Bilinguismo -->
+									</p:row>
+								</p:columnGroup>
+								<!-- Fin Cabeceras -->
+
+								<!-- Inicio Detalle -->
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.codEntidad}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.entidad}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.sector}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.orden}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.suborden}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.clasificacionOrganica}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.naturalezaJuridica}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.situacion}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.sistemaCarrera}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.regimenSalarial}" />
+								</p:column>
+								<!-- Inicio - Plan anual de Vacantes -->
+								<c:choose>
+									<c:when
+										test="#{cifrasEmpleoPublicoBean.filtro.planAnualVacantes}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.debeReportarPAV]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.reportoPAV]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.vacDefinitivaAsesor}"
+												converter="javax.faces.Integer" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.vacDefinitivaProfesional}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.vacDefinitivaTecnico}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.vacDefinitivaAsistencial}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.vacDefinitivaOtro}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.vacDefinitivaTotal}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.encargoAsesor}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.encargoProfesional}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.encargoTecnico}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.encargoAsistencial}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.encargoOtro}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.encargoTotal}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.provisionalidadAsesor}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.provisionalidadProfesional}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.provisionalidadTecnico}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.provisionalidadAsistencial}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.provisionalidadOtro}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.provisionalidadTotal}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.porProveerAsesor}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.porProveerProfesional}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.porProveerTecnico}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.porProveerAsistencial}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.porProveerOtro}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.porProveerTotal}" />
+										</p:column>
+										<p:column styleClass="tematica texto texto">
+											<h:outputText value="#{dataCifra.observacionPAV}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Plan anual de Vacantes -->
+								<!-- Inicio - Ley de Cuotas -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.leyCuotas}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="${titles[dataCifra.debeReportarLC]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="${titles[dataCifra.reportoLC]}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.maximoNivelDecisorioTotal}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.maximoNivelDecisorioVacantes}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.maximoNivelDecisorioProvistos}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.maximoNivelDecisorioMujeres}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.maximoNivelDecisorioHombres}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.maximoNivelDecisorioPMujeres}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.maximoNivelDecisorioPHombres}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.otroNivelDecisorioTotal}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.otroNivelDecisorioVacantes}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.otroNivelDecisorioProvistos}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.otroNivelDecisorioMujeres}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.otroNivelDecisorioHombres}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.otroNivelDecisorioPMujeres}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.otroNivelDecisorioPHombres}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.observacionPAV}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin - Ley de Cuotas -->
+								<!-- Inicio Empleos -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.empleos}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.debeReportarEmp]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.seguimientoSigepEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plantaPermanenteEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plantaTemporalEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plantaTransitoriaEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.trabajadoresOficialesEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plantaPrivadaEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plantaDocentesEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.sistemaCarreraEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.decretoSalarialEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.escalaSalarialEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.sistemaNomenclaturaEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.decretoNomenclaturaEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.nomenclaturaEmpleosEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.totalPlantaEmp}"
+												converter="javax.faces.Integer" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Empleos -->
+								<!-- Inicio Naturlaeza -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.naturaleza}">
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.eleccionPopularEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.empleosLibreNomRemEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.empleosCarreraEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.empleosCarreraDipEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.periodoFijoEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.empleosTemporalesEmp}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.totalEmp}" />
+										</p:column>
+										<p:column styleClass="tematica texto texto">
+											<h:outputText value="#{dataCifra.observacionEmp}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Naturlaeza -->
+								<!-- Inicio Seguimiento -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.seguimiento}">
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalPlantaNorma}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plataAprobadaReal}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.plantaPermanenteDistribuida}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.plantaTemporalDistribuida}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.plantaTransitoriaDistribuida}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.totalNumeroEmpleosPlantaDistribuida}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.numeroEmpleadosVinculados}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.vacantesReportaEntidad}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.totalHVActivasEmpleadosPublicos}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.numeroDeclaracionesBienesRentasVigencia}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalActivasContratistas}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.numeroContratosVigentes}" />
+										</p:column>
+										<p:column
+											styleClass="tematica numero total#{cifrasEmpleoPublicoBean.getNoVinculado(dataCifra.numeroVinculadosSobreNumeroCargosPlanta)}">
+											<h:outputText
+												value="#{dataCifra.numeroVinculadosSobreNumeroCargosPlanta}"
+												rendered="#{dataCifra.numeroVinculadosSobreNumeroCargosPlanta.doubleValue() ne -0.01}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+											<h:outputText
+												value="${titles['TTL_GI_TABLERO_CEP_NO_VINCULADO']}"
+												rendered="#{dataCifra.numeroVinculadosSobreNumeroCargosPlanta.doubleValue() eq -0.01}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.pesoPorcentajeVinculacion}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.porcentajeVinculacion}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column
+											styleClass="tematica numero total#{cifrasEmpleoPublicoBean.getError(dataCifra.numeroContratosVigentesSobreNumeroHVActivasContratistas)}">
+											<h:outputText
+												value="#{dataCifra.numeroContratosVigentesSobreNumeroHVActivasContratistas}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.pesoPorcentajeContrato}" />
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<h:outputText value="#{dataCifra.porcentajeContratos}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica numero total">
+											<p:graphicImage dir="resources"
+												rendered="#{dataCifra.ipvc gt -1}"
+												styleClass="seguimiento-semaforo"
+												name="images/gi/#{cifrasEmpleoPublicoBean.getSemaforo(dataCifra.ipvc)}.png"
+												title="#{cifrasEmpleoPublicoBean.getSemaforo(dataCifra.ipvc)}"
+												alt="#{cifrasEmpleoPublicoBean.getSemaforo(dataCifra.ipvc)}"
+												height="16" width="16" />
+											<h:outputText value="#{dataCifra.ipvc}"
+												rendered="#{dataCifra.ipvc gt -1}">
+												<f:convertNumber pattern="#{porcentajeFormato}" />
+											</h:outputText>
+											<h:outputText
+												value="${titles['TTL_GI_TABLERO_CEP_NO_APLICA']}"
+												rendered="#{dataCifra.ipvc le -1}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.observacionesSEG}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Seguimiento -->
+								<!-- Inicio Acuerdo de Gestion -->
+								<c:choose>
+									<c:when
+										test="#{cifrasEmpleoPublicoBean.filtro.acuerdosGestion}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.debeReportarAG]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.reportoAG]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.numeroGerentesPublicos}" />
+										</p:column>
+										<p:column styleClass="tematica texto texto">
+											<h:outputText value="#{dataCifra.observacionAG}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Acuerdo de Gestion -->
+								<!-- Inicio Capacitacion -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.capacitacion}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.debeReportarCap]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.adoptoCap]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.actoAdministrativoCap}"
+												converter="javax.faces.Integer" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.entidadesPIC]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPAE}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.describaPAE}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.presupuestoAnualPIC}">
+												<f:convertNumber pattern="#{monedaFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText
+												value="#{titles[dataCifra.cantidadServidoresDiplomadosDAFP]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText
+												value="#{dataCifra.cuantosServidoresDiplomados}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.diplomadosTomadosDAFP}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText
+												value="#{titles[dataCifra.cuentaServidoresBenBecasDAFP]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cuantosServidoresBenBecas}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.becasDAFPOtorgadas}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.observacionCap}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Capacitacion -->
+								<!-- Inicio Bienestar e Incentivos -->
+								<c:choose>
+									<c:when
+										test="#{cifrasEmpleoPublicoBean.filtro.bienestarIncentivos}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.debeReportarBeI]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.adoptoBeI]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.manifestoBeI]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadServidoresBeI}" />
+										</p:column>
+										<p:column styleClass="tematica texto texto">
+											<h:outputText value="#{dataCifra.observacionBeI}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Bienestar e Incentivos -->
+								<!-- Inicio Horarios flexibles -->
+								<c:choose>
+									<c:when
+										test="#{cifrasEmpleoPublicoBean.filtro.horariosFlexibles}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.adoptoHF]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText
+												value="#{titles[dataCifra.actoAdministrativoHF]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadServidoresHF}" />
+										</p:column>
+										<p:column styleClass="tematica texto texto">
+											<h:outputText value="#{dataCifra.observacionHF}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Horarios flexibles -->
+								<!-- Inicio Teletrabajo -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.teletrabajo}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.adoptoTel]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText
+												value="#{titles[dataCifra.actoAdministrativoTel]}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadServidoresTel}" />
+										</p:column>
+										<p:column styleClass="tematica texto texto">
+											<h:outputText value="#{dataCifra.observacionTel}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Teletrabajo -->
+								<!-- Inicio Bilinguismo -->
+								<c:choose>
+									<c:when test="#{cifrasEmpleoPublicoBean.filtro.bilinguismo}">
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{titles[dataCifra.cartaBil]}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.inicioBil}">
+												<f:convertDateTime pattern="#{periodoFormato}" />
+											</h:outputText>
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscBeguinner}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscA11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscA12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscA13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalPreInscA1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscA21}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscA22}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscA23}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalPreInscA2}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscB11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscB12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadPreInscB13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalPreInscB1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniBeguinner}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniA11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniA12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniA13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalIniA1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniA21}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniA22}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniA23}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalIniA2}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniB11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniB12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadIniB13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalIniB1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerBeguinner}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerA11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerA12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerA13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalTerA1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerA21}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerA22}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerA23}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalTerA2}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerB11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerB12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadTerB13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalTerB1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproBeguinner}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproA11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproA12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproA13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalAproA1}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproA21}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproA22}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproA23}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalAproA2}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproB11}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproB12}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.cantidadAproB13}" />
+										</p:column>
+										<p:column styleClass="tematica numero">
+											<h:outputText value="#{dataCifra.totalAproB1}" />
+										</p:column>
+										<p:column styleClass="tematica texto">
+											<h:outputText value="#{dataCifra.observacionesBil}" />
+										</p:column>
+									</c:when>
+								</c:choose>
+								<!-- Fin- Bilinguismo -->
+								<!-- Fin Detalle -->
+
+								<!-- Inicio Totales -->
+								<p:columnGroup type="footer">
+									<p:row>
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.planAnualVacantes or cifrasEmpleoPublicoBean.filtro.leyCuotas or cifrasEmpleoPublicoBean.filtro.empleos or cifrasEmpleoPublicoBean.filtro.naturaleza or cifrasEmpleoPublicoBean.filtro.seguimiento or cifrasEmpleoPublicoBean.filtro.acuerdosGestion or cifrasEmpleoPublicoBean.filtro.capacitacion or cifrasEmpleoPublicoBean.filtro.bienestarIncentivos or cifrasEmpleoPublicoBean.filtro.horariosFlexibles or cifrasEmpleoPublicoBean.filtro.teletrabajo or cifrasEmpleoPublicoBean.filtro.bilinguismo}">
+												<p:column colspan="9" footerText="" />
+												<p:column styleClass="tematica total-texto-total"
+													footerText="${titles['TTL_GI_TABLERO_CEP_PAV_TOTAL']}" />
+											</c:when>
+										</c:choose>
+										<!-- Inicio - Plan anual de Vacantes -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.planAnualVacantes}">
+												<p:column styleClass="tematica total-texto" colspan="2"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacDefinitivaAsesor}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacDefinitivaProfesional}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacDefinitivaTecnico}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacDefinitivaAsistencial}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacDefinitivaOtro}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacDefinitivaTotal}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.encargoAsesor}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.encargoProfesional}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.encargoTecnico}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.encargoAsistencial}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.encargoOtro}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.encargoTotal}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.provisionalidadAsesor}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.provisionalidadProfesional}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.provisionalidadTecnico}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.provisionalidadAsistencial}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.provisionalidadOtro}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.provisionalidadTotal}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.porProveerAsesor}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.porProveerProfesional}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.porProveerTecnico}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.porProveerAsistencial}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.porProveerOtro}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.porProveerTotal}" />
+												<p:column styleClass="tematica total-texto" footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin- Plan anual de Vacantes -->
+										<!-- Inicio - Ley de Cuotas -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.leyCuotas}">
+												<p:column styleClass="tematica total-texto" colspan="2"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioTotal}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioVacantes}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioProvistos}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioMujeres}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioHombres}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioPMujeres)}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.maximoNivelDecisorioPHombres)}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioTotal}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioVacantes}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioProvistos}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioMujeres}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioHombres}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioPMujeres)}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.otroNivelDecisorioPHombres)}" />
+												<p:column styleClass="tematica total-texto" footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Ley de Cuotas -->
+										<!-- Inicio - Empleos -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.empleos}">
+												<p:column styleClass="tematica total-texto" colspan="2"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaPermanenteEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaTemporalEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaTransitoriaEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.trabajadoresOficialesEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaPrivadaEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaDocentesEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.sistemaCarreraEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.decretoSalarialEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.escalaSalarialEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.sistemaNomenclaturaEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.decretoNomenclaturaEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.nomenclaturaEmpleosEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalPlantaEmp}" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Empleo -->
+										<!-- Inicio - Naturlaeza -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.naturaleza}">
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.eleccionPopularEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.empleosLibreNomRemEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.empleosCarreraEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.empleosCarreraDipEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.periodoFijoEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.empleosTemporalesEmp}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalEmp}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Naturaleza -->
+										<!-- Inicio - Seguimiento -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.seguimiento}">
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalPlantaNorma}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plataAprobadaReal}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaPermanenteDistribuida}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaTemporalDistribuida}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.plantaTransitoriaDistribuida}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalNumeroEmpleosPlantaDistribuida}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.numeroEmpleadosVinculados}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.vacantesReportaEntidad}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalHVActivasEmpleadosPublicos}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.numeroDeclaracionesBienesRentasVigencia}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalActivasContratistas}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.numeroContratosVigentes}" />
+												<p:column
+													styleClass="tematica total-numero#{cifrasEmpleoPublicoBean.getNoVinculado(cifrasEmpleoPublicoBean.listaCifras.total.numeroVinculadosSobreNumeroCargosPlanta)}"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.numeroVinculadosSobreNumeroCargosPlanta.doubleValue() ne -1 ? cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.numeroVinculadosSobreNumeroCargosPlanta) : titles.TTL_GI_TABLERO_CEP_NO_VINCULADO}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.pesoPorcentajeVinculacion)}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.porcentajeVinculacion)}" />
+												<p:column
+													styleClass="tematica total-numero#{cifrasEmpleoPublicoBean.getError(getPesoPorcentajeContrato.numeroContratosVigentesSobreNumeroHVActivasContratistas)}"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.numeroContratosVigentesSobreNumeroHVActivasContratistas)}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.pesoPorcentajeContrato)}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.porcentajeContratos)}" />
+												<p:column
+													styleClass="tematica total-numero seguimiento-semaforo-#{cifrasEmpleoPublicoBean.getSemaforo(cifrasEmpleoPublicoBean.listaCifras.total.ipvc)}"
+													footerText="#{cifrasEmpleoPublicoBean.formatoPorcentaje(cifrasEmpleoPublicoBean.listaCifras.total.ipvc)}" />
+												<p:column styleClass="tematica total-texto" footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Seguimiento -->
+										<!-- Inicio - Acuerdos de Gestion -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.acuerdosGestion}">
+												<p:column styleClass="tematica total-texto" colspan="2"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.numeroGerentesPublicos}" />
+												<p:column styleClass="tematica total-texto" footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Acuerdos de Gestion -->
+										<!-- Inicio - Capacitacion -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.capacitacion}">
+												<p:column styleClass="tematica total-texto" colspan="4"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPAE}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.formatoMoneda(cifrasEmpleoPublicoBean.listaCifras.total.presupuestoAnualPIC)}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cuantosServidoresDiplomados}" />
+												<p:column styleClass="tematica total-texto" colspan="3"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cuantosServidoresBenBecas}" />
+												<p:column styleClass="tematica total-texto" colspan="2"
+													footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Capacitacion -->
+										<!-- Inicio - Bienestar e Inventivos -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.bienestarIncentivos}">
+												<p:column styleClass="tematica total-texto" colspan="3"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadServidoresBeI}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Bienestar e Inventivos -->
+										<!-- Inicio - Horarios flexibles -->
+										<c:choose>
+											<c:when
+												test="#{cifrasEmpleoPublicoBean.filtro.horariosFlexibles}">
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.adoptoHF}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadServidoresHF}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Horarios flexibles -->
+										<!-- Inicio - Teletrabajo -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.teletrabajo}">
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.adoptoTel}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadServidoresTel}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Teletrabajo -->
+										<!-- Inicio - Bilinguismo -->
+										<c:choose>
+											<c:when test="#{cifrasEmpleoPublicoBean.filtro.bilinguismo}">
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cartaBil}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscBeguinner}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscA11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscA12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscA13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalPreInscA1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscA21}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscA22}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscA23}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalPreInscA2}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscB11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscB12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadPreInscB13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalPreInscB1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniBeguinner}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniA11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniA12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniA13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalIniA1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniA21}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniA22}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniA23}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalIniA2}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniB11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniB12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadIniB13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalIniB1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerBeguinner}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerA11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerA12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerA13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalTerA1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerA21}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerA22}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerA23}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalTerA2}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerB11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerB12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadTerB13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalTerB1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproBeguinner}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproA11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproA12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproA13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalAproA1}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproA21}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproA22}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproA23}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalAproA2}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproB11}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproB12}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.cantidadAproB13}" />
+												<p:column styleClass="tematica total-numero"
+													footerText="#{cifrasEmpleoPublicoBean.listaCifras.total.totalAproB1}" />
+												<p:column styleClass="tematica total-texto" colspan="1"
+													footerText="" />
+											</c:when>
+										</c:choose>
+										<!-- Fin - Bilinguismo -->
+									</p:row>
+								</p:columnGroup>
+								<!-- Fin Totales -->
+							</p:dataTable>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<p:defaultCommand target="frmPrincipal:searchBtn" />
+		</h:panelGroup>
+
+	        <p:dialog header="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_ACUERDOS_GESTION']}" widgetVar="dlg" modal="true" id="dlg">
+			    <div class="card">
+			       <table width="100%">
+					  <tr>
+					    <th>Nombre Campo</th>
+					    <th>Valor Original</th>
+					    <th>Valor Conciliado</th>
+					  </tr>
+					  <tr>
+					    <td>${titles['TTL_GI_TABLERO_CEP_AG_REPORTA']}</td>
+					    <td><h:outputText value="#{titles[cifrasEmpleoPublicoBean.listaCifras.listaCifras[0].debeReportarAG]}" /></td>
+					    <td>
+					    	<p:inputText id="debeReportarAGCL" class="form-control"
+								required="false" autocomplete="off" disabled="#{cifrasEmpleoPublicoBean.debeReportarAGCL.definitivo}"
+								value="#{cifrasEmpleoPublicoBean.debeReportarAGCL.valorCifraConcilia}" immediate="true"
+								styleClass="form-control-form-act-usua">
+							</p:inputText>
+						</td>
+					  </tr>
+					  <tr>
+					     <td>${titles['TTL_GI_TABLERO_CEP_AG_REPORTO']}</td>
+					    <td>#{titles[cifrasEmpleoPublicoBean.listaCifras.listaCifras[0].reportoAG]}</td>
+					    <td>
+					    	<p:inputText id="reportoAGCL" class="form-control"
+								required="false" autocomplete="off" disabled="#{cifrasEmpleoPublicoBean.reportoAGCL.definitivo}"
+								value="#{cifrasEmpleoPublicoBean.reportoAGCL.valorCifraConcilia}" immediate="true"
+								styleClass="form-control-form-act-usua">
+							</p:inputText>
+					    </td>
+					  </tr>
+					  <tr>
+					     <td>${titles['TTL_GI_TABLERO_CEP_AG_NUMERO_GERENTES_PUBLICOS']}</td>
+					    <td>#{cifrasEmpleoPublicoBean.listaCifras.listaCifras[0].numeroGerentesPublicos}</td>
+					     <td>
+					    	<p:inputText id="numeroGerentesPublicoCL" class="form-control"
+								required="false" autocomplete="off" disabled="#{cifrasEmpleoPublicoBean.numeroGerentesPublicoCL.definitivo}"
+								value="#{cifrasEmpleoPublicoBean.numeroGerentesPublicoCL.valorCifraConcilia}" immediate="true"
+								styleClass="form-control-form-act-usua">
+							</p:inputText>
+					    </td>
+					  </tr>
+					  <tr>
+					      <td>${titles['TTL_GI_TABLERO_CEP_AG_OBSERVACIONES']}</td>
+					      <td>#{cifrasEmpleoPublicoBean.listaCifras.listaCifras[0].observacionAG}</td>
+					      <td>
+					    	<p:inputText id="observacionAGCL" class="form-control"
+								required="false" autocomplete="off" disabled="#{cifrasEmpleoPublicoBean.observacionAGCL.definitivo}"
+								value="#{cifrasEmpleoPublicoBean.observacionAGCL.valorCifraConcilia}" immediate="true"
+								styleClass="form-control-form-act-usua">
+							</p:inputText>
+					    </td>
+					  </tr>
+					</table>
+					
+					<div class="col-md-12" align="right">
+					    <p:commandButton id="cancelar" value="Cancelar"
+							title="Cancelar" process="@this" update="@form"
+							styleClass="btn btn-transparent" style="padding: 0% !important;" 
+							onclick="PF('dlg').hide();">
+						</p:commandButton>
+						<p:commandButton id="parcialBtn" value="Guardado Parcial"
+							title="Guardado Parcial" process="@this" update="@form"
+							styleClass="btn btn-transparent" style="padding: 0% !important;" 
+							action="#{cifrasEmpleoPublicoBean.conciliacionParcial()}">
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="definitivoBtn" value="Guardado Definitivo"
+							title="Guardado Definitivo" process="@form" update="@form"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							action="#{cifrasEmpleoPublicoBean.conciliacionFinal()}" >
+						</p:commandButton>
+					</div>
+					
+			    </div>
+	        </p:dialog>
+	</ui:define>
+</ui:composition>

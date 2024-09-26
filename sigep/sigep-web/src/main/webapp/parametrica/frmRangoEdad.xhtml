@@ -1,0 +1,364 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_RANGO_EDAD']}" />
+	
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.TTL_RANGO_EDAD} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="NombreRangoEdad" maxlength="255"
+						placeholder="${titles['TTL_NOMBRE_RANGO']}"
+						title="${titles['TTL_INGRESE']} ${titles['TTL_NOMBRE_RANGO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this"
+						scrollable="true" scrollHeight="150"
+						completeMethod="#{rangoEdadBean.listaRangoEdad}"  
+						value="#{rangoEdadBean.nombreRangoEdad}">
+						<p:ajax event="itemSelect" listener="#{rangoEdadBean.filtrarRangoEdad()}" update ="dataTableRangoEdad"/>
+					</p:autoComplete>
+					<p:message for="NombreRangoEdad" display="text" />
+			</div>	
+			<div class="col-md-1 btn-search" style="margin-left: -31px!important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}" id="btnAdmonBuscarParametro"
+						styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						action="#{rangoEdadBean.filtrarRangoEdad()}"
+						process="@this NombreRangoEdad"
+						update="NombreRangoEdad dataTableRangoEdad" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+		<p:spacer height="4" />
+		<span class="span-style">#{titles.TTL_RANGO_EDAD}</span> <br /> <br />
+		<hr class="hr-style hr-style-two" />
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarRangoEdad"
+					value="${titles['LBL_ADD_NEW']}" icon="fa fa-fw fa-plus-circle"
+					process="@this" styleClass="btn btn-transparent"
+					actionListener="#{rangoEdadBean.nuevaRangoEdad()}"
+					immediate="true"
+					update="panelRangoEdad"
+					oncomplete="window.location.href='#frmPrincipal:panelRangoEdad';">
+					<p:resetInput target="frmPrincipal:panelRangoEdad" />
+				</p:commandButton>
+			</div>
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"> </label>
+			</div>
+		</div>
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTableRangoEdad" paginator="true" reflow="true"
+				rowIndexVar="rowIndex"
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				value="#{rangoEdadBean.lstRangoEdad}"
+				var="dataRangoEdad"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				<p:column headerText="${titles['TTL_NOMBRE_RANGO']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataRangoEdad.nombreRango}">
+					<h:outputText value="#{dataRangoEdad.nombreRango}" />
+				</p:column>
+				
+				<p:column headerText="${titles['TTL_RANGO_INFERIOR']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataRangoEdad.limiteInferior}">
+					<h:outputText value="#{dataRangoEdad.limiteInferior}" />
+				</p:column>
+				
+				<p:column headerText="${titles['TTL_RANGO_SUPERIOR']}"
+					style="word-wrap: break-word!important;"
+					sortBy="#{dataRangoEdad.limiteSuperior}">
+					<h:outputText value="#{dataRangoEdad.limiteSuperior}" />
+				</p:column>
+
+				<p:column headerText="#{titles.TTL_ACTIVO}"
+					style="word-wrap: break-word!important;text-align: center!important;"
+					sortBy="#{dataRangoEdad.flgActivo}">
+					<p:selectBooleanCheckbox
+						value="#{dataRangoEdad.flgActivo == 1 ? true : false}" disabled="true" />
+				</p:column>
+
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+					style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					<p:commandButton id="btnEditarRangoEdad"
+						title="${titles['TTL_EDIT']}" icon="icon-edit"
+						styleClass="icon-btn btn-view-data" 
+						immediate="true"
+						process="@this"
+						update="frmPrincipal:panelRangoEdad"
+						oncomplete="window.location.href='#frmPrincipal:panelRangoEdad';"
+						actionListener="#{rangoEdadBean.modificarRangoEdad(dataRangoEdad)}">
+					</p:commandButton>					
+					
+					<p:commandButton id="btnConsultarRangoEdad"
+						title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:panelRangoEdad"
+						oncomplete="window.location.href='#frmPrincipal:panelRangoEdad';"
+						actionListener="#{rangoEdadBean.consultarRangoEdad(dataRangoEdad)}">
+					</p:commandButton>
+					<p:commandButton id="btnEliminarRangoEdad"
+						title="${titles['BTN_ELIMINAR']}" icon="icon-delete" process="@this"
+						styleClass="icon-btn" rendered="false">
+						 <p:ajax process="@this" listener="#{rangoEdadBean.solicitarConfirmacionEliminarRangoEdad(dataRangoEdad)}"/>	
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+
+	</div>
+	<br />
+	<p:outputPanel id="panelRangoEdad">
+		<p:panel id="subpanelRangoEdad"
+			widgetVar="subpanelRangoEdad"
+			rendered="#{rangoEdadBean.habilitaFormulario}">
+			<div class="row row-background-white">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<c:if test="#{!rangoEdadBean.lbEsConsulta and !rangoEdadBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_AGREGAR_RANGO_EDAD']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{!rangoEdadBean.lbEsConsulta and rangoEdadBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_MODIFICAR_RANGO']}
+					</span> 
+					<br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+					</div>
+					<hr class="hr-style" />
+					<br />
+				</div>
+				</c:if>
+				<c:if test="#{rangoEdadBean.lbEsConsulta and !rangoEdadBean.lbModificacion}">
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_RANGO_EDAD']}
+					</span> 
+					<br />
+					<br />
+					<br />
+				</c:if>
+				<p:panel>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_NOMBRE_RANGO']}"
+									styleClass="log-label form-label-formularios" for="nombreRangoInput" />
+								<p:inputText id="nombreRangoInput" required="true" disabled="#{rangoEdadBean.lbEsConsulta}"
+								           requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" maxlength="50"
+											value="#{rangoEdadBean.rangoEdadSeleccionada.nombreRango}"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_NOMBRE_RANGO']} ${titles['TTL_TIPO_ALFANUMERICO']}" >
+								<f:validator validatorId="textAlfanumericoTildeValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="nombreRangoInput" display="text" />
+							</div>
+							
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_RANGO_INFERIOR']}"
+									styleClass="log-label form-label-formularios" for="limiteInferiorInput"/>
+								<p:inputText id="limiteInferiorInput" required="true" disabled="#{rangoEdadBean.lbEsConsulta}"
+											requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+											value="#{rangoEdadBean.rangoEdadSeleccionada.limiteInferior}" maxlength="2"
+											onkeypress="return numbervalida(event)"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_RANGO_INFERIOR']} ${titles['TTL_TIPO_NUMERICO']}">
+								<f:validator validatorId="numberValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="limiteInferiorInput" display="text" />
+							</div>
+							
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_RANGO_SUPERIOR']}"
+									styleClass="log-label form-label-formularios" for="limiteSuperiorInput"/>
+								<p:inputText id="limiteSuperiorInput" disabled="#{rangoEdadBean.lbEsConsulta}"
+											requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" maxlength="2"
+											validatorMessage="Debe ingresar valores Numericos"
+											onkeypress="return numbervalida(event)"
+											value="#{rangoEdadBean.rangoEdadSeleccionada.limiteSuperior}" 
+											title="${titles['TTL_INGRESE']} ${titles['TTL_RANGO_SUPERIOR']} ${titles['TTL_TIPO_NUMERICO']}">
+								<f:validator validatorId="numberValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="limiteSuperiorInput" display="text" />
+							</div>
+							
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoRangoEdad"
+									styleClass="log-label form-label-formularios" />
+								<br />
+								<p:selectBooleanCheckbox required="true" id="activoRangoEdad"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									disabled="#{rangoEdadBean.lbEsConsulta}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+									value="#{rangoEdadBean.blnFlgActivo}">
+								</p:selectBooleanCheckbox>
+								<p:message for="activoRangoEdad" display="text" />
+
+							</div>
+						</div>
+					</div>
+	
+				</p:panel>
+				<div class="row" align="center" style="margin-top:4.3em!important">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="idpanelGuardarRangoEdad"
+							style="padding: 0%;">
+							<c:if test="#{!rangoEdadBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_SAVE']}"
+									process="frmPrincipal:panelRangoEdad"
+									update="panelRangoEdad dataTableRangoEdad"
+									actionListener="#{rangoEdadBean.guardarRangoEdad()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+							<c:if test="#{rangoEdadBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_OK']}"
+									process="frmPrincipal:panelRangoEdad"
+									update="panelRangoEdad dataTableRangoEdad"
+									actionListener="#{rangoEdadBean.aceptarConsulta()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+						</p:panel>
+					</div>
+					
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-default btn-update-disable"
+							process="@this" immediate="true"
+							rendered="#{!rangoEdadBean.lbEsConsulta}"
+							style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; 
+							font-size:1.5em!important; padding-top:0!important;"
+							onclick="PF('dlg2').show();" >
+							<p:resetInput target="frmPrincipal:panelRangoEdad" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	
+	
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlg2" modal="true" minHeight="300"
+			  draggable="false" 
+			  closable="false" 
+			  appendTo="@(body)">
+    	
+    	<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+			<center><h5>#{rangoEdadBean.strMensajeConfirmacion}</h5></center>
+		</div>
+		<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="#{titles.LBL_SI}"
+						    		process="@this" 
+								    styleClass="btn btn-primary"
+								    actionListener="#{rangoEdadBean.accionConfirmada()}"
+								    style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								    onclick="PF('dlg2').hide();"
+								    update="frmPrincipal:panelRangoEdad frmPrincipal:dataTableRangoEdad"
+						    />
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="#{titles.TTL_NO}"
+								styleClass="btn btn-default" onclick="PF('dlg2').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+	</p:dialog> 
+
+	
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgEliminarnRangoEdad"
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{rangoEdadBean.strMensajeConfirmacionEliminacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="Si"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{rangoEdadBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgEliminarnRangoEdad').hide();"
+		    		    		update="frmPrincipal:panelRangoEdad frmPrincipal:dataTableRangoEdad"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="No"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgEliminarnRangoEdad').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>	
+		
+	</ui:define>
+		
+</ui:composition>

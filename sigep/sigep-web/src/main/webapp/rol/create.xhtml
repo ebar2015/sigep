@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{gestionarRolBean.id}" />
+		<f:viewParam name="recursoId" value="#{gestionarRolBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{gestionarRolBean.dialog}" />
+		<f:event listener="#{gestionarRolBean.retrieve}" type="preRenderView" />
+		<f:event listener="#{gestionarRolBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['TTL_ADMIN_SISTEMA_BREADCRUMB']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_ROLES_TITLE']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_ROLES_CREAR']} •"
+							styleClass="page-subtitle" 
+							style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<div class="row row-background-white">
+			<br />
+			<div class="row">
+				<div class="col-md-12" style="text-align: center;">
+					<p:outputLabel
+						value="${titles['LBL_ROLES_MSG_CREAR_ROL']}"
+					   	for="nombreRol"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+				Crear Rol
+			</span> <br /> <br />
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-5">
+						<p:outputLabel value="${titles['LBL_ROLES_NOMBRE']}:"
+							for="nombreRol" styleClass="log-label form-label-formularios" />
+						<p:inputText id="nombreRol" value="#{gestionarRolBean.rol.nombre}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							class="form-control-acti-usua" autocomplete="off"
+							title="${titles['LBL_ROLES_NOMBRE']}" maxlength="50">
+						</p:inputText>
+						<p:message for="nombreRol" display="text" />
+					</div>
+					<div class="col-sm-5">
+						<p:outputLabel value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+							for="descripcionRol"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="descripcionRol"
+							value="#{gestionarRolBean.rol.descripcionRol}" required="false"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							class="form-control-acti-usua" autocomplete="off"
+							title="${titles['LBL_PARAMETRICA_DESCRIPCION']}" maxlength="255">
+						</p:inputText>
+						<p:message for="descripcionRol" display="text" />
+					</div>
+					<div class="col-sm-1"></div>
+				</div>
+				<br />
+			</div>
+			<br /><br />
+			<div class="row" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2">
+					<p:commandButton value="${titles['TTL_OK']}" type="submit"
+						process="contains" update="contains"
+						actionListener="#{gestionarRolBean.persist()}"
+						styleClass="btn btn-primary"
+						style="padding-left:25%!important;padding-right:25%!important; font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-2">
+					<p:commandButton value="${titles['TTL_CANCEL']}" resetValues="true"
+						process="@this" update="contains"
+						actionListener="#{gestionarRolBean.cancelar()}"
+						styleClass="btn btn-default"
+						style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{personaBean.personaVO.id}' />
+		<f:viewParam name="dialog" value='#{personaBean.dialog}' />
+		<f:event type="preRenderView" listener='#{personaBean.retrieve}' />
+		<f:event type="preRenderView" listener='#{personaBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_TRANSVERSAL_PERSONAS']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_PERSONAS_CREAR']}" />
+
+	<f:event listener="#{personaBean.validateForm}" type="postValidate" />
+	<ui:define name="main">
+		<p:panelGrid columns="6"
+			columnClasses="ui-grid-col-3,ui-grid-col-6,ui-grid-col-3,ui-grid-col-3,ui-grid-col-6,ui-grid-col-3"
+			layout="grid" styleClass="ui-panelgrid-blank">
+
+			<p:outputLabel for="tipoIdentificacionId"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_TIPO_DOCUMENTO']}" />
+			<p:selectOneMenu id="tipoIdentificacionId" filter="true"
+				filterMatchMode="contains"
+				value="#{personaBean.personaVO.tipoIdentificacionId}"
+				converter="tipoDocumentoIdentidadConverter" var="t" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{tiposDocumentoEntidad}"
+					var="tipoIdentificacionId"
+					itemLabel="#{tipoIdentificacionId.descripcion}"
+					itemValue="#{tipoIdentificacionId}" />
+				<p:column>
+					<h:outputText value="#{t.descripcion}" />
+				</p:column>
+				<p:ajax process="@this" update="contains" event="change"
+					listener="#{personaBean.consultarIdentificacionCrear}" />
+			</p:selectOneMenu>
+			<p:message for="tipoIdentificacionId" display="icon" />
+
+			<p:outputLabel for="numeroIdentificacion"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_DOCUMENTO']}" />
+			<p:inputNumber id="numeroIdentificacion"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_DOCUMENTO']}"
+				value="#{personaBean.personaVO.numeroIdentificacion}"
+				required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				decimalPlaces="0" decimalSeparator="" thousandSeparator=","
+				minValue="0" maxValue="9999999999999">
+				<p:clientValidator />
+				<p:ajax process="@this" update="contains"
+					listener="#{personaBean.consultarIdentificacionCrear}" />
+			</p:inputNumber>
+			<p:message for="numeroIdentificacion" display="icon" />
+
+			<p:outputLabel for="fechaExpedicionIdentificacio"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_FECHA_DOCUMENTO']}" />
+			<p:calendar mask="true" id="fechaExpedicionIdentificacio"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_FECHA_DOCUMENTO']}"
+				yearRange="#{rangoAnios}" navigator="true"
+				value="#{personaBean.personaVO.fechaExpedicionIdentificacio}"
+				maxdate="#{fechaSistema}" locale="#{lenguajeBean.localeCode}"
+				pattern="#{fechaFormato}">
+				<f:attribute name="maxDate" value="#{fechaSistema}" />
+				<f:validator validatorId="maxDateValidator" />
+			</p:calendar>
+			<p:message for="fechaExpedicionIdentificacio" display="icon" />
+
+			<p:outputLabel for="ciudadExpedicion"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_CIUDAD_EXPEDICION']}" />
+			<p:selectOneMenu id="ciudadExpedicion" filter="true"
+				filterMatchMode="contains"
+				value="#{personaBean.personaVO.ciudadExpedicion}"
+				converter="municipioConverter" var="t">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{municipios}" var="ciudadExpedicion"
+					itemLabel="#{ciudadExpedicion.nombre}"
+					itemValue="#{ciudadExpedicion}" />
+				<p:column>
+					<h:outputText value="#{t.nombre}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{t.departamento.nombre}" />
+				</p:column>
+			</p:selectOneMenu>
+			<p:message for="ciudadExpedicion" display="icon" />
+
+			<p:outputLabel for="primerNombre"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}" />
+			<p:inputText id="primerNombre"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}"
+				value="#{personaBean.personaVO.primerNombre}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="primerNombre" display="icon" />
+
+			<p:outputLabel for="segundoNombre"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}" />
+			<p:inputText id="segundoNombre"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}"
+				value="#{personaBean.personaVO.segundoNombre}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="segundoNombre" display="icon" />
+
+			<p:outputLabel for="primerApellido"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}" />
+			<p:inputText id="primerApellido"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}"
+				value="#{personaBean.personaVO.primerApellido}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="primerApellido" display="icon" />
+
+			<p:outputLabel for="segundoApellido"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}" />
+			<p:inputText id="segundoApellido"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}"
+				value="#{personaBean.personaVO.segundoApellido}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="segundoApellido" display="icon" />
+
+			<p:outputLabel for="direccion"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']}" />
+			<p:inputText id="direccion"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']}"
+				value="#{personaBean.personaVO.direccion}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="direccion" display="icon" />
+
+			<p:outputLabel for="telefono"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_TELEFONO']}" />
+			<p:inputNumber id="telefono"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_TELEFONO']}"
+				value="#{personaBean.personaVO.telefono}" decimalPlaces="0"
+				decimalSeparator="" thousandSeparator="">
+				<p:clientValidator />
+			</p:inputNumber>
+			<p:message for="telefono" display="icon" />
+
+			<p:outputLabel for="ciudadId"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_CIUDAD']}" />
+			<p:selectOneMenu id="ciudadId" filter="true"
+				filterMatchMode="contains" value="#{personaBean.personaVO.ciudadId}"
+				converter="municipioConverter" var="t">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{municipios}" var="ciudadId"
+					itemLabel="#{ciudadId.nombre}" itemValue="#{ciudadId}" />
+				<p:column>
+					<h:outputText value="#{t.nombre}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{t.departamento.nombre}" />
+				</p:column>
+			</p:selectOneMenu>
+			<p:message for="ciudadId" display="icon" />
+
+			<p:outputLabel for="apartadoAereo"
+				value="${titles['LBL_TRANSVERSAL_APARTADO_AEREO']}" />
+			<p:inputText id="apartadoAereo"
+				placeholder="${titles['LBL_TRANSVERSAL_APARTADO_AEREO']}"
+				value="#{personaBean.personaVO.apartadoAereo}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="apartadoAereo" display="icon" />
+
+			<p:outputLabel for="correoElectronico"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_EMAIL']}" />
+			<p:inputText id="correoElectronico"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_EMAIL']}"
+				value="#{personaBean.personaVO.correoElectronico}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:validator validatorId="emailValidator" />
+				<p:clientValidator />
+				<f:validator for="direccionWeb" validatorId="emailValidator"
+					disabled="#{empty personaBean.personaVO.direccionWeb}" />
+			</p:inputText>
+			<p:message for="correoElectronico" display="icon" />
+
+			<p:outputLabel for="direccionWeb"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_WEB']}" />
+			<p:inputText id="direccionWeb"
+				placeholder="${titles['LBL_TRANSVERSAL_PERSONAS_WEB']}"
+				value="#{personaBean.personaVO.direccionWeb}">
+				<f:validator validatorId="webSiteValidator" />
+				<p:ajax process="@this" update="@this browser" />
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="direccionWeb" display="icon" />
+
+			<p:outputLabel for="estado"
+				value="${titles['LBL_TRANSVERSAL_PERSONAS_ESTADO']}" />
+			<p:selectBooleanCheckbox id="estado"
+				title="${titles['LBL_TRANSVERSAL_PERSONAS_ESTADO']}"
+				value="#{personaBean.personaVO.estado}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:selectBooleanCheckbox>
+			<p:message for="estado" display="icon" />
+
+			<h:outputText />
+			<p:link id="browser" value="#{personaBean.personaVO.direccionWeb}"
+				href="#{personaBean.personaVO.direccionWeb}" target="_blank" />
+			<h:outputText />
+		</p:panelGrid>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton value="${titles['TTL_SAVE']}" icon="ui-icon-disk"
+			process="@this contains" update="contains"
+			action="#{personaBean.persist}" />
+	</ui:define>
+	<ui:define name="restablecer">
+		<p:commandButton value="${titles['TTL_RESET']}"
+			icon="ui-icon-arrowreturnthick-1-w" process="@this"
+			update="@this contains" actionListener="#{personaBean.init()}">
+			<p:ajax resetValues="true" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

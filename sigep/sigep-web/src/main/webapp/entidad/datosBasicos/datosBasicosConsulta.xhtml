@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <div class="row row-background-white" style="padding-top: 2em;">
+    	<br /><br />
+		<div class="col-md-12">
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style "> ${titles.TTL_INFORMACION_BASICA_ENTIDAD} 
+			</span> <br /> <br />
+		</div>
+        <hr class="hr-style" />
+        <div class="row">
+            <div class="col-md-12">
+            	<div class="col-md-4">    
+                	 <p:outputLabel value="#{titles.LBL_ENTIDAD_USUARIO}" styleClass="advisor" style="display: block; text-align:left;"/>	                
+                    <h:outputText value="#{creacionEntidadBean.entidadN.nombreEntidad}" styleClass="output-consulta"/>
+                </div>
+                <div class="col-md-4">  
+                	<p:outputLabel value="#{titles.TTL_DEPARTAMENTO_ENTIDAD_2}" styleClass="advisor" style="display: block; text-align:left;" />		                  
+                    <h:outputText value="#{creacionEntidadBean.obtenerNombreDepartamento(creacionEntidadBean.entidadN.codDepartamento)}" styleClass="output-consulta"/>
+                </div>
+                <div class="col-md-4">
+                	<p:outputLabel value="#{titles.TTL_MUNICIPIO_ENTIDAD_2}" styleClass="advisor" style="display: block; text-align:left;" />	                    
+                    <h:outputText value="#{creacionEntidadBean.obtenerNombreMunicipio(creacionEntidadBean.entidadN.codMunicipio)}" styleClass="output-consulta"/>
+                </div>
+            </div>
+        </div>
+        <br/><br/>
+        <div class="row">
+            <div class="col-md-12">
+            	<div class="col-md-4">
+                	<p:outputLabel value="#{titles.TTL_SIGLA}" styleClass="advisor" style="display: block; text-align:left;" />	               
+                    <h:outputText value="#{creacionEntidadBean.entidadN.sigla}" styleClass="output-consulta"/>	
+                </div>
+                <div class="col-md-4">
+                	<p:outputLabel value="#{titles.TTL_NATURALEZA_JURIDICA}" styleClass="advisor" style="display: block; text-align:left;" />	               
+                    <h:outputText value="#{creacionEntidadBean.entidadN.codNaturaleza}" converter="parametricaBgDecimalConverter" styleClass="output-consulta"/>
+                </div>
+                <div class="col-md-4">
+                	<p:outputLabel value="#{titles.TTL_NIVEL_ADMINISTRATIVO}" styleClass="advisor" style="display: block; text-align:left;" />	               
+                    <h:outputText value="#{creacionEntidadBean.entidadN.codNivelAdministrativo}" converter="parametricaBgDecimalConverter" styleClass="output-consulta"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        	<div class="col-md-12">
+        		<div class="col-md-4">
+        			<p:outputLabel value="#{titles.LBL_CLASIFICACION_ORGANICA}" styleClass="advisor" style="display: block; text-align:left;" />	               
+                    <h:outputText value="#{creacionEntidadBean.entidadN.codClasificacionOrganica}" converter="parametricaBgDecimalConverter" styleClass="output-consulta"/>
+        		</div>
+        	</div>
+        </div>
+        <br/>        
+        <br/>
+        <br/>        
+        <br/>
+        
+        <div class="col-md-12">
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style"> ${titles.TTL_DATOS_NORMA} 
+			</span> <br /> <br />
+		</div>
+        <hr class="hr-style" />
+        
+        <p:panel id="panelNorma" rendered="#{!creacionEntidadBean.mostrarJustificacion}">
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="col-md-4">
+	                    <p:outputLabel
+	                        value="#{titles.TTL_TIPO_NORMA}"
+	                        styleClass="advisor" />		
+	                </div>
+	                <div class="col-md-4">
+	                    <p:outputLabel
+	                        value="#{titles.TTL_OBJETO}"
+	                        styleClass="advisor" />	
+	                </div>
+	                <div class="col-md-4">
+	                    <p:outputLabel
+	                        value="#{titles.TTL_NUMERO_NORMA}"
+	                        styleClass="advisor" />			
+	                </div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="col-md-4">                    
+	                	 <h:outputText value="#{creacionEntidadBean.tipoNorma.codTipoNorma}"
+	                                  styleClass="output-consulta"
+	                                  converter="parametricaBgDecimalConverter"/>
+	                </div>
+	                <div class="col-md-4">                    
+	                    <h:outputText value="#{creacionEntidadBean.tipoNorma.objetoNorma}"
+	                                  styleClass="output-consulta"/>
+	                </div>
+	                <div class="col-md-4">                    
+	                    <h:outputText value="#{creacionEntidadBean.tipoNorma.numeroNorma}"
+	                                  styleClass="output-consulta"/>	
+	                </div>
+	            </div>
+	        </div>
+	        <br/>
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="col-md-4">
+	                    <p:outputLabel
+	                        value="#{titles.TTL_FECHA_NORMA}"
+	                        styleClass="advisor" />		
+	                </div>
+	                <div class="col-md-4">
+	                    			
+	                </div>
+	                <div class="col-md-4">
+	                    
+	                </div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="col-md-4">                    
+	                    <h:outputText value="#{creacionEntidadBean.tipoNorma.fechaNorma}"
+	                                  styleClass="output-consulta">
+	                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-5"/>
+	                    </h:outputText>
+	                </div>
+	                <div class="col-md-4">                    
+	                    	
+	                </div>
+	                <div class="col-md-4">                    
+	                    
+	                </div>
+	            </div>
+	        </div>
+        </p:panel>
+        
+        <p:panel id="panelSinNorma" rendered="#{creacionEntidadBean.mostrarJustificacion}">
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="col-md-4">
+	                    <p:outputLabel
+	                        value="#{titles.LBL_CT_JUSTIFICACION}"
+	                        styleClass="log-label form-label-formularios" />		
+	                </div>
+	                <div class="col-md-4">
+	                    	
+	                </div>
+	                <div class="col-md-4">
+	                    			
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="col-md-4">                    
+	                	 <h:outputText value="#{creacionEntidadBean.entidadN.justificacion}"
+	                                  styleClass="output-consulta"/>
+	                </div>
+	                <div class="col-md-4">                    
+	                    
+	                </div>
+	                <div class="col-md-4">                    
+	                    	
+	                </div>
+	            </div>
+	        </div>
+        </p:panel>
+    </div>
+</html>
+

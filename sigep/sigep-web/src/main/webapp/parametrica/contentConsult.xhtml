@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+
+<p:importConstants type="co.gov.dafp.sigep2.util.xml.elemento.TipoDato"
+	var="PFTipoDato" />
+<p:importConstants type="co.gov.dafp.sigep2.util.xml.elemento.Extension"
+	var="PFExtension" />
+<p:dataGrid id="parametros" value="#{parametricaBean.parametros}"
+	var="parametro" style="border:0px solid" columns="1" emptyMessage=""
+	styleClass="row">
+	<p:messages id="messages" showSummary="false" showDetail="true"
+		escape="false" globalOnly="true" style="text-align:left" />
+	<p:panelGrid columns="3" columnClasses="col-md-2,col-md-4,col-md-1">
+		<p:outputLabel styleClass="log-label" for="intParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.INTEGER.value()}" />
+		<p:inputNumber required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.INTEGER.value()}"
+			id="intParameter" maxlength="38" value="#{parametro.value}"
+			decimalPlaces="0" decimalSeparator="" thousandSeparator=""
+			styleClass="form-control">
+		</p:inputNumber>
+		<p:message for="intParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.INTEGER.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="doubleParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.DOUBLE.value() || parametro.type eq PFTipoDato.DECIMAL.value() || parametro.type eq PFTipoDato.PERCENT.value()}" />
+		<p:inputNumber id="doubleParameter" required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.DOUBLE.value() || parametro.type eq PFTipoDato.DECIMAL.value() || parametro.type eq PFTipoDato.PERCENT.value()}"
+			maxValue="9999999999999.99" value="#{parametro.value}"
+			decimalPlaces="2" decimalSeparator="." thousandSeparator=","
+			styleClass="form-control">
+			<f:validateDoubleRange minimum="1" />
+		</p:inputNumber>
+		<p:message for="doubleParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.DOUBLE.value() || parametro.type eq PFTipoDato.DECIMAL.value() || parametro.type eq PFTipoDato.PERCENT.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="dateParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.DATE.value()}" />
+		<p:calendar mask="true" id="dateParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.DATE.value()}"
+			yearRange="#{rangoAnios}" navigator="true" pattern="#{fechaFormato}"
+			value="#{parametro.value}" locale="#{lenguajeBean.localeCode}"
+			maxdate="#{fechaSistema}" styleClass="form-control">
+			<f:attribute name="maxDate" value="#{fechaSistema}" />
+			<f:validator validatorId="maxDateValidator" />
+		</p:calendar>
+		<p:message for="dateParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.DATE.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="periodParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.PERIOD.value()}" />
+		<p:calendar mask="true" id="periodParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.PERIOD.value()}"
+			yearRange="#{rangoAnios}" navigator="true"
+			pattern="#{periodoFormato}" value="#{parametro.value}"
+			locale="#{lenguajeBean.localeCode}" maxdate="#{fechaSistema}">
+			<f:attribute name="maxDate" value="#{fechaSistema}" />
+			<f:validator validatorId="maxDateValidator" styleClass="form-control" />
+		</p:calendar>
+		<p:message for="periodParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.PERIOD.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="dateStringParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.DATE_STRING.value()}" />
+		<p:calendar mask="true" id="dateStringParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.DATE_STRING.value()}"
+			yearRange="#{rangoAnios}" navigator="true" pattern="#{fechaFormato}"
+			value="#{parametro.value}" locale="#{lenguajeBean.localeCode}"
+			styleClass="form-control">
+		</p:calendar>
+		<p:message for="dateStringParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.DATE_STRING.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="dateLargeParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.DATE_LARGE.value()}" />
+		<p:calendar mask="true" id="dateLargeParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.DATE_LARGE.value()}"
+			yearRange="#{rangoAnios}" navigator="true"
+			pattern="#{fechaHoraFormato}" value="#{parametro.value}"
+			locale="#{lenguajeBean.localeCode}" styleClass="form-control">
+		</p:calendar>
+		<p:message for="dateLargeParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.DATE_LARGE.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="firstDayAnioParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.FIRST_DAY_ANIO.value()}" />
+		<p:calendar mask="true" id="firstDayAnioParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.FIRST_DAY_ANIO.value()}"
+			yearRange="#{rangoAnios}" navigator="true"
+			pattern="#{fechaHoraFormato}" value="#{parametro.value}"
+			mindate="#{primerDiaAnio}" locale="#{lenguajeBean.localeCode}"
+			styleClass="form-control">
+			<f:attribute name="minDate" value="#{primerDiaAnio}" />
+			<f:validator validatorId="minDateValidator" />
+		</p:calendar>
+		<p:message for="firstDayAnioParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.FIRST_DAY_ANIO.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="lastDayAnioParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.LAST_DAY_ANIO.value()}" />
+		<p:calendar mask="true" id="lastDayAnioParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.LAST_DAY_ANIO.value()}"
+			yearRange="#{rangoAnios}" navigator="true"
+			pattern="#{fechaHoraFormato}" value="#{parametro.value}"
+			maxdate="#{ultimoDiaAnio}" locale="#{lenguajeBean.localeCode}">
+			<f:attribute name="maxDate" value="#{ultimoDiaAnio}"
+				styleClass="form-control" />
+			<f:validator validatorId="maxDateValidator" />
+		</p:calendar>
+		<p:message for="lastDayAnioParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.LAST_DAY_ANIO.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="monthParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.MONTH.value()}" />
+		<p:selectOneMenu id="monthParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" varStatus="loop"
+			rendered="#{parametro.type eq PFTipoDato.MONTH.value()}"
+			filter="true" filterMatchMode="contains" var="t"
+			styleClass="form-control">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+			<c:forEach items="#{meses}" var="origen" varStatus="loop">
+				<f:selectItem itemValue="#{loop.index + 1}" itemLabel="#{origen}" />
+			</c:forEach>
+			<p:column>
+				<h:outputText value="#{t}" />
+			</p:column>
+		</p:selectOneMenu>
+		<p:message for="monthParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.MONTH.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="trimesterParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.TRIMESTER.value()}" />
+		<p:selectOneMenu id="trimesterParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.TRIMESTER.value()}"
+			filter="true" filterMatchMode="contains" var="t"
+			styleClass="form-control">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+			<f:selectItems value="#{trimestres}" var="origen"
+				itemValue="#{origen}" itemLabel="#{origen}" />
+			<p:column>
+				<h:outputText value="#{t}" />
+			</p:column>
+		</p:selectOneMenu>
+		<p:message for="trimesterParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.TRIMESTER.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="semesterParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.SEMESTER.value()}" />
+		<p:selectOneMenu id="semesterParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.SEMESTER.value()}"
+			filter="true" filterMatchMode="contains" var="t"
+			styleClass="form-control">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+			<f:selectItems value="#{semestres}" var="origen"
+				itemValue="#{origen}" itemLabel="#{origen}" />
+			<p:column>
+				<h:outputText value="#{t}" />
+			</p:column>
+		</p:selectOneMenu>
+		<p:message for="semesterParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.SEMESTER.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="anioParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.ANIO.value()}" />
+		<p:selectOneMenu id="anioParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.ANIO.value()}" filter="true"
+			filterMatchMode="contains" var="t" styleClass="form-control">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+			<f:selectItems value="#{anios}" var="origen" itemValue="#{origen}"
+				itemLabel="#{origen}" />
+			<p:column>
+				<h:outputText value="#{t}" />
+			</p:column>
+		</p:selectOneMenu>
+		<p:message for="anioParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.ANIO.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="stringParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.STRING.value()}" />
+		<p:inputText id="stringParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.STRING.value()}"
+			styleClass="form-control">
+		</p:inputText>
+		<p:message for="stringParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.STRING.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="queryParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.QUERY.value()}" />
+		<p:selectOneMenu id="queryParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.QUERY.value()}"
+			filter="true" filterMatchMode="contains" var="t"
+			styleClass="form-control">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+			<f:selectItems value="#{parametricaBean.getListaQuery(parametro.source)}"
+				var="origen" itemValue="#{origen}" itemLabel="#{origen.key}" />
+			<p:column>
+				<h:outputText value="#{t.key}" />
+			</p:column>
+		</p:selectOneMenu>
+		<p:message for="queryParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.QUERY.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="csvParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.CSV.value()}" />
+		<p:selectOneMenu id="csvParameter" value="#{parametro.value}"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			rendered="#{parametro.type eq PFTipoDato.CSV.value()}" filter="true"
+			filterMatchMode="contains" var="t" styleClass="form-control">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+			<f:selectItems value="#{parametricaBean.getListaCSV(parametro.source)}"
+				var="origen" itemValue="#{origen}" itemLabel="#{origen.key}" />
+			<p:column>
+				<h:outputText value="#{t.key}" />
+			</p:column>
+		</p:selectOneMenu>
+		<p:message for="csvParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.CSV.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="queryOpParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.QUERY_OP.value()}" />
+		<p:panelGrid columnClasses="component" columns="1"
+			captionClass="component"
+			rendered="#{parametro.type eq PFTipoDato.QUERY_OP.value()}">
+			<p:selectOneRadio id="queryOpParameter" value="#{parametro.value}"
+				required="#{parametro.required}"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				rendered="#{parametro.type eq PFTipoDato.QUERY_OP.value()}"
+				columns="1" styleClass="form-control">
+				<f:selectItems
+					value="#{parametricaBean.getListaQuery(parametro.source)}" var="origen"
+					itemValue="#{origen.key}" itemLabel="#{origen}" />
+			</p:selectOneRadio>
+		</p:panelGrid>
+		<p:message for="queryOpParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.QUERY_OP.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="csvOpParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.CSV_OP.value()}" />
+		<p:panelGrid columnClasses="component" columns="1"
+			captionClass="component"
+			rendered="#{parametro.type eq PFTipoDato.CSV_OP.value()}">
+			<p:selectOneRadio id="csvOpParameter" value="#{parametro.value}"
+				required="#{parametro.required}"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				rendered="#{parametro.type eq PFTipoDato.CSV_OP.value()}"
+				columns="1" styleClass="form-control">
+				<f:selectItems value="#{parametricaBean.getListaCSV(parametro.source)}"
+					var="origen" itemValue="#{origen.key}" itemLabel="#{origen}" />
+			</p:selectOneRadio>
+		</p:panelGrid>
+		<p:message for="csvOpParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.CSV_OP.value()}" />
+
+		<p:outputLabel styleClass="log-label" for="booleanParameter"
+			value="#{parametro.label}"
+			rendered="#{parametro.type eq PFTipoDato.QUERY_OP.value()}" />
+		<p:selectBooleanCheckbox id="booleanParameter"
+			required="#{parametro.required}"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			value="#{parametro.value}" itemLabel="#{parametro.source}"
+			rendered="#{parametro.type eq PFTipoDato.BOOLEAN.value()}"
+			styleClass="form-control">
+		</p:selectBooleanCheckbox>
+		<p:message for="booleanParameter" display="icon"
+			rendered="#{parametro.type eq PFTipoDato.BOOLEAN.value()}" />
+	</p:panelGrid>
+</p:dataGrid>
+<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid"
+	styleClass="ui-panelgrid-blank">
+	<p:dataTable
+		currentPageReportTemplate="{currentPage} #{'/'} {totalPages}"
+		id="resultados" reflow="true" lazy="true"
+		resizableColumns="#{parametricaBean.resultados.rowCount gt 0}"
+		paginator="#{parametricaBean.resultados.rowCount gt 0}"
+		rowKey="#{item.id}" value="#{parametricaBean.resultados}"
+		rows="#{paginatorSize}"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="#{paginatorsSize}" 
+		var="registros"
+		emptyMessage="#{parametricaBean.mensajeValidaciones}" scrollable="true"
+		scrollWidth="95%"
+		rowStyleClass="#{(indice % 2) eq 0? 'fila-par' : 'fila-impar'}"
+		rowIndexVar="indice" sortMode="multiple">
+		<p:columns var="column" value="#{parametricaBean.columns}" width="200"
+			headerText="#{column.header}"
+			style="#{(column.type eq PFTipoDato.DECIMAL.value() or column.type eq PFTipoDato.DOUBLE.value() or column.type eq PFTipoDato.PERCENT.value() or column.type eq PFTipoDato.INTEGER.value()) ? 'text-align:right;width:1px;white-space:nowrap;' : ((column.type eq PFTipoDato.LINK.value() or column.type eq PFTipoDato.TOOLTIP.value()) ? 'text-align:center;width:1px;white-space:nowrap;' : 'text-align:left;width:1px;white-space:nowrap;')}"
+			exportable="#{column.type ne PFTipoDato.LINK.value() and column.type ne PFTipoDato.TOOLTIP.value() and column.type ne PFTipoDato.CRUD.value()}"
+			sortable="#{column.type ne PFTipoDato.LINK.value() and column.type ne PFTipoDato.TOOLTIP.value() and column.type ne PFTipoDato.CRUD.value()}"
+			sortBy="#{[registros.item.get(column.index).dateValue]}">
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.ANIO.value()}">
+				<f:convertDateTime pattern="#{anioFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.ANIO.value()}">
+				<f:convertDateTime pattern="#{anioFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TRIMESTER.value()}" />
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.SEMESTER.value()}" />
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.PERIOD.value()}">
+				<f:convertDateTime pattern="#{periodoFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.DATE.value()}">
+				<f:convertDateTime pattern="#{fechaFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.DATE_LARGE.value()}">
+				<f:convertDateTime pattern="#{fechaHoraFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).stringValue}"
+				rendered="#{column.type eq PFTipoDato.DATE_STRING.value()}" />
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).currencyValue}"
+				rendered="#{column.type eq PFTipoDato.DECIMAL.value()}">
+				<f:convertNumber pattern="#{monedaFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).doubleValue}"
+				rendered="#{column.type eq PFTipoDato.DOUBLE.value()}">
+				<f:convertNumber pattern="#{decimalFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).percentValue}"
+				rendered="#{column.type eq PFTipoDato.PERCENT.value()}">
+				<f:convertNumber pattern="#{porcentajeFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).longValue}"
+				rendered="#{column.type eq PFTipoDato.INTEGER.value()}">
+				<f:convertNumber pattern="#{enteroFormato}" />
+			</h:outputText>
+			<h:outputText title="#{column.title}"
+				value="#{registros.item.get(column.index).stringValue}"
+				rendered="#{column.type eq PFTipoDato.STRING.value()}" />
+			<p:link id="linkToolTip" href="#" value="#{column.headerAlias}"
+				rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TOOLTIP.value()}" />
+			<p:tooltip id="toolTip"
+				rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TOOLTIP.value()}"
+				for="linkToolTip" escape="false" hideDelay="3000"
+				globalSelector="true"
+				value="#{parametricaBean.getExecQuery(registros.item.get(column.index).stringValue)}"
+				showEffect="clip" hideEffect="clip" position="left"
+				style="max-width:80%" />
+			<p:commandLink id="linkNotUpdate" value="#{column.headerAlias}"
+				process="@this" update="@this"
+				actionListener="#{parametricaBean.abrirDetalle(registros.item.get(column.index).stringValue)}"
+				title="#{registros.item.get(column.index).stringValue.split(';')[0]}"
+				rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.LINK.value() and !parametricaBean.actualizarFormularioConsultarDetalle}">
+			</p:commandLink>
+			<p:commandLink id="linkUpdate" value="#{column.headerAlias}"
+				process="@this" update="@form"
+				actionListener="#{parametricaBean.abrirDetalle(registros.item.get(column.index).stringValue)}"
+				title="#{registros.item.get(column.index).stringValue.split(';')[0]}"
+				rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.LINK.value() and parametricaBean.actualizarFormularioConsultarDetalle}">
+			</p:commandLink>
+			<h:panelGroup rendered="#{column.type eq PFTipoDato.CRUD.value()}">
+				<c:forEach items="#{permisosUsuarioRol}" var="crud" varStatus="loop">
+					<p:commandButton value=" " icon="#{crud.icono}"
+						actionListener="#{parametricaBean.abrirAccion(registros.item.get(column.index).longValue, crud.pagina)}"
+						title="#{titles[crud.accion]}" process="@this" update="@form" />
+					<p:spacer width="20" />
+				</c:forEach>
+			</h:panelGroup>
+		</p:columns>
+		<p:columnGroup type="footer"
+			rendered="#{parametricaBean.resultados.rowCount ge 1 and fn:length(parametricaBean.totales) ge 1 and !empty parametricaBean.totales.get(0).valorFormateado}">
+			<p:row rendered="#{fn:length(parametricaBean.totales) > 0}">
+				<p:columns var="column" value="#{parametricaBean.columns}"
+					style="text-align:right"
+					footerText="#{(fn:length(parametricaBean.totales) ge (column.index + 1)) ? parametricaBean.totales.get(column.index).valorFormateado : ''}"
+					exportable="#{column.type ne PFTipoDato.LINK.value() and column.type ne PFTipoDato.TOOLTIP.value() and column.type ne PFTipoDato.CRUD.value()}">
+				</p:columns>
+			</p:row>
+			<p:row>
+				<p:column style="text-align:right"
+					footerText="${titles['LBL_TRANSVERSAL_REPORTEADOR_TOTAL_REGISTROS']}" />
+				<p:column style="text-align:left"
+					footerText="#{parametricaBean.resultados.rowCount}" />
+				<p:column colspan="#{fn:length(parametricaBean.columns) - 2}"
+					footerText="" />
+			</p:row>
+		</p:columnGroup>
+	</p:dataTable>
+</p:panelGrid>
+</html>

@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <script type="text/javascript">
+            function foco(idElemento) {
+                document.getElementById(idElemento).focus();
+            }
+        </script>
+    </head>
+    <h:form id="frmGestionarEntidad">
+        <div class="row row-background-white">
+            <div class="col-md-12">
+                <br /> <br />
+                
+                <div class="col-md-4">
+                    <p:outputLabel value="${titles['TTL_COD_SIGEP']}:"
+                                   styleClass="log-label form-label-formularios" />
+                    <p:inputText class="form-control-acti-usua"
+                                 style="width:100%!important;" maxlength="12"
+                                 value="#{gestionEntidadBean.entFiltro.codigoSigep}"
+                                 title="${titles['TTL_INGRESE']} ${titles['TTL_COD_SIGEP']} ${titles['TTL_TIPO_ALFANUMERICO']}"/>
+                </div>
+                <div class="col-md-4">
+                    <p:outputLabel value="${titles['TTL_DENOMINACION']}:"
+                                   styleClass="log-label form-label-formularios" />
+                    <p:inputText class="form-control-acti-usua"
+                                 style="width:100%!important;" maxlength="255"
+                                 value="#{gestionEntidadBean.entFiltro.nombreEntidad}"
+                                 title="${titles['TTL_INGRESE']} ${titles['TTL_DENOMINACION']} ${titles['TTL_TIPO_ALFANUMERICO']}" />
+                </div>
+                <div class="col-md-1">
+                    <p:outputLabel value="${titles['TTL_SIGLA']}:"
+                                   styleClass="log-label form-label-formularios"
+                                   onblur="this.value = this.value.toUpperCase();" />
+                    <p:inputText class="form-control-acti-usua"
+                                 style="width:100%!important;" maxlength="60"
+                                 value="#{gestionEntidadBean.entFiltro.sigla}"
+                                 title="${titles['TTL_INGRESE']} ${titles['TTL_SIGLA']} ${titles['TTL_TIPO_ALFANUMERICO']}" />
+                </div>
+                <div class="col-md-3">
+                    <p:outputLabel value="${titles['TTL_NIT']}:"
+                                   styleClass="log-label form-label-formularios" />
+                    <p:inputText class="form-control-acti-usua"
+                                 style="width:100%!important; paddin-right:18px!important;"
+                                 maxlength="12" value="#{gestionEntidadBean.entFiltro.nit}"
+                                 title="${titles['TTL_INGRESE']} ${titles['TTL_NIT']} ${titles['TTL_TIPO_ALFANUMERICO']}" />
+                </div>
+              </div>  
+               
+            <div class="col-md-12">   
+                <div class="row">
+                    <br />
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_CODIGO_DANE']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:inputText class="form-control-acti-usua"
+                                     style="width:100%!important;" maxlength="12"
+                                     value="#{gestionEntidadBean.entFiltro.codigoDane}"
+                                     title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_DANE']} ${titles['TTL_TIPO_ALFANUMERICO']}"/>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_CODIGO_CUIN']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:inputText class="form-control-acti-usua"
+                                     style="width:100%!important;" 
+                                     value="#{gestionEntidadBean.entFiltro.codigoCuin}"
+                                     maxlength="30" 
+                                     title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_CUIN']} ${titles['TTL_TIPO_ALFANUMERICO']}"/>
+                    </div>
+                    <div class="col-md-4">
+                    	<p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="#{titles.TTL_DEPENDENCIA_ESPECIAL}" />
+                        <br />
+                        <p:selectBooleanCheckbox  value="#{gestionEntidadBean.lbDependenciaespecialBuscar}"/>
+                    </div>
+                </div>
+                </div>
+           
+              <div class="col-md-12"> 
+                <div class="row">
+                <br />
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_TIPO_ENTIDAD']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codTipoEntidad}"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_ENTIDAD']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getTiposEntidad()}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_SECTOR']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codSectorAdministrativo}"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_SECTOR']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getTipoSectorAdministrativo()}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_CLASIFICACION_ORGANICA']}:" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codClasificacionOrganica}"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_ORGANICA']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getTipoClasificacionOrganica()}" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                 </div>
+                <div class="col-md-12">
+                <div class="row">
+                    <br />
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_NATURALEZA_JURIDICA']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codNaturaleza}"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_NATURALEZA_JURIDICA']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getTipoNaturalezaJuridica()}" />
+                        </p:selectOneMenu>
+                    </div>   
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_ESTADO_ENTIDAD']}"
+                                       styleClass="log-label form-label-formularios" />
+                        <br />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codEstadoEntidad}"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_ESTADO_GESTION_ENTIDAD']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getParametricaPorIdPadre(1479)}" />
+                            <p:ajax event="change" process="@this" update="@this"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_ESTADO_GESTION_ENTIDAD']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codEstadoGestion}"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_ESTADO_GESTION_ENTIDAD']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getParametricaPorIdPadre(2321)}" />
+                            <p:ajax event="change" process="@this" update="@this"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-12">
+                <div class="row">
+                    <br />
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_ENTIDAD_POSCONFLICTO']}:" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.entidadPostconfilcto}"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_ENTIDAD_POSCONFLICTO']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getEntidadPostConflicto()}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_ORDEN']}:" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codOrden}"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_ORDEN']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getTipoOrdenTerritorial()}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_SUBORDEN']}:" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codSuborden}"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_SUBORDEN']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getTipoSubordenEntidad()}" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                </div>
+                <br />
+                
+                <div class="col-md-12">
+                <div class="row">
+                    <br />
+                    <div class="col-md-4">
+                        <p:outputLabel value="${titles['TTL_CATEGORIA_MUNICIPIO']}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_CATEGORIA_MUNICIPIO']}"
+                                         value="#{gestionEntidadBean.entFiltro.codCategoriaMunicipio}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.categoriaMunicipio}" />
+                        </p:selectOneMenu>
+                    </div>
+                  
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_CATEGORIA_DNP']}:" />
+                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_CATEGORIA_DNP']}"
+                                         value="#{gestionEntidadBean.codigoDNP}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.categoriaDNP}" />
+                        </p:selectOneMenu>
+                    </div>
+                     <div class="col-md-4"></div>
+                </div>
+                </div>
+                <br />
+                <div class="col-md-12">
+                <div class="row">
+                    <br />
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_DEPARTAMENTO']}:" />
+                        <p:selectOneMenu id="departamento"
+                                         styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codDepartamento}"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getDeptos(169)}" />
+                            <p:ajax update="municipio" event="change" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel styleClass="log-label form-label-formularios"
+                                       value="${titles['LBL_MUNICIPIO']}:" />
+                        <p:selectOneMenu id="municipio"
+                                         styleClass="form-control-form-act-usua"
+                                         style="width:100%!important;"
+                                         value="#{gestionEntidadBean.entFiltro.codMunicipio}"
+                                         disabled="#{empty gestionEntidadBean.entFiltro.codDepartamento}"
+                                         title="${titles['TTL_SELECT']} ${titles['LBL_MUNICIPIO']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+                            <f:selectItems  value="#{webUtils.getMunicipios(gestionEntidadBean.entFiltro.codDepartamento)}" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                   <br /> <br /> <br />
+                </div>
+             
+
+                <div class="row" align = "center">
+                   <div class="col-md-12">
+                     <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <p:commandButton styleClass="btn btn-primary"
+                                             style ="padding-right: 20%!important; padding-left: 18%!important;"
+                            				 value="${titles['TTL_FILTRAR']}"
+                                             actionListener="#{gestionEntidadBean.filtrarLista()}"
+                                             update="panelScroll"
+                                             onclick="window.location.href='#tablaGestionarEntidad'"/>
+                        </div>
+                        <div class="col-md-3">
+                            <p:commandButton styleClass="btn btn-default"
+                                             style ="padding-right: 17%!important;  padding-left: 15%!important;"
+                            				 value="${titles['TTL_CANCEL']}"
+                                             actionListener="#{gestionEntidadBean.cancelarFilros()}"
+                                             update="panelScroll frmGestionarEntidad" />
+                        </div>
+                          <div class="col-md-3"></div>
+                    </div>
+                </div>
+
+           
+        </div>
+    </h:form>
+</html>
+

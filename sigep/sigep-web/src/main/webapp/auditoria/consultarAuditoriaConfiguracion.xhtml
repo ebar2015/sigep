@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id"
+			value='#{consultarAuditoriaConfiguracionBean.id}' />
+		<f:viewParam name="dialog"
+			value='#{consultarAuditoriaConfiguracionBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{consultarAuditoriaConfiguracionBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{consultarAuditoriaConfiguracionBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_AUDITORIA']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_AUDITORIA_CONSULTAR_1']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_AUDITORIA_CONSULTAR_1']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<p:outputPanel>
+			<p:panel id="paneFiltro">
+				<div class="row row-background-white">
+					<br />
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_AUDITORIA_FILTROS']} </span> <br /> <br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['TTL_AUDITORIA_TABLA_FUNCIONAL']}:"
+									for="nombreFuncional"
+									styleClass="log-label form-label-formularios" />
+								<p:autoComplete id="nombreFuncional" process="@this"
+									minQueryLength="3" 
+									update="nombreFuncional" 
+									scrollable="true"
+									scrollHeight="150"
+									completeMethod="#{consultarAuditoriaConfiguracionBean.consultarNombreFuncional}"
+									value="#{consultarAuditoriaConfiguracionBean.auditoriaConfiguracion.nombreFuncional}">
+								</p:autoComplete>
+								<p:message for="nombreFuncional" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['TTL_AUDITORIA_TABLA_NOMBRE']}:"
+									for="nombreTabla" styleClass="log-label form-label-formularios" />
+								<p:inputText id="nombreTabla"
+									value="#{consultarAuditoriaConfiguracionBean.auditoriaConfiguracion.nombreTabla}">
+								</p:inputText>
+								<p:message for="nombreTabla" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['TTL_AUDITORIA_TABLA_DESCRIPCION']}:"
+									styleClass="log-label form-label-formularios"
+									for="descripcionTabla" />
+								<p:inputText id="descripcionTabla"
+									value="#{consultarAuditoriaConfiguracionBean.auditoriaConfiguracion.descripcionTabla}">
+								</p:inputText>
+								<p:message for="descripcionTabla" display="text" />
+							</div>
+						</div>
+					</div>
+
+					<br /> <br />
+
+					<div class="row" align="center">
+						<div class="col-md-5"></div>
+						<div class="col-md-2" style="margin-bottom: 1%;">
+							<p:commandButton value="${titles['BTN_CT_BUSCAR']}"
+								styleClass="btn btn-primary"
+								style="padding-left:15%!important; padding-right:15%!important; font-size:1.5em!important; padding-top:0!important;"
+								actionListener="#{consultarAuditoriaConfiguracionBean.buscar}"
+								update="paneFiltro, basicDT" process="paneFiltro" />
+						</div>
+						<div class="col-md-5"></div>
+					</div>
+				</div>
+			</p:panel>
+			<br />
+			<br />
+			<div class="row row-background-white"
+				style="margin-left: 0px !important;">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_AUDITORIA_INFORMACION_SIGEP']} </span> <br /> <br />
+				<div class="col-md-12"
+					style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable id="basicDT" paginator="true" var="variable"
+						reflow="true"
+						value="#{consultarAuditoriaConfiguracionBean.listaConfiguracionAuditoria}"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						rowIndexVar="rowIndex" rows="#{paginatorSize}"
+						rowsPerPageTemplate="#{paginatorsSize}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']}  {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="${titles['TTL_AUDITORIA_TABLA_FUNCIONAL']}" sortBy="#{variable.nombreFuncional}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{variable.nombreFuncional}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_AUDITORIA_TABLA_NOMBRE']}" sortBy="#{variable.nombreTabla}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{variable.nombreTabla}" />
+						</p:column>
+						<p:column
+							headerText="${titles['TTL_AUDITORIA_TABLA_DESCRIPCION']}" sortBy="#{variable.descripcionTabla}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{variable.descripcionTabla}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_AUDITORIA_CONSULTAR_2']}" sortBy="#{variable.flgSelect}"
+							style="word-wrap: break-word!important;width:100px;text-align: center">
+							<p:selectBooleanCheckbox value="#{variable.flgSelect}"
+								disabled="#{consultarAuditoriaConfiguracionBean.flgValidModificarCheck }">
+								<p:ajax update="basicDT"
+									listener="#{consultarAuditoriaConfiguracionBean.cambioCheck(variable.flgSelect,variable.codTablaAuditoria,1)}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column headerText="${titles['TTL_AUDITORIA_CREAR']}" sortBy="#{variable.flgInsert}"
+							style="word-wrap: break-word!important;width:100px;text-align: center">
+							<p:selectBooleanCheckbox value="#{variable.flgInsert}"
+								disabled="#{consultarAuditoriaConfiguracionBean.flgValidModificarCheck }"
+								id="insertFLG">
+								<p:ajax update="basicDT"
+									listener="#{consultarAuditoriaConfiguracionBean.cambioCheck(variable.flgInsert,variable.codTablaAuditoria,2)}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column headerText="${titles['TTL_AUDITORIA_MODIFICAR']}" sortBy="#{variable.flgUpdate}"
+							style="word-wrap: break-word!important;width:100px;text-align: center">
+							<p:selectBooleanCheckbox value="#{variable.flgUpdate}"
+								disabled="#{consultarAuditoriaConfiguracionBean.flgValidModificarCheck }"
+								id="updateFLG">
+								<p:ajax update="basicDT"
+									listener="#{consultarAuditoriaConfiguracionBean.cambioCheck(variable.flgUpdate,variable.codTablaAuditoria,3)}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column headerText="${titles['TTL_AUDITORIA_ELIMINAR']}" sortBy="#{variable.flgDelete}"
+							style="word-wrap: break-word!important;width:100px;text-align: center">
+							<p:selectBooleanCheckbox value="#{variable.flgDelete}"
+								disabled="#{consultarAuditoriaConfiguracionBean.flgValidModificarCheck }"
+								styleClass="checkboxstyle">
+								<p:ajax update="basicDT"
+									listener="#{consultarAuditoriaConfiguracionBean.cambioCheck(variable.flgDelete,variable.codTablaAuditoria,4)}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column headerText="${titles['TTL_AUDITORIA_VISUALIZAR']}"
+							style="word-wrap: break-word!important;width:100px;text-align: center">
+							<p:commandButton id="btnVerDetalleAuditoria"
+								title="${titles['TTL_AUDITORIA_VISUALIZAR']}" icon="icon-view"
+								styleClass="icon-btn" process="@this"
+								actionListener="#{consultarAuditoriaConfiguracionBean.consultarDetalleAuditoria(variable)}">
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p:messages id="messages1" autoUpdate="true" showDetail="true"
+						closable="true" globalOnly="true"
+						style="text-align:center;font-size:1em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0" />
+				</div>
+			</div>
+		</p:outputPanel>
+		<p:outputPanel>
+			<p:panel id="paneBtnGuardar">
+				<div class="row" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-2" style="margin-bottom: 1%;">
+						<p:commandButton value="${titles['LBL_GUARDAR']}" id="btnGuardarM"
+							styleClass="btn btn-primary"
+							disabled="#{!consultarAuditoriaConfiguracionBean.verBtnGurdar}"
+							style="padding-left:15%!important; padding-right:15%!important; font-size:1.5em!important; padding-top:0!important;"
+							update="basicDT" onclick="PF('confirmacionGuardar').show();"
+							process="@this" />
+					</div>
+					<div class="col-md-2" style="margin-bottom: 1%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" id="btnCancelar"
+							styleClass="btn btn-primary"
+							disabled="#{!consultarAuditoriaConfiguracionBean.verBtnGurdar}"
+							style="padding-left:15%!important; padding-right:15%!important; font-size:1.5em!important; padding-top:0!important;"
+							update="basicDT" onclick="location.reload();" process="@this" />
+					</div>
+					<div class="col-md-2" style="margin-bottom: 1%;">
+						<p:commandButton value="${titles['BTN_CT_VOLVER']}" id="btnVolver"
+							styleClass="btn btn-primary"
+							style="padding-left:15%!important; padding-right:15%!important; font-size:1.5em!important; padding-top:0!important;"
+							process="@this"
+							actionListener="#{consultarAuditoriaConfiguracionBean.cancelar()}" />
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${messages['DLG_CONFIRMACION']} •"
+			widgetVar="confirmacionGuardar" modal="true" closeOnEscape="false"
+			draggable="false" closable="false" height="auto" resizable="false"
+			style="background: #F1F1F1!important;opacity: 1!important;">
+			<p:panel id="panelGuardar"
+				style="background: #F1F1F1!important;opacity: 1!important;">
+				<br />
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="${titles['TTL_AUDITORIA_CONFIRMA_MODIFICACON']}"
+						style="font-size:1.2em!important; color:#245279; font-weight: normal;margin-bottom: 1em;"
+						escape="false" />
+				</div>
+				<hr
+					style="display: block; margin-top: 1em; margin-bottom: 1em; margin-left: auto; margin-right: auto; border: 0.5px solid #CCCCCC; width: 95%;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnGuardar" value="${titles['TTL_OK']}"
+							styleClass="btn btn-primary"
+							style="padding-left:10%!important;padding-right:10%!important;border-radius:4px!important;margin-bottom:1%;"
+							process="@this" update="basicDT"
+							actionListener="#{consultarAuditoriaConfiguracionBean.guardarModificacion}"
+							onclick="PF('confirmacionGuardar').hide();" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="@this" styleClass="btn btn-default"
+							style="padding-left:9%!important;padding-right:9%!important;margin-bottom:1%;"
+							onclick="PF('confirmacionGuardar').hide();" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+		<p:outputPanel id="paneldetalle">
+			<p:panel id="hijopaneldetalle"
+				rendered="#{consultarAuditoriaConfiguracionBean.habilitarPanelVerDetalle}">
+				<div class="row row-background-white">
+					<br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">${titles['LBL_DETALLE_CONFIG_AUDITORIA']}
+					</span> <br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+							<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row" align="left">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<h4 class="form-label-formularios">
+									<p:outputLabel
+										value="#{consultarAuditoriaConfiguracionBean.auditoriasporClave.nombreTabla}">
+									</p:outputLabel>
+								</h4>
+
+							</div>
+						</div>
+					</div>
+					<br />
+					<p:panelGrid>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<p:outputLabel
+										value="* ${titles['TTL_AUDITORIA_TIPO_ACCION']}:"
+										styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="tAccion" filter="false" required="false"
+										value="#{consultarAuditoriaConfiguracionBean.tipoAccion.id}"
+										filterMatchMode="contains"
+										styleClass="form-control-form-act-usua"
+										style="width:90%!important;">
+										<f:selectItem itemValue="#{null}"
+											itemLabel="${titles['TTL_SELECT']}" />
+										<f:selectItems value="#{webUtils.accionesAuditoria}" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-md-4">
+									<p:outputLabel value="* ${titles['LBL_FECHA_INICIAL']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:calendar pattern="dd/MM/yyyy" />
+								</div>
+								<div class="col-md-4">
+									<p:outputLabel value="* ${titles['LBL_FECHA_FIN_2']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:calendar pattern="dd/MM/yyyy" />
+								</div>
+							</div>
+						</div>
+						<br></br>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-5"></div>
+								<div class="col-md-2">
+									<p:commandButton value="${titles['TTL_AUDITORIA_CONSULTAR_2']}"
+										styleClass="btn btn-primary">
+									</p:commandButton>
+								</div>
+								<div class="col-md-5"></div>
+							</div>
+						</div>
+					</p:panelGrid>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<br />
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,831 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:pe="http://primefaces.org/ui/extensions" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div style="margin-top: 20px!important; margin-bottom: 30px!important; padding: 5px 15px 10px 15px!important; background-color: #fff; text-transform: capitalize;">
+		<div class="row" style="margin-top: 5px !important; margin-bottom: 5px !important;">
+			<div class="col-md-12">
+				<h4 style="border-bottom: 1px solid #bbb;" >
+					<p:outputLabel value="${titles['LBL_INFORMACION_DE_LA_ENTIDAD']}" 
+						style="font-family: 'Poppins'!important; font-weight: 500; color: #245379!important" styleClass="page-subtitle" />
+				</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<p:outputLabel style="display: block!important; font-weight: 600!important; font-family: Arial,sans-serif!important; text-transform: capitalize;" 
+					value="${titles['LBL_ROLES_FILTER']}" styleClass="log-label form-label-formularios" />
+				<p:outputLabel styleClass="log-label form-label-formularios display-block" value="#{estructuraBean.entidadActual.nombreEntidad}" />
+			</div>
+			<div class="col-md-4">
+				<p:outputLabel style="display: block!important; font-weight: 600!important; font-family: Arial,sans-serif!important; text-transform: capitalize;"
+				 	value="${titles['TTL_NIT']}" styleClass="log-label form-label-formularios" />
+				<p:outputLabel styleClass="log-label form-label-formularios display-block" value="#{estructuraBean.entidadActual.nit}" />
+			</div>	
+			<div class="col-md-4">
+				<p:outputLabel style="display: block!important; font-weight: 600!important; font-family: Arial,sans-serif!important; text-transform: capitalize;"
+				 	value="${titles['TTL_CODIGO_DANE']}" styleClass="log-label form-label-formularios" />
+				<p:outputLabel styleClass="log-label form-label-formularios display-block" value="#{estructuraBean.entidadActual.codigoDane}" />
+			</div>											
+   		</div>
+	</div>
+	<h:form id ="frmPrincipal">
+		<p:panel id="frmDependenciaEntidad" style="background: transparent !important;" visible="#{estructuraBean.estadoPnlform}">
+      		<div class="row row-background-white"><br />
+      			<hr class="hr-style hr-style-two" style = "width: 90%!important; margin-top: 10px!important;" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_DEPENDENCIAS_BUSCAR']}</span> 
+				<br /><br />				
+      			<div class="row" style="margin-top: 10px!important;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NOMBRE_DEPENDENCIA']}" styleClass="log-label form-label-formularios"/>
+							<p:inputText id="idNombreDependenciaBuscar" class="form-control-acti-usua" 
+								value="#{estructuraBean.strNombreDependenciaBuscar}"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NUMERO_JERARQUIA']}" styleClass="log-label form-label-formularios"/>
+							<p:inputText id="idJerarquiaBuscar" value="#{estructuraBean.strNumJerarquiaBuscar}" class="form-control-acti-usua" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TIPO_DEPENDENCIA']}" styleClass="log-label form-label-formularios"/>
+							<h:selectOneMenu id="sltTipoDependenciaBuscar" value="#{estructuraBean.strTipoDependenciaBuscar}" 
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+								 <f:selectItems value="#{webUtils.getTiposDependenciaEspecial()}" />								
+							 </h:selectOneMenu>							
+						</div>
+					</div>      				
+      			</div>
+      			<div class="row" align="center">
+					<div class="col-md-12" style="margin-bottom: 2%; margin-top: 2%">
+						<p:commandButton value="${titles['TTL_SEARCH']}" id="idBtBuscarDependencias" styleClass="btn btn-primary"
+	               			style="padding-left:5%!important;padding-right:5%!important;font-size:1.5em!important;" 
+	               			process="@this frmDependenciaEntidad" update="frmDependenciaEntidad" action="#{estructuraBean.buscarDependencias()}">
+						</p:commandButton>
+					</div>
+				</div> 
+      			<br />
+      			<hr class="hr-style hr-style-two" style = "width: 95%!important; margin-top: 20px!important;" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_DEPENDENCIAS']}</span> 
+      			<div class="row" style="margin-top: 20px!important;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_NORMA']}" styleClass="log-label form-label-formularios"/>
+							<p:selectOneMenu id="sltTipoNorma" 
+								value="#{estructuraBean.normaEstructura.codTipoNorma}"
+								styleClass="form-control-form-act-usua" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								filter="true">
+								<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tiposNormaEntidad}" />
+								<p:ajax event="change" process="@this"/> 
+							 </p:selectOneMenu>
+							 <p:message for="sltTipoNorma" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_GESTION_PLANTA_FECHA_NORMA']}" styleClass="log-label form-label-formularios"/>	
+							<p:calendar mask="true"  id="idCTFechaNorma" placeholder="${titles['LBL_FORMATO_FECHA']}" 
+								value="#{estructuraBean.normaEstructura.fechaNorma}"
+								pattern="#{fechaFormato}" locale="#{lenguajeBean.localeCode}" 
+								yearRange="#{rangoAnios}" navigator="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+							<p:ajax event="dateSelect" process="@this" partialSubmit="true"  ignoreAutoUpdate="true" update="frmPrincipal:idCTFechaNorma"/>
+							</p:calendar>
+							<p:message for="idCTFechaNorma" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" styleClass="log-label form-label-formularios"/>
+							<p:autoComplete id="idNumeroNorma" value="#{estructuraBean.normaEstructura}" 
+								converter="normaBdConverter" var="normSelect" dropdown="true" 
+								completeMethod="#{estructuraBean.acNombreNormaListener}" minQueryLength="1" 
+								valueChangeListener="#{estructuraBean.acNombreNormaSelectListener}" 
+								itemLabel="#{normSelect.numeroNorma}" itemValue="#{normSelect}" maxResults="20">
+                   	    		<p:ajax process="@this" event="change"/>
+                        	</p:autoComplete>
+						<p:message for="idNumeroNorma" display="text" />							
+						</div>
+					</div>      				
+      			</div>
+      			<br />     			
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-12">
+							<p:outputLabel for="iTAJustificacion" value="${titles['LBL_CT_JUSTIFICACION']}" 
+								styleClass="log-label form-label-formularios" />
+							<p:inputTextarea rows="2" cols="10" id="iTAJustificacion" counterTemplate="Quedan {0} caracteres." 
+								autoResize="false" style="resize: none;overflow-x: hidden;word-wrap: break-word!important;" 
+								styleClass="form-control-acti-usua form-control" value="#{estructuraBean.estructuraEntidad.justificacion}" 
+								maxlength="255"	/>
+							<p:message for="iTAJustificacion" display="text" />
+						</div>
+					</div>
+				</div> 
+				<br /><br />  
+      		<br /> 
+			<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">		
+				<p:panel id="frmTablaDependencias" style="background: transparent !important;">                
+				    <p:commandButton id ="btnAgregarDepdendencias" styleClass="btn btn-transparent" 
+				    	value="${titles['TTL_ADD']} ${titles['LBL_CT_DEPENDENCIA']}" process="@this" update="tblAgregarDepdendencia"
+						action="#{estructuraBean.agregarDependencia}" icon="fa fa-fw fa-plus-circle" oncomplete="resaltarCeldaEstructura();" />             
+					<p:dataTable id="tblAgregarDepdendencia" value="#{estructuraBean.lstDependenciasEntidad}" 
+								 var="dependencia" editMode="cell" editable="true" emptyMessage="${titles['TTL_ESTRUCTURA_SIN_REGISTROS']}"
+					             paginator="true"
+								 rows="#{paginatorSize}"
+								 rowsPerPageTemplate="#{paginatorsSize}"
+								 reflow="true" 
+					             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+					             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" >						
+						<p:ajax event="cellEdit" listener="#{estructuraBean.celdaEditada}" />
+							
+	            		<p:column id="rowDependenciaPadre" headerText="${titles['LBL_TRANSVERSAL_RECURSO_PADRE']}"  sortBy="#{dependencia.jerarquiaPadre}">
+	            			<p:cellEditor>
+			                    <f:facet name="output">
+			                        <h:outputText value="#{dependencia.jerarquiaPadre}"/>
+			                    </f:facet>
+			                    <f:facet name="input">
+									<h:selectOneMenu id="idSomDepPadre"
+										             value="#{dependencia.jerarquiaPadre}"
+										             styleClass="form-control-form-act-usua"           >
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}"/>
+										<f:selectItems value="#{estructuraBean.siDependenciaspadre}"></f:selectItems>
+										<p:ajax event="change" process="@this" update="tabViewEstructuraGrupo:frmPrincipal:tblAgregarDepdendencia" 
+										listener="#{estructuraBean.validarJerarquiaPadre(dependencia)}"/>
+									</h:selectOneMenu>			                        
+			                    </f:facet>
+	                		</p:cellEditor>
+	            		</p:column>	
+						
+						<p:column id ="rowDepNumeroJearquia" headerText="${titles['LBL_NUMERO_JERARQUIA']}" sortBy="#{dependencia.jerarquia}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{dependencia.jerarquia}"/>
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{dependencia.jerarquia}" required="true" onblur="restaurarCelda(this);">
+										<f:validateRequired />
+										<p:ajax event="change" 
+										listener="#{estructuraBean.validarJerarquia(dependencia)}"
+											global="false" update="tblAgregarDepdendencia" />				                            
+	                        		</p:inputText>
+	                    		</f:facet>
+			                </p:cellEditor>
+	            		</p:column>
+	            		<p:column id="rowDepNombreDependencia" headerText="${titles['LBL_NOMBRE_DEPENDENCIA']}"
+	            			sortBy="#{dependencia.nombreDependencia}">
+	            			<p:cellEditor>
+			                    <f:facet name="output">
+			                        <h:outputText value="#{dependencia.nombreDependencia}"/>
+			                    </f:facet>
+			                    <f:facet name="input">
+			                        <p:inputText value="#{dependencia.nombreDependencia}" required="true" onblur="restaurarCelda(this);">
+			                            <f:validateRequired />
+			                            <p:ajax event="change" update="tblAgregarDepdendencia" process="@this" 
+			                            	listener="#{estructuraBean.validarDuplicidadNombre(dependencia)}"></p:ajax>
+			                        </p:inputText>
+			                    </f:facet>
+	                		</p:cellEditor>
+	            		</p:column>	
+	            		<p:column id="rowDependenciaEspecial" headerText="${titles['TTL_DEPENDENCIA_ESPECIAL']}">
+	            			<p:cellEditor>
+			                    <f:facet name="output">
+			                        <h:outputText value="#{dependencia.flgEspecial == 1 ? titles.TTL_YES: titles.TTL_NO}"/>
+			                    </f:facet>
+			                    <f:facet name="input">
+									<h:selectOneMenu value="#{dependencia.flgEspecial}" onblur="restaurarCelda(this);" 
+										style="max-height: 28px!important; font-size: 11px!important;" styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="${titles['TTL_NO']}" itemValue="0" />
+										<f:selectItem itemLabel="${titles['TTL_YES']}" itemValue="1" />
+									 	<p:ajax process="@this tabViewEstructuraGrupo:frmPrincipal:sltTipoNorma 
+									 						   tabViewEstructuraGrupo:frmPrincipal:idCTFechaNorma
+									 						   tabViewEstructuraGrupo:frmPrincipal:iTAJustificacion" event="change" 
+									 						   update="tabViewEstructuraGrupo:frmPrincipal"
+									 	 	listener="#{estructuraBean.configurarDependenciaEspecial(dependencia)}" >
+									 	</p:ajax>
+									</h:selectOneMenu>			                        
+			                    </f:facet>
+	                		</p:cellEditor>
+	            		</p:column>
+	            		
+	            	 
+	            		<p:column id="rowDependenciaStaff" headerText="${titles['TTL_DEPENDENCIA_STAFF']}">
+	            			<p:cellEditor>
+			                    <f:facet name="output">
+			                        <h:outputText value="#{dependencia.flgDependenciaHijo == 1 ? titles.TTL_YES: titles.TTL_NO}"/>
+			                    </f:facet>
+			                    <f:facet name="input">
+									<h:selectOneMenu value="#{dependencia.flgDependenciaHijo}" onblur="restaurarCelda(this);" 
+										style="max-height: 28px!important; font-size: 11px!important;" styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="${titles['TTL_NO']}" itemValue="0" />
+										<f:selectItem itemLabel="${titles['TTL_YES']}" itemValue="1" />
+									 	<p:ajax process="@this" event="change" update="tabViewEstructuraGrupo:frmPrincipal:tblAgregarDepdendencia" >
+									 	</p:ajax>
+									</h:selectOneMenu>			                        
+			                    </f:facet>
+	                		</p:cellEditor>
+	            		</p:column>	            		           		
+	            		
+	            		
+	            		
+						<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" exportable="false" 
+							style="opacity: 1!important; text-align:center!important;padding: 15px 5px!important;">
+							<p:commandButton icon="icon-edit" type="button" styleClass="icon-btn" onclick="editarCelda(this);"/>
+							<p:commandButton id="idEstructuraEliminarDependencia" 
+								icon="icon-delete" styleClass="icon-btn"
+								process="@this"
+								onclick="PF('eliminarDependencia').show();">
+								<f:setPropertyActionListener value="#{dependencia}"
+									target="#{estructuraBean.dependenciaEliminar}" />
+							</p:commandButton>	
+							<p:commandButton id="idverStaff" title="${titles['TTL_DEPENDENCIA_STAFF']}"
+								             icon="icon-view" styleClass="icon-btn" process="@this tabViewEstructuraGrupo:frmPrincipal:frmDependenciaEntidad "
+								            update="tabViewEstructuraGrupo:frmPrincipal:frmDependenciaEntidad 
+								                    tabViewEstructuraGrupo:frmPrincipal:dlgEstructuraOrganizacional"
+								             action="#{estructuraBean.generarEstructuraStaff(dependencia)}">
+							</p:commandButton>															
+						</p:column>	            			            		
+            		</p:dataTable>
+	   			</p:panel>
+	   			</div>	   			
+	   			
+	   			<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; display: none!important">
+	   			<p:panel id="pnlTablaImpresion">
+	   				<p:dataTable id="tblAgregarDepdendenciaImpresion" value="#{estructuraBean.lstDependenciasEntidad}" 
+	   					var="dependencia" emptyMessage="${titles['TTL_ESTRUCTURA_SIN_REGISTROS']}" >
+       			 		<f:facet name="header" align="center" >
+							<h:outputText value="Lista de dependencias" />
+						</f:facet>
+       			 		<p:columnGroup type="header">
+				            <p:row>
+								<p:column colspan="1" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="Nombre de la entidad" />
+				                <p:column colspan="2" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="#{estructuraBean.entidadActual.nombreEntidad}" />
+				            </p:row>
+				            <p:row>
+				            	<p:column colspan="1" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="Nit" />
+				                <p:column colspan="2" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="#{estructuraBean.entidadActual.nit}" />
+				            </p:row>
+				            <p:row>
+				            	<p:column colspan="1" style="padding-top:2px!important;; padding-bottom: 2px!important;" headerText="Codigo DANE" />
+				                <p:column colspan="2" style="padding-top:2px!important;; padding-bottom: 2px!important;" headerText="#{estructuraBean.entidadActual.codigoDane}" />      
+				            </p:row>
+				             <p:row visible="false" >
+				            	<p:column style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="${titles['LBL_NUMERO_JERARQUIA']}" />
+				                <p:column style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="${titles['LBL_NOMBRE_DEPENDENCIA']}" />
+				                <p:column style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="${titles['TTL_DEPENDENCIA_ESPECIAL']}" />
+				            </p:row>
+				        </p:columnGroup>					
+						<p:column>
+							<h:outputText value="#{dependencia.jerarquia}"/>
+	            		</p:column>
+	            		<p:column >
+			            	<h:outputText value="#{dependencia.nombreDependencia}"/>
+	            		</p:column>	
+	            		<p:column>
+			            	<h:outputText value="#{dependencia.flgEspecial == 1 ? titles.TTL_YES: titles.TTL_NO}"/>
+	            		</p:column>	          			            		
+            		</p:dataTable>
+            		</p:panel>
+	   			</div>
+				<br /> <br />				     							    			
+				<div class="row text-center">
+					<div class="col-md-12" style="margin-bottom: 2%;">
+					 	<br /> <br />
+						<div class="col-md-12">
+						<div class="col-md-3" >
+							<p:commandButton value="${titles['TTL_ENTIDAD_PLANTA_GUARDADO_PARCIAL']}" id="idBtGuardarParcial" 
+								styleClass="btn btn-primary" style="margin-right: 5px!important; width: 14.3em!important;" 
+								process="@this frmDependenciaEntidad" update="frmDependenciaEntidad" action="#{estructuraBean.guardar('1')}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_ESTRUCTURA_ORGANIZACIONAL_GUARDAR_DEFINITIVO']}"  id="idBtGuardarDefinitivo"  
+								styleClass="btn btn-secondary" style="margin-right: 5px!important; width: 14.3em!important;" 
+								process="@this frmDependenciaEntidad" update="frmDependenciaEntidad" action="#{estructuraBean.guardar('0')}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3" >
+							<p:commandButton value="${titles['TTL_EXPORTAR']}" id="idBtExportar" 
+								styleClass="btn btn-third" style="margin-right: 5px!important;width: 14.3em!important;" 
+								process="@this frmDependenciaEntidad" onclick="PF('dlgEstructuraOrganizacionalExportar').show();">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_ORGANIGRAMA']}" id="idBtOrganigrama" 
+								styleClass="btn btn-primary" style="width: 14.3em!important;" process="@this frmDependenciaEntidad"  
+								update="panelOrganigrama btnImprimirOrga dlgEstructuraOrganizacional" action="#{estructuraBean.generarEstructura()}" >
+							</p:commandButton>
+						</div>
+						</div>																				
+					</div>
+				</div>
+				<div class="row text-center" >
+					<div class="col-md-12" style="margin-bottom: 2%;">
+					<div class="col-md-2"></div>
+					<div class="col-md-3">
+						<p:commandButton id="btnImprimirOrga" value="${titles['LBL_IMPRIMIR_ORGANIGRAMA']}" disabled="#{estructuraBean.estadoBtnImpre}" 
+							style="margin-right: 5px!important; width: 14.3em!important" styleClass="btn btn-primary">
+							<p:printer target="organigramaGrupos" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="${titles['LBL_IMPRIMIR_DEPENDENCIAS']}" style="margin-right: 5px!important; width: 14.3em!important" 
+							styleClass="btn btn-secondary">
+							<p:printer target="tblAgregarDepdendenciaImpresion" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="${titles['LBL_REGRESAR']}" id="idBtRegresar" 
+							styleClass="btn btn-default" style="width: 14.3em!important"
+	                       	process="@this" action="#{estructuraBean.regresar()}">
+						</p:commandButton>
+					</div>
+					</div>
+				</div>				
+  			</div>
+  			<p:panel id="panelOrganigrama">
+  			
+	  			<div class="row" id="extension" style="margin-top: 20px!important;" >
+					<div class="col-md-12">
+						<p:scrollPanel  mode="native">
+							<script src="https://www.gstatic.com/charts/loader.js"></script>
+							<pe:gChart value="#{estructuraBean.arbolOrganizacional}" id="organigramaGrupos" rendered="#{estructuraBean.lbverOrganigrama}"/>
+						</p:scrollPanel>
+					</div>
+				</div>
+			</p:panel>
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgEstructuraOrganizacional" id="dlgEstructuraOrganizacional" 
+				minHeight="300"  modal="true" resizable="false" 
+				closeOnEscape="false" responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center><h5>#{estructuraBean.strMensajeDialog}</h5></center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}" process="@this" styleClass="btn btn-primary" 
+				    	onclick="PF('dlgEstructuraOrganizacional').hide();" />
+				</div>
+				<br />
+			</p:dialog>	
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgEstructuraOrganizacionalRetornaPrincipal"
+				id="dlgEstructuraOrganizacionalRetornaPrincipal" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false" responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center>
+						<h5>#{estructuraBean.strMensajeDialog}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}" process="@this" styleClass="btn btn-primary" 
+				    	action="#{estructuraBean.retornarPrincipal()}" onclick="PF('dlgEstructuraOrganizacionalRetornaPrincipal').hide();" />
+				</div>
+				<br />
+			</p:dialog>	
+			
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="eliminarDependencia"
+				id="eliminarDependencia" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false" responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center>
+						<h5>${messages['DLG_ELIMINAR_DEPENDENCIA_CONFIRMACION']}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_TO_CONTINUE']}" 
+				    	process="@this" styleClass="btn btn-primary" 
+				    	action="#{estructuraBean.eliminarDependenciaEstructura()}" 
+				    	onclick="PF('eliminarDependencia').hide();" 
+				    	update="tabViewEstructuraGrupo:frmPrincipal:frmDependenciaEntidad  tblAgregarDepdendencia 
+								tabViewEstructuraGrupo:frmPrincipal:dlgEstructuraOrganizacional"/>
+				    <p:commandButton value="${titles['TTL_CANCEL']}" 
+				    	process="@this" styleClass="btn btn-default" 
+				    	onclick="PF('eliminarDependencia').hide();" />
+				</div>
+				<br />
+			</p:dialog>	
+			
+			
+			<p:dialog header="• ${titles['TTL_EXPORTAR']} •" widgetVar="dlgEstructuraOrganizacionalExportar" 
+				id="dlgEstructuraOrganizacionalExportar" minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<div class="row" align="center">
+					<div class="col-md-12" style="margin-bottom: 2%;">
+						<div class="col-md-3" style="margin-bottom: 2%;"/>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<h:commandLink id="btnVinExportarEstructuraPdf"  onclick="PF('dlgEstructuraOrganizacionalExportar').hide();" 
+							action="#{estructuraBean.imprimirDependenciasPdf()}" >
+							    <p:graphicImage name="images/pdf-export.png" width="25"/>
+								  
+							</h:commandLink>	
+							 <p:tooltip id="toolPdf" for="btnVinExportarEstructuraPdf" value="PDF" position="top"/>
+						</div>
+						
+						
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<h:commandLink id="btnVinExportarEstructuraExcel" onclick="PF('dlgEstructuraOrganizacionalExportar').hide();"  >
+								 <p:graphicImage name="images/icon_excel.png" width="25" />
+								  <pe:exporter type="xlsx" target="tblAgregarDepdendenciaImpresion" fileName="Dependencias"
+							  		cellFontSize="12" cellFontStyle="NORMAL" facetFontSize="12" facetFontStyle="BOLD" encoding="UTF-8"/>  
+							</h:commandLink>	
+							<p:tooltip id="toolExcel" for="btnVinExportarEstructuraExcel" value="Excel" position="top"/>
+						</div>
+						<div class="col-md-3" style="margin-bottom: 2%;"/>
+					</div>
+						<div class="col-md-12" style="margin-bottom: 2%;">
+						    <p:commandButton id="btnVinExportarEstructuraSalir" value="Salir" process="@this" 
+						    	styleClass="btn btn-primary" onclick="PF('dlgEstructuraOrganizacionalExportar').hide();" >
+			   		    	</p:commandButton>
+						</div>
+				</div>												
+			</p:dialog>	
+		</p:panel>
+		<p:panel id="pnlDatosDependenciaEspecial" visible="#{estructuraBean.estadoPnlDepEspecial}">
+			<script type="text/javascript">
+			    function geocode() {
+			    	var direccion = document.getElementById("tabViewEstructuraGrupo:frmPrincipal:txtDireccion").value;
+		        	PF('wvMapaEntidad').geocode(direccion);
+			    }
+	     	</script>	
+			<div class="row" style="margin-top: 20px!important" >
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_CORREO']}" styleClass="log-label form-label-formularios"/>
+					<p:inputText id="txtCorreoInsti" value="#{estructuraBean.dependenciaEnGestion.correoInstitucional}" 
+						maxlength="100" class="form-control-acti-usua" >
+						<f:validator validatorId="maxByteLengthValidator" />
+					</p:inputText>
+					<p:message for="txtCorreoInsti" display="text" />		
+				</div>
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_PAGINA']}" styleClass="log-label form-label-formularios" />
+					<p:inputText id="txtPaginaWeb" value="#{estructuraBean.dependenciaEnGestion.paginaWeb}" maxlength="100" class="form-control-acti-usua" >
+						<f:validator validatorId="maxByteLengthValidator" />
+					</p:inputText>
+					<p:message for="txtPaginaWeb" display="text" />	
+				</div>
+				<div class="col-md-4">
+					<p:outputLabel value="#{titles.LBL_UBICACION_GEORREFERENCIAL}" styleClass="log-label form-label-formularios" />
+	                <p:gmap center="#{estructuraBean.centroMapa}" zoom="15" type="ROADMAP" widgetVar="wvMapaEntidad" id="wvMapaEntidad"
+	                        model="#{estructuraBean.modeloMapa}" style="width:100%; height:30px;" 
+	                        title="${titles['TTL_INGRESE']} ${titles['LBL_CODIGO_POSTAL']} ${titles['TTL_TIPO_NUMERICO']}">
+	                    <p:ajax event="geocode" update="@this" listener="#{estructuraBean.geolocalizacionListener}" />
+	                </p:gmap>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 10px!important;">
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_DEPARTAMENTO']}" styleClass="log-label form-label-formularios"/>
+					<h:selectOneMenu id="sltDepartamento" value="#{estructuraBean.dependenciaEnGestion.codDepartamento}" 
+						styleClass="form-control-form-act-usua ">
+						<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+						<f:selectItems value="#{webUtils.getDeptos(estructuraBean.entidadActual.codPais == null ? 169 : estructuraBean.entidadActual.codPais)}" />
+						<p:ajax event="change" process="@this" update="sltMunicipio panelBanderaPais panelBanderaPaisfax" 
+							listener="#{estructuraBean.agregarIndicativoDepartamento()}"/> 
+					</h:selectOneMenu>
+					<p:message for="sltDepartamento" display="text" />
+				</div>
+				<div class="col-md-4">
+				<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_MUNICIPIO']}" styleClass="log-label form-label-formularios"/>
+					<h:selectOneMenu id="sltMunicipio" value="#{estructuraBean.dependenciaEnGestion.codMunicipio}" styleClass="form-control-form-act-usua" >
+						<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+						<f:selectItems value="#{webUtils.getMunicipios(estructuraBean.dependenciaEnGestion.codDepartamento)}" />
+						<p:ajax event="change" process="@this" listener="#{estructuraBean.geolocalizarDireccion}">
+						</p:ajax> 
+					</h:selectOneMenu>
+					<p:message for="sltMunicipio" display="text" />
+				</div>
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_DIRECCION_FISICA']}" styleClass="log-label form-label-formularios"/>
+					<p:inputText id="txtDireccion" readonly="true" maxlength="100" style="max-width: 80%!important; display: inline-block!important;" 
+						value="#{estructuraBean.dependenciaEnGestion.direccionFisica}" class="form-control-acti-usua" >
+						<f:validator validatorId="numberValidator" />
+					</p:inputText>
+					<p:commandButton value="${titles['TTL_EDIT']}" onclick="$('#dialogEditarDir').modal('show');" 
+						style="max-width: 18%!important; display: inline-block!important;" update="pnlEditarDireccion" 
+						process="@this" actionListener="#{estructuraBean.setEstadoPanelDireccion(true)}" >
+					</p:commandButton>
+					<p:message for="txtDireccion" display="text" />		
+				</div>
+			</div>
+			<div class="row" style="margin-top: 10px!important;">
+				<div class="col-md-4">
+                    <p:outputLabel value="${titles['LBL_INDICATIVO']}:" style="width:30%;" styleClass="log-label form-label-formularios" />
+						<p:outputLabel value="${titles['LBL_TELEFONO_CELULAR']}" for="txtTelCel" style="width:70%;" 
+							styleClass="log-label form-label-formularios" />
+						<p:panel id="panelBanderaPais" style="padding: 0px!important;" styleClass="col-sm-12">
+							<div style="padding-right: 0px; width: 30%; float: left;">
+								<p:panel id="indicativoTel" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua" 
+									style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+									<img src="../../..#{estructuraBean.banderaPais}" height="13" width="18" alt="" title="Bandera del país" />
+									<h:outputLabel value="+#{estructuraBean.dependenciaEnGestion.indicador}" styleClass="label-indicativo" />
+								</p:panel>
+							</div>
+							<div style="width: 70%; float: right;">
+								<p:inputText id="txtTelCel" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+									title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_CELULAR']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+									value="#{estructuraBean.dependenciaEnGestion.telefono}" 
+									class="form-control-acti-usua"  autocomplete="false" maxlength="#{maxNumeros.maxNumCelular}" 
+									onkeypress="return numbervalida(event)" style="border-radius:0px 3px 3px 0px!important;">
+									<f:attribute value="#{maxNumeros.minNumCelular}" name="minLength" />
+									<f:attribute value="#{maxNumeros.maxNumCelular}" name="maxLength" />
+									<f:validator validatorId="numberValidator" />
+								</p:inputText>
+								<p:message for="txtTelCel" display="text" />
+							</div>
+						</p:panel>
+                </div>
+                <div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_INDICATIVO']}:" style="width:30%;" styleClass="log-label form-label-formularios" />
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_FAX']}" for="txtTelFax" style="width:70%;" 
+							styleClass="log-label form-label-formularios" />
+						<p:panel id="panelBanderaPaisfax" style="padding: 0px!important;" styleClass="col-sm-12">
+							<div style="padding-right: 0px; width: 30%; float: left;">
+								<p:panel id="indicativoFax" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua" 
+									style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+									<img src="../../..#{estructuraBean.banderaPais}" height="13" width="18" alt="" title="Bandera del país" />
+									<h:outputLabel value="+#{estructuraBean.dependenciaEnGestion.indicador}" styleClass="label-indicativo" />
+								</p:panel>
+							
+							</div>
+							<div style="width: 70%; float: right;">
+								<p:inputText id="txtTelFax" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+									title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_CELULAR']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+									value="#{estructuraBean.dependenciaEnGestion.fax}" 
+									class="form-control-acti-usua" autocomplete="false" maxlength="#{maxNumeros.maxNumCelular}" 
+									onkeypress="return numbervalida(event)" style="border-radius:0px 3px 3px 0px!important;">
+									<f:attribute value="#{maxNumeros.minNumCelular}" name="minLength" />
+									<f:attribute value="#{maxNumeros.maxNumCelular}" name="maxLength" />
+									<f:validator validatorId="numberValidator" />
+								</p:inputText>
+								<p:message for="txtTelFax" display="text" />
+							</div>
+						</p:panel>
+					
+                </div>				
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_SIGLA']}" styleClass="log-label form-label-formularios"/>
+					<p:inputText id="txttxtSigla" value="#{estructuraBean.dependenciaEnGestion.sigla}" maxlength="100" class="form-control-acti-usua" >
+						<f:validator validatorId="maxByteLengthValidator" />
+					</p:inputText>
+					<p:message for="txttxtSigla" display="text" />		
+				</div>
+			</div>
+			<div class="row" style="margin-top: 10px!important;">
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_CODIGO_DANE']}" styleClass="log-label form-label-formularios"/>
+					<p:inputText id="txtCodDane" value="#{estructuraBean.dependenciaEnGestion.codigoDane}" maxlength="100" class="form-control-acti-usua" >
+						<f:validator validatorId="maxByteLengthValidator" />
+					</p:inputText>
+					<p:message for="txtCodDane" display="text" />	
+				</div>
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_POLITICAS_ASOCIADAS']}" styleClass="log-label form-label-formularios"/>
+					<h:selectOneMenu id="sltPoliticasAsociadas" value="#{estructuraBean.dependenciaEnGestion.codPoliticasAsociadas}" 
+						styleClass="form-control-form-act-usua" >
+						<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+						<f:selectItems value="#{webUtils.getListasParametricas(2208)}" />
+						<p:ajax event="change" process="@this"/> 
+					</h:selectOneMenu>
+					<p:message for="sltPoliticasAsociadas" display="text" />
+				</div>
+				<div class="col-md-4">
+					<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_TIPO_DEPENDENCIA']}" styleClass="log-label form-label-formularios"/>
+					<h:selectOneMenu id="sltTipoDependencia" value="#{estructuraBean.dependenciaEnGestion.codTipDependenciaEspecial}" 
+						styleClass="form-control-form-act-usua" >
+						<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+						<f:selectItems value="#{webUtils.getListasParametricas(2208)}" />
+						<p:ajax event="change" process="@this"/> 
+					</h:selectOneMenu>
+					<p:message for="sltTipoDependencia" display="text" />
+				</div>
+			</div>
+			<div class="row" style="margin-top: 20px!important;">
+				<div class="col-md-12">
+				<div class="col-md-4"></div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_OK']}" styleClass="btn btn-primary" update="tabViewEstructuraGrupo" 
+										 process="pnlDatosDependenciaEspecial" 
+										 actionListener="#{estructuraBean.cambiarEstadoVentanas(true)}"
+										 style="font-size: 1.6em!important; width: 12em!important;"/>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" styleClass="btn btn-default" 
+										 update="tabViewEstructuraGrupo" process="@this" 
+										 actionListener="#{estructuraBean.cambiarEstadoVentanas(true)}"
+										 style="font-size: 1.6em!important; width: 12em!important;"/>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+		<br /><br /><br /><br />
+		<!-- ***************************************************************************************************************************** -->
+		<div class="modal fade" id="dialogEditarDir" role="dialog" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-dialog-2" style="top: 10%; width: 74%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<p:panel visible="#{estructuraBean.estadoPanelDireccion}" id="pnlEditarDireccion" >
+							        <br /><br />
+									<hr class="hr-style hr-style-two" />
+									<span class="span-style"> ${titles['TTL_EDITAR_DIRECCION']}</span>
+									<br /><br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-sm-12">
+											<p:outputLabel styleClass="log-label form-label-formularios" value="Vía Principal" />
+										</div>
+									</div>
+								</div>
+							
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-sm-3">
+											<p:outputLabel for="tipovia" value="${titles['TTL_VIA']}" styleClass="log-label form-label-formularios" />
+											<h:selectOneMenu id="tipovia" title="#{titles.TTL_SELECT} #{titles.TTL_VIA}" 
+												value="#{estructuraBean.editarDireccion.tipoVia}" converter="tipoViaConverter" 
+												filterMatchMode="contains"
+												filter="true" styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{tipoVia}" var="tipovia" itemLabel="#{tipovia.sigla}" itemValue="#{tipovia}" />
+												<p:ajax listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-sm-3">
+										<p:outputLabel for="numero" value="${titles['TTL_NUMERO']}" styleClass="log-label form-label-formularios" style="width:100% !important;" />
+										<p:inputText id="numero" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}" value="#{estructuraBean.editarDireccion.numero}"
+											maxlength="3" onkeypress="return numbervalida(event)" class="form-control-acti-usua" autocomplete="false" style="width:30%!important;">
+											<p:ajax event="change" listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+										</p:inputText>
+										<h:selectOneMenu id="primerLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{estructuraBean.editarDireccion.primerLetra}"
+											filterMatchMode="contains" filter="true" converter="tipoLetraConverter" styleClass="form-control-form-act-usua" style="width:70%!important;">
+											<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+											<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+											<p:ajax listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+										</h:selectOneMenu>
+										</div>
+										<div class="col-sm-1">
+											<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+											<p:selectBooleanCheckbox value="#{estructuraBean.editarDireccion.bis}">
+												<p:ajax event="change" listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</p:selectBooleanCheckbox>
+											<p:spacer width="5" />
+											<p:outputLabel id="bis1" value="${titles['LBL_BIS']}" title="#{titles.TTL_SELECT} #{titles.LBL_BIS}" styleClass="log-label form-label-formularios" />
+										</div>
+										<div class="col-sm-2">
+											<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+											<h:selectOneMenu id="segundaLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{estructuraBean.editarDireccion.segundaLetra}" filterMatchMode="contains" filter="true"
+												converter="tipoLetraConverter" styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+												<p:ajax listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-sm-3">
+											<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+											<h:selectOneMenu id="orientacion" title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}" value="#{estructuraBean.editarDireccion.orientacion}" filterMatchMode="contains" filter="true" converter="tipoOrientacionConverter" styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{tipoOrientacion}" var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}" itemValue="#{tipoorientacion}" />
+												<p:ajax listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</h:selectOneMenu>
+										</div>
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-sm-12">
+											<p:outputLabel styleClass="log-label form-label-formularios" value="Vía Secundaria" style="font-weight: 600!important;" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-sm-2">
+											<p:outputLabel value="${titles['TTL_NUMERO']}" for="segundoNumero" styleClass="log-label form-label-formularios" />
+											<p:inputText id="segundoNumero" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}" value="#{estructuraBean.editarDireccion.segundoNumero}" maxlength="3" onkeypress="return numbervalida(event)" class="form-control-acti-usua" autocomplete="false">
+												<p:ajax event="change" listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</p:inputText>
+										</div>
+										<div class="col-sm-2">
+											<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+											<h:selectOneMenu id="tercerLetra"
+												title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{estructuraBean.editarDireccion.tercerLetra}" filterMatchMode="contains" filter="true" converter="tipoLetraConverter" styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+												<p:ajax listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-sm-2">
+											<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+											<p:inputText id="tercerNumero" maxlength="3" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERICO}" value="#{estructuraBean.editarDireccion.tercerNumero}" >
+												<p:ajax event="change" listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" class="form-control-acti-usua" autocomplete="false" onkeypress="return numbervalida(event)" />
+											</p:inputText>
+										</div>
+										<div class="col-sm-2">
+											<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+											<h:selectOneMenu id="segundaOrientacion"
+												title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}" value="#{estructuraBean.editarDireccion.segundaOrientacion}" filterMatchMode="contains" filter="true" styleClass="form-control-form-act-usua" >
+												<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" converter="tipoOrientacionConverter" styleClass="form-control-form-act-usua" />
+												<f:selectItems value="#{tipoOrientacion}" var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}" itemValue="#{tipoorientacion}" />
+												<p:ajax listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</h:selectOneMenu>
+										</div>
+										<div class="col-sm-4">
+											<p:outputLabel value="${titles['TTL_COMPLEMENTO']}" for="complemento" styleClass="log-label form-label-formularios" />
+											<p:inputText id="complemento" title="#{titles.TTL_INGRESE} #{titles.TTL_COMPLEMENTO} #{titles['TTL_TIPO_ALFANUMERICO']} " value="#{estructuraBean.editarDireccion.complemento}" class="form-control-acti-usua" 
+												autocomplete="false" maxlength="50">
+												<f:validator validatorId="maxByteLengthValidator" />
+												<p:ajax event="change" listener="#{estructuraBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+											</p:inputText>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<p:outputLabel value="${titles['TTL_DIRECCION_GENERADA']}" for="direccionGenerada" styleClass="log-label form-label-formularios" />
+											<p:inputText id="direccionGenerada" title="#{titles.TTL_DIRECCION_GENERADA}" value="#{estructuraBean.editarDireccion.direccionGenerada}" class="form-control-acti-usua" readonly="true" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<br />
+								<!-- 						Boton de la direccion  -->
+								<div class="row" align="center">
+									<div class="col-md-4"></div>
+									<div class="col-md-2" style="margin-bottom: 2%;">
+										<p:commandButton value="${titles['TTL_OK']}" styleClass="btn btn-primary btn-update-disable" style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;" process="@this" update="pnlEditarDireccion txtDireccion" onclick="$('#dialogEditarDir').modal('hide');" actionListener="#{estructuraBean.agergarDireccion()}"  />
+									</div>
+									<div class="col-md-2" style="margin-bottom: 2%;">
+										<p:commandButton value="${titles['TTL_CANCEL']}" styleClass="btn btn-default btn-update-disable" style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;" onclick="$('#dialogEditarDir').modal('hide');" actionListener="#{estructuraBean.mostrarPanelEditarDireccion(false)}"  />
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p:dialog widgetVar="loadingDialog" modal="true" draggable="false" closable="false" resizable="false" 
+			showHeader="false" style="width:auto;height:auto">
+			<p:graphicImage dir="resources" name="/images/loading.gif" rendered="#{progressBarView.progress eq 0}" 
+				height="45" width="70" alt="${messages['DLG_PROCESANDO']}" title="${messages['MSG_PROCESANDO']}" />
+		</p:dialog>
+		
+	</h:form>
+	<script type="text/javascript">
+		function resaltarCeldaEstructura(){
+			var v = document.getElementById("tabViewEstructuraGrupo:frmPrincipal:tblAgregarDepdendencia");
+			v = v.getElementsByTagName("table");
+			v = (((v[0].childNodes)[1].childNodes)[0].childNodes);
+			v[0].classList.add("ui-state-highlight");
+			v[0].classList.add("ui-cell-editing");
+			v = ((v[0].childNodes)[1].childNodes)
+			v[1].setAttribute("style", "display: block");
+			v[0].setAttribute("style", "display: none");
+			v = v[1].childNodes[0];
+			v.classList.add("ui-state-hover");
+			v.classList.add("ui-state-focus");
+		}
+		
+		function restaurarCelda(celda){
+			removerEdicion();
+		}
+		
+		function removerEdicion(){
+			$('tr').removeClass("ui-state-highlight");
+			$('tr').removeClass("ui-cell-editing");
+			$('td').removeClass("ui-state-highlight");
+			$('td').removeClass("ui-cell-editing");
+			$('input').removeClass("ui-state-hover");
+			$('input').removeClass("ui-state-focus");
+			$('.ui-cell-editor-input').css("display" , "none");
+			$('.ui-cell-editor-output').css("display" , "block");
+			$('.ui-cell-editor-output').removeClass("ui-state-highlight");
+		}
+			
+		function editarCelda(celda){
+			removerEdicion();
+			var v = celda.parentNode.parentNode;
+			v = v.childNodes;
+			v[0].classList.add("ui-state-highlight");
+			v[0].classList.add("ui-cell-editing");
+			v = ((v[0].childNodes)[1].childNodes)
+			v[1].setAttribute("style", "display: block");
+			v[0].setAttribute("style", "display: none");
+			v = v[1].childNodes[0];
+			v.classList.add("ui-state-hover");
+			v.classList.add("ui-state-focus");
+		}
+	</script>
+</ui:composition>

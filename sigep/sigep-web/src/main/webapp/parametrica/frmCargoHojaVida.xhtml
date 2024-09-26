@@ -1,0 +1,276 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['LBL_CARGOS_HOJA_VIDA']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_CARGOS_HOJA_VIDA} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<br />
+		<p:outputPanel id="panelBusquedaCargo" style="background: transparent !important;">
+			<p:panel id="subPanelCargo" style="background: transparent !important;" >
+		
+			<div class="row row-background-white">
+			<br /><br />
+				<hr class="hr-style hr-style-two" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;"> #{titles.LBL_FILTROS}</span> <br /> <br />
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<div class="col-md-4">
+								<p:outputLabel for="filtroTipoCargoHV"
+									title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_CARGO']}"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_TIPO_CARGO']}:" />
+								<p:selectOneMenu id="filtroTipoCargoHV"
+									value="#{cargoHojaVidaBean.filterCargoHV.flgPublico}"
+									title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_CARGO']}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+									<f:selectItem itemLabel="${titles['LBL_PUBLICO']}" itemValue="1" />
+									<f:selectItem itemLabel="${titles['LBL_PRIVADO']}" itemValue="0" />
+								</p:selectOneMenu>
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="#{titles.LBL_NOMBRE_CARGO}:"
+									styleClass="log-label form-label-formularios"
+									for="filtroNombreCargoHV" />
+								<p:inputText id="filtroNombreCargoHV"
+									value="#{cargoHojaVidaBean.filterCargoHV.nombreCargo}"
+									maxlength="255"
+									style="text-transform:uppercase;">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+							</div>
+							<div class = "col-md-4">
+								<p:outputLabel for="filtroActivoHV"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ESTADO']}"
+									styleClass="log-label form-label-formularios"
+									value="${titles['TTL_ESTADO']}:" />
+								<p:selectOneMenu id="filtroActivoHV"
+									value="#{cargoHojaVidaBean.filterCargoHV.flgActivo}"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+									<f:selectItem itemLabel="${titles['TTL_ACTIVO']}" itemValue="1" />
+									<f:selectItem itemLabel="${titles['LBL_INACTIVO']}" itemValue="0" />
+								</p:selectOneMenu>
+							</div>
+						</div>
+					</div>
+					<br /><br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['BTN_CT_BUSCAR']}" id="btnBuscarCargoHV"
+								styleClass="btn btn-primary"
+								process="@this panelBusquedaCargo"
+								update ="dataTableCargoHV panelBusquedaCargo"
+								actionListener="#{cargoHojaVidaBean.consultarCargos()}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_CARGOS_HOJA_VIDA}</span> <br /> <br />
+
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearCargoHV" process="@this"
+					update="panelCargoHV" actionListener="#{cargoHojaVidaBean.crearCargoHV()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelCargoHV';">
+					<p:resetInput target="frmPrincipal:panelCargoHV" />
+				</p:commandButton>
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableCargoHV" 
+					lazy="true"
+					paginator="true"
+					reflow="true" rowIndexVar="rowIndex"
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+				 	value="#{cargoHojaVidaBean.lstCargoHV}"
+					var="dataCargoHV"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					
+					<p:column sortBy="#{dataCargoHV.flgPublico}" style="word-wrap: break-word!important; text-align: center;" >
+						<f:facet name="header" ><h:outputText value="${titles['LBL_TIPO_CARGO']}" /></f:facet>
+						<h:outputText value="#{dataCargoHV.flgPublico == 1 ? 'PÚBLICO' : 'PRIVADO'}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataCargoHV.nombreCargo}" style="word-wrap: break-word!important; text-align: center;" >
+						<f:facet name="header" ><h:outputText value="${titles['LBL_NOMBRE_CARGO']}" /></f:facet>
+						<h:outputText value="#{dataCargoHV.nombreCargo}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataCargoHV.flgActivo}" style="word-wrap: break-word!important; text-align: center;" >
+						<f:facet name="header" ><h:outputText value="${titles['TTL_ACTIVO']}" /></f:facet>
+						<p:selectBooleanCheckbox value="#{dataCargoHV.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+		
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarCargoHV" title="${titles['TTL_EDIT']}"
+							icon="icon-edit" styleClass="icon-btn btn-view-data"
+							process="@this" update="frmPrincipal:panelCargoHV"
+							immediate="true"
+							actionListener="#{cargoHojaVidaBean.modificarCargoHV(dataCargoHV)}"
+                    		oncomplete="window.location.href='#frmPrincipal:panelCargoHV';">
+                    		<p:resetInput target="frmPrincipal:panelCargoHV" />
+						</p:commandButton>
+						<p:commandButton id="btnVerCargoHV"
+							actionListener="#{cargoHojaVidaBean.consultarCargoHV(dataCargoHV)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view" styleClass="icon-btn"
+							process="@this" update="frmPrincipal:panelCargoHV"
+                    		oncomplete="window.location.href='#frmPrincipal:panelCargoHV';">
+                    		<p:resetInput target="frmPrincipal:panelCargoHV" />
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+							id="btnEliminarCargoHV" styleClass="icon-btn" process="@this"
+							actionListener="#{cargoHojaVidaBean.eliminarCargoHV()}" update="frmPrincipal:dlgConfirmarCargoHV">
+							<f:setPropertyActionListener value="#{dataCargoHV}" target="#{cargoHojaVidaBean.infoCargoHV}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelCargoHV">
+			<p:spacer height="2" />
+			<p:panel id="subpanelCargoHV" widgetVar="subPanelCargoHV" rendered="#{cargoHojaVidaBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<div class="col-md-12" >
+						<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 2em; white-space: pre-line!important;">
+							#{cargoHojaVidaBean.strAccionRealizada}</span>
+					</div>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4" align="center">
+							<p:outputLabel for="txtTipoCargoHV"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_CARGO']}"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_TIPO_CARGO']}:" />
+							<p:selectOneRadio id="txtTipoCargoHV"
+								value="#{cargoHojaVidaBean.blnFlgPublico}"
+								disabled="#{cargoHojaVidaBean.blnConsultarCargoHV}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_CARGO']}">
+								<f:selectItem itemLabel="${titles['LBL_PUBLICO']}" itemValue="true" />
+								<f:selectItem itemLabel="${titles['LBL_PRIVADO']}" itemValue="false" />
+							</p:selectOneRadio>
+							<p:message for="txtTipoCargoHV" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_NOMBRE_CARGO}:"
+								styleClass="log-label form-label-formularios"
+								for="txtNombreCargoHV" />
+							<p:inputText id="txtNombreCargoHV" required="true"
+								value="#{cargoHojaVidaBean.infoCargoHV.nombreCargo}"
+								disabled="#{cargoHojaVidaBean.blnConsultarCargoHV}"
+								maxlength="255"
+								style="text-transform:uppercase;"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreCargoHV" display="text" />
+						</div>
+						
+						<div class="col-md-4" align="center">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoCargoHV"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true" id="activoCargoHV"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{cargoHojaVidaBean.blnConsultarCargoHV}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{cargoHojaVidaBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoCargoHV" display="text" />
+						</div>
+					</div>
+				
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							rendered="#{!cargoHojaVidaBean.blnConsultarCargoHV}"
+							styleClass="btn btn-primary"
+							disabled="#{cargoHojaVidaBean.blnConsultarCargoHV}" update="panelCargoHV dataTableCargoHV txtNombreCargoHV"
+							actionListener="#{cargoHojaVidaBean.guardarCargoHV()}"
+							process="frmPrincipal:panelCargoHV"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!cargoHojaVidaBean.blnConsultarCargoHV}"
+							styleClass="btn btn-default" update="dlgConfirmarCargoHV"
+							actionListener="#{cargoHojaVidaBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{cargoHojaVidaBean.blnConsultarCargoHV}"
+							styleClass="btn btn-primary" update="panelCargoHV txtNombreCargoHV"
+							actionListener="#{cargoHojaVidaBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarCargoHV" id="dlgConfirmarCargoHV" minHeight="300"
+			modal="true" draggable="false" closable="false"
+			resizable="false" responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center>
+					<h5>#{cargoHojaVidaBean.strMensaje}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary" update="panelCargoHV dataTableCargoHV"
+						actionListener="#{cargoHojaVidaBean.procesarRespuestaConfirmacion}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlgConfirmarCargoHV').hide();" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarCargoHV').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+
+	<script type="text/javascript">
+		function mayus(e) {
+			e.value = e.value.toUpperCase();
+		}
+	</script>
+
+</ui:composition>

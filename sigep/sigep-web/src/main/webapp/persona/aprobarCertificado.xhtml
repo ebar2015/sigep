@@ -1,0 +1,458 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	<f:metadata>
+		<f:viewParam name="id" value="#{aprobarCertificadoBean.id}" />
+		<f:viewParam name="recursoId" value="#{aprobarCertificadoBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{aprobarCertificadoBean.dialog}" />
+		<f:event listener="#{aprobarCertificadoBean.retrieve}" type="preRenderView" />
+	</f:metadata>
+	
+	<ui:param name="pageTitle" value="${titles['LBL_HV_PERSONAS']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_APROBAR_HV']}" />
+	
+	<ui:define name="main">		
+		<p:outputPanel id="outPanelPrincipal">
+			<p:panel id="panelAprobar" style="background-color: transparent;" rendered="#{aprobarCertificadoBean.flgPanelAprobar}">
+				<div class="row">
+					<div class="col-md-12" align="center"><br /></div>
+					<div class="col-md-12" align="center">
+						<h2>
+							<p:outputLabel value="• ${titles['TTL_TARJETA_DE_ACTIVACION_PERSONA']} •" styleClass="page-subtitle" style="color: #263948!important;" />
+						</h2>
+					</div>
+				</div>		
+				<ui:include src="tarjetaPersonaView.xhtml"/>
+				<br /><br />
+				<div class="row row-background-white">
+					<br /><br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">${titles['TTL_SOPORTE_VARIOS']}</span>
+					<br /><br />
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="tablaSoporteVarios" reflow="true" 
+							paginator="true" 							
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							value="#{aprobarCertificadoBean.listSoportesVarios}" var="soportesVarios"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column headerText="${titles['TTL_TIPO_SOPORTE']}">
+								<h:outputText value="#{soportesVarios.tipoSoporte}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_DETALLE']}">
+								<h:outputText value="#{soportesVarios.detalle}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_VERIFICADO']}" style="text-align: center;">
+								<p:selectBooleanCheckbox value="#{soportesVarios.verificacion}" styleClass="checkbox-aprobacion"
+									disabled="#{soportesVarios.url == null or soportesVarios.url == ''}">
+									<p:ajax event="change" update="tablaSoporteVarios" process="tablaSoporteVarios" 
+										listener="#{aprobarCertificadoBean.persistSoporteVarios(soportesVarios)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+								style="opacity: 1!important; text-align:center!important;">
+								<p:commandButton title="${titles['LBL_VER_ADJUNTOS']}"
+									icon="icon-view" styleClass="icon-btn"
+									process="@this" update="frmPrincipal:panelDiaVisualizar"
+									actionListener="#{aprobarCertificadoBean.visualizarArchivo(soportesVarios.url)}"
+									onclick="$('#documentosAdjuntos').modal('show')" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<br /><br />
+				<div class="row row-background-white">
+					<br /><br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">${titles['TTL_APROBAR_HV_TAB1']}</span>
+					<br /><br />
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="tablaEducacionFormal"
+							value="#{aprobarCertificadoBean.listaEducacionFormalExt}" var="eduFromal"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}" 
+							reflow="true" 
+							paginator="true" 							
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						    >
+							<p:column headerText="${titles['TTL_APROBAR_HV_EDU_COL1']}">
+								<h:outputText value="#{eduFromal.nombreInstitucionAcademica != null ?  eduFromal.nombreInstitucionAcademica : 'SIN DATO' }" />
+							</p:column>
+							<c:set var="valorTituloTabla" value="#{eduFromal.flgFinalizado ? eduFromal.nivelEducativo : 'SIN DATO' }" />
+							<p:column headerText="${titles['TTL_APROBAR_HV_EDU_COL2']}">
+								<h:outputText value="#{eduFromal.tituloObtenido !=null  ? eduFromal.tituloObtenido : valorTituloTabla}" />
+							</p:column>
+							<p:column headerText="${titles['TTL_APROBAR_HV_EDU_COL3']}">
+								<h:outputText value="#{eduFromal.flgFinalizado == false ? titles.TTL_IN_PROCESS : titles.TTL_FINALIZED}" />
+							</p:column>
+							<p:column headerText="${titles['TTL_APROBAR_HV_EDU_COL4']}">
+								<h:outputText value="#{eduFromal.fechaGrado}">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="${titles['LBL_VERIFICADO_TP']}" style="text-align: center;">
+								<p:selectBooleanCheckbox value="#{eduFromal.flgValidadoTarjetaProfesional}" styleClass="checkbox-aprobacion"
+									disabled="#{(eduFromal.urlTarjetaProfesional == null or eduFromal.urlTarjetaProfesional == '')}">
+									<p:ajax event="change" update="tablaEducacionFormal" process="tablaEducacionFormal" 
+										listener="#{aprobarCertificadoBean.validaTarjetaProfesional(eduFromal)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>								
+							<p:column headerText="${titles['LBL_VERIFICADO_EF']}" style="text-align: center;">
+								<p:selectBooleanCheckbox value="#{eduFromal.flgValidadoRrhh}" styleClass="checkbox-aprobacion"
+									disabled="#{(eduFromal.urlAnexo == null or eduFromal.urlAnexo == '')}">
+									<p:ajax event="change" update="tablaEducacionFormal" process="tablaEducacionFormal" 
+										listener="#{aprobarCertificadoBean.persistEducacionFormal(eduFromal)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>	
+							<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+								style="opacity: 1!important; text-align:center!important;">
+								<p:commandButton title="${titles['LBL_HV_CONTRATO_ADJUNTO_TARJETA']}"
+										icon="icon-view" styleClass="icon-btn"
+										process="@this" update="frmPrincipal:panelDiaVisualizar"
+										actionListener="#{aprobarCertificadoBean.visualizarArchivo(eduFromal.urlTarjetaProfesional)}"
+										onclick="$('#documentosAdjuntos').modal('show')" />
+										
+								<p:commandButton title="${titles['LBL_HV_CONTRATO_ADJUNTO_EDUCACION']}"
+										icon="icon-view" styleClass="icon-btn"
+										process="@this" update="frmPrincipal:panelDiaVisualizar"
+										actionListener="#{aprobarCertificadoBean.visualizarArchivo(eduFromal.urlAnexo)}"
+										onclick="$('#documentosAdjuntos').modal('show')" />										
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<br /><br />
+				<div class="row row-background-white">
+					<br /><br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">${titles['TTL_APROBAR_HV_TAB2']}</span>
+					<br /><br />
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="tablaExperienciaLaboral" 
+							value="#{aprobarCertificadoBean.listExperienciaProfesionalExt}" var="expProfe"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"						
+							paginator="true" 							
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true" 
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column headerText="${titles['TTL_ENTIDAD']}">
+								<h:outputText value="#{expProfe.nombreEntidadExt}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_CARGO']}">
+								<h:outputText value="#{expProfe.nombreCargo}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_TABLA_DEPENDENCIA']}">
+								<h:outputText value="#{expProfe.nombreDependencia}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_FECHA_INGRESO']}">
+								<h:outputText value="#{expProfe.fechaInicio}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_FECHA_TERMINACION']}">
+								<h:outputText value="#{expProfe.fechaFin}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_TIEMPO_LABORADO']}">
+								<h:outputText value="#{expProfe.tiempoExperienciaLaboral}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_VERIFICADO']}" style="text-align: center;">
+								<p:selectBooleanCheckbox value="#{expProfe.flgValidaJefe}" styleClass="checkbox-aprobacion"
+									disabled="#{expProfe.urlDocumentoSoporte == null or expProfe.urlDocumentoSoporte == ''}">
+									<p:ajax event="change" update="tablaExperienciaLaboral" process="tablaExperienciaLaboral" 
+										listener="#{aprobarCertificadoBean.persistExperienciaProfecional(expProfe)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+								style="opacity: 1!important; text-align:center!important;">
+								<p:commandButton title="${titles['LBL_VER_ADJUNTOS']}"
+									icon="icon-view" styleClass="icon-btn"
+									process="@this" update="frmPrincipal:panelDiaVisualizar"
+									actionListener="#{aprobarCertificadoBean.visualizarArchivo(expProfe.urlDocumentoSoporte)}"
+									onclick="$('#documentosAdjuntos').modal('show')" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<br /><br />
+				<div class="row row-background-white">
+					<br /><br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">${titles['TTL_EXPERIENCIA_LABORAL_DOCENTE']}</span>
+					<br /><br />
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="tablaExperienciaLaboralDocente" reflow="true" 
+							paginator="true" 							
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							value="#{aprobarCertificadoBean.listExperienciaDocenteExt}" var="expDocent"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						    paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							<p:column headerText="${titles['LBL_INSTITUCION']}">
+								<h:outputText value="#{expDocent.nombreInstitucion}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_TABLA_AREA_CONOCIMIENTO']}">
+								<h:outputText value="#{expDocent.areaConocimiento}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_FECHA_INGRESO']}">
+								<h:outputText value="#{expDocent.fechaInicio}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_FECHA_TERMINACION']}">
+								<h:outputText value="#{expDocent.fechaFinal}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_TIEMPO_LABORADO']}">
+								<h:outputText value="#{expDocent.tiempoExperienciaDocente}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_VERIFICADO']}" style="text-align: center;">
+								<p:selectBooleanCheckbox value="#{expDocent.flgVerificado}" styleClass="checkbox-aprobacion"
+									disabled="#{expDocent.urlDocumentoSoporte == null or expDocent.urlDocumentoSoporte == ''}">
+									<p:ajax event="change" update="tablaExperienciaLaboralDocente" process="tablaExperienciaLaboralDocente" 
+										listener="#{aprobarCertificadoBean.persistExperienciaDocente(expDocent)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+								style="opacity: 1!important; text-align:center!important;">
+								<p:commandButton title="${titles['LBL_VER_ADJUNTOS']}"
+									icon="icon-view" styleClass="icon-btn"
+									process="@this" update="frmPrincipal:panelDiaVisualizar"
+									actionListener="#{aprobarCertificadoBean.visualizarArchivo(expDocent.urlDocumentoSoporte)}"
+									onclick="$('#documentosAdjuntos').modal('show')" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<br /><br />
+				<div class="row" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							styleClass="btn btn-primary"
+							style="padding-left:14.5%!important;padding-right:14.5%!important; font-size:1.5em!important; padding-top:0!important;"
+							process="@this" update="panelAprobar"
+							actionListener="#{aprobarCertificadoBean.guardar(true)}" />
+					</div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_APROBAR']}"
+							process="@this" update="outPanelPrincipal"
+							actionListener="#{aprobarCertificadoBean.activarFormularioAprobacion(false)}"
+							style="background:#235379!important;border-color:#235379!important;
+							padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;"
+							styleClass="btn btn-primary btn-aprobar"/>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							process="@this" update="@this"							
+							actionListener="#{aprobarCertificadoBean.volver}"
+							style="padding-left:14%!important;padding-right:14%!important; font-size:1.5em!important; padding-top:0!important;"
+							styleClass="btn btn-default"/>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</p:panel>
+			
+			<p:panel id="panelAprobar1" style="background-color: transparent;" rendered="#{!aprobarCertificadoBean.flgPanelAprobar}">
+				<div class="row">
+					<div class="col-md-12" align="center"><br /></div>
+					<div class="col-md-12" align="center">
+						<h2>
+							<p:outputLabel value="• ${titles['LBL_APROBACION']} •" styleClass="page-subtitle" />
+						</h2>
+					</div>
+				</div>
+				<div class="row row-background-white">
+					<div class="col-md-12"><br /><br /></div>
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_ENTIDAD_APRUEBA']}:" for="nombreEntidad"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="nombreEntidad" value="#{aprobarCertificadoBean.hojadevida.nombreEntidad}"
+								class="form-control-acti-usua" disabled="true"/>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['TTL_USUARIO_APRUEBA']}:" for="usuarioAprueba"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="usuarioAprueba" value="#{aprobarCertificadoBean.hojadevida.nombreUsuarioAprueba}"
+								class="form-control-acti-usua" disabled="true"/>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_MODALIDAD']}" for="modalidad"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="modalidad" value="#{aprobarCertificadoBean.hojadevida.codModalidadContrato}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tipoModalidad}" />
+								<p:ajax event="change" listener="#{aprobarCertificadoBean.cambiarModalidad}" 
+										process="@this" update="panelModalidad" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="col-md-12"><br /><br /></div>
+					<p:outputPanel id="panelModalidad">
+						<p:panel id="panelUtlUan" rendered="#{aprobarCertificadoBean.panelUtlUan}">
+							<hr class="hr-style" />
+							<div class="col-md-12" align="center">
+								<p:outputLabel value="${titles['TTL_HOJA_VIDA_APROBAR']}" styleClass="advisor" />
+							</div>
+							<div class="col-md-12" style="margin-bottom: 2%;">
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_HV_SELECT_UTL']}:" for="utluan"
+										styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="utluan" value="#{aprobarCertificadoBean.hojadevida.codUtlUan}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{aprobarCertificadoBean.obtenerUtlUan()}" />
+										<p:ajax event="change"  listener="#{aprobarCertificadoBean.validarUTLIgual()}" update= "utluan"/>
+									</h:selectOneMenu>
+									<p:message for="utluan" display="text" />
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_HV_SALARIO']}:" for="salario"
+										styleClass="log-label form-label-formularios" />
+									<p:inputNumber id="salario" value="#{aprobarCertificadoBean.hojadevida.salario}"
+										title="#{titles.TTL_INGRESAR} salario en pesos"
+										symbol="$"
+										decimalSeparator=","
+		                                thousandSeparator="."
+		                                decimalPlaces="2"
+		                                required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15']}"
+										converter="javax.faces.BigDecimal"
+										converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+										<p:keyFilter mask="num"></p:keyFilter>
+										<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+									</p:inputNumber>
+									<p:message for="salario" display="detalleContrato" />
+								</div>
+							</div>
+							<p:panel id="panelMsnUtlUan" rendered="#{aprobarCertificadoBean.panelMsnUtlUan}">
+							<div class="col-md-12"><br /><br /><br /></div>
+								<div class="col-md-12" align="center">
+									<p:outputLabel value="#{aprobarCertificadoBean.msnUtlUan}" />
+								</div>
+								<div class="col-md-12" align="center">
+									<p:commandButton value="${titles['TTL_OK']}"
+										styleClass="btn btn-primary"
+										style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; padding-top:0!important;"
+										process="@this" update="panelUtlUan"
+										actionListener="#{aprobarCertificadoBean.aceptar}" />
+								</div>
+							</p:panel>
+						</p:panel>
+						<p:panel id="panelCargo" rendered="#{aprobarCertificadoBean.panelCargo}">
+							<hr class="hr-style" />
+							<div class="col-md-12" style="margin-bottom: 2%;">				
+								<div class="col-sm-4">
+									<p:outputLabel value="Seleccione el cargo:" for="cargo"
+										styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="cargo" value="#{aprobarCertificadoBean.hojadevida.codCargo}"
+										title="#{titles.TTL_SELECT} #{titles.LBL_CARGO} "
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']} ${titles.LBL_CARGO} " itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.getCargoAprobar(aprobarCertificadoBean.entidadUsuario.id)}" />
+									</h:selectOneMenu>
+									<p:message for="cargo" display="text" />
+								</div>
+							</div>
+						</p:panel>
+						<p:panel id="panelContrato" rendered="#{aprobarCertificadoBean.panelContrato}">
+							<hr class="hr-style" />
+							<div class="col-md-12" style="margin-bottom: 2%;">
+								<div class="col-sm-4">
+									<p:outputLabel value="#{titles.LBL_HV_CONTRATO}:" for="detalleContrato"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="detalleContrato" value="#{aprobarCertificadoBean.hojadevida.detallesContrato}"
+										class="form-control-acti-usua"/>
+								</div>
+							</div>
+						</p:panel>
+					</p:outputPanel>
+					<br /><br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 3%;">
+							<p:commandButton value="${titles['TTL_APROBAR']}"
+								styleClass="btn btn-primary"
+								style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; padding-top:0!important;"
+								process="panelAprobar1" update="panelAprobar1 outPanelPrincipal"
+								actionListener="#{aprobarCertificadoBean.persist}" />
+						</div>
+						<div class="col-md-2" style="margin-bottom: 3%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}"
+								styleClass="btn btn-default"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								process="@this" update="outPanelPrincipal"
+								actionListener="#{aprobarCertificadoBean.activarFormularioAprobacion(true)}" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		
+		<div id="documentosAdjuntos" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 60%;">
+				<div class="modal-content">
+					<div class="modal-header" align="center">
+						<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+					</div>
+					<div class="modal-body">
+						<p:panel id="panelDiaVisualizar" style="background: transparent!important;">
+							<c:if test="#{aprobarCertificadoBean.rutaArchivo==null}">
+				                <h:outputLabel value="Sin soporte" class="form-label-formularios" />
+				            </c:if>
+				            <c:if test="#{aprobarCertificadoBean.rutaArchivo!=null}">
+							    <iframe src ="#{aprobarCertificadoBean.rutaArchivo}" width='600' height='400'></iframe> 
+				            </c:if>
+				         </p:panel>
+					</div>
+					<div class="modal-footer">
+						<p:commandButton value="${titles['TTL_CLOSE']}"
+							styleClass="btn btn-default"
+							process="@this"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							onclick="$('#documentosAdjuntos').modal('hide')" />
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-12">
+			<p:messages id="messagesAprobarCertificado" autoUpdate="true" showDetail="true"
+				closable="true" globalOnly="true" 
+				style="font-family:Helvetica;text-align:center;font-size:1.2em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0" />
+		</div>
+		<p:remoteCommand name="redirectGestionarHv" update="@this" action="#{aprobarCertificadoBean.redirectGestionarHv}"/>
+		
+		<script type="text/javascript">
+			function habilitarBtnAprobar(){
+				var num = $(".checkbox-aprobacion input:checkbox:not(:checked)").filter(".checkbox-aprobacion input:checkbox:not(:disabled)").length;
+				if(parseInt(num) == 0){
+					$(".btn-aprobar").prop('disabled',false);
+				}else{
+					
+					$(".btn-aprobar").prop('disabled',true);
+				}
+			}
+			$(document).on( "click", ".checkbox-aprobacion input[type='checkbox']",function() { habilitarBtnAprobar(); });
+			$(document).ready(function () { habilitarBtnAprobar(); });
+		    
+		</script>
+	</ui:define>
+</ui:composition>

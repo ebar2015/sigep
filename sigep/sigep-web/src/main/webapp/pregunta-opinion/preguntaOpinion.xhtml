@@ -1,0 +1,638 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_GESTIONDELAOPINION']}" />
+
+
+	<ui:define name="main">
+		<!-- Titulo -->
+		<!-- Inicia el formulario de consulta -->
+		<p:outputPanel id="panelPreguntaConsulta" style="background: transparent !important;">
+			<p:panel id="pregunta" style="background: transparent !important;" 
+				rendered="#{preguntaOpinionBean.habilitarPanelConsultaRender}">
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<h2> <p:outputLabel value="• ${titles['TTL_CONSULTA_OPINION']} •" styleClass="page-subtitle" /></h2>
+					</div>
+				</div>
+
+				<div class="row row-background-white">
+					<br />
+					<!-- Inicia el boton nueva pregunta -->
+					<div class="col-md-12" style="text-align: right;">
+						<p:commandButton id="btnAdmonAgregarPregunta"
+							process="@this"
+							style="margin-right: -3.7em!important;"
+							update="panelPreguntaOpinion panelPreguntaConsulta panelMensajeCrear panelMensajeModificar"
+							icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+							actionListener="#{preguntaOpinionBean.habilitarPanelCrearPregunta(true,true,false)}"
+							value="${titles.LBL_PREGUNTA_OPINION_CREAR}">
+						</p:commandButton>
+					</div>
+					<!-- Finaliza el boton nueva pregunta -->
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;"> #{titles.LBL_FILTROS}</span> <br /> <br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_PREGUNTA']}:"  for="buscarPregunta" styleClass="log-label form-label-formularios" />
+								<p:inputText id="buscarPregunta" required="false"
+									autocomplete="false" class="form-control-acti-usua" maxlength="256"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_PREGUNTA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									value="#{preguntaOpinionBean.preguntaFiltro.pregunta}" >
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="buscarPregunta" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_FECHA_PUBLICACION']}:"
+									for="fechaInicioPub"
+									styleClass="log-label form-label-formularios" />
+								<p:calendar id="fechaInicioPub" required="false" mask="true"
+									yearRange="#{rangoAnios}" navigator="true"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_PUBLICACION']}"
+									pattern="#{fechaFormato}" effect="slideDown"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+									value="#{preguntaOpinionBean.preguntaFiltro.fechaInicio}" >
+									<p:ajax event="dateSelect" update="fechaFinPub" />
+									<p:ajax event="change" update="fechaFinPub" />
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="fechaInicioPub" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_FECHA_FIN_PUBLICACION']}:"
+									for="fechaFinPub" styleClass="log-label form-label-formularios" />
+								<p:calendar id="fechaFinPub" mask="true" yearRange="#{rangoAnios}"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_FIN_PUBLICACION']}"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									value="#{preguntaOpinionBean.preguntaFiltro.fechaFin}"
+									pattern="#{fechaFormato}" effect="slideDown" navigator="true"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar">
+									<f:attribute name="startDate" value="#{preguntaOpinionBean.preguntaFiltro.fechaInicio}" />
+									<f:attribute name="startDateName" value="${titles['LBL_FECHA_PUBLICACION']}" />
+									<f:attribute name="endDateName" value="${titles['LBL_FECHA_FIN_PUBLICACION']}" />
+									<f:validator validatorId="dateRangeValidator" />
+								</p:calendar>
+								<p:message for="fechaFinPub" display="text" />
+							</div>
+						</div>
+					</div>
+					<br /><br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['BTN_CT_BUSCAR']}" id="btnAdmonBuscarPregunta"
+								styleClass="btn btn-primary"
+								process="frmPrincipal:pregunta @this"
+								update="pregunta dataTabPreguntaOpinion"
+								actionListener="#{preguntaOpinionBean.consultarPregunta}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<!-- Finaliza el formulario de consulta -->
+
+		<p:outputPanel id="panelMensajeCrear" style="background: transparent !important;">
+			<p:panel id="subPanelMensajeCrear" style="background: transparent !important;"
+				rendered="#{preguntaOpinionBean.habilitarMensajeCrear}">
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<h2> <p:outputLabel id="mensCrear"
+								value="• #{titles.LBL_PREGUNTA_OPINION_CREAR} •" styleClass="page-subtitle" style="color: #263948!important;" /></h2>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		
+		<p:outputPanel id="panelMensajeModificar" style="background: transparent !important;">
+			<p:panel id="subPanelMensajeModificar" style="background: transparent !important;"
+				rendered="#{preguntaOpinionBean.habilitarMensajeModificar}">
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<h2> <p:outputLabel id="mensModificar" value="• #{titles.LBL_PREGUNTA_OPINION_MODIFICAR} •" 
+								styleClass="page-subtitle" style="color: #263948!important;" /> </h2>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		
+		<!-- Inicia Panel Crear Pregunta de Opinión -->
+		<p:outputPanel id="panelPreguntaOpinion">
+			<p:panel id="subPanelPreguntaOpinion" rendered="#{preguntaOpinionBean.habilitarPanelCrearPregunta}">
+				<div class="row row-background-white">
+					<br /> <br />
+					<div class="row">
+						<div class="col-md-12" align="center" >
+							<p:outputLabel value="#{preguntaOpinionBean.strMsgInicial}" styleClass="advisor" />
+						</div>
+					</div>
+					<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['LBL_PREGUNTA']}:" for="crearPregunta"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="crearPregunta" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_PREGUNTA']}${titles['TTL_TIPO_ALFANUMERICO']}"
+									maxlength="256" class="form-control-acti-usua"
+									disabled="#{preguntaOpinionBean.preguntaOpinion.totalRespuesta}"
+									value="#{preguntaOpinionBean.preguntaOpinion.pregunta}" >
+										<f:validator validatorId="maxByteLengthValidator" />
+									</p:inputText>
+								<p:message for="crearPregunta" display="text" />
+							</div>
+
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['LBL_FECHA_INICIO']}" for="fechaInicioCrear"
+									styleClass="log-label form-label-formularios" />
+								<p:calendar id="fechaInicioCrear" mask="true" 
+									yearRange="#{rangoAnios}" navigator="true"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_INICIO']}"
+									required="true"
+									mindate="#{fechaSistema}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									mode="popup" 
+									pattern="#{fechaFormato}" effect="slideDown"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+									value="#{preguntaOpinionBean.preguntaOpinion.fechaInicio}">
+									<p:ajax event="dateSelect" update="fechaFinCrear" />
+									<p:ajax event="change" update="fechaFinCrear" />
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="fechaInicioCrear" display="text" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}" for="fechaFinCrear"
+									styleClass="log-label form-label-formularios" />
+								<p:calendar id="fechaFinCrear" mask="true"
+									yearRange="#{rangoAnios}" navigator="true"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_FIN_2']}"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									pattern="#{fechaFormato}" effect="slideDown"
+									locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+									mindate="#{preguntaOpinionBean.preguntaOpinion.fechaInicio}"
+									value="#{preguntaOpinionBean.preguntaOpinion.fechaFin}">
+									<f:attribute name="minDate" value="#{fechaSistema}" />
+									<f:attribute name="startDateName" value="${titles['LBL_FECHA_INICIO']}" />
+									<f:attribute name="endDateName" value="${titles['LBL_FECHA_FIN_2']}" />
+									<f:attribute name="startDate" value="#{preguntaOpinionBean.preguntaOpinion.fechaInicio}" />
+									<f:validator validatorId="dateRangeValidator" />
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="fechaFinCrear" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activaPregunta" styleClass="log-label form-label-formularios" />
+								<br />
+								<p:selectBooleanCheckbox id="activaPregunta"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+									value="#{preguntaOpinionBean.preguntaOpinion.flgActivo}">
+								</p:selectBooleanCheckbox>
+								<p:message for="activaPregunta" display="text" />
+							</div>
+						</div>
+					</div>
+					<br /><br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['LBL_GUARDAR']}" styleClass="btn btn-primary" id="btnAdmonGuardaPregunta"
+								style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; padding-top:0!important;"
+								process="frmPrincipal:panelPreguntaOpinion"
+								update="panelPreguntaOpinion dataTabPreguntaOpinion panelPreguntaConsulta panelMensajeCrear panelMensajeModificar"
+								actionListener="#{preguntaOpinionBean.persistNuevaOpinion}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}" styleClass="btn btn-default"
+								style="padding-left:11%!important;padding-right:11%!important; font-size:1.5em!important; padding-top:0!important;"
+								process="@this" update="panelPreguntaOpinion panelPreguntaConsulta panelMensajeCrear panelMensajeModificar"
+								actionListener="#{preguntaOpinionBean.habilitarPanelCrearPregunta(false, false,true)}">
+								<p:ajax update="panelPreguntaOpinion" resetValues="true" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<!-- Finaliza Panel Crear Pregunta de Opinión -->
+		<br /><br />
+		<!-- Inicia Tabla de opiniones -->
+		<div class="row row-background-white">
+			<br />
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+				#{titles.TTL_PREGUNTAS_OPINION}</span> <br /> <br />
+			<div class="row">
+				<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable id="dataTabPreguntaOpinion"
+						value="#{preguntaOpinionBean.listaPreguntaOpinion}"
+						var="dataTablePreguntaOpinion"
+						rows="#{paginatorSize}"
+						rowsPerPageTemplate="#{paginatorsSize}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						paginator="true" reflow="true" 
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+						<p:column headerText="${titles['LBL_PREGUNTA']}"
+							style="word-wrap: break-word!important;width: 30em;"
+							sortBy="#{dataTablePreguntaOpinion.pregunta}">
+							<h:outputText value="#{dataTablePreguntaOpinion.pregunta}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_FECHA_PUBLICACION']}"
+							style="word-wrap: break-word!important; text-align: center!important;"
+							sortBy="#{dataTablePreguntaOpinion.fechaIni}">
+							<h:outputText value="#{dataTablePreguntaOpinion.fechaIni}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_FECHA_FIN_PUBLICACION']}"
+							style="word-wrap: break-word!important; text-align: center!important;"
+							sortBy="#{dataTablePreguntaOpinion.fechaFini}">
+							<h:outputText value="#{dataTablePreguntaOpinion.fechaFini}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_ACTIVO']}"
+							style="word-wrap: break-word!important; text-align:center!important;width: 10em;"
+							sortBy="#{dataTablePreguntaOpinion.flgActivo}">
+							<p:selectBooleanCheckbox id="activo" disabled="true"
+								value="#{dataTablePreguntaOpinion.flgActivo}">
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column headerText="${titles['LBL_ACCIONES']}"
+							style="opacity: 1!important; text-align:center!important;">
+							<p:commandButton title="${titles['TTL_VERRESULTADOPREGUNTADEOPINION']}" icon="icon-view" id="btnAdmonVerResultadoPregunta"
+								styleClass="icon-btn" 
+								process="@this"
+								oncomplete="window.location.href='#frmPrincipal:panelResultadoPreguntaOpinion'"
+								update="frmPrincipal:panelResultadoPreguntaOpinion frmPrincipal:panelDetalleResultadoPreguntaOpinion frmPrincipal:panelInformacionSegunPuntaje
+										frmPrincipal:panelPreguntaOpinion, frmPrincipal:panelPreguntaConsulta, frmPrincipal:panelMensajeModificar, frmPrincipal:panelMensajeCrear"
+								actionListener="#{preguntaOpinionBean.habilitarResultadosOpinion(dataTablePreguntaOpinion.codPreguntaOpinion)}">
+								<f:setPropertyActionListener value="#{dataTablePreguntaOpinion}" target="#{preguntaOpinionBean.preguntaOpinion}" />
+							</p:commandButton>
+							<p:commandButton title="${titles['TTL_MODIFY']}" icon="icon-edit" id="btnAdmonModificarPregunta"
+								styleClass="icon-btn"
+								onclick="document.documentElement.scrollTop = 0;"
+								process="@this"
+								 update="frmPrincipal:panelPreguntaOpinion, frmPrincipal:panelPreguntaConsulta, 
+								 frmPrincipal:panelMensajeModificar, frmPrincipal:panelMensajeCrear"
+								resetValues="true"
+								actionListener="#{preguntaOpinionBean.modificarPreguntaOpinion()}">
+								<f:setPropertyActionListener value="#{dataTablePreguntaOpinion}" target="#{preguntaOpinionBean.preguntaOpinion}" />
+							</p:commandButton>
+							<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete" id="btnAdmonEliminarPregunta"
+								styleClass="icon-btn"
+								process="@this"
+								update="frmPrincipal:panelComfirmacionPreguntaOpinion"
+								onclick="$('#eliminarPreguntaOpinion').modal('show')">
+								<f:setPropertyActionListener value="#{dataTablePreguntaOpinion}"
+									target="#{preguntaOpinionBean.preguntaOpinion}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<div class="col-md-12">
+						<p:messages id="messages1" autoUpdate="true" showDetail="true"
+							closable="true" globalOnly="true"
+							style="font-family:Helvetica;text-align:center;font-size:1.2em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Finaliza Tabla de opiniones -->
+		<br /><br />
+		<!-- Inicia Panel de resultados de Preguntas de Opinión -->
+		<p:outputPanel id="panelResultadoPreguntaOpinion">
+			<p:panel id="subPanelResultadoPreguntaOpinion" rendered="#{preguntaOpinionBean.habilitarPanelVerResultado}">
+				<div class="row">
+					<br />
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{titles.LBL_PREGUNTA_OPINION_RESULTADOS}: #{preguntaOpinionBean.preguntaOpinion.pregunta} </span> <br /> <br />
+					<div class="row" align="right">
+						<div class="col-md-12"><label class="form-label-formularios">#{titles.LBL_PREGUNTA_OPINION_DETALLE_PUNTAJE}</label> </div>
+					</div>
+					<div class="col-md-12">
+						<p:chart type="pie" style="font-size: 2em!important;color: #0a3a62;" model="#{preguntaOpinionBean.graficoPuntaje}" responsive="true">
+							 <p:ajax event="itemSelect" listener="#{preguntaOpinionBean.obtenerIndexSeleccionadoGraficaPuntaje}" update="panelInformacionSegunPuntaje"/>
+						</p:chart>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<!-- Finaliza Panel de resultados de Preguntas de Opinión -->
+		
+		<!-- Inicia Panel de informacion del perfil segun el puntaje-->
+		<p:outputPanel id="panelInformacionSegunPuntaje">
+			<p:panel id="subPanelInformacionSegunPuntaje" rendered="#{preguntaOpinionBean.habilitarPanelPuntajeSeleccionado}">
+				<div class="row">
+					<br />
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{titles.LBL_PREGUNTA_OPINION_INFORMACION_PERFIL}</span> <br /> <br />
+					
+					<div class="col-md-12" align="center">
+							<p:chart type="pie" style="font-size: 2em!important;color: #0a3a62;" model="#{preguntaOpinionBean.graficoRol}" responsive="true" />
+					</div>
+					
+					<div class="col-md-12" align="center">
+						<p:chart type="pie" style="font-size: 2em!important;color: #0a3a62;" model="#{preguntaOpinionBean.graficoNivelJerarquico}" responsive="true" />
+					</div>
+					
+					<div class="col-md-12" align="center">
+						<p:chart type="pie" style="font-size: 2em!important;color: #0a3a62;" model="#{preguntaOpinionBean.graficoRangoEdad}" responsive="true" />
+					</div>
+					
+					<div class="col-md-12" align="center">
+						<p:chart type="pie" style="font-size: 2em!important;color: #0a3a62;" model="#{preguntaOpinionBean.graficoRetenSocial}" responsive="true" />
+					</div>
+					
+					
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<!-- Finaliza Panel de informacion del perfil segun el puntaje -->
+		
+		<!-- Inicia Panel de detalle resultados de Preguntas de Opinión -->
+		<p:outputPanel id="panelDetalleResultadoPreguntaOpinion">
+			<p:panel id="subPanelDetalleResultadoPreguntaOpinion"
+				rendered="#{preguntaOpinionBean.habilitarPanelVerResultado}">
+				<div class="row row-background-white">
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{titles.LBL_PREGUNTA_OPINION_DETALLE_RESULTADOS}: #{preguntaOpinionBean.preguntaOpinion.pregunta} </span> <br /> <br />
+					<!-- Inicia tabla -->
+					<div class="row">
+						<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+						 <p:scrollPanel mode="native" style="width: 100%" id="panelScroll">
+							<p:dataTable id="dataResultPreguntaOpinion" paginator="true"
+								style="width: 1500px;"
+								var="dataTableResultadoPreguntaOpinion" reflow="true" 
+								rowIndexVar="rowIndex" rows="10" rowsPerPageTemplate="10,30,50"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								value="#{preguntaOpinionBean.listaDetalleResultadoPregunta}"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+								<p:column headerText="#{titles.LBL_PREGUNTA_OPINION_OBSERVACIONES}" 
+									style="word-wrap: break-word!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.comentario}" />
+								</p:column>
+								<p:column headerText="#{titles.LBL_PREGUNTA_OPINION_FECHA_RESPUESTA_PREGUNTA}" 
+									style="word-wrap: break-word!important; text-align: center!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.audFechaActualizacion}">
+										<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.LBL_PREGUNTA_OPINION_ROL_EN_EL_SISTEMA}" 
+									style="word-wrap: break-word!important; text-align: center!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.nombreRol}" />
+								</p:column>
+								<p:column headerText="#{titles.LBL_PREGUNTA_OPINION_NIVEL}" 
+									style="word-wrap: break-word!important; text-align: center!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.nombreNivel}" />
+								</p:column>
+								<p:column headerText="#{titles.LBL_PREGUNTA_OPINION_RETEN_SOCIAL}" 
+									style="word-wrap: break-word!important; text-align: center!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.cabezaFamilia}" />
+								</p:column>
+								<p:column headerText="#{titles.LBL_PREGUNTA_OPINION_RANGO_EDAD}" 
+									style="word-wrap: break-word!important; text-align: center!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.nombreRango}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_TIPO_DOCUMENTO']}"
+									style="word-wrap: break-word!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.tipoIdentificacion}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_NICK_NAME']}"
+									style="word-wrap: break-word!important;">
+									<h:outputText value="#{dataTableResultadoPreguntaOpinion.numeroIdentificacion}"  />
+								</p:column>
+								<c:set var="puntaje" value="#{dataTableResultadoPreguntaOpinion.puntaje}" />
+								<p:column headerText="${titles['LBL_ACCIONES']}"
+									style="opacity: 1!important; text-align: center!important;">	
+									<p:commandButton title="Ver Hoja de Vida" icon="icon-view" id="btnAdmonVerHVResultadoPregunta"
+										styleClass="icon-btn btn-view-data"
+										rendered="#{puntaje != 4 and puntaje !=5}" process="@this"
+										action="#{preguntaOpinionBean.redireccionarHojaVida()}">
+										<f:setPropertyActionListener
+											value="#{dataTableResultadoPreguntaOpinion.codPersona}"
+											target="#{preguntaOpinionBean.persona}" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+							<br />
+			                <!-- Tabla oculta utilizada para exportar a excel -->
+							<p:dataTable id="tablaExportPregunta"
+								value="#{preguntaOpinionBean.listaInformacionResultadoPregunta}"
+								var="exportar" rendered="false">
+								<f:facet name="header" align="center">
+									<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_DETALLE_RESULTADOS}: #{preguntaOpinionBean.preguntaOpinion.pregunta}" />
+								</f:facet>
+								<p:columnGroup type="header">
+								  	<p:row>
+						                <p:column colspan="2" headerText="" />
+						               
+						            </p:row>
+						            <p:row>
+						                <p:column colspan="2" headerText="#{titles.LBL_PREGUNTA_OPINION_FECHA_EXPORTACION}" />
+						                <p:column colspan="2" headerText="#{preguntaOpinionBean.generarFecha()}">
+						                </p:column>
+						            </p:row>
+						            <p:row>
+						               <p:column colspan="2" headerText="#{titles.LBL_FECHA_PUBLICACION}" />
+						               <p:column colspan="2" headerText="#{preguntaOpinionBean.preguntaOpinion.fechaIni}"/>
+						            </p:row>
+						   			<p:row>
+						               <p:column colspan="2" headerText="#{titles.LBL_FECHA_FIN_PUBLICACION}" />
+						               <p:column colspan="2" headerText="#{preguntaOpinionBean.preguntaOpinion.fechaFini}"/>
+						            </p:row>
+						            <p:row>
+						               <p:column colspan="2" headerText="#{titles.LBL_PREGUNTA_OPINION_ESTADO}" />
+						               <p:column colspan="2" headerText="#{preguntaOpinionBean.preguntaOpinion.flgActivo == true ? 'Activo' : 'Inactivo'}"/>
+						            </p:row>          
+						        </p:columnGroup>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.TTL_CODIGO_SIGEP_ENTIDAD}" />
+									</f:facet>
+									<h:outputText value="#{exportar.codSigep}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_DE_ENTIDAD_USUARIO}" />
+									</f:facet>
+									<h:outputText value="#{exportar.nombreEntidad}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.TTL_TIPO_DOCUMENTO}" />
+									</f:facet>
+									<h:outputText value="#{exportar.tipoIdentificacion}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.TTL_NICK_NAME}" />
+									</f:facet>
+									<h:outputText value="#{exportar.numeroIdentificacion}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_NOMBRE_PERSONA}" />
+									</f:facet>
+									<h:outputText value="#{exportar.primerNombre} #{exportar.segundoNombre} #{exportar.primerApellido} #{exportar.segundoApellido}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_PUNTAJE}" />
+									</f:facet>
+									<h:outputText value="#{exportar.puntaje}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_OBSERVACIONES}" />
+									</f:facet>
+									<h:outputText value="#{exportar.comentario}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_FECHA_RESPUESTA_PREGUNTA}" />
+									</f:facet>
+									<h:outputText value="#{exportar.audFechaActualizacion}">
+										<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+									</h:outputText>
+								</p:column>	
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_ROL_EN_EL_SISTEMA}" />
+									</f:facet>
+									<h:outputText value="#{exportar.nombreRol}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_NIVEL}" />
+									</f:facet>
+									<h:outputText value="#{exportar.nombreNivel}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_RETEN_SOCIAL}" />
+									</f:facet>
+									<h:outputText value="#{exportar.cabezaFamilia}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{titles.LBL_PREGUNTA_OPINION_RANGO_EDAD}" />
+									</f:facet>
+									<h:outputText value="#{exportar.nombreRango}" />
+								</p:column>
+							</p:dataTable>
+							</p:scrollPanel>
+						</div>
+					</div>
+					<!-- Finaliza tabla -->
+					<div class="row" align="center">
+						<br/><br/>
+						<p:commandButton styleClass="btn btn-primary" value="${titles.TTL_EXPORTAR}" ajax="false">
+							  <pe:exporter type="xlsx" target="tablaExportPregunta" fileName="DetalleRespuestas"
+							  		postProcessor="#{preguntaOpinionBean.postProcessXLS}"/>  
+						</p:commandButton>
+					
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<!-- Panel de detalle resultados de Preguntas de Opinión -->
+		<br />
+		<!-- Boton volver que redirecciona al home -->
+		<div class="row" align="center">
+			<p:commandButton id="btnVolverHome" value="${titles['TTL_FINALIZE']}"
+				process="@this"
+				onclick="window.location.assign('../index.xhtml?faces-redirect=true');"
+				styleClass="btn btn-primary"
+				style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+		</div>
+		
+		<!-- Fin boton volver -->
+		
+		
+		<br />
+		<!-- Inicia Dialog Eliminar Pregunta Opinion -->
+		<div id="eliminarPreguntaOpinion" class="modal fade" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<p:panel id="panelComfirmacionPreguntaOpinion" style="background: transparent!important;">
+							<div class="col-md-12" align="center"
+								style="margin-top: 4%; margin-bottom: 4%;">
+								<p:outputLabel
+									value="¿Está seguro que desea eliminar la pregunta de opinión?"
+									style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+									escape="false" />
+							</div>
+							<div class="row" align="center">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<p:commandButton id="btnEliminarPreguntaOpinion"
+										value="${titles['TTL_OK']}" styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+										process="@this" update="dataTabPreguntaOpinion, frmPrincipal:panelPreguntaOpinion, frmPrincipal:panelPreguntaConsulta, frmPrincipal:panelMensajeModificar, frmPrincipal:panelMensajeCrear"
+										actionListener="#{preguntaOpinionBean.eliminarPreguntaOpinion(preguntaOpinionBean.preguntaOpinion.codPreguntaOpinion)}"
+										onclick="$('#eliminarPreguntaOpinion').modal('hide')" />
+								</div>
+								<div class="col-md-4">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										process="@this" styleClass="btn btn-default"
+										style="padding-left:13.5%!important;padding-right:13.5%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+										onclick="$('#eliminarPreguntaOpinion').modal('hide')" />
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Finaliza Dialog Eliminar Pregunta Opinion -->
+
+	</ui:define>
+</ui:composition>

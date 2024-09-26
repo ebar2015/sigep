@@ -1,0 +1,414 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jsp/jstl/core_1_1" xmlns:p="http://primefaces.org/ui">
+<h:form id="frmParientesConyugu" rendered="true">
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div class="row">
+				<div class="col-md-12" style="text-align: center;">
+					<p:outputLabel value="${titles['TTL_BR_PARIENTES']}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				
+			<div class="col-md-12" style="text-align: right;">
+				<div style="padding-right: 1%; display: inline-block">
+						<p:commandButton styleClass="btn btn-transparent"
+							id="txtAgregarNue" 
+							icon="fa fa-fw fa-plus-circle" 
+							value="${titles['LBL_ADD_NEW']}" 
+							process="@this" 
+							update="tabViewBienesRentas:frmParientesConyugu:frmRegistroParientes"
+							disabled="#{bienesRentasBean.sinParientes}" 
+							actionListener="#{bienesRentasBean.agregarNuevoPariente()}"  />
+					</div>
+					
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12">
+						<p:dataTable  id="parientesTable" var="pariente" 
+							value="#{bienesRentasBean.parientes}" 
+							paginator="true" reflow="true" rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink}  {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+							emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+							<p:column headerText="#{titles.TTL_BIENES_RENTAS_NOMBRES_TABLA}" style="word-wrap: break-word!important;"
+								sortBy="#{pariente.primerNombre}">
+								<h:outputText style="display: inline-block; margin-right: 5px;" 
+									value="#{pariente.primerNombre} #{null} #{pariente.segundoNombre} #{null}" />
+								<h:outputText style="display: inline-block;" 
+									value="#{null} #{pariente.primerApellido} #{null} #{pariente.segundoApellido}" />
+							</p:column>
+							<p:column headerText="#{titles.TTL_BIENES_RENTAS_DOCUMENTO_TABLA}" style="word-wrap: break-word!important;"
+								sortBy="#{pariente.codTipoIdentificacion}">
+								<h:outputText value="#{bienesRentasBean.obtenerNombreParametrica(pariente.codTipoIdentificacion)} #{null} #{pariente.numIdentificacion}" />
+							</p:column>
+							<p:column headerText="#{titles.TTL_BIENES_RENTAS_PARIENTES_TABLA}" style="word-wrap: break-word!important;"
+								sortBy="#{pariente.codTipoParentesco}">
+								<h:outputText value="#{bienesRentasBean.obtenerValorParametrica(pariente.codTipoParentesco)}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_ACCIONES']}" style="word-wrap: break-word!important; text-align:center!important;">
+								<p:commandButton id="btnVer" title="#{titles.TTL_BR_VISUALIZAR}" icon="icon-view" styleClass="icon-btn" 
+									action="#{bienesRentasBean.verDetallesPariente(pariente)}"
+									update="tabViewBienesRentas:frmParientesConyugu:frmRegistroParientes tabViewBienesRentas:frmParientesConyugu" 
+									process="@this" 
+									/>
+								<p:commandButton id="btnAct" title="#{titles.TTL_EDIT}" icon="icon-edit" styleClass="icon-btn" 
+									action="#{bienesRentasBean.confirmarActualizadoPariente(pariente)}"
+									process="@this" 
+									update="tabViewBienesRentas:frmParientesConyugu tabViewBienesRentas:frmParientesConyugu:frmRegistroParientes"
+									/>
+								<p:commandButton id="btnElim" title="#{titles.TTL_DELETE}" icon="icon-delete"
+									styleClass="icon-btn" actionListener="#{bienesRentasBean.confirmaEliminarariente(pariente)}" 
+									process="@this" href="javascript:void(0);" onclick="$('#dlgElimina').modal('show')" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12">
+					<h:outputText styleClass="log-label form-label-formularios" value="#{titles.TTL_BIENES_RENTAS_NO_TENGO_PARIENTES}" style="color: #00537B" />
+					<p:spacer width="5" />
+					<p:selectBooleanCheckbox id="chkSinParientes" value="#{bienesRentasBean.sinParientes}">
+						<p:ajax listener="#{bienesRentasBean.guardarValoresVerificacion}"
+						        process="@this" update="txtAgregarNue" />
+					</p:selectBooleanCheckbox>
+				</div>
+			</div>
+			<br />
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton disabled="#{bienesRentasBean.btnGuardarParientesDeshabilitado}" title="#{bienesRentasBean.btnGuardarParientesMensaje}" id="btnSeguir" styleClass="btn btn-primary" process="@this"
+						style="font-size:1.5em!important; padding-top:0!important;" update="tabViewBienesRentas" 
+						actionListener="#{bienesRentasBean.guardadoParcialParientes()}" value="${titles['TTL_BIENES_RENTAS_GUARDAR_CONTINUAR']}" />
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton type="button" styleClass="btn btn-default" id="btnCan" style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" value="${titles['TTL_CANCEL']}"
+						process="frmParientesConyugu" href="javascript:void(0);" onclick="$('#dlgAbort').modal('show')" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<p:panel id="frmRegistroParientes" visible="#{bienesRentasBean.lbMostrarFormulario}">
+			<div class="row row-background-white" style="margin-left: 0px !important;">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_BIENES_RENTAS_FORMULARIO_PARIENTES']}
+				</span> 
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}:" for="cmbTipDoc" styleClass="log-label form-label-formularios display-block" />
+							<p:selectOneMenu id="cmbTipDoc" required="true" 
+								filter="true" filterMatchMode ="contains" onchange="validarPast(this.value)"
+								styleClass="form-control-form-act-usua" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_DOCUMENTO']}" 
+								disabled="#{!bienesRentasBean.lbEditarFormulario}" 
+								value="#{bienesRentasBean.parienteSeleccionado.codTipoIdentificacion}" >
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{bienesRentasBean.obtenerTiposDocumento()}" process="@this" update="frmRegistroParientes" />
+								<p:ajax listener="#{bienesRentasBean.compararDocumento()}" process="@this" update="txtNumDoc cmbTipDoc cldFechaNac"/>
+							</p:selectOneMenu>
+							<p:message for="cmbTipDoc" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NICK_NAME']}:" for="txtNumDoc" styleClass="display-block log-label form-label-formularios" />
+							<p:inputText id="txtNumDoc" required="true" 
+								title="${titles['TTL_INGRESE']} ${titles['TTL_NICK_NAME']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+								disabled="#{!bienesRentasBean.lbEditarFormulario}" 
+								styleClass="form-control-acti-usua form-control" onblur="validarDoc(this.value, this.id)"
+								value="#{bienesRentasBean.parienteSeleccionado.numIdentificacion}" 
+								maxlength="20" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onkeydown="if (event.keyCode === 13) { validarEnter(); return false; }">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<label id="msgTxtNumDoc"></label>
+							
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_NACIMIENTO']}:" for="cldFechaNac" 
+							styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaNac" required="true" navigator="true" readonlyInput="false" mask="true" 
+								yearRange="#{rangoAnios}" mode="popup" maxdate="#{bienesRentasBean.getMaxAge()}" 
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}" onkeypress="return false;" 
+								locale="#{lenguajeBean.localeCode}"
+								effect="slideDown" value="#{bienesRentasBean.parienteSeleccionado.fechaNacimiento}" 
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_NACIMIENTO']}" 
+								disabled="#{!bienesRentasBean.lbEditarFormulario}"  pattern="#{fechaFormato}">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+								<p:ajax event="dateSelect" listener="#{bienesRentasBean.verificarEdadDocumento}" 
+								process="@this" update="cmbTipDoc cldFechaNac cmbParent">
+								</p:ajax>
+							</p:calendar>
+							<p:message for="cldFechaNac" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}:" for="txtPrimNom" styleClass="log-label form-label-formularios display-block" />
+							<p:inputText id="txtPrimNom" required="true" styleClass="form-control-acti-usua form-control" title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}"  value="#{bienesRentasBean.parienteSeleccionado.primerNombre}" maxlength="50" onkeypress="return noConsecutivos(event, this.value)" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtPrimNom" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}:" styleClass="log-label form-label-formularios display-block" />
+							<p:inputText styleClass="form-control-acti-usua form-control" title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}" value="#{bienesRentasBean.parienteSeleccionado.segundoNombre}" maxlength="50" onkeypress="return noConsecutivos(event, this.value)" >
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}:" for="txtPriApell" styleClass="log-label form-label-formularios display-block" />
+							<p:inputText id="txtPriApell" required="true" title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}"  styleClass="form-control-acti-usua form-control" value="#{bienesRentasBean.parienteSeleccionado.primerApellido}"
+								maxlength="50" onkeypress="return noConsecutivos(event, this.value)" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtPriApell" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}:" styleClass="log-label form-label-formularios display-block" />
+							<p:inputText styleClass="form-control-acti-usua form-control" title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}"  value="#{bienesRentasBean.parienteSeleccionado.segundoApellido}" maxlength="50" onkeypress="return noConsecutivos(event, this.value, this)" >
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+						</div>
+						<div class="col-md-4 val-msg-info">
+							<p:outputLabel value="${titles['TTL_PARENTESCO']}: " for="cmbParent" styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="cmbParent" required="true" title="${titles['TTL_SELECT']} ${titles['TTL_PARENTESCO']}" 
+								filter="true" filterMatchMode ="contains"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}"
+								styleClass="form-control-form-act-usua" value="#{bienesRentasBean.parienteSeleccionado.codTipoParentesco}" 
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<p:ajax listener="#{bienesRentasBean.verificarEdadPariente('0')}" update="@this rdbParent" process="@this" 
+								event="change"/>
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}"  />
+								<f:selectItems value="#{webUtils.parentesco}" />
+							</p:selectOneMenu>
+							<p:message for="cmbParent" display="text" />
+						</div>
+						<div class="col-md-4" id="sociedad">
+							<p:outputLabel  value="${titles['TTL_BIENES_RENTAS_CONYUGUE_ACTUAL']}" for="rdbParent" 
+											styleClass="log-label form-label-formularios display-block" />
+							<p:selectOneRadio id="rdbParent" required="true"
+							    disabled="#{!bienesRentasBean.estadoRadioPariente}"
+								value="#{bienesRentasBean.parienteSeleccionado.flgSociedadConyugalActiva}" 
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<p:ajax listener="#{bienesRentasBean.verificarEdadPariente('1')}" update="@this" process="@this" event="change"/>
+								<f:selectItem itemLabel="${titles['TTL_YES']}" itemValue="1" />
+								<f:selectItem itemLabel="${titles['TTL_NO']}" itemValue="0" />
+							</p:selectOneRadio>
+							<p:message for="rdbParent" display="text" />
+						</div>
+					</div>
+				</div>
+				<br /> <br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_BR_BTN_ADICIONAR']}" 
+						styleClass="btn btn-primary" style="font-size:1.5em!important; padding-top:0!important;" process="frmRegistroParientes"
+							update="frmParientesConyugu" actionListener="#{bienesRentasBean.guardarPariente()}" 
+							disabled="#{!bienesRentasBean.lbEditarFormulario}"  />
+					</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this" 
+							update="frmParientesConyugu cmbTipDoc"
+							actionListener="#{bienesRentasBean.limpiarPariente()}" 
+							title="#{bienesRentasBean.strToolTipBtnLimpiar}"
+							disabled="#{!bienesRentasBean.lbEditarFormulario}" >
+									<p:resetInput
+										target="tabViewBienesRentas:frmParientesConyugu:frmRegistroParientes" />							
+					    </p:commandButton>
+					</div>					
+					<div class="col-md-3"></div>
+				</div>
+			</div>
+		</p:panel>
+		<br />
+		<!-- Modal respuesta casilla checkbox registros -->
+	</h:form>
+	<div class="modal fade" id="dialogRespu" role="dialog"  data-backdrop="static" data-keyboard="false" >
+		<div class="modal-dialog modal-dialog-2" style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${titles['TTL_BR_BORRAR_TODO']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton id="btnDeshabiTablaParientes" value="${titles['TTL_OK']}"
+								process="@this" styleClass="btn btn-primary" 
+								update="tabViewBienesRentas:frmParientesConyugu tabViewBienesRentas:frmParientesConyugu:frmRegistroParientes" 
+								actionListener="#{bienesRentasBean.limpiarFormParientesOcultar()}" 
+								onclick="$('#dialogRespu').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_CANCEL']}" process="@this" styleClass="btn btn-default" 
+							actionListener="#{bienesRentasBean.cancelarEliminacionTabla()}" 
+							update="tabViewBienesRentas:frmParientesConyugu:txtAgregarNue tabViewBienesRentas:frmParientesConyugu:chkSinParientes" 
+							onclick="$('#dialogRespu').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal eliminar registro -->
+	<div class="modal fade" id="dlgElimina" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${messages['BR_INTERROGA_ELIMINACION']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+							<p:commandButton id="btnElim" value="${titles['TTL_YES']}" process="@this" update="frmParientesConyugu" styleClass="btn btn-primary" actionListener="#{bienesRentasBean.eliminarPariente()}"
+								onclick="$('#dlgElimina').modal('hide')" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" onclick="$('#dlgElimina').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal modificar registro -->
+	<div class="modal fade" id="dlgModifi" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2" style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${titles['BR_TITULO_EDICION']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton id="btnEdi" value="${titles['TTL_OK']}" process="@this" 
+							update="frmParientesConyugu tabViewBienesRentas:frmParientesConyugu:rdbParent" 
+							styleClass="btn btn-primary" 
+							actionListener="#{bienesRentasBean.actualizarPariente()}" 
+							onclick="$('#dlgModifi').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_CANCEL']}" styleClass="btn btn-default" onclick="$('#dlgModifi').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal abortar operacion registro -->
+	<div class="modal fade" id="dlgAbort" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${messages['BR_DIALOGO_CANCELAR']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" >
+							<p:commandButton value="${titles['TTL_YES']}" process="@this" styleClass="btn btn-primary btn-si" onclick="$('#dlgAbort').modal('hide'); location.href='../index.xhtml';"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" onclick="$('#dlgAbort').modal('hide')" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		var regexPass =  new RegExp('^([A-Za-z0-9]{3,17}|sistema|superadmin)+$');
+		var regexOtoD =  new RegExp('^([0-9]{3,17}|sistema|superadmin)+$');
+		var idDoc;
+            function validarPast(value){
+            	idDoc = value
+            }
+            function validarDoc(value, id){
+            	$("#msgTxtNumDoc").attr("style", "color:red");
+            			if(idDoc == 42){
+                    		if(!regexPass.test(value)){
+                    			document.getElementById("msgTxtNumDoc").innerHTML = "${titles['DLG_NICK_NAME_INVALID']}";
+                    		}else{
+                    			document.getElementById("msgTxtNumDoc").innerHTML = "";
+                    		}
+                    	}else{
+                    		if(!regexOtoD.test(value)){
+                    			document.getElementById(id).value = "";
+                    			document.getElementById("msgTxtNumDoc").innerHTML = "${titles['DLG_NICK_NAME_INVALID']}";
+                    		}else{
+                    			document.getElementById("msgTxtNumDoc").innerHTML = "";
+                    		}
+                    	}
+            }
+     </script>
+	
+
+</ui:composition>

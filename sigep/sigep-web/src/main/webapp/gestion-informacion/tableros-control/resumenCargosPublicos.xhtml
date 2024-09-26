@@ -1,0 +1,427 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1ansitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{resumenCargosPublicosBean.id}" />
+		<f:viewParam name="recursoId"
+			value="#{resumenCargosPublicosBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{resumenCargosPublicosBean.dialog}" />
+		<f:event listener="#{resumenCargosPublicosBean.retrieve}"
+			type="preRenderView" />
+		<f:event listener="#{resumenCargosPublicosBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_GI_BREADCRUMBS']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_REPORTES_CATALOGO']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_GI_BREADCRUMB_RESUMEN_CARGOS_PUBLICOS']}" />
+
+
+	<ui:define name="main">
+		<h:messages globalOnly="true" styleClass="error" />
+		<f:event listener="#{resumenCargosPublicosBean.validateForm}"
+			type="postValidate" />
+
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• ${titles['TTL_GI_BREADCRUMB_RESUMEN_CARGOS_PUBLICOS2']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<h:panelGroup id="parametros"
+			rendered="#{resumenCargosPublicosBean.habilitarConsulta}">
+			<div class="panel-body form-horizontal">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2" />
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+								styleClass="log-label form-label-formularios" for="codOrden" />
+							<h:selectOneMenu id="codOrden"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+								value="#{resumenCargosPublicosBean.filtro.codOrden}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{cifrasEmpleoPublicoBean.listaOrden}"
+									var="orden" itemLabel="#{orden.nombreParametro}"
+									itemValue="#{orden.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+								styleClass="log-label form-label-formularios"
+								for="codClasificacionOrganica" />
+							<h:selectOneMenu id="codClasificacionOrganica"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+								value="#{resumenCargosPublicosBean.filtro.codClasificacionOrganica}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{cifrasEmpleoPublicoBean.listaClasificacionOrganica}"
+									var="clasificacionOrganica"
+									itemLabel="#{clasificacionOrganica.nombreParametro}"
+									itemValue="#{clasificacionOrganica.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+
+		<!-- DataTable  -->
+		<br />
+		<h:panelGroup>
+			<div class="row row-background-white">
+				<br />
+				<div class="col-md-12" align="right">
+					<p:commandButton id="cancelBtn" value="${titles['TTL_FINALIZE']}"
+						title="${titles['TTL_FINALIZE']}" process="@this" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{resumenCargosPublicosBean.cancelar()}"
+						icon="fa fa-fw fa-backward">
+					</p:commandButton>
+					<p:spacer width="2" />
+					<p:commandButton id="searchBtn" value="${titles['TTL_CONSULT']}"
+						title="${titles['TTL_CONSULT']}" process="@form" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{resumenCargosPublicosBean.montarDatos()}"
+						icon="fa fa-fw fa-search">
+					</p:commandButton>
+					<h:panelGroup id="exportarBtn"
+						rendered="#{resumenCargosPublicosBean.listaCifras.size() gt 0}">
+						<p:spacer width="2" />
+						<p:commandButton id="exportXLSXBtn"
+							value="${titles['TTL_DOWNLOAD']} Excel"
+							title="${titles['TTL_DOWNLOAD']} Excel"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false">
+							<pe:exporter type="xlsx"
+								target="dataTableResumenCargosPublicos,dataTableTotalesResumenCargosPublicos"
+								fileName="#{titles.TTL_GI_BREADCRUMB_RESUMEN_CARGOS_PUBLICOS2} #{fechaSistemaString}"
+								orientation="Landscape"
+								encoding="${configurationView['CNS_ENCODING']}" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="exportPDFBtn"
+							value="${titles['TTL_DOWNLOAD']} PDF"
+							title="${titles['TTL_DOWNLOAD']} PDF"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false">
+							<pe:exporter type="pdf"
+								target="dataTableResumenCargosPublicos,dataTableTotalesResumenCargosPublicos"
+								fileName="#{titles.TTL_GI_BREADCRUMB_RESUMEN_CARGOS_PUBLICOS2} #{fechaSistemaString}"
+								tableTitle="${titles['TTL_GI_BREADCRUMB_RESUMEN_CARGOS_PUBLICOS2']}"
+								orientation="Landscape" facetFontSize="12" facetFontStyle="BOLD"
+								cellFontSize="12" cellFontStyle="NORMAL" encoding="ISO-8859-1" />
+						</p:commandButton>
+					</h:panelGroup>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableResumenCargosPublicos"
+							widgetVar="panelTableResumenCargosPublicos"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTableResumenCargosPublicos" var="dataRCP"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{resumenCargosPublicosBean.listaResumenCargosPublicos}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="10"
+											headerText="${titles['TTL_SYSTEM_OWNER']}"
+											styleClass="tematica-col tabla-resultado col-centro" />
+									</p:row>
+									<p:row>
+										<p:column colspan="10"
+											headerText="${titles['TTL_GI_BREADCRUMB_RESUMEN_CARGOS_PUBLICOS2']}"
+											styleClass="tematica-col tabla-resultado col-centro" />
+									</p:row>
+									<p:row>
+										<p:column colspan="10"
+											headerText="#{titles['TTL_GI_TABLERO_FECHA_CORTE']}: #{fechaSistemaString}"
+											styleClass="tematica-col tabla-resultado col-centro" />
+									</p:row>
+									<p:row>
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_CARGOS']}" />
+										<p:column colspan="3" rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_RAMA_ENTIDAD']}" />
+										<p:column colspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_EMPLEOS_PUBLICOS']}" />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_TOTAL_EMPLEOS_PUBLICOS']}" />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_TRABAJADORES_OFICIALES']}" />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_GRAN_TOTAL']} " />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_PERSONAL_REGIMEN_PRIVADO']}" />
+									</p:row>
+									<p:row>
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_ADMINISTRATIVOS']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_DOCENTES']}" />
+									</p:row>
+								</p:columnGroup>
+								<p:column
+									rendered="#{rowIndex lt 2 or rowIndex gt 67 or empty dataRCP.etiqueta}"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 2}" rowspan="19"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 22}" rowspan="4"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 27}" rowspan="19"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 47}" rowspan="6"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 54}" rowspan="2"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+								<p:column
+									rendered="#{not empty dataRCP.etiqueta and rowIndex eq 57}"
+									rowspan="6"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+								<p:column
+									rendered="#{not empty dataRCP.etiqueta and rowIndex eq 64}"
+									rowspan="4"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}" />
+								</p:column>
+
+								<p:column colspan="#{empty dataRCP.etiqueta ? 3 : 3}"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'} #{dataRCP.tabulacion}">
+									<h:outputText value="#{dataRCP.etiqueta}" escape="false" />
+								</p:column>
+								<p:column
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText
+										value="#{dataRCP.valorAdministrativosUniformados}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.valorDocentes}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.totalEmpleosPublicos}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.valorTrabajadoresOficiales}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde total' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.granTotal}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}">
+									<h:outputText value="#{dataRCP.valorRegimenPrivado}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<!-- Totales -->
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableTatalesResumenCargosPublicos"
+							widgetVar="panelTableTatalesResumenCargosPublicos"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTableTotalesResumenCargosPublicos" var="dataRCP"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{resumenCargosPublicosBean.listaTotalesResumenCargosPublicos}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="10" headerText=""
+										styleClass="tematica-col tabla-resultado col-centro" />
+									<p:row>
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_CARGOS']}" />
+										<p:column colspan="3" rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_RAMA_ENTIDAD']}" />
+										<p:column colspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_EMPLEOS_PUBLICOS']}" />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_TOTAL_EMPLEOS_PUBLICOS']}" />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_TRABAJADORES_OFICIALES']}" />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_GRAN_TOTAL']} " />
+										<p:column rowspan="2"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_PERSONAL_REGIMEN_PRIVADO']}" />
+									</p:row>
+									<p:row>
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLEROS_ADMINISTRATIVOS']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_DOCENTES']}" />
+									</p:row>
+								</p:columnGroup>
+								<br />
+								<br />
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.codCifrasEmpleoPublico}"
+										rendered="#{dataRCP.codCifrasEmpleoPublico gt 0}" />
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}" colspan="3"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'} #{dataRCP.tabulacion}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.etiqueta}" escape="false" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 2}" colspan="5"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'} #{dataRCP.tabulacion}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.etiqueta}" escape="false" />
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText
+										value="#{dataRCP.valorAdministrativosUniformados}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.valorDocentes}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex eq 2}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}#{dataRCP.tabulacion eq 'nivel1-1' ? ' nivel1-2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.valorDocentes}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex eq 2}" colspan="3"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'} #{dataRCP.tabulacion}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText
+										value="#{resumenCargosPublicosBean.listaTotalesResumenCargosPublicos.get(3).etiqueta}"
+										escape="false" />
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.totalEmpleosPublicos}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.valorTrabajadoresOficiales}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde total' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.granTotal}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex le 1}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText value="#{dataRCP.valorRegimenPrivado}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex eq 2}"
+									styleClass="tematica numero col-der#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'}#{dataRCP.tabulacion eq 'nivel1' ? ' nivel1-num' : ''}#{dataRCP.tabulacion eq 'nivel2' ? ' nivel2-num' : ''}#{dataRCP.tabulacion eq 'nivel1-1' ? ' nivel1-1-num' : ''}"
+									style="border-bottom:0.05em solid #D2D2D2 !important">
+									<h:outputText
+										value="#{resumenCargosPublicosBean.listaTotalesResumenCargosPublicos.get(3).valorRegimenPrivado}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column rendered="#{rowIndex gt 3}" colspan="10"
+									styleClass="tematica-col tabla-resultado col-izq#{not empty dataRCP.etiqueta ? ' borde' : ' borde2'} #{dataRCP.tabulacion}">
+									<h:outputText value="#{dataRCP.etiqueta}" escape="false" />
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<p:defaultCommand target="frmPrincipal:searchBtn" />
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

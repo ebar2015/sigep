@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/template/basicTemplate.xhtml"
+                >
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TTL_LIQUIDAR_ENTIDAD}" />
+
+
+    <ui:define name="content">
+	<h:form id="formLiquidarEntidad">
+	
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <h2>
+                    <p:outputLabel value="• ${titles['TTL_LIQUIDAR_ENTIDAD']} •"
+                                   styleClass="page-subtitle" />
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="row row-background-white" id="child-tab-data-basic">            
+
+            <br /> <br />
+            <hr class="hr-style hr-style-two" />
+            <span
+                style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">                
+            </span>
+            <br /> <br />
+            
+            <p:outputPanel id="panelLiquidarEntidad">
+
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <br /><br />
+	
+	                    <div class="col-md-4">
+	                        <p:outputLabel
+	                        	for="cmbTipoNorma"
+	                            styleClass="log-label form-label-formularios"
+	                            value="${titles['LBL_TIPO_NORMA']}:" />
+	                        <h:selectOneMenu id="cmbTipoNorma" title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_NORMA']}" 
+	                        	styleClass="form-control-form-act-usua" 
+		                        value="#{liquidarEntidadBean.tipoNorma.codTipoNorma}"
+		                        required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(1038)}" />
+								<p:ajax process="@this" update="cmbNumeroNorma">
+		      					</p:ajax>
+							</h:selectOneMenu>  
+	                        <p:message for="cmbTipoNorma" display="text" />
+	                    </div>
+	                    <div class="col-md-4">
+	                    	<p:outputLabel value="${titles['LBL_FECHA_NORMA']}:"
+								for="cmbFechaNorma"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cmbFechaNorma"
+								mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_PUBLICACION']}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+								value="#{liquidarEntidadBean.tipoNorma.fechaNorma}" >
+								<p:ajax event="dateSelect" process="@this cmbTipoNorma" update="cmbTipoNorma cmbNumeroNorma"/>
+								<p:ajax event="change" process="@this cmbTipoNorma" update="cmbTipoNorma cmbNumeroNorma"/>																
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>							
+							<p:message for="cmbFechaNorma" display="text" />
+	                    </div>
+	                    <div class="col-md-4">
+	                    	<p:outputLabel
+	                    		value="${titles['TTL_NUMERO_NORMA']}:" 
+	                    		for="cmbNumeroNorma"
+	                    		styleClass="log-label form-label-formularios" />
+        						<p:selectOneMenu id="cmbNumeroNorma" editable="true" title="${titles['TTL_SELECT']}" 
+        							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+        							styleClass="form-control-form-act-usua" 
+        							value="#{liquidarEntidadBean.tipoNorma.numeroNorma}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{liquidarEntidadBean.getNumerosNorma(liquidarEntidadBean.tipoNorma.codTipoNorma,liquidarEntidadBean.tipoNorma.fechaNorma)}" />
+								</p:selectOneMenu>
+	                       		<p:message for="cmbNumeroNorma" display="text" />	
+	                    </div>
+	
+	                </div>
+	            </div>
+	            
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <br /><br />
+	                    <div class="col-md-4">
+	                        <p:outputLabel
+	                            value="${titles['TTL_CODIGO_SIGEP']}:"
+	                            styleClass="log-label form-label-formularios" />
+	                        <p:inputText
+	                        	id="codEntidad"
+	                        	readonly="true"
+	                  			value="#{liquidarEntidadBean.entidadActual.codigoSigep}"
+	                            class="form-control-acti-usua"
+	                            maxlength="12" />
+	                    </div>
+	                    <div class="col-md-4">
+	                        <p:outputLabel 
+	                            value="${titles['LBL_CT_NOMBRE_ENTIDAD']}:"
+	                            styleClass="log-label form-label-formularios" />
+	                        <p:inputText
+	                        	id="nombreEntidad"
+	                        	readonly="true"
+	                        	value="#{liquidarEntidadBean.entidadActual.nombreEntidad}"
+	                            class="form-control-acti-usua"
+                                maxlength="12"/>	                            
+	                    </div> 
+	                      <div class="col-md-4"></div>       
+	
+	                </div>
+	            </div>
+	            <br></br>
+	            <br></br>
+	            <div class="row" align ="center">   
+	            	<div class="col-md-3"  style ="margin-bottom: 1%!important;"></div>
+					<div class="col-md-3 media-btn-cancelar">
+						<p:commandButton 
+						value="${titles['TTL_LIQUIDAR_ENTIDAD']}"							
+						onclick="$('#liquidarEntidad').modal('show')"
+						process="@this"
+						styleClass="btn btn-primary"
+						style="width: 12.3em!important;height: 2.5em!important;font-size: 1.4em;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							action="#{liquidarEntidadBean.regresarGestionarEntidad()}"
+							styleClass="btn btn-default"
+							process="@this"
+							style="width: 12.3em!important;height: 2.5em!important;font-size: 1.4em;"/>
+					</div>					
+					<div class="col-md-3"></div>
+	            </div>
+	            
+	        </p:outputPanel>        
+
+        </div>
+        
+	</h:form>
+	
+	<div id="liquidarEntidad" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<p:panel id="panelConfirmacionLiquidarEntidad">
+						<div class="col-md-12" align="center"
+							style="margin-top: 3%; margin-bottom: 3%;">
+							<p:outputLabel
+								value="#{liquidarEntidadBean.strMensajeLiquidar}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnLiquidarEntidad"
+									value="${titles['TTL_LIQUIDAR_ENTIDAD']}" styleClass="btn btn-primary"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+									process="@this"
+									onclick="$('#liquidarEntidad').modal('hide')"
+									actionListener="#{liquidarEntidadBean.liquidarEntidad()}"/>
+								<p:message for="btnLiquidarEntidad" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_CANCEL']}"
+									process="@this"
+									styleClass="btn btn-default"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+									onclick="$('#liquidarEntidad').modal('hide')" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<br />
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	
+	<!-- DataTable  -->		
+	<br />
+	<br />
+	<!-- class="modal fade"-->
+	<div	
+	id="dialogLiquidarEntidades"
+	class="modal fade col-md-10"
+	role="dialog" align="center">		
+		<div class="row row-background-white modal-dialog modal-dialog-2">			
+			<div class="col-md-12">
+				<br></br>
+				<div class="row">
+					<div
+						class="col-md-12"
+						align="center">
+						<h5>
+							<p:outputLabel
+								value="La entidad tiene las siguientes personas vinculadas, ¿Desea hacer la liquidación la entidad con desvinculaciones automáticas?"
+								style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+						</h5>
+					</div>						
+					
+					<div class="col-md-12">
+						<div class="col-md-3"></div>
+						<div
+							class="col-md-3"
+							align="center"
+							style="margin-bottom: 3%;">
+							<p:commandButton
+								value="${titles['TTL_YES']}"
+								process="@this"
+								onstart="PF('dlgCargaLiquidarEntidad').show()"
+                    			oncomplete="PF('dlgCargaLiquidarEntidad').hide()"
+                    			onsuccess="PF('dlgCargaLiquidarEntidad').hide()"
+                    			onclick="$('#dialogLiquidarEntidades').modal('hide');"
+								actionListener="#{liquidarEntidadBean.desactivaEntVincAutomatica()}"								
+								styleClass="btn btn-primary"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>
+						<div
+							class="col-md-3"
+							align="center">
+							<p:commandButton
+								value="${titles['TTL_NO']}"
+								styleClass="btn btn-default"
+								type="button"
+								onclick="$('#dialogLiquidarEntidades').modal('hide');"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>					
+					</div>
+						
+				</div>				
+				<p:panel id="panelTableDesvinculaciones" widgetVar="panelTableDesvinculaciones" style="background: transparent;">
+					<p:dataTable id="tablaDesvinculaciones"  lazy="true" var="listPersVinc"
+						emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}" 
+						
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						
+						value="#{liquidarEntidadBean.listPersVinc}"
+						>						
+						
+						<p:column headerText="#{titles.TTL_NICK_NAME}" sortBy="#{listPersVinc.numeroIdentificacion}">
+							<h:outputText value="#{listPersVinc.numeroIdentificacion}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_NOMBRES']}" sortBy="#{listPersVinc.primerNombre}">
+							<h:outputText value="#{listPersVinc.primerNombre}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_APELLIDOS']}" sortBy="#{listPersVinc.primerApellido}">
+							<h:outputText value="#{listPersVinc.primerApellido}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_CARGO']}" sortBy="#{listPersVinc.nombreCargo}">
+							<h:outputText value="#{listPersVinc.nombreCargo}" />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+	<br />
+	<br />	
+	
+	<p:dialog widgetVar="dlgCargaLiquidarEntidad" modal="true" draggable="false"
+     	closable="false" resizable="false" showHeader="false"
+        style="width:auto;height:auto">
+        <img src="../../resources/images/loading.gif" alt="" height="45" width="70"/>
+    </p:dialog>
+    </ui:define>    
+    
+</ui:composition>

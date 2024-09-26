@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form id="formularioCrearEntidad">
+        
+        <div class="row row-background-white" style="padding-top: 2em;">
+            <div class="row">
+                <div class="col-md-12" align="center">
+                    <p:outputLabel
+                        value="#{titles.TTL_ENTIDAD_DATOS_BASICOS_CREAR}"
+                        styleClass="advisor" />
+                </div>
+                <div class="col-md-12" align="center">
+                    <p:outputLabel
+                        value="#{titles.TTL_ENTIDAD_DATOS_BASICOS_CREAR_SUB}"
+                        styleClass="advisor" />
+                </div>
+            </div>
+
+            <hr class="hr-style" />
+
+            <div class="row">
+                <div class="col-md-12">
+                	 <div class="col-md-4">
+                        <p:outputLabel for="nombreEntidad"
+                                       value="#{titles.LBL_ENTIDAD_USUARIO}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:inputText
+                            id="nombreEntidad"
+                            required="true"
+                            value="#{creacionEntidadBean.entidadN.nombreEntidad}"
+                            requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                            styleClass="form-control-acti-usua form-control"
+                            title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_USUARIO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                            maxlength="255"
+                            disabled="#{!creacionEntidadBean.lbPermiteModificarNombreEntidad}">
+                            <f:validator validatorId="maxByteLengthValidator" />
+                            <p:ajax event="blur" process="@this" update="@this btnGuardarEntidad"
+                                    listener="#{creacionEntidadBean.itNombreEntidadListener()}"/>
+                        </p:inputText>                        
+                        <p:message for="nombreEntidad" />
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            for="departamentoEntidad"
+                            value="#{titles.TTL_DEPARTAMENTO_ENTIDAD}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu
+                            id="departamentoEntidad"
+                            required="true"
+                            filter="true"
+                            value="#{creacionEntidadBean.entidadN.codDepartamento}"
+                            requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                            styleClass="form-control-form-act-usua"
+                            title="${titles['TTL_SELECT']} ${titles['TTL_DEPARTAMENTO_ENTIDAD']}"  >
+                            <f:selectItem
+                                itemValue="#{null}"
+                                itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.getDeptos(169)}"/>
+                            <p:ajax event="change" process="@this" update="btnGuardarEntidad municipioEntidad nombreEntidad @widgetVar(wvPnCaracterizacion)"
+                                    listener="#{creacionEntidadBean.somDepartamentoMunicipioListener()}"/>
+                        </p:selectOneMenu>	
+                        <p:message for="departamentoEntidad" />					
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            for="municipioEntidad"
+                            value="#{titles.TTL_MUNICIPIO_ENTIDAD}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu
+                            id="municipioEntidad"
+                            required="true"
+                            filter="true"
+                            disabled="#{creacionEntidadBean.entidadN.codDepartamento==null}"
+                            value="#{creacionEntidadBean.entidadN.codMunicipio}"
+                            requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                            styleClass="form-control-form-act-usua"
+                            style="width: 100%"
+                            title="${titles['TTL_SELECT']} ${titles['TTL_MUNICIPIO_ENTIDAD']}">
+                            <f:selectItem
+                                itemValue="#{null}"
+                                itemLabel="#{titles.TTL_SELECT}"/>
+                            <f:selectItems value="#{webUtils.getMunicipios(creacionEntidadBean.entidadN.codDepartamento)}"/>
+                            <p:ajax process="@this" update="btnGuardarEntidad nombreEntidad @widgetVar(wvPnCaracterizacion)"
+                                    listener="#{creacionEntidadBean.somDepartamentoMunicipioListener()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="municipioEntidad" />	
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            for="siglaEntidad"
+                            value="#{titles.TTL_SIGLA} #{titles.TTL_ENTIDAD}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:inputText
+                            id="siglaEntidad"
+                            required="false"
+                            converterMessage="#{messages.DLG_VALOR_ALFANUMERICO}"
+                            onblur="this.value = this.value.toUpperCase();"
+                            value="#{creacionEntidadBean.entidadN.sigla}"
+                            requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                            styleClass="form-control-acti-usua form-control"
+                            title="${titles['TTL_INGRESE']} ${titles['TTL_ENTIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                            maxlength="60">
+                            <f:validator validatorId="maxByteLengthValidator" />
+                            <f:validator validatorId="textAlfanumericoValidator" /> 
+                          </p:inputText>
+                          <p:message for="siglaEntidad" display="text" />
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel for="selectNaturalezaEntidad"
+                                       value="#{titles.TTL_NATURALEZA_JURIDICA}:"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu id="selectNaturalezaEntidad"
+                                         required="true"
+                                         filter="true"
+                                         value="#{creacionEntidadBean.entidadN.codNaturaleza}"
+                                         requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                                         styleClass="form-control-form-act-usua"
+                                         style="width: 100% !important"
+                                         title="${titles['TTL_SELECT']} ${titles['TTL_NATURALEZA_JURIDICA']}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.tipoNaturalezaJuridica}" />
+                            <p:ajax event="valueChange"
+                            listener="#{creacionEntidadBean.somCategoriaListener}" 
+                            update="tabViewCrearEntidad:formularioCaracterizacion:somCategoriaEnt"/>
+                        </p:selectOneMenu>
+                        <p:message for="selectNaturalezaEntidad" />
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            for="somNivelAdministrativo"
+                            value="#{titles.TTL_NIVEL_ADMINISTRATIVO}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:selectOneMenu id="somNivelAdministrativo"
+                        	  filter="true"
+	                          value="#{creacionEntidadBean.entidadN.codNivelAdministrativo}"
+	                          styleClass="form-control-form-act-usua"
+	                          title="${titles['TTL_SELECT']} ${titles['TTL_NIVEL_ADMINISTRATIVO']}">
+                            <f:selectItem
+                                itemValue="#{null}"
+                                itemLabel="#{titles.TTL_SELECT}" />
+                            <f:selectItems value="#{webUtils.tipoNivelAdministrativo}"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+						<p:outputLabel for="somClasificacionOrganica"
+							value="#{titles.LBL_CLASIFICACION_ORGANICA}:"
+							styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu id="somClasificacionOrganica"
+							filter="true"
+							value="#{creacionEntidadBean.entidadN.codClasificacionOrganica}"
+							styleClass="form-control-form-act-usua"
+							style="width: 100% !important"
+							title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_ORGANICA']}">
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{titles.TTL_SELECT}" />
+							<f:selectItems value="#{webUtils.tipoClasificacionOrganica}" />
+							<p:ajax event="valueChange"
+								listener="#{creacionEntidadBean.verificarClasificacionOrganica()}"
+								update="tabViewCrearEntidad:formularioCaracterizacion:panelClasificacionOrganica" />							
+						</p:selectOneMenu>
+                  </div>
+                </div>
+            </div>
+            <br /><br />
+
+            <p:spacer height="2" />
+            <hr class="hr-style hr-style-two" />
+            <span
+                style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">#{titles.TTL_DATOS_NORMA}</span>
+                
+              
+			<div class="row">
+			<br /><br />  
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                        <p:selectOneRadio layout="grid"
+                                          value="#{creacionEntidadBean.norma}"
+                                          id="normaEntidad"
+                                          columns="2">
+                            <f:selectItem itemLabel="#{titles.TTL_DATOS_NORMA}" itemValue="#{creacionEntidadBean.getNORMA_SI()}"/>
+                            <f:selectItem itemLabel="#{titles.TTL_NO_NORMA}" itemValue="#{creacionEntidadBean.getNORMA_NO()}"/>
+                            <p:ajax event="change" process="@this" 
+                                    update="@widgetVar(wvPnDatosNormaSi) @widgetVar(wvPnDatosNormaNo)"
+                                    listener="#{creacionEntidadBean.sorNormaListener()}"/>
+                        </p:selectOneRadio>
+                    </div>
+                    <div class="col-md-4"></div>
+                    
+                </div>
+            </div>
+            <br /><br />
+            <p:panel style="border: none"
+                     widgetVar="wvPnDatosNormaNo"
+                     visible="#{creacionEntidadBean.norma==creacionEntidadBean.getNORMA_NO()}">
+                <br /><br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <p:outputLabel
+                                for="justificacion"
+                                value="#{titles.LBL_CT_JUSTIFICACION}:"
+                                styleClass="log-label form-label-formularios" />
+                            <p:outputPanel autoUpdate="true">
+                                <p:inputText
+                                    id="justificacion"
+                                    required="#{creacionEntidadBean.norma==creacionEntidadBean.getNORMA_NO()}"
+                                    value="#{creacionEntidadBean.entidadN.justificacion}"
+                                    requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                                    styleClass="form-control-acti-usua form-control"
+                                    title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                                  	maxlength="255">
+                                  	<f:validator validatorId="maxByteLengthValidator" />
+                                  </p:inputText>
+                                <p:message for="justificacion" />
+                            </p:outputPanel>
+                        </div>
+                        <div class="col-md-4">
+                            <p:outputLabel
+                                for="estadoEntidad"
+                                value="#{titles.TTL_ESTADO_ENTIDAD}:"
+                                styleClass="log-label form-label-formularios" />
+                            <p:selectOneRadio id="estadoEntidad" disabled="true" value ="#{creacionEntidadBean.estadoEntidad}" >
+                                <f:selectItem itemLabel="#{titles.TTL_ACTIVA}" itemValue="true" />
+                                <f:selectItem itemLabel="#{titles.TTL_INACTIVA}" itemValue="false"/>
+                            </p:selectOneRadio>
+                        </div>
+                    </div>
+                </div>
+            </p:panel>
+            <p:panel style="border: none"
+                     widgetVar="wvPnDatosNormaSi"
+                     visible="#{creacionEntidadBean.norma==creacionEntidadBean.getNORMA_SI()}">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <p:outputLabel
+                                for="tipoDeNorma"
+                                value="#{titles.TTL_TIPO_NORMA}:"
+                                styleClass="log-label form-label-formularios" />
+                            <p:selectOneMenu
+                                id="tipoDeNorma"						
+                                value="#{creacionEntidadBean.tipoNorma.codTipoNorma}"
+                                required="false"
+                                filter="true"
+                                scrollable="true" scrollHeight="100"
+                                styleClass="form-control-form-act-usua"
+                                 title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_NORMA']}">
+                                <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+                                <f:selectItems value="#{webUtils.getTiposNormaEntidad()}"/>
+                                 <p:ajax process="@this" update="tipoDeNorma numeroNorma fechaNorma" event="change" listener="#{creacionEntidadBean.restablecerTipoNorma()}" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="col-md-4">
+                            <p:outputLabel
+                                for="fechaNorma"
+                                value="#{titles.LBL_FECHA_NORMA}: "
+                                styleClass="log-label form-label-formularios" />
+                            <p:calendar id="fechaNorma" mask="true"
+                                        yearRange="#{rangoAnios}" navigator="true"
+                                        placeholder="${titles['LBL_FORMATO_FECHA']}"
+                                        maxdate="#{fechaSistema}" mode="popup"
+                                        required="false"
+                                        value="#{creacionEntidadBean.tipoNorma.fechaNorma}"
+                                        pattern="#{fechaFormato}" effect="slideDown"
+                                        converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+                                        locale="#{lenguajeBean.localeCode}"
+                                        title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_NORMA']}">
+                                        <f:attribute name="maxDate" value="#{fechaSistema}" />
+										<f:validator validatorId="maxDateValidator" />
+										<p:ajax event="dateSelect" process="@this" 
+										        update="fechaNorma numeroNorma tipoDeNorma" listener="#{creacionEntidadBean.restablecerNorma()}"/>
+										<p:ajax event="change" process="@this" 
+										        update="fechaNorma numeroNorma tipoDeNorma" listener="#{creacionEntidadBean.restablecerNorma()}"/>
+                            </p:calendar>
+                            <p:message for="fechaNorma" display="text" />
+                        </div>
+                        <div class="col-md-4">
+                            <p:outputLabel
+                                for="numeroNorma"
+                                value="#{titles.TTL_NUMERO_NORMA}:"
+                                styleClass="log-label form-label-formularios" />
+                            <p:outputPanel>
+                             <p:autoComplete id="numeroNorma"
+                                    value="#{creacionEntidadBean.tipoNorma}"
+                                    converter="normaBdConverter"
+                                    var="normSelect" 
+                                    completeMethod="#{creacionEntidadBean.acNombreNormaListener}"
+                                    minQueryLength="1"
+                                    valueChangeListener="#{creacionEntidadBean.acNombreNormaSelectListener}"
+                                    itemLabel="#{normSelect.numeroNorma}"
+                                    itemValue="#{normSelect}"
+                                    maxResults="20" >
+                       	    <p:ajax process="@this"
+                                update="@this objetoNorma"
+                                event="itemSelect"
+                              	 />
+                          </p:autoComplete>
+                                <p:keyFilter for="numeroNorma" mask="num"/>
+                                <p:message for="numeroNorma"/>
+                            </p:outputPanel>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row" >
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <p:outputLabel
+                                for="objetoNorma"
+                                value="#{titles.TTL_OBJETO}:"
+                                styleClass="log-label form-label-formularios" />
+                            <p:inputText
+                                id="objetoNorma"
+                                value="#{creacionEntidadBean.objetoNorma}"
+                                required="false"
+                                process="@this"
+                                styleClass="form-control-acti-usua form-control"
+                                title="${titles['TTL_INGRESE']} ${titles['TTL_OBJETO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                                maxlength="500">
+                                <f:validator validatorId="maxByteLengthValidator" />
+                             </p:inputText>
+                        </div>
+                    </div>
+                </div>
+                <br /><br />
+            </p:panel>
+			<div class="row" align="right">
+			<div class="col-md-4"/>
+			<div class="col-md-4"/>
+				<div class="col-md-4">
+					<p:outputLabel for="codigoSigep"
+						value="#{titles.TTL_CODIGO_SIGEP}: "
+						styleClass="log-label form-label-formularios" />
+					<h:outputText id="codigoSigep" disabled="true"
+						value="#{creacionEntidadBean.entidadN.codigoSigep}"
+						requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+						styleClass="log-label form-label-formularios"
+						title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_SIGEP']} ${titles['TTL_TIPO_ALFANUMERICO']}"/>
+				</div>
+			</div>
+
+			<div class="row" align="center">
+                <div class="col-md-4"></div>
+                <div class="col-md-2" style="margin-bottom: 3%;">
+                    <div>
+                        <p:commandButton 
+                            id="btnGuardarEntidad"
+                            value="#{botonguardardatosbasicos}"
+                            actionListener="#{creacionEntidadBean.btCrearEntidadListener()}"
+                            process="@form"
+                            disabled="#{creacionEntidadBean.btGuardar}"
+                            update="@widgetVar(wvTvCrearEntidad) frmSidebar:somEntidadesusuarioSideBar"
+                            styleClass="btn btn-primary"
+                            onstart="PF('dlgCargaEntidad').show()"
+                            oncomplete="PF('dlgCargaEntidad').hide()"
+                            onsuccess="PF('dlgCargaEntidad').hide()"
+                            style="padding-left:12.5%!important;padding-right:12.5%!important;font-size:1.5em!important;padding-top:0!important;"/>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-bottom: 3%;">
+                    <p:commandButton
+                        value="${titles.TTL_CANCEL}"
+                        styleClass="btn btn-default"
+                        style="padding-left:23.5%!important;padding-right:23.5%!important;font-size:1.5em!important;padding-top:0!important;"
+                        process="@this"
+                        action="#{creacionEntidadBean[regresarAction]}"/>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

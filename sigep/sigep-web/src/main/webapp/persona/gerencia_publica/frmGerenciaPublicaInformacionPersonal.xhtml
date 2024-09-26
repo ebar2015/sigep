@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="pnlGerenciaPublicaInformacionPersonal" style="background: transparent !important;">
+		<br /><br />
+		<hr class="hr-style hr-style-two" />
+		<span class="span-style">${titles['TTL_INFORMACION_PERSONAL']} </span>
+		<br />
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_HOMBRE_MUJER_CABEZA_FAMILIA']}:" styleClass="log-label form-label-formularios"
+							for="somCabezaFamilia"/>
+						<h:selectOneMenu
+							id="somCabezaFamilia"
+							title="#{titles.TTL_SELECT} #{titles.TTL_CABEZA_FAMILIA}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{gerenciaPublicaHVBean.datoAdicionalProcesar.codCabezaHogar}"
+							required="true"
+							styleClass="form-control-form-act-usua"
+							onchange="datosModificados(1);">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.cabezaFamilia}" />
+						</h:selectOneMenu>
+						<p:message for="somCabezaFamilia" display="text" />
+				</div>
+				<div class="col-md-4">
+						<p:outputLabel 
+							value="${titles['LBL_VICTIMA_DESPLAZAMIENTO']}:" styleClass="log-label form-label-formularios"
+							for="somVictimaDesplazamiento"/>
+						<h:selectOneMenu id="somVictimaDesplazamiento"
+							title="#{titles.TTL_SELECT} #{titles.LBL_VICTIMA_DESPLAZAMIENTO}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{gerenciaPublicaHVBean.datoAdicionalProcesar.codVictimaDesplazamiento}"
+							required="true" styleClass="form-control-form-act-usua"
+							onchange="datosModificados(1);">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.victimaDesplazamiento}" />
+						</h:selectOneMenu>
+						<p:message for="somVictimaDesplazamiento" display="text" />
+				</div>
+				<div class="col-md-4" >
+						<p:outputLabel 
+							for="somOrientacionSexual" value="${titles['LBL_USTED_ES']}:"
+							styleClass="log-label form-label-formularios" />
+						<h:selectOneMenu id="somOrientacionSexual"
+							title="#{titles.TTL_SELECT} #{titles.TTL_ORIENTACION_SEXUAL}"
+							value="#{gerenciaPublicaHVBean.datoAdicionalProcesar.codOrientacionSexual}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								          itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.orientacionSexual}" />
+							<p:ajax oncomplete="datosModificados(1);"
+								    listener="#{gerenciaPublicaHVBean.mostrarTextoOtraOrientacion()}" update="pnlOtraOrientacionSexual"/>
+						</h:selectOneMenu>
+						<p:message for="somOrientacionSexual" display="text" />
+				</div>				
+			</div>
+		</div>
+		<p:panel id="pnlOtraOrientacionSexual" visible="#{gerenciaPublicaHVBean.lbMostrarTextoOtraOrientacionSexual}">
+			<div class="row">
+				<div class="col-md-12">
+					<br />
+					<div class="col-md-4">
+						<p:outputLabel for="itOtraOrientacionSexual"
+							value="${titles['TTL_OTRA_ORIENTACION_SEXUAL']}:"
+							styleClass="log-label form-label-formularios" />
+						<h:inputText id="itOtraOrientacionSexual"
+							title="#{titles.TTL_SELECT} #{titles.TTL_OTRA_ORIENTACION_SEXUAL}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{gerenciaPublicaHVBean.datoAdicionalProcesar.otraOrientacionSexual}"
+							styleClass="form-control-acti-usua form-control"
+							onchange="datosModificados(1);" >
+							<p:message for="itOtraOrientacionSexual" display="text" />
+						</h:inputText>
+					</div>
+				</div>
+			</div>	
+		</p:panel>	
+	</p:panel>
+</ui:composition>
+
+

@@ -1,0 +1,2066 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_SITUACIONES_ADMINISTRATIVAS']}" />
+
+	<script>
+		$("#btnCerrar").on("click",function(event){ 
+		     event.prevenDefault(); 
+		     $('#miFormulario').trigger("reset"); 
+		});
+	</script>
+
+	<ui:define name="main">
+		<ui:include src="../persona/tarjetaPersonaView.xhtml" />
+		<br /><br />
+		<h:panelGroup id="hpgVinculacion">
+			<ui:include src="../vinculacion/tarjetaCargoVinculacion.xhtml" />
+		</h:panelGroup>
+		<br /><br />
+		<!-- Gestion de situaciones administrativas -->
+		<div class="row row-background-white">
+			<br /> <br /><hr class="hr-style hr-style-two" />
+			<span class="span-style">${titles['TTL_SITUACIONES_ADMINISTRATIVAS']} </span> <br /> <br />
+			<div class="col-md-12" style="text-align: right;">
+				<div style="padding-right: 1%; display: inline-block">
+					<p:commandButton id="btnAgregarNuevaSA" title="${titles['LBL_REGISTRAR_NUEVA_SA']}"
+						process="@this"
+						actionListener="#{situacionesAdministrativasBean.mostrarFormulario(true)}"
+						update="panelEleccionSA, SubPanelEleccionSA,panelRegLicenciayPermiso,panelRegLicenciaEnfermedad,panelRegEncargo,panelRegComision,
+								panelRegLibretaMilitar,panelRegOtro,panelRegProvisional, panelRegPruebaOtraEntidad, 
+								panelCargosDisponibles, frmPrincipal:panelhpgCancelar"
+						resetValues="true"
+						styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle"
+						oncomplete="window.location.href='#frmPrincipal:SubPanelEleccionSA_content'"
+						onclick="window.location.href='#frmPrincipal:SubPanelEleccionSA_content'" />
+				</div>
+			</div>
+			<br /> <br />
+			<!-- Tabla historico Situaciones Administrativas -->
+			<div class="col-md-12">
+				<p:dataTable id="tablaSitAdmin" var="dataSitAdmin"
+					value="#{situacionesAdministrativasBean.listaSitAdminFuncionario}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+					paginator="true"
+					rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}" reflow="true"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+					<p:column headerText="#{titles['LBL_SA_SITUACION_DEPENDIENTE']}" sortBy="#{dataSitAdmin.nombreSituacion}">
+						<h:outputText value="#{dataSitAdmin.nombreSituacion}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_FECHA_INICIAL} #{titles.TTL_SITUACION_ADMIN}" sortBy="#{dataSitAdmin.fechaInicial}">
+						<h:outputText value="#{dataSitAdmin.fechaInicial}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_FECHA_FIN_2} #{titles.TTL_SITUACION_ADMIN}" sortBy="#{dataSitAdmin.fechaFinal}">
+						<h:outputText value="#{dataSitAdmin.fechaFinal}" />
+					</p:column>
+					<p:column headerText="${titles['LBL_SA_DURACION']} (${titles['SUFIJO_SUBTTL_HISTORICO_CARGA_MASIVA']})" sortBy="#{dataSitAdmin.duracion}">
+						<h:outputText value="#{dataSitAdmin.duracion}" />
+					</p:column>
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important;padding: 15px 5px !important;">
+						<p:commandButton id="btnProrrogarSA"
+							title="Prorrogar Situación Administrativa" icon="icon-wait-doc"
+							styleClass="icon-btn" process="@this"
+							actionListener="#{situacionesAdministrativasBean.prorrogarSituacionAdministrativa(dataSitAdmin)}"
+							update="frmPrincipal frmPrincipal:hpgProrrogarSituacion">
+						</p:commandButton>
+						<p:commandButton id="btnModificarSA" title="${titles['TTL_MODIFY']}"
+							icon="icon-edit" styleClass="icon-btn" process="@this"
+							action="#{situacionesAdministrativasBean.modificarSituacionAdministrativa(dataSitAdmin)}"
+							update="frmPrincipal frmPrincipal:hpgProrrogarSituacion 
+							frmPrincipal:idpgfrmSituacionesAdProrrogar 
+							frmPrincipal:panelRegOtro frmPrincipal:panelRegLicenciayPermiso">
+						</p:commandButton>
+						<p:commandButton id="btnEliminarSA" title="${titles['BTN_TABLA_ELIMINAR']}"
+							icon="icon-delete" styleClass="icon-btn" process="tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.abrirEliminarSA}">
+							<f:setPropertyActionListener value="#{dataSitAdmin}"
+								target="#{situacionesAdministrativasBean.situacionAdminVinculacionExtSelected}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<!-- FIN DE TABLA HISTORICO DE SITUACIONES ADMINISTRATIVAS -->
+		<!-- INICIO FORMULARIO DE REGISTRO DE SITUACIONES ADMINISTRATIVAS -->
+		<br /><br />
+		<h:panelGroup id="panelEleccionSA">
+			<p:panel id="SubPanelEleccionSA" widgetVar="SubPanelEleccionSA"
+				rendered="#{situacionesAdministrativasBean.habilitarFormSA}">
+				<div class="row row-background-white">
+					<br /><!-- SELECCION DE TIPO DE SITUACION ADMINISTRATIVA A REGISTRAR -->
+					<hr class="hr-style hr-style-two" /><br />
+					<ui:fragment rendered="#{!situacionesAdministrativasBean.flgModificar}">
+						<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+					</ui:fragment>
+					<ui:fragment rendered="#{situacionesAdministrativasBean.flgModificar}">
+						<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+					</ui:fragment>
+					<br /> <br />
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-4">
+							<p:outputLabel for="sitAdmin" styleClass="log-label form-label-formularios"
+								value="${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:selectOneMenu id="sitAdmin"
+								value="#{situacionesAdministrativasBean.sitAdminPadre}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="contains">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true" itemValue="#{null}" />
+								<f:selectItems value="#{situacionesAdministrativasBean.listSitAdminP}" />
+								<p:ajax listener="#{situacionesAdministrativasBean.listaSitAdminDependiente(situacionesAdministrativasBean.sitAdminPadre)}"
+									event="change" process="@this"
+									update="sitAdminDep, panelSADep panelEleccionSA" />
+							</p:selectOneMenu>
+							<p:message for="sitAdmin" display="text" />
+						</div>
+						<p:outputPanel id="panelSADep">
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.habilitarSADEP}">
+								<div class="col-md-4">
+									<p:outputLabel for="sitAdminDep"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+									<p:selectOneMenu id="sitAdminDep"
+										value="#{situacionesAdministrativasBean.sitAdminDep}"
+										required="true"
+										filter="true" filterMatchMode ="contains"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true"
+											itemValue="#{null}" />
+										<f:selectItems
+											value="#{situacionesAdministrativasBean.listSitAdminDependiente}" />
+										<p:ajax
+											listener="#{situacionesAdministrativasBean.mostrarClasificacionClase()}"
+											event="change" process="@this" update="subPanelClasificacion" />
+									</p:selectOneMenu>
+									<p:message for="sitAdminDep" display="text" />
+								</div>
+							</p:panel>
+						</p:outputPanel>
+						<div class="col-md-2"></div>
+					</div>
+
+					<!-- SE VISUALIZAN LOS CAMPOS DE CLASIFICACION Y CLASE CUANDO LA SITUACION ES ENCARGO O COMISION-->
+					<p:outputPanel id="subPanelClasificacion">
+						<p:panel
+							rendered="#{situacionesAdministrativasBean.flghabilitarClasificacionClase}">
+							<br /><br />
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<p:outputLabel for="clasificacionPlanta"
+										value="${titles['LBL_CLASIFICACION_PLANTA']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="clasificacionPlanta"
+										value="#{situacionesAdministrativasBean.vinculacion.codClasificacionPlanta}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										filter="true" filterMatchMode ="contains"
+										title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_PLANTA']}"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemValue="#{null}"
+											itemLabel="${titles['TTL_SELECT']}" />
+										<f:selectItems
+											value="#{webUtils.getClasificacionPlantaByEntidad(situacionesAdministrativasBean.lngValorEntidad)}" />
+										<p:ajax event="change" process="@this" update="clasePlanta" />
+									</p:selectOneMenu>
+									<p:message for="clasificacionPlanta" display="text" />
+								</div>
+								<div class="col-md-4">
+									<p:outputLabel for="clasePlanta"
+										value="${titles['LBL_CLASE']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="clasePlanta"
+										value="#{situacionesAdministrativasBean.vinculacion.codClasePlanta}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										filter="true" filterMatchMode ="contains"
+										title="${titles['TTL_SELECT']} ${titles['LBL_CLASE']}"
+										styleClass="form-control-form-act-usua"
+										default="${titles['TTL_SELECT']}">
+										<f:selectItem itemValue="#{null}" itemLabel="${titles['TTL_SELECT']}" />
+										<f:selectItems
+											value="#{webUtils.getClasePlantaByEntidad(situacionesAdministrativasBean.lngValorEntidad,situacionesAdministrativasBean.vinculacion.codClasificacionPlanta)}" />
+									</p:selectOneMenu>
+									<p:message for="clasePlanta" display="text" />
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						</p:panel>
+					</p:outputPanel>
+					<br /> <br />
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 2%;">
+							<p:commandButton id="btnConfirmarSA"
+								value="${titles['TTL_TO_CONTINUE']}"
+								update="panelEleccionSA, SubPanelEleccionSA, panelRegLicenciayPermiso,panelRegLicenciaEnfermedad,panelRegEncargo,panelRegComision,
+								panelRegLibretaMilitar,panelRegOtro,panelRegProvisional,panelRegPruebaOtraEntidad, panelCargosDisponibles, subPanelClasificacion"
+								styleClass="btn btn-primary" process="panelEleccionSA"
+								action="#{situacionesAdministrativasBean.mostrarFormularioRegistoSA()}"
+								style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>
+						<div class="col-md-2" style="margin-bottom: 2%;">
+							<p:commandButton id="btnCancelar" value="${titles['TTL_CANCEL']}"
+								actionListener="#{situacionesAdministrativasBean.mostrarFormulario(false)}"
+								process="@this"
+								update="panelEleccionSA, SubPanelEleccionSA,panelRegLicenciayPermiso,panelRegLicenciaEnfermedad,panelRegEncargo,panelRegComision,
+								panelRegLibretaMilitar,panelRegOtro,panelRegProvisional,panelRegPruebaOtraEntidad, panelCargosDisponibles, frmPrincipal:panelhpgCancelar"
+								styleClass="btn btn-default" resetValues="true"
+								style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- FIN DE ELECCION DE TIPO DE SITUACIONES ADMINISTRATIVAS -->
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE LICENCIAS NO REMUNERADAS, LUTO, ACTIVIDADES DEPORTIVAS -->
+		<h:panelGroup id="panelRegLicenciayPermiso">
+			<p:panel id="subPanelRegLicenciayPermiso" widgetVar="subPanelRegLicenciayPermiso" rendered="#{situacionesAdministrativasBean.habilitarFormLic}">
+				<br /><hr class="hr-style hr-style-two" /><br />
+				<ui:fragment rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br /><br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="licenciaSitAdmin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:inputText id="licenciaSitAdmin" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="true"
+								value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+								styleClass="form-control-acti-usua form-control" />
+							<p:message for="licenciaSitAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSitAdminDepLicencia"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+							<p:inputText id="codSitAdminDepLicencia" type="hidden"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codSituacionAdministrativa}" />
+							<p:inputText id="regSitAdminDepLicencia" disabled="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.sitAdminDepForm}"
+								class="form-control-acti-usua" />
+							<p:message for="regSitAdminDepLicencia" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSitAdminFechaInicio"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regSitAdminFechaInicio" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								icon="fa fa-calendar">
+								<p:ajax event="dateSelect"
+									update="regSitAdminFechaFinSuspension regSitAdminFechaFin"
+									listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regSitAdminFechaInicio" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputPanel id="fechaFin">
+								<p:panel
+									rendered="#{situacionesAdministrativasBean.mostrarFechaFin}">
+									<p:outputLabel for="regSitAdminFechaFin"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+									<p:calendar id="regSitAdminFechaFin" mask="true"
+										yearRange="#{rangoAnios}" navigator="true"
+										disabled="#{situacionesAdministrativasBean.deshabilitarfechafin}"
+										placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+										locale="#{lenguajeBean.localeCode}"
+										value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+										pattern="#{fechaFormato}" required="true" effect="slideDown"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+										icon="fa fa-calendar">
+										<f:attribute name="startDateName"
+											value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="endDateName"
+											value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="startDate"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+										<f:validator validatorId="dateRangeValidator" />
+									</p:calendar>
+									<h:outputText>
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<p:message for="regSitAdminFechaFin" display="text" />
+								</p:panel>
+							</p:outputPanel>
+							<p:outputPanel id="fechaFinSuspension">
+								<p:panel
+									rendered="#{situacionesAdministrativasBean.mostrarfechaFinSuspension}">
+									<p:outputLabel for="regSitAdminFechaFinSuspension"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+									<p:calendar id="regSitAdminFechaFinSuspension" mask="true"
+										yearRange="#{rangoAnios}" navigator="true"
+										placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+										locale="#{lenguajeBean.localeCode}"
+										value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+										pattern="#{fechaFormato}" effect="slideDown"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+										icon="fa fa-calendar">
+										<f:attribute name="startDateName"
+											value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="endDateName"
+											value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="startDate"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+										<f:validator validatorId="dateRangeValidator" />
+									</p:calendar>
+									<h:outputText>
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<p:message for="regSitAdminFechaFinSuspension" display="text" />
+								</p:panel>
+							</p:outputPanel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="licenciaActoAdmin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+							<p:selectOneMenu id="licenciaActoAdmin" required="true"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								filter="true" filterMatchMode ="contains"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true" itemValue="#{null}" />
+								<f:selectItems value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+							</p:selectOneMenu>
+							<p:message for="licenciaActoAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="numActoAdmin"
+								value="${titles['TTL_NUM_ACT_ADMIN']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="numActoAdmin" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								maxlength="20" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+								class="form-control-acti-usua" />
+							<p:message for="numActoAdmin" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="descripcionSA"
+								value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="descripcionSA" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								maxlength="254"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+								class="form-control-acti-usua" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnConfirmarRegSA"
+							rendered="#{!situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}" process="panelRegLicenciayPermiso"
+							update="panelRegLicenciayPermiso,tablaSitAdmin "
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+						<p:commandButton id="btnConfirmarRegSA1"
+							rendered="#{situacionesAdministrativasBean.flgModificar}"
+							value="${titles['BTN_ACTUALIZAR']}"
+							process="panelRegLicenciayPermiso"
+							update="panelRegLicenciayPermiso,tablaSitAdmin "
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton id="btnCancelarRegSA"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+							process="@this"
+							update="panelRegLicenciayPermiso,tablaSitAdmin, subPanelRegLicenciayPermiso, frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							<p:ajax update="panelRegLicenciayPermiso" resetValues="true" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- FIN DE FORMULARIO PARA REGISTRO DE LICENCIAS NO REMUNERADAS, LUTO, ACTIVIDADES DEPORTIVAS-->
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE LICENCIAS POR MATERNIDAD, ENFERMEDAD, ACCIDENTE LABORAL-->
+		<h:panelGroup id="panelRegLicenciaEnfermedad">
+			<p:panel id="subPanelRegLicenciaEnfermedad" idgetVar="subPanelRegLicenciaEnfermedad" rendered="#{situacionesAdministrativasBean.habilitarFormEnf}">
+				<br /><hr class="hr-style hr-style-two" /><br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="sitAdminIncapacidad"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:inputText id="sitAdminIncapacidad" disabled="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+								class="form-control-acti-usua" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSitAdminDepIncapacidad"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+							<p:inputText id="regSitAdminDepIncapacidad" type="hidden"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codSituacionAdministrativa}" />
+							<p:inputText id="codSitAdminIncapacidad" disabled="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.sitAdminDepForm}"
+								class="form-control-acti-usua" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="incapacidad"
+								value="${titles['TTL_SA_INCAPACIDAD_CODIGO']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:autoComplete id="incapacidad" forceSelection="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								dropdown="true" required="true"
+								scrollable="true" scrollHeight="100"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								completeMethod="#{situacionesAdministrativasBean.listaEnfermedades}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoIncapacidad}">
+								<p:ajax
+									listener="#{situacionesAdministrativasBean.descripcionEnfermedad(situacionesAdministrativasBean.situacionAdminPersona.codTipoIncapacidad)}"
+									event="itemSelect" process="incapacidad"
+									update="incapacidad,descIncapacidad" />
+								<p:ajax
+									listener="#{situacionesAdministrativasBean.descripcionEnfermedad(situacionesAdministrativasBean.situacionAdminPersona.codTipoIncapacidad)}"
+									event="itemUnselect" process="incapacidad"
+									update="incapacidad,descIncapacidad" />
+							</p:autoComplete>
+							<p:message for="incapacidad" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="descIncapacidad"
+								value="${titles['TTL_SA_DESC_INCAPACIDAD']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="descIncapacidad" dropdown="true" disabled="true"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionEnfermedad}"
+								style="box-shadow: none!important;" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSAdEnferFechaInicio"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regSAdEnferFechaInicio" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								icon="fa fa-calendar">
+								<p:ajax update="regSAEnferFechaFin" event="dateSelect"
+									listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regSAdEnferFechaInicio" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSAEnferFechaFin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regSAEnferFechaFin" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								icon="fa fa-calendar"
+								disabled="#{situacionesAdministrativasBean.deshabilitarfechafin}">
+								<f:attribute name="startDateName"
+									value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+								<f:attribute name="endDateName"
+									value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+								<f:attribute name="startDate"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+								<f:validator validatorId="dateRangeValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regSAEnferFechaFin" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="licenciaEnferActoAdmin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+							<p:selectOneMenu id="licenciaEnferActoAdmin" required="true"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="contains">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+							</p:selectOneMenu>
+							<p:message for="licenciaEnferActoAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="enferNumActoAdmin"
+								value="${titles['TTL_NUM_ACT_ADMIN']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="enferNumActoAdmin" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+								class="form-control-acti-usua" maxlength="20">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="enferNumActoAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="descripcionSAEnfer"
+								value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="descripcionSAEnfer" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+								class="form-control-acti-usua" maxlength="254">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnConfirmarRegSAEnfermedad"
+							rendered="#{!situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}"
+							process="panelRegLicenciaEnfermedad"
+							update="panelRegLicenciaEnfermedad,tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+						<p:commandButton id="btnConfirmarRegSAEnfermedad1"
+							rendered="#{situacionesAdministrativasBean.flgModificar}"
+							value="${titles['BTN_ACTUALIZAR']}"
+							process="panelRegLicenciaEnfermedad"
+							update="panelRegLicenciaEnfermedad,tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton id="btnCancelarRegSAEnfermedad"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+							process="@this"
+							update="panelRegLicenciaEnfermedad,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							<p:ajax update="panelRegLicenciaEnfermedad" resetValues="true" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- FIN DE FORMULARIO PARA REGISTRO DE LICENCIAS POR MATERNIDAD, ENFERMEDAD, ACCIDENTE LABORAL-->
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE SA POR ENCARGO-->
+		<h:panelGroup id="panelRegEncargo">
+			<p:panel id="subPanelRegEncargo" idgetVar="subPanelRegEncargo"
+				rendered="#{situacionesAdministrativasBean.habilitarFormCargo}">
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="sitAdminCargo"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:inputText id="sitAdminCargo" disabled="true" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+							class="form-control-acti-usua" />
+						<p:message for="sitAdminCargo" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="regSitAdminDepCargo"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+						<p:inputText id="codSitAdminCargo" type="hidden" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.codSituacionAdministrativa}" />
+						<p:inputText id="regSitAdminDepCargo" disabled="true"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.sitAdminDepForm}"
+							class="form-control-acti-usua" />
+						<p:message for="codSitAdminCargo" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputPanel id="panelDependenciaPlanta">
+							<p:panel
+								rendered="#{!situacionesAdministrativasBean.flgTipoPlanta}">
+								<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:"
+									for="dependenciaGlobal"
+									styleClass="log-label form-label-formularios" />
+								<p:selectOneMenu id="dependenciaGlobal"
+									disabled="#{situacionesAdministrativasBean.flgModificar}"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.codDependenciaEntidad}"
+									required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									filter="true" filterMatchMode ="contains"
+									title="${titles['TTL_SELECT']} ${titles['LBL_DEPENDENCIA']}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+									<f:selectItems
+										value="#{webUtils.getDependenciaEntidadFilter(situacionesAdministrativasBean.lngValorEntidad)}" />
+								</p:selectOneMenu>
+								<p:message for="dependenciaGlobal" display="text" />
+							</p:panel>
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.flgTipoPlanta}">
+								<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:"
+									for="dependenciaEstructural"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="dependenciaEstructural"
+									disabled="#{situacionesAdministrativasBean.flgModificar}"
+									value="#{situacionesAdministrativasBean.vinculacion.strNombreDependencia}"
+									readonly="true" title="${titles['LBL_DEPENDENCIA']}" />
+							</p:panel>
+						</p:outputPanel>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="cargoEncargo"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_CARGO']}:" />
+						<p:inputText id="cargoEncargo" disabled="true"
+							value="#{situacionesAdministrativasBean.nombreCargoEncargo}"
+							class="form-control-acti-usua" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="regSAEncargoFechaInicio"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:calendar id="regSAEncargoFechaInicio" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							locale="#{lenguajeBean.localeCode}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+							pattern="#{fechaFormato}" required="true" effect="slideDown"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							icon="fa fa-calendar">
+							<p:ajax event="dateSelect" update="regSAEncargorFechaFin"
+								listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="regSAEncargoFechaInicio" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="regSAEncargorFechaFin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:calendar id="regSAEncargorFechaFin" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							locale="#{lenguajeBean.localeCode}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+							pattern="#{fechaFormato}" effect="slideDown"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+							icon="fa fa-calendar">
+							<f:attribute name="startDateName"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+							<f:attribute name="endDateName"
+								value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+							<f:attribute name="startDate"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+							<f:validator validatorId="dateRangeValidator" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="regSAEncargorFechaFin" display="text" />
+					</div>
+
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="licenciaEncargoActoAdmin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+						<p:selectOneMenu id="licenciaEncargoActoAdmin"
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							filter="true" filterMatchMode ="contains"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+							styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true"
+								itemValue="#{null}" />
+							<f:selectItems
+								value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+						</p:selectOneMenu>
+						<p:message for="licenciaEncargoActoAdmin" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="encargoNumActoAdmin"
+							value="${titles['TTL_NUM_ACT_ADMIN']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="encargoNumActoAdmin" autocomplete="false"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+							class="form-control-acti-usua" maxlength="20">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="encargoNumActoAdmin" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="descripcionSAEncargo"
+							value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="descripcionSAEncargo" autocomplete="false"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							maxlength="254"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+							class="form-control-acti-usua">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputPanel id="panelVolverEncargar">
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.mostrarVolverEncargar}">
+								<div class="col-md-4">
+									<p:outputLabel for="volverEncargar"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_VOLVER_ENCARGAR']}:" />
+									<p:selectBooleanCheckbox id="volverEncargar"
+										disabled="#{situacionesAdministrativasBean.flgModificar}"
+										value="#{situacionesAdministrativasBean.valorEncargar}">
+										<p:ajax event="change"
+											listener="#{situacionesAdministrativasBean.validarEncargoAnterior()}"
+											update="panelVolverEncargar" />
+									</p:selectBooleanCheckbox>
+								</div>
+							</p:panel>
+						</p:outputPanel>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnConfirmarRegSAEncargo"
+							rendered="#{!situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}" process="panelRegEncargo"
+							update="frmPrincipal frmPrincipal:panelRegEncargo frmPrincipal:tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+						<p:commandButton id="btnConfirmarRegSAEncargo1"
+							rendered="#{situacionesAdministrativasBean.flgModificar}"
+							value="${titles['BTN_ACTUALIZAR']}" process="panelRegEncargo"
+							update="frmPrincipal frmPrincipal:panelRegEncargo frmPrincipal:tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton id="btnCancelarRegSAEncargo"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+							process="@this"
+							update="panelRegEncargo,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							<p:ajax update="panelRegEncargo" resetValues="true" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- fin DE FORMULARIO PARA REGISTRO DE SA POR ENCARGO-->
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE COMISION-->
+		<h:panelGroup id="panelRegComision">
+			<p:panel id="subPanelRegComision" idgetVar="subPanelRegComision"
+				rendered="#{situacionesAdministrativasBean.habilitarFormComision}">
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<br />
+
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.mostrarTotalDuracion}">
+					<div class="col-md-12" align="center">
+						<p:outputLabel styleClass="advisor"
+							value="Total días Comisión de Libre Remoción en otra entidad: #{situacionesAdministrativasBean.duracionComisionTotal}" />
+					</div>
+				</ui:fragment>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="sitAdminComision"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:inputText id="sitAdminComision" disabled="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+								class="form-control-acti-usua" />
+							<p:message for="sitAdminComision" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSitAdminDepComision"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+							<p:inputText id="codSitAdminDepComision" type="hidden"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codSituacionAdministrativa}" />
+							<p:inputText id="regSitAdminDepComision" disabled="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.sitAdminDepForm}"
+								class="form-control-acti-usua" />
+							<p:message for="regSitAdminDepComision" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="codEntidadComision"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_ENTIDAD_COMISION']}:" />
+							<p:inputText id="codEntidadComision" required="true"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								maxlength="15"
+								onkeypress="return numbervalida(event)"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codCodigoSigepEntidad}"
+								class="form-control-acti-usua">
+								<f:attribute name="maxLength" value="15" />
+								<f:validator validatorId="maxByteLengthValidator" />
+								<p:ajax
+									listener="#{situacionesAdministrativasBean.descripcionEntidad(situacionesAdministrativasBean.situacionAdminPersona.codCodigoSigepEntidad)}"
+									event="change" process="@this"
+									update="descEntidadComision subPanelRegComision" />
+							</p:inputText>
+							<p:message for="codEntidadComision" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputPanel id="panelMostrarDescEntidad">
+								<p:panel>
+									<p:outputLabel for="descEntidadComision"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_DESC_ENTIDAD']}:" />
+									<p:inputText id="descEntidadComision" disabled="true"
+										value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionEntidad}"
+										class="form-control-acti-usua" />
+								</p:panel>
+							</p:outputPanel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSAdComisionFechaInicio"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regSAdComisionFechaInicio" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								icon="fa fa-calendar">
+								<p:ajax event="dateSelect" update="regSAComisionFechaFin"
+									listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regSAdComisionFechaInicio" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSAComisionFechaFin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regSAComisionFechaFin" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								icon="fa fa-calendar">
+								<f:attribute name="startDateName"
+									value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+								<f:attribute name="endDateName"
+									value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+								<f:attribute name="startDate"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+								<f:validator validatorId="dateRangeValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regSAComisionFechaFin" display="text" />
+						</div>
+					</div>
+				</div>
+
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="comisionActoAdmin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+							<p:selectOneMenu id="comisionActoAdmin" 
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								filter="true" filterMatchMode ="contains"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+							</p:selectOneMenu>
+							<p:message for="comisionActoAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="comisionNumActoAdmin"
+								value="${titles['TTL_NUM_ACT_ADMIN']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="comisionNumActoAdmin" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								maxlength="20"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+								class="form-control-acti-usua">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="comisionNumActoAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="descripcionSAComision"
+								value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="descripcionSAComision" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								maxlength="254"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+								class="form-control-acti-usua">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+
+				<div class="row" align="center">
+					<br />
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 3%;">
+							<p:commandButton id="btnConfirmarRegSAComision"
+								rendered="#{!situacionesAdministrativasBean.flgModificar}"
+								value="${titles['TTL_SAVE']}" process="panelRegComision"
+								update="panelRegComision,tablaSitAdmin"
+								action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+								styleClass="btn btn-primary">
+							</p:commandButton>
+							<p:commandButton id="btnConfirmarRegSAComision1"
+								rendered="#{situacionesAdministrativasBean.flgModificar}"
+								value="${titles['BTN_ACTUALIZAR']}" process="panelRegComision"
+								update="panelRegComision,tablaSitAdmin"
+								action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>
+						<div class="col-md-2 media-btn-vinculacion">
+							<p:commandButton id="btnCancelarRegSAComision"
+								value="${titles['TTL_CANCEL']}"
+								actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+								process="@this"
+								update="panelRegComision,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+								styleClass="btn btn-default"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+								<p:ajax update="panelRegComision,tablaSitAdmin"
+									resetValues="true" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE LIBRETA MILITAR -->
+		<h:panelGroup id="panelRegLibretaMilitar">
+			<p:panel id="subPanelRegLibretaMilitar"
+				widgetVar="subPanelRegLibretaMilitar"
+				rendered="#{situacionesAdministrativasBean.habilitarFormLibreta}">
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="sitAdminLibreta"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:inputText id="sitAdminLibreta" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="true"
+								value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+								styleClass="form-control-acti-usua form-control" />
+							<p:message for="sitAdminLibreta" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regFechaInicioLibreta"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regFechaInicioLibreta" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								icon="fa fa-calendar">
+								<p:ajax event="dateSelect"
+									update="regFechaFinLibretaRequerido regFechaFinLibreta"
+									listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regFechaInicioLibreta" display="text" />
+						</div>
+
+						<div class="col-md-4">
+							<p:outputPanel id="fechaFinRequerida">
+								<p:panel
+									rendered="#{situacionesAdministrativasBean.mostrarFechaFinRequerida}">
+									<p:outputLabel for="regFechaFinLibretaRequerido"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+									<p:calendar id="regFechaFinLibretaRequerido" mask="true"
+										yearRange="#{rangoAnios}" navigator="true"
+										disabled="#{situacionesAdministrativasBean.deshabilitarfechafin}"
+										placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+										locale="#{lenguajeBean.localeCode}"
+										value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+										pattern="#{fechaFormato}" required="true" effect="slideDown"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+										icon="fa fa-calendar">
+										<f:attribute name="startDateName"
+											value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="endDateName"
+											value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="startDate"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+										<f:validator validatorId="dateRangeValidator" />
+									</p:calendar>
+									<h:outputText>
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<p:message for="regFechaFinLibretaRequerido" display="text" />
+								</p:panel>
+							</p:outputPanel>
+							<p:outputPanel id="pfechaFinLibreta">
+								<p:panel
+									rendered="#{!situacionesAdministrativasBean.mostrarFechaFinRequerida}">
+									<p:outputLabel for="regFechaFinLibreta"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+									<p:calendar id="regFechaFinLibreta" mask="true"
+										yearRange="#{rangoAnios}" navigator="true"
+										placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+										locale="#{lenguajeBean.localeCode}"
+										mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+										value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+										pattern="#{fechaFormato}" effect="slideDown"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										icon="fa fa-calendar">
+										<f:attribute name="startDateName"
+											value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="endDateName"
+											value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+										<f:attribute name="startDate"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+										<f:validator validatorId="dateRangeValidator" />
+									</p:calendar>
+									<h:outputText>
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<p:message for="regFechaFinLibreta" display="text" />
+								</p:panel>
+							</p:outputPanel>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="libretaActoAdmin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+							<p:selectOneMenu id="libretaActoAdmin" 
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								filter="true" filterMatchMode ="contains"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true" itemValue="#{null}" />
+								<f:selectItems value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+							</p:selectOneMenu>
+							<p:message for="libretaActoAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="numActoAdminlibreta"
+								value="${titles['TTL_NUM_ACT_ADMIN']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="numActoAdminlibreta" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								maxlength="20" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+								class="form-control-acti-usua" />
+							<p:message for="numActoAdminlibreta" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="descripcionSALibreta"
+								value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="descripcionSALibreta" autocomplete="false"
+								disabled="#{situacionesAdministrativasBean.flgModificar}"
+								maxlength="254"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+								class="form-control-acti-usua" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 3%;">
+							<p:commandButton id="btnConfirmarRegLibreta"
+								rendered="#{!situacionesAdministrativasBean.flgModificar}"
+								value="${titles['TTL_SAVE']}" process="panelRegLibretaMilitar"
+								update="panelRegLibretaMilitar,tablaSitAdmin "
+								action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+							<p:commandButton id="btnConfirmarRegLibreta1"
+								rendered="#{situacionesAdministrativasBean.flgModificar}"
+								value="${titles['BTN_ACTUALIZAR']}"
+								process="panelRegLibretaMilitar"
+								update="panelRegLibretaMilitar,tablaSitAdmin "
+								action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>
+						<div class="col-md-2" style="margin-bottom: 2%;">
+							<p:commandButton id="btnCancelarRegLibreta"
+								value="${titles['TTL_CANCEL']}"
+								actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+								process="@this"
+								update="panelRegLibretaMilitar,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+								styleClass="btn btn-default" resetValues="true"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+								<p:ajax update="panelRegLibretaMilitar,tablaSitAdmin"
+									resetValues="true" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<br />
+				<br />
+			</p:panel>
+		</h:panelGroup>
+		<!-- FIN DE FORMULARIO PARA REGISTRO DE LIBRETA MILITAR-->
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE OTRO -->
+		<h:panelGroup id="panelRegOtro">
+			<p:panel id="subPanelRegOtro" widgetVar="subPanelRegOtro"
+				rendered="#{situacionesAdministrativasBean.habilitarFormOtro}">
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="otroSitAdmin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:inputText id="otroSitAdmin" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="true"
+								value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+								styleClass="form-control-acti-usua form-control" />
+							<p:message for="licenciaSitAdmin" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regSitAdminDepOtraSA"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+							<p:inputText id="codSitAdminDepOtraSA" type="hidden"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.codSituacionAdministrativa}" />
+							<p:inputText id="regSitAdminDepOtraSA" disabled="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{situacionesAdministrativasBean.sitAdminDepForm}"
+								class="form-control-acti-usua" />
+							<p:message for="regSitAdminDepOtraSA" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="regOtroFechaInicio"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regOtroFechaInicio" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								icon="fa fa-calendar">
+								<p:ajax event="dateSelect" update="regSAOtroFechaFin"
+									listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regOtroFechaInicio" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="regSAOtroFechaFin"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+							<p:calendar id="regSAOtroFechaFin" mask="true"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								locale="#{lenguajeBean.localeCode}"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+								icon="fa fa-calendar">
+								<f:attribute name="startDateName"
+									value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+								<f:attribute name="endDateName"
+									value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+								<f:attribute name="startDate"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+								<f:validator validatorId="dateRangeValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="regSAOtroFechaFin" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnConfirmarRegOtro"
+							rendered="#{!situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}" process="panelRegOtro"
+							update="panelRegOtro,tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+						<p:commandButton id="btnConfirmarRegOtro1"
+							rendered="#{situacionesAdministrativasBean.flgModificar}"
+							value="${titles['BTN_ACTUALIZAR']}" process="panelRegOtro"
+							update="panelRegOtro,tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton id="btnCancelarRegOtro"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+							process="@this" update="panelRegOtro,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default" resetValues="true"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							<p:ajax update="panelRegOtro,tablaSitAdmin" resetValues="true" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- FIN FORMULARIO DE OTRO -->
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE SA PROVISIONAL-->
+		<h:panelGroup id="panelRegProvisional">
+			<p:panel id="subPanelRegProvisional"
+				idgetVar="subPanelRegProvisional"
+				rendered="#{situacionesAdministrativasBean.habilitarFormProvisional}">
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="sitAdminProvisional"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:inputText id="sitAdminProvisional" disabled="true"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+							class="form-control-acti-usua" />
+						<p:message for="sitAdminCargo" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputPanel id="panelDependenciaProvisional">
+							<p:panel
+								rendered="#{!situacionesAdministrativasBean.flgTipoPlanta}">
+								<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:"
+									for="dependenciaProvisionalGlobal"
+									styleClass="log-label form-label-formularios" />
+								<p:selectOneMenu id="dependenciaProvisionalGlobal"
+									disabled="#{situacionesAdministrativasBean.flgModificar}"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.codDependenciaEntidad}"
+									required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									filter="true" filterMatchMode ="contains"
+									title="${titles['TTL_SELECT']} ${titles['LBL_DEPENDENCIA']}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+									<f:selectItems value="#{webUtils.getDependenciaEntidadFilter(situacionesAdministrativasBean.lngValorEntidad)}" />
+								</p:selectOneMenu>
+								<p:message for="dependenciaProvisionalGlobal" display="text" />
+							</p:panel>
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.flgTipoPlanta}">
+								<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:"
+									for="dependenciaProvisionalEstructural"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="dependenciaProvisionalEstructural"
+									disabled="#{situacionesAdministrativasBean.flgModificar}"
+									value="#{situacionesAdministrativasBean.vinculacion.strNombreDependencia}"
+									readonly="true" title="${titles['LBL_DEPENDENCIA']}" />
+							</p:panel>
+						</p:outputPanel>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="cargoEncargoProvisional"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_CARGO']}:" />
+						<p:inputText id="cargoEncargoProvisional" disabled="true"
+							value="#{situacionesAdministrativasBean.nombreCargoEncargo}"
+							class="form-control-acti-usua" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="regSAProvisionalFechaInicio"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:calendar id="regSAProvisionalFechaInicio" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							locale="#{lenguajeBean.localeCode}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+							pattern="#{fechaFormato}" required="true" effect="slideDown"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							icon="fa fa-calendar">
+							<p:ajax event="dateSelect" update="regSAProvisionalFechaFin"
+								listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="regSAProvisionalFechaInicio" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="regSAProvisionalFechaFin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:calendar id="regSAProvisionalFechaFin" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							locale="#{lenguajeBean.localeCode}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+							pattern="#{fechaFormato}" effect="slideDown"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+							icon="fa fa-calendar">
+							<f:attribute name="startDateName"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+							<f:attribute name="endDateName"
+								value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+							<f:attribute name="startDate"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+							<f:validator validatorId="dateRangeValidator" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="regSAProvisionalFechaFin" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="SAProvisionalActoAdmin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+						<p:selectOneMenu id="SAProvisionalActoAdmin" 
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							filter="true" filterMatchMode ="contains"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+							styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true" itemValue="#{null}" />
+							<f:selectItems
+								value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+						</p:selectOneMenu>
+						<p:message for="SAProvisionalActoAdmin" display="text" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="SAProvisionalNumActoAdmin"
+							value="${titles['TTL_NUM_ACT_ADMIN']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="SAProvisionalNumActoAdmin" autocomplete="false"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+							class="form-control-acti-usua" maxlength="20">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="SAProvisionalNumActoAdmin" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="descripcionSAProvisional"
+							value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="descripcionSAProvisional" autocomplete="false"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							maxlength="254"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+							class="form-control-acti-usua">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnConfirmarRegSAProvisional"
+							rendered="#{!situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}" process="panelRegProvisional"
+							update="panelRegProvisional,tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+						<p:commandButton id="btnConfirmarRegSAProvisional1"
+							rendered="#{situacionesAdministrativasBean.flgModificar}"
+							value="${titles['BTN_ACTUALIZAR']}" process="panelRegProvisional"
+							update="panelRegProvisional,tablaSitAdmin"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton id="btnCancelarRegSAProvisional"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+							process="@this"
+							update="panelRegProvisional,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default" resetValues="true"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							<p:ajax update="panelRegEncargo" resetValues="true" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- fin DE FORMULARIO PARA REGISTRO DE SA POR ENCARGO-->
+
+		<!-- INICIO DE FORMULARIO PARA REGISTRO DE PERIODO DE PRUEBA EN ASCENSO EN OTRA ENTIDAD-->
+		<h:panelGroup id="panelRegPruebaOtraEntidad">
+			<p:panel id="subPanelRegPruebaOtraEntidad"
+				idgetVar="subPanelRegPruebaOtraEntidad"
+				rendered="#{situacionesAdministrativasBean.habilitarFormPruebaOtraEntidad}">
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<br />
+				<ui:fragment
+					rendered="#{!situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_REGISTRAR_SA']} </span>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{situacionesAdministrativasBean.flgModificar}">
+					<span class="span-style"> ${titles['TTL_MODIFICAR_SA']} </span>
+				</ui:fragment>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="sitAdminPruebaOtraEntidad"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:inputText id="sitAdminPruebaOtraEntidad" disabled="true"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+							class="form-control-acti-usua" />
+						<p:message for="sitAdminPruebaOtraEntidad" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="codEntidadPruebaOtraEntidad"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_ENTIDAD_COMISION']}:" />
+						<p:inputText id="codEntidadPruebaOtraEntidad" required="true"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							maxlength="15"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.codCodigoSigepEntidad}"
+							class="form-control-acti-usua">
+							<f:validator validatorId="maxByteLengthValidator" />
+							<p:ajax
+								listener="#{situacionesAdministrativasBean.descripcionEntidad(situacionesAdministrativasBean.situacionAdminPersona.codCodigoSigepEntidad)}"
+								event="change" process="@this"
+								update="descEntidadPruebaOtraEntidad panelRegPruebaOtraEntidad subPanelRegPruebaOtraEntidad" />
+						</p:inputText>
+						<p:message for="codEntidadPruebaOtraEntidad" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="descEntidadPruebaOtraEntidad"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_DESC_ENTIDAD']}:" />
+						<p:inputText id="descEntidadPruebaOtraEntidad" disabled="true"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionEntidad}"
+							class="form-control-acti-usua" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="regSAPruebaOtraEntidadFechaInicio"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:calendar id="regSAPruebaOtraEntidadFechaInicio" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							locale="#{lenguajeBean.localeCode}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+							pattern="#{fechaFormato}" required="true" effect="slideDown"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							icon="fa fa-calendar">
+							<p:ajax event="dateSelect"
+								update="regSAPruebaOtraEntidadFechaFin"
+								listener="#{situacionesAdministrativasBean.calcularfechaFin()}" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="regSAPruebaOtraEntidadFechaInicio" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="regSAPruebaOtraEntidadFechaFin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:calendar id="regSAPruebaOtraEntidadFechaFin" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							locale="#{lenguajeBean.localeCode}"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+							pattern="#{fechaFormato}" effect="slideDown"
+							mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							icon="fa fa-calendar">
+							<f:attribute name="startDateName"
+								value="${titles['LBL_FECHA_INICIO']} ${titles['TTL_SITUACION_ADMIN']}" />
+							<f:attribute name="endDateName"
+								value="${titles['LBL_TABLA_FECHA_FIN']} ${titles['TTL_SITUACION_ADMIN']}" />
+							<f:attribute name="startDate"
+								value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}" />
+							<f:validator validatorId="dateRangeValidator" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="regSAPruebaOtraEntidadFechaFin" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="PruebaOtraEntidadActoAdmin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+						<p:selectOneMenu id="PruebaOtraEntidadActoAdmin" 
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							filter="true" filterMatchMode ="contains"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+							styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" disabled="true" itemValue="#{null}" />
+							<f:selectItems value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+						</p:selectOneMenu>
+						<p:message for="PruebaOtraEntidadActoAdmin" display="text" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="PruebaOtraEntidadNumActoAdmin"
+							value="${titles['TTL_NUM_ACT_ADMIN']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="PruebaOtraEntidadNumActoAdmin"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							autocomplete="false" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							maxlength="20"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+							class="form-control-acti-usua">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="PruebaOtraEntidadNumActoAdmin" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="descripcionSAPruebaOtraEntidad"
+							value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="descripcionSAPruebaOtraEntidad"
+							disabled="#{situacionesAdministrativasBean.flgModificar}"
+							autocomplete="false" maxlength="254"
+							value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+							class="form-control-acti-usua">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+					</div>
+				</div>
+				<br />
+				<br />
+
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnConfirmarRegPruebaOtraEntidad"
+							rendered="#{!situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}" process="panelRegPruebaOtraEntidad"
+							update="panelRegPruebaOtraEntidad,tablaSitAdmin,frmPrincipal:hpgVinculacion,frmPrincipal:hpgidVinculacion"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+						<p:commandButton id="btnConfirmarRegPruebaOtraEntidad1"
+							rendered="#{situacionesAdministrativasBean.flgModificar}"
+							value="${titles['TTL_SAVE']}" process="panelRegPruebaOtraEntidad"
+							update="panelRegPruebaOtraEntidad,tablaSitAdmin,frmPrincipal:hpgVinculacion,frmPrincipal:hpgidVinculacion"
+							action="#{situacionesAdministrativasBean.guardarSituacionAdministrativa()}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton id="btnCancelarRegPruebaOtraEntidad"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarRegistro()}"
+							process="@this"
+							update="panelRegPruebaOtraEntidad,tablaSitAdmin, frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default" resetValues="true"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							<p:ajax update="panelRegEncargo" resetValues="true" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+		<!-- Formulario para Próorróga -->
+
+		<h:panelGroup id="hpgProrrogarSituacion"
+			rendered="#{situacionesAdministrativasBean.lbProrrogar}">
+			<ui:include src="../situacionesadmin/frmSAdProrrogar.xhtml" />
+			<br />
+			<br />
+		</h:panelGroup>
+
+		<h:panelGroup id="panelhpgCancelar"
+			style="background: transparent !important;">
+			<p:panel id="hpgCancelar" widgetVar="hpgCancelar"
+				rendered="#{situacionesAdministrativasBean.flgVisualizarCancelar}">
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style"> </span>
+				<br />
+				<br />
+				<div class="row row-background-white" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-4 media-botn-cancel">
+						<p:commandButton id="btnCancelarLast"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{situacionesAdministrativasBean.cancelarGestionBusqueda()}"
+							process="@this"
+							update="panelEleccionSA,panelSADep,panelRegLicenciayPermiso, panelRegLicenciaEnfermedad,panelRegEncargo,panelRegComision, 
+						panelRegLibretaMilitar,panelRegOtro,panelRegProvisional,panelRegPruebaOtraEntidad,frmPrincipal:panelhpgCancelar"
+							styleClass="btn btn-default" resetValues="true"
+							style="padding-left:10.5%!important;padding-right:10.5%!important;font-size:1.5em!important; padding-top:0!important;" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+		</h:panelGroup>
+
+		<!-- DIALOG CON TABALA DE LISTADO DE CARGOS DISPONIBLES -->
+		<p:dialog header="• #{titles['LBL_CARGOS_DISPONIBLES']} •" id="dialogCargo"
+			widgetVar="dialogCargo" modal="true" style="min-width: 95%"
+			resizable="false" closeOnEscape="false" draggable="false"
+			closable="false" responsive="true">
+			<p:panel id="panelCargosDisponibles"
+				style="background: transparent !important;">
+				<p:scrollPanel mode="native" style="width:100%;height:450px">
+				<div class="modal-body">
+					<div class="col-md-12">
+						<p:dataTable id="tablaCargoDisp" var="dataCargoDisp" 
+							rowKey="#{dataCargoDisp.codEntidadPlantaDetalle}"
+							value="#{situacionesAdministrativasBean.listCargos}"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column headerText="#{titles['LBL_CARGO']}" 
+								sortBy="#{dataCargoDisp.nombreCargo}" sortable="true"
+								filterBy="#{dataCargoDisp.nombreCargo}"  filterMatchMode="contains">
+								<h:outputText value="#{dataCargoDisp.nombreCargo}" />
+							</p:column>
+							<p:column headerText="#{titles['LBL_CODIGO']}" 
+								sortBy="#{dataCargoDisp.nombreCodigo}" sortable="true"
+								filterBy="#{dataCargoDisp.nombreCodigo}"  filterMatchMode="contains">
+								<h:outputText value="#{dataCargoDisp.nombreCodigo}" />
+							</p:column>
+							<p:column headerText="#{titles['LBL_GRADO']}" 
+								sortBy="#{dataCargoDisp.nombreGrado}" sortable="true"
+								filterBy="#{dataCargoDisp.nombreGrado}"  filterMatchMode="contains">
+								<h:outputText value="#{dataCargoDisp.nombreGrado}" />
+							</p:column>
+							<p:column headerText="#{titles['LBL_TIPO_VACANCIA']}" 
+								sortBy="#{dataCargoDisp.tipoVacancia}" sortable="true"
+								filterBy="#{dataCargoDisp.tipoVacancia}"  filterMatchMode="contains">
+								<h:outputText value="#{dataCargoDisp.tipoVacancia}" />
+							</p:column>
+							<p:column headerText="#{titles['LBL_NOMBRE_ULTIMO_CARGO']}" 
+								sortBy="#{dataCargoDisp.primerNombre}" sortable="true"
+								filterBy="#{dataCargoDisp.primerNombre}"  filterMatchMode="contains">
+								<h:outputText value="#{dataCargoDisp.primerNombre}" />
+							</p:column>
+							<p:column headerText="#{titles['LBL_DEPENDENCIA_CARGO_ENCARGO']}" 
+								sortBy="#{dataCargoDisp.dependenciaVinculacion}" sortable="true"
+								filterBy="#{dataCargoDisp.dependenciaVinculacion}"  filterMatchMode="contains">
+								<h:outputText value="#{dataCargoDisp.dependenciaVinculacion}" />
+							</p:column>
+							<p:column headerText="${titles['TTL_SELECT']}"
+								style="opacity: 1!important;padding: 0.5%!important;text-align:center!important;">
+								<p:commandButton title="${titles['TTL_OK']}" icon="icon-check"
+									styleClass="icon-btn" process="@this"
+									update="frmPrincipal:panelRegEncargo,frmPrincipal:panelRegProvisional,frmPrincipal:panelRegComision"
+									action="#{situacionesAdministrativasBean.seleccionCargo(dataCargoDisp)}">
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-4" style="margin-bottom: 5%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important;"
+							actionListener="#{situacionesAdministrativasBean.cancelarCargosDisponibles}"
+							process="@this" resetValues="true"
+							update="frmPrincipal:panelRegEncargo,frmPrincipal:tablaSitAdmin,frmPrincipal:panelRegProvisional" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				<br />
+				</p:scrollPanel>
+			</p:panel>
+		</p:dialog>
+
+		<!-- FIN DIALOG -->
+		<!-- PRIMER MODAL DE CONFIRMACIÓN DE ELIMINACION SA -->
+		<p:dialog header="• Eliminar Situación Administrativa •"
+			id="eliminarSA" minHeight="600" widgetVar="eliminarSA" modal="true"
+			resizable="false" closeOnEscape="false" draggable="false"
+			closable="false" responsive="true">
+			<p:panel id="panelConfirmacionEliminacionSA"
+				style="background: transparent;">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="¿Está usted seguro de borrar esta situación administrativa?"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+				</div>
+				<hr
+					style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnEliminarSA" value="${titles['TTL_YES']}"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							process="@this" update="frmPrincipal:tablaSitAdmin"
+							actionListener="#{situacionesAdministrativasBean.abrirConfirmacionEliminarSA}" />
+						<p:message for="btnEliminarSA" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_NO']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							actionListener="#{situacionesAdministrativasBean.cancelarEliminarSA}" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<!-- SEGUNDO MODAL DE CONFIRMACION DE ELIMINACION SA -->
+		<p:dialog header="• Confirmación Eliminar Situación Administrativa •"
+			id="eliminarSA2" minHeight="600" widgetVar="eliminarSA2" modal="true"
+			resizable="false" closeOnEscape="false" draggable="false"
+			closable="false" responsive="true">
+			<p:panel id="panelConfirmacionEliminacionSA2"
+				style="background: transparent;">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="¿Realmente está usted seguro de borrar esta situación administrativa?"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+				</div>
+				<hr
+					style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnEliminarSA2" value="${titles['TTL_YES']}"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							process="@this" update="frmPrincipal:tablaSitAdmin"
+							actionListener="#{situacionesAdministrativasBean.eliminarSituacionAdministrativa(situacionesAdministrativasBean.situacionAdminVinculacionExtSelected)}" />
+						<p:message for="btnEliminarSA2" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_NO']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							actionListener="#{situacionesAdministrativasBean.cancelarEliminarSA2}" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

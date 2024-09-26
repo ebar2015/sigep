@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pageTitle" value="${titles['TTL_HOJA_VIDA2']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_IMPRIMIR_HOJA_VIDA']}" />
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{imprimirDescargarHojaVidaBean.id}' />
+		<f:viewParam name="dialog"
+			value='#{imprimirDescargarHojaVidaBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{imprimirDescargarHojaVidaBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{imprimirDescargarHojaVidaBean.showDialog}' />
+	</f:metadata>
+
+	<ui:define name="mainDataUser">
+		<p:panel id="informacionPersonalUsuario">
+			<div class="row">
+				<div class="col-md-12">
+					<a href="#{imprimirDescargarHojaVidaBean.urlImprimir}"
+						target="_blank" class="btn btn-primary color-slide_imp">${titles['TTL_IMPRIMIR_HOJA_VIDA']}</a><br />
+					<a href="#{imprimirDescargarHojaVidaBean.urlDescargar}"
+						target="_blank" class="btn btn-primary color-slide_descg">${titles['TTL_DESCARGAR_HOJA_VIDA']}</a>
+				</div>
+			</div>
+		</p:panel>
+	</ui:define>
+
+	<ui:define name="main">
+
+		<div class="row">
+			<br /> <br />
+			<div class="col-md-12" align="center">
+				<h2 style="margin-top: -1%">
+					<p:outputLabel
+						value="• ${ imprimirDescargarHojaVidaBean.optionView == true ? titles['TTL_IMPRIMIR_HOJA_VIDA'] : titles['TTL_DESCARGAR_HOJA_VIDA']} •"
+						styleClass="page-subtitle" style="color: #263948!important;" />
+				</h2>
+			</div>
+		</div>
+		<!-- Formulario -->
+		<div class="row row-background-white ">
+			<p:panel id="formGeneratePdf">
+				<div class="panel-body form-horizontal">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<p:outputLabel
+								value="${ imprimirDescargarHojaVidaBean.optionView == true ? titles['TTL_OPCIONES_IMPRIMIR'] : titles['TTL_OPCIONES_DESCARGA']}"
+								styleClass="advisor" />
+						</div>
+					</div>
+					<hr
+						style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+					<br />
+					<div class="row ">
+						<div class="col-md-12" align="center">
+							<p:selectOneRadio id="rdbPubli"
+								value="#{imprimirDescargarHojaVidaBean.hojaDeVidaToPrint.flgFormatoCompleto}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="${titles['TTL_FORMATO_UNICO_HV']}"
+									itemValue="false" />
+								<f:selectItem itemLabel="${titles['TTL_FORMATO_COMPLETO_HV']}"
+									itemValue="true" />
+							</p:selectOneRadio>
+							<p:message for="rdbPubli" display="text" />
+						</div>
+					</div>
+					<br />
+					<div class="row ">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['TTL_INCLUIR_FORMULARIO_GERENCIA']}"
+									styleClass="log-label form-label-formularios" />
+								&nbsp;
+								<p:selectBooleanCheckbox
+									value="#{imprimirDescargarHojaVidaBean.hojaDeVidaToPrint.flgGerenciaPublica}" />
+							</div>
+							<div class="col-md-2" style="margin-left: -3% !important;">
+								<p:outputLabel value="${titles['TTL_INCLUIR_ANEXOS']}"
+									styleClass="log-label form-label-formularios" />
+								&nbsp;
+								<p:selectBooleanCheckbox
+									value="#{imprimirDescargarHojaVidaBean.incluirAnexos}" />
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+
+					<hr
+						style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+					<br />
+					<div class="row" align="center">
+						<br />
+						<div class="col-md-12">
+							<div class="col-md-5"></div>
+							<div class="col-md-2">
+								<c:if test="#{imprimirDescargarHojaVidaBean.optionView==true}">
+									<p:commandButton value="${titles['TTL_PRINT']}" ajax="false"
+										process="formGeneratePdf" update="formGeneratePdf"
+										onclick="this.form.target='_blank'"
+										actionListener="#{imprimirDescargarHojaVidaBean.imprimirHojaDeVida}"
+										styleClass="btn btn-primary" />
+								</c:if>
+								<c:if test="#{imprimirDescargarHojaVidaBean.optionView==false}">
+									<p:commandButton value="${titles['TTL_DOWNLOAD']}" ajax="false"
+										process="formGeneratePdf" update="formGeneratePdf"
+										onclick="this.form.target='_blank'"
+										actionListener="#{imprimirDescargarHojaVidaBean.descargarHojaDeVida}"
+										styleClass="btn btn-primary" />
+								</c:if>
+							</div>
+							<div class="col-md-5"></div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</div>
+	</ui:define>
+</ui:composition>

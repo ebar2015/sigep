@@ -1,0 +1,1037 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{plantillaBean.id}' />
+		<f:viewParam name="recursoId" value='#{plantillaBean.recursoId}' />
+		<f:viewParam name="recursoId" value='#{reporteBean.recursoId}' />
+		<f:viewParam name="dialog" value='#{plantillaBean.dialog}' />
+		<f:viewParam name="id" value='#{reporteBean.id}' />
+		<f:event type="preRenderView" listener='#{plantillaBean.retrieve}' />
+		<f:event type="preRenderView" listener='#{plantillaBean.showDialog}' />
+		<f:event type="preRenderView" listener='#{reporteBean.retrieve}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_TRANSVERSAL_PLANTILLA_XML']}" />
+	<ui:param name="pageSubtitle"
+		value="#{plantillaBean.recursoId eq 'GestionarReporteCrearTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_CREAR : (plantillaBean.recursoId eq 'GestionarReporteModificarTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_EDITAR : (plantillaBean.recursoId eq 'GestionarReporteConsultarTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_CONSULTAR : (plantillaBean.recursoId eq 'GestionarReporteEliminarTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_ELIMINAR : (plantillaBean.recursoId eq 'GestionarReporteAgregarCatalogoTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_AGREGAR_CATALOGO : (plantillaBean.recursoId eq 'GestionarReporteQuitarCatalogoTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_QUITAR_CATALOGO : ( plantillaBean.recursoId eq 'GestionarReporteModificarTag2' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_MODIFICAR : ''))))))}" />
+
+	<ui:define name="main">
+		<h:outputStylesheet>
+			.ui-state-highlight{
+				color: #24547A!important;
+				padding: 0.5em!important;
+				border: 1px solid !important;
+			}
+		</h:outputStylesheet>
+		<f:event listener="#{plantillaBean.validateForm}" type="postValidate" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.TipoPlantilla"
+			var="PFTipoPlantilla" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.FormatoReporte"
+			var="PFFormatoReporte" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.FormaConsulta"
+			var="PFFormaConsulta" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.CalificadorComparacion"
+			var="PFCalificador" />
+		<p:importEnum
+			type="co.gov.dafp.sigep2.util.xml.reporte.config.TipoGrafico"
+			var="PFTipoGrafico" />
+
+		<div class="row ">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• #{plantillaBean.recursoId eq 'GestionarReporteCrearTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_CREAR : (plantillaBean.recursoId eq 'GestionarReporteModificarTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_EDITAR : (plantillaBean.recursoId eq 'GestionarReporteConsultarTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_CONSULTAR : (plantillaBean.recursoId eq 'GestionarReporteEliminarTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_ELIMINAR : (plantillaBean.recursoId eq 'GestionarReporteAgregarCatalogoTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_AGREGAR_CATALOGO : (plantillaBean.recursoId eq 'GestionarReporteQuitarCatalogoTag' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_QUITAR_CATALOGO : ( plantillaBean.recursoId eq 'GestionarReporteModificarTag2' ? titles.TTL_SUB_TRANSVERSAL_PLANTILLA_MODIFICAR : ''))))))} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		
+		<div class="col-md-2"></div>
+		<!-- Formulario -->
+		<div class="row row-background-white">
+			<div class="panel-body form-horizontal col-md-12">
+				
+				<div class="col-md-12">
+					<div class="col-md-12" style="margin-bottom: 2% !important;">
+						<p:outputLabel for="nombre"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO']}"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="nombre" maxlength="150"
+							rendered="#{plantillaBean.renderIngresoInformacion}"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO']}"
+							value="#{plantillaBean.xml.nombre}" required="true"
+							disabled="#{plantillaBean.recursoId eq 'GestionarReporteModificarTag'}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua-acti-usua">
+							<p:ajax process="@this" update="@this" />
+							<f:validator validatorId="textAlfanumericoTildeValidator" />
+						</p:inputText>
+						<h:outputText id="nombreD"
+							rendered="#{!plantillaBean.renderIngresoInformacion}"
+							value="#{plantillaBean.xml.nombre}"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO']}"
+							styleClass="log-label form-label form-control" />
+						<p:message for="nombre" display="text" />
+					</div>
+					<br />
+					<div class="col-md-12" style="margin-bottom: 2% !important;">
+						<p:outputLabel for="descripcion"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION_REPORTE']}"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="descripcion" maxlength="150"
+							rendered="#{plantillaBean.renderIngresoInformacion}"
+							placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION_REPORTE']}"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION_REPORTE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							value="#{plantillaBean.xml.descripcion}" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua-acti-usua">
+							<p:ajax process="@this" update="@this" />
+							<f:validator validatorId="textAlfanumericoTildeValidator" />
+						</p:inputText>
+						<h:outputText id="descripcionD"
+							rendered="#{!plantillaBean.renderIngresoInformacion}"
+							title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION_REPORTE']}"
+							value="#{plantillaBean.xml.descripcion}"
+							styleClass="log-label form-label form-control" />
+						<p:message for="descripcion" display="text" />
+					</div>
+					<h:panelGroup id="configuracionBaseMallas"
+						rendered="#{plantillaBean.xml.tipoPlantilla ne 'CONFIGURACION'}">
+						<div class="col-md-6">
+							<p:outputLabel for="periodoGeneracion"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PERIODO']}"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="periodoGeneracion"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PERIODO']}"
+								rendered="#{plantillaBean.renderIngresoInformacion}"
+								filter="true" filterMatchMode="contains"
+								value="#{plantillaBean.xml.periodoGeneracion}" var="t"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems var="periodo" value="#{periodosGeneracion}"
+									itemLabel="#{titles[periodo]}" itemValue="#{periodo}" />
+							</h:selectOneMenu>
+							<h:outputText id="periodoGeneracionD"
+								rendered="#{!plantillaBean.renderIngresoInformacion}"
+								title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PERIODO']}"
+								value="#{titles[plantillaBean.xml.periodoGeneracion]}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="periodoGeneracion" display="text" />
+						</div>
+						<div class="col-md-6" style="margin-bottom: 2% !important;">
+							<p:outputLabel for="tipoGrafico"
+								value="${titles['TTL_REPORTES_FORMATO_GRAFICO']}"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="tipoGrafico"
+								title="${titles['TTL_SELECT']} ${titles['TTL_REPORTES_FORMATO_GRAFICO']}"
+								rendered="#{plantillaBean.renderIngresoInformacion}"
+								filter="true" filterMatchMode="contains"
+								value="#{plantillaBean.xml.tipoGrafico}" var="t"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems var="grafico" value="#{tiposGraficos}"
+									itemLabel="#{titles[grafico]}" itemValue="#{grafico}" />
+							</h:selectOneMenu>
+							<h:outputText title="${titles['TTL_REPORTES_FORMATO_GRAFICO']}"
+								rendered="#{!plantillaBean.renderIngresoInformacion}"
+								value="#{titles[plantillaBean.xml.tipoGrafico]}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="tipoGrafico" display="text" />
+						</div>
+						<div class="col-md-6" style="margin-bottom: 2% !important;">
+							<p:outputLabel for="versionEsquema"
+								rendered="#{!plantillaBean.renderIngresoInformacion}"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VERSION_ESQUEMA']}"
+								styleClass="log-label form-label-formularios" />
+							<h:outputText id="versionEsquema"
+								title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VERSION_ESQUEMA']}"
+								value="#{plantillaBean.xml.versionEsquema}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="versionEsquema" display="text" />
+						</div>
+						<div class="col-md-12"
+							style="margin-bottom: 2% !important; margin-top: 2% !important;">
+							<p:outputLabel for="mallaReporte"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MALLA']}"
+								styleClass="log-label form-label-formularios" />
+						</div>
+						<div class="col-md-12">
+							<p:selectManyCheckbox id="mallaReporte"
+								value="#{plantillaBean.listaMalla}" layout="responsive"
+								columns="4" rendered="#{plantillaBean.renderIngresoInformacion}"
+								collectionType="java.util.ArrayList">
+								<f:selectItems id="mallaSelect"
+									value="#{plantillaBean.xmlConfiguracion.mallaConfiguracion}"
+									var="mallaItem" itemLabel="#{mallaItem.nombre}"
+									itemValue="#{mallaItem.id}" />
+								<p:ajax event="change" process="@this"
+									update="@this,mallasSeleccionadas,frmPrincipal:panalOrdenarValoresMalla"
+									listener="#{plantillaBean.cargarMallas}" immediate="true" />
+							</p:selectManyCheckbox>
+							<p:message for="mallaReporte" display="text" />
+						</div>
+						<h:panelGroup id="panalOrdenarValoresMalla" styleClass="col-md-12"
+							layout="block"
+							style="margin-bottom: 2% !important; margin-top: 2% !important;">
+							<h:panelGroup styleClass="col-md-2" layout="block"
+								style="margin-bottom: 2% !important; margin-top: 2% !important;"
+								rendered="#{plantillaBean.lstOrden.size() gt 1 and plantillaBean.renderIngresoInformacion}">
+								<p:commandButton id="botonOrdenarValorMalla" process="@this"
+									icon="icon-sort" title="${titles['TTL_ORDENAR_VALORES_MALLA']}"
+									onclick="PF('ordenarValoresMallaDialog').show();" />
+								<p:commandButton id="botonItemIdAncla" icon="icon-cadena"
+									process="@this" update="@this"
+									title="${titles['TTL_GO_TO']} ${titles['TTL_ADD_VALOR_MALLA_CONFIGURACION']}"
+									onclick="posicionarAncla('${messages['DLG_HEADER_MENSAJES']}', '${titles['TTL_GO_TO']} ${titles['TTL_ADD_VALOR_MALLA']}', 'itemIdAncla')" />
+							</h:panelGroup>
+							<div class="col-md-10" />
+						</h:panelGroup>
+						<div class="col-md-12" style="margin-bottom: 2% !important;">
+							<h:panelGroup id="mallasSeleccionadasD"
+								rendered="#{!plantillaBean.renderIngresoInformacion}">
+								<ui:repeat var="mallaReporte"
+									value="#{plantillaBean.listaMallaReporte}">
+									<div class="panel-body form-horizontal cuadrito col-md-12">
+										<div class="row">
+											<div class="col-md-12" style="margin-bottom: 2% !important;">
+												<h:outputText id="mallaD"
+													title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MALLA']}"
+													value="#{mallaReporte.nombre}"
+													styleClass="log-label form-label form-control" />
+												<p:outputLabel
+													value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALORES_MALLA']}"
+													styleClass="log-label form-label-formularios"
+													style="padding-top: 2%!important; padding-bottom: 2%!important; font-size: 17px!important;" />
+												<ui:repeat var="itemValorMalla"
+													value="#{mallaReporte.valorMalla}">
+													<h:outputText id="mallaD"
+														title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MALLA']}"
+														value="#{itemValorMalla.nombre}"
+														styleClass="log-label form-label form-control" />
+												</ui:repeat>
+											</div>
+										</div>
+									</div>
+								</ui:repeat>
+							</h:panelGroup>
+							
+							<h:panelGroup id="mallasSeleccionadas"
+								rendered="#{plantillaBean.renderIngresoInformacion}">
+								<p:dataTable id="mallasSeleccionadasTable" reflow="true"
+									expandedRow="#{true}"
+									value="#{plantillaBean.listaMallaReporte}" var="mallaReporte"
+									emptyMessage="${messages['DLG_SIN_REGISTROS']}">
+									<p:column style="width:10%!important"
+										headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_VALORES_MALLA']}"
+										width="150">
+										<p:rowToggler />
+									</p:column>
+									<p:column
+										headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_MALLA']}"
+										width="150">
+										<h:outputText value="#{mallaReporte.nombre}" />
+									</p:column>
+									<p:rowExpansion>
+										<h:panelGroup id="detalleValorMalla">
+											<ui:repeat var="itemValorMalla"
+												value="#{mallaReporte.valorMalla}">
+												<h:panelGroup id="configuracionValorMalla"
+													class="panel-body form-horizontal">
+													<!-- Formulario -->
+													<div class="panel-body form-horizontal cuadrito col-md-12">
+														<div class="row">
+															<div class="row">
+																<div class="col-md-12" align="center">
+																	<h:panelGroup id="tituloValorMalla">
+																		<h3>
+																			<h:panelGroup
+																				rendered="#{empty itemValorMalla.nombre}">
+																				<div id="itemIdAncla">
+																					<p:outputLabel
+																						value="• ${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']} •"
+																						styleClass="page-subtitle"
+																						style="color: #263948!important;" />
+																				</div>
+																			</h:panelGroup>
+																			<h:panelGroup
+																				rendered="#{not empty itemValorMalla.nombre}">
+																				<p:outputLabel value="• #{itemValorMalla.nombre} •"
+																					styleClass="page-subtitle"
+																					style="color: #263948!important;" />
+																			</h:panelGroup>
+																		</h3>
+																	</h:panelGroup>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="col-md-12">
+																	<p:outputLabel
+																		styleClass="log-label form-label-formularios"
+																		for="idColumnaParaValorMalla"
+																		value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}" />
+																	<p:selectOneMenu id="idColumnaParaValorMalla"
+																		title="${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}"
+																		value="#{itemValorMalla.id}" 
+																		required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+																		styleClass="form-control-form-act-usua" filter="true"
+																		filterMatchMode="contains">
+																		<f:selectItem itemLabel="${titles['TTL_SELECT']}" noSelectionOption="true" itemValue="#{null}" />
+																		<f:selectItems var="columna"
+																			value="#{plantillaBean.getColumnasMalla(mallaReporte.id)}"
+																			itemLabel="#{columna.etiquetaColumna}"
+																			itemValue="#{columna.id}" />
+																		<p:ajax process="@this"
+																			update="@this,configuracionValorMalla,@widgetVar(ordenarValoresMallaDialog),frmPrincipal:panalOrdenarValoresMalla"
+																			listener="#{plantillaBean.cargarValorMalla(mallaReporte.id, itemValorMalla)}" />
+																	</p:selectOneMenu>
+																	<p:message for="idColumnaParaValorMalla" display="text" />
+																	<p:inputText id="nombre" type="text"
+																		value="#{itemValorMalla.nombre}"
+																		required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+																		<p:ajax process="@this"
+																			update="@this,configuracionValorMalla,@widgetVar(ordenarValoresMallaDialog),frmPrincipal:panalOrdenarValoresMalla" />
+																	</p:inputText>
+																	<p:inputText id="nombreColumna" type="hidden"
+																		value="#{itemValorMalla.nombreColumna}">
+																		<p:ajax process="@this" update="@this" />
+																	</p:inputText>
+																	<p:message for="nombre" display="text" />
+																</div>
+																<div class="col-md-12">
+																	<br />
+																</div>
+																<div class="col-md-12">
+																	<p:outputLabel
+																		value="${titles['TTL_ADD_VALOR_MALLA_CONFIGURACION']}" />
+																</div>
+																<div>
+																	<div class="col-md-6">
+																		<p:selectBooleanCheckbox id="graficar"
+																			itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_GRAFICAR']}"
+																			title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_GRAFICAR']}"
+																			value="#{itemValorMalla.graficar}"
+																			disabled="#{plantillaBean.xml.tipoGrafico == null}">
+																			<p:ajax process="@this" update="@this" />
+																		</p:selectBooleanCheckbox>
+																		<p:message for="graficar" display="text" />
+																	</div>
+																</div>
+																<h:panelGroup
+																	rendered="#{itemValorMalla.permiteOperacionesAgrupamiento}"
+																	layout="block">
+																	<div class="col-md-6">
+																		<p:selectBooleanCheckbox id="agrupamiento"
+																			itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_AGRUPAR']}"
+																			title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_AGRUPAR']}"
+																			value="#{itemValorMalla.agrupamiento}">
+																			<p:ajax process="@this" update="@this" />
+																		</p:selectBooleanCheckbox>
+																		<p:message for="agrupamiento" display="text" />
+																	</div>
+																	<div class="col-md-6">
+																		<p:selectBooleanCheckbox id="totalizado"
+																			itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TOTALIZADO']}"
+																			title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TOTALIZADO']}"
+																			value="#{itemValorMalla.totalizado}">
+																			<p:ajax process="@this" update="@this" />
+																		</p:selectBooleanCheckbox>
+																		<p:message for="totalizado" display="text" />
+																	</div>
+																	<div class="col-md-6">
+																		<p:selectBooleanCheckbox id="conteo"
+																			itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CONTEO']}"
+																			title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_CONTEO']}"
+																			value="#{itemValorMalla.conteo}">
+																			<p:ajax process="@this" update="@this" />
+																		</p:selectBooleanCheckbox>
+																		<p:message for="conteo" display="text" />
+																	</div>
+																</h:panelGroup>
+																<div class="col-md-6">
+																	<p:selectBooleanCheckbox id="mostrarEnReporte"
+																		itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_RENDERIZADO']}"
+																		title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_RENDERIZADO']}"
+																		value="#{itemValorMalla.mostrarEnReporte}">
+																		<p:ajax process="@this" update="@this" />
+																	</p:selectBooleanCheckbox>
+																	<p:message for="mostrarEnReporte" display="text" />
+																</div>
+																<div class="col-md-6" />
+																<div class="col-md-6">
+																	<p:selectBooleanCheckbox id="esParametro"
+																		itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO']}"
+																		title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO']}"
+																		value="#{itemValorMalla.esParametro}">
+																		<p:ajax event="change" process="@this"
+																			update="@this,configuracionValorMalla" />
+																	</p:selectBooleanCheckbox>
+																	<p:message for="esParametro" display="text" />
+																</div>
+																<h:panelGroup id="configuracionParametro"
+																	rendered="#{itemValorMalla.esParametro}">
+																	<div class="col-md-6">
+																		<p:selectBooleanCheckbox id="requerido"
+																			itemLabel="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+																			title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_REQUERIDO']}"
+																			value="#{itemValorMalla.requerido}">
+																			<p:ajax process="@this" update="@this" />
+																		</p:selectBooleanCheckbox>
+																		<p:message for="graficar" display="text" />
+																	</div>
+																	<div class="col-md-6">
+																		<p:outputLabel
+																			styleClass="log-label form-label-formularios"
+																			for="calificadorParametro"
+																			value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO_CALIFICADOR']}" />
+																		<h:selectOneMenu id="calificadorParametro"
+																			title="${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO_CALIFICADOR']}"
+																			value="#{itemValorMalla.calificadorParametro}"
+																			required="true"
+																			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+																			styleClass="form-control-form-act-usua">
+																			<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+																				itemValue="#{null}" disabled="true" />
+																			<f:selectItems var="calificador"
+																				value="#{calificadoresComparacionReporte}"
+																				itemLabel="#{titles[calificador]}"
+																				itemValue="#{calificador}" />
+																			<p:ajax event="change" process="@this" update="@this" />
+																		</h:selectOneMenu>
+																		<p:message for="calificadorParametro" display="text" />
+																	</div>
+																	<div class="col-md-6">
+																		<p:outputLabel
+																			styleClass="log-label form-label-formularios"
+																			for="valorComparacionParametro"
+																			value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO_VALOR_COMPARACION']}" />
+																		<p:inputText id="valorComparacionParametro"
+																			title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO_VALOR_COMPARACION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+																			placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PARAMETRO_VALOR_COMPARACION']}"
+																			value="#{itemValorMalla.valorComparacionParametro}"
+																			styleClass="form-control-form-act-usua-acti-usua">
+																			<p:ajax process="@this" update="@this" />
+																		</p:inputText>
+																		<p:message for="valorComparacionParametro"
+																			display="text" />
+																	</div>
+																</h:panelGroup>
+															</div>
+														</div>
+														<br />
+														<hr
+															style="border-top: 1.5px solid rgb(196, 196, 196); width: 92.5%;" />
+														<div class="row" align="center">
+															<div class="col-md-3"></div>
+															<div class="col-md-6">
+																<p:commandButton value="${titles['TTL_REMOVE']}"
+																	title="${titles['TTL_REMOVE']}" process="@this"
+																	actionListener="#{plantillaBean.confirmarQuitarValorMalla()}"
+																	styleClass="btn btn-primary"
+																	style="font-size: 1.6em!important; padding-left:4%!important; padding-right:4%!important; border-radius: 4px!important;">
+																	<f:setPropertyActionListener value="#{mallaReporte}"
+																		target="#{plantillaBean.mallaSeleccionada}" />
+																	<f:setPropertyActionListener value="#{itemValorMalla}"
+																		target="#{plantillaBean.valorMallaSeleccionado}" />
+																</p:commandButton>
+
+															</div>
+															<div class="col-md-3"></div>
+														</div>
+													</div>
+												</h:panelGroup>
+											</ui:repeat>
+										</h:panelGroup>
+										<div class="col-md-12">
+											<p:commandButton id="botonMasValorMalla" icon="icon-new-role"
+												title="${titles['TTL_ADD_VALOR_MALLA']}"
+												actionListener="#{plantillaBean.agregarValorMalla(mallaReporte.id)}"
+												process="@this" update="mallasSeleccionadasTable" />
+										</div>
+									</p:rowExpansion>
+								</p:dataTable>
+								<p:message for="mallasSeleccionadasTable" display="text" />
+							</h:panelGroup>
+						</div>
+
+						<div class="col-md-6">
+							<p:outputLabel for="formatoReporte"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FORMATO']}"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="formatoReporte"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FORMATO']}"
+								rendered="#{plantillaBean.renderIngresoInformacion}"
+								filter="true" filterMatchMode="contains"
+								value="#{plantillaBean.xml.formatoReporte}" var="t"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems var="formato" value="#{formatosReporte}"
+									itemLabel="#{titles[formato]}" itemValue="#{formato}" />
+							</h:selectOneMenu>
+							<h:outputText id="formatoReporteD"
+								rendered="#{!plantillaBean.renderIngresoInformacion}"
+								title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FORMATO']}"
+								value="#{titles[plantillaBean.xml.formatoReporte]}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="formatoReporte" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel for="formaConsulta"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FORMA_CONSULTA']}"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="formaConsulta"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FORMA_CONSULTA']}"
+								rendered="#{plantillaBean.renderIngresoInformacion}"
+								filter="true" filterMatchMode="contains"
+								value="#{plantillaBean.xml.formaConsulta}" var="t"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems var="forma" value="#{formasConsulta}"
+									itemLabel="#{titles[forma]}" itemValue="#{forma}" />
+							</h:selectOneMenu>
+							<h:outputText id="formaConsultaD"
+								rendered="#{!plantillaBean.renderIngresoInformacion}"
+								title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_FORMA_CONSULTA']}"
+								value="#{titles[plantillaBean.xml.formaConsulta]}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="formaConsulta" display="text" />
+						</div>
+						<div class="col-md-12"
+							style="margin-bottom: 2% !important; margin-top: 2% !important;">
+							<p:outputLabel for="rol"
+								value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ROLES']}"
+								styleClass="log-label form-label-formularios" />
+							<p:selectCheckboxMenu id="rol"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ROLES']}"
+								rendered="#{plantillaBean.renderIngresoInformacion}"
+								value="#{plantillaBean.listaRol}"
+								label="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ROLES']}"
+								multiple="true" filter="true" filterMatchMode="startsWith"
+								required="true" styleClass="form-control-nacionalidad"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItems value="#{rolesSistema}" var="rol"
+									itemLabel="#{rol.descripcionRol}"
+									itemValue="#{rol.nombre.toUpperCase()}" />
+							</p:selectCheckboxMenu>
+							<h:panelGroup
+								rendered="#{!plantillaBean.renderIngresoInformacion}">
+								<div class="panel-body form-horizontal cuadrito col-md-12">
+									<div class="row">
+										<div class="row">
+											<div class="col-md-12">
+												<ui:repeat var="rol" value="#{plantillaBean.listaRol}">
+													<div class="col-md-6">
+														<h:outputText id="rolD"
+															title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ROLES']}"
+															value="#{rol}"
+															styleClass="log-label form-label form-control" />
+													</div>
+												</ui:repeat>
+											</div>
+										</div>
+									</div>
+								</div>
+							</h:panelGroup>
+							<p:message for="rol" display="text" />
+						</div>
+					</h:panelGroup>
+					<div class="col-md-12" />
+				</div>
+				<h:panelGroup
+					rendered="#{plantillaBean.xml.tipoPlantilla eq 'CONFIGURACION' and plantillaBean.renderIngresoInformacion}">
+					<hr
+						style="border-top: 1.5px solid rgb(196, 196, 196); width: 92.5%; margin-top: 13em" />
+					<div class="col-md-12">
+						<p:commandButton id="botonAgregarMalla" icon="icon-new-role"
+							title="${titles['TTL_ADD_ARCHIVO']}">
+							<p:ajax process="@this"
+								listener="#{plantillaBean.abrirAccion(plantillaBean.id, 'malla', 'recursoId=agregarMallaReportesTag')}"
+								update="@form" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="detalleBloque" editable="true" editMode="cell"
+							reflow="true" rowKey="#{mallaConfiguracion.nombre}"
+							value="#{plantillaBean.xml.mallaConfiguracion}"
+							var="mallaConfiguracion"
+							emptyMessage="${messages['DLG_SIN_REGISTROS']}">
+							<p:column style="width:10%!important">
+								<p:rowToggler />
+							</p:column>
+							<p:column style="width:8em!important">
+								<p:commandButton id="botonModificarMalla" icon="icon-edit"
+									title="${titles['TTL_EDIT']}" process="@this"
+									update="@this detalleBloque">
+									<f:setPropertyActionListener value="#{mallaConfiguracion}"
+										target="#{plantillaBean.reporteSeleccionado}" />
+									<f:setPropertyActionListener value="#{columna}"
+										target="#{plantillaBean.columnaSeleccionada}" />
+									<p:ajax process="@this"
+										listener="#{plantillaBean.abrirAccion(plantillaBean.id, 'malla', 'recursoId=modificarMallaReportesTag;mallaReporte='.concat(mallaConfiguracion.id))}"
+										update="detalleBloque" />
+								</p:commandButton>
+								<p:commandButton icon="icon-delete"
+									title="${titles['TTL_REMOVE']}" oncomplete="quitarBloque()">
+									<f:setPropertyActionListener value="#{mallaConfiguracion}"
+										target="#{plantillaBean.reporteSeleccionado}" />
+									<p:confirm header="${messages['DLG_CONFIRMACION']}"
+										message="#{messages['MSG_PREGUNTA_ELIMINAR_REGISTRO'].concat(' ').concat(mallaConfiguracion.nombre)}"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:remoteCommand name="quitarBloque"
+									actionListener="#{plantillaBean.quitarReporte()}"
+									update="@this detalleBloque" />
+								<p:commandButton id="botonMasColumna" icon="icon-new-role"
+									title="${titles['TTL_ADD_COLUMNA']}" process="@this"
+									update="@this detalleColumna">
+									<f:setPropertyActionListener value="#{mallaConfiguracion}"
+										target="#{plantillaBean.reporteSeleccionado}" />
+									<f:setPropertyActionListener value="#{columna}"
+										target="#{plantillaBean.columnaSeleccionada}" />
+									<p:ajax process="@this"
+										listener="#{plantillaBean.abrirAccion(plantillaBean.id, 'columna', 'recursoId=agregarColumnaReportesTag;mallaReporte='.concat(mallaConfiguracion.id))}"
+										update="detalleColumna" />
+								</p:commandButton>
+
+							</p:column>
+							<p:column
+								headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_ARCHIVO']}"
+								style="width:50%!important">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{mallaConfiguracion.nombre}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="nombre"
+											title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_ARCHIVO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+											placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_ARCHIVO']}"
+											value="#{mallaConfiguracion.nombre}" required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua-acti-usua">
+											<p:ajax process="@this" update="@this" />
+											<f:attribute name="minLength" value="5" />
+											<f:attribute name="maxLength" value="30" />
+											<f:attribute name="pattern"
+												value="^[A-ZÑÁÉÍÓÚ]+[a-zA-zñÑáéíóúÁÉÍÓÚ\s\-]*$" />
+											<f:validator validatorId="textGenericValidator" />
+										</p:inputText>
+										<p:message for="nombre" display="text" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column
+								headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PREFIJO_TABLA']}"
+								style="width:50%!important">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{mallaConfiguracion.prefijoTabla}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="prefijoTabla"
+											title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PREFIJO_TABLA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+											placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PREFIJO_TABLA']}"
+											value="#{mallaConfiguracion.prefijoTabla}" required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua-acti-usua">
+											<p:ajax process="@this" update="@this" />
+											<f:attribute name="minLength" value="2" />
+											<f:attribute name="maxLength" value="6" />
+											<f:attribute name="pattern" value="^[a-z]+[0-9]*$" />
+											<f:validator validatorId="textGenericValidator" />
+										</p:inputText>
+										<p:message for="prefijoTabla" display="text" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column
+								headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_TABLA']}"
+								style="width:50%!important">
+								<h:outputText value="#{mallaConfiguracion.nombreTabla}" />
+							</p:column>
+							<p:rowExpansion>
+								<p:panelGrid columns="1" layout="grid" columnClasses="col-md-12">
+									<p:dataTable id="detalleColumna" var="columna" editable="true"
+										editMode="cell" rowKey="#{columna}" varStatus="status"
+										value="#{mallaConfiguracion.columna}"
+										emptyMessage="${messages['DLG_SIN_REGISTROS']}"
+										paginator="true" rows="#{paginatorSize}"
+										currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+										rowsPerPageTemplate="#{paginatorsSize}">
+										<p:column style="width:5em!important">
+											<p:commandButton icon="icon-edit"
+												title="${titles['TTL_EDIT']}" process="@this"
+												update="@this detalleColumna">
+												<f:setPropertyActionListener value="#{mallaConfiguracion}"
+													target="#{plantillaBean.reporteSeleccionado}" />
+												<f:setPropertyActionListener value="#{columna}"
+													target="#{plantillaBean.columnaSeleccionada}" />
+												<p:ajax process="@this"
+													listener="#{plantillaBean.abrirAccion(plantillaBean.id, 'columna', 'recursoId=modificarColumnaReportesTag;mallaReporte='.concat(mallaConfiguracion.id).concat(';valorMalla=').concat(columna.id))}"
+													update="detalleColumna" />
+											</p:commandButton>
+											<p:commandButton icon="icon-delete"
+												title="${titles['TTL_REMOVE']}" oncomplete="quitarColumna()">
+												<f:setPropertyActionListener value="#{mallaConfiguracion}"
+													target="#{plantillaBean.reporteSeleccionado}" />
+												<f:setPropertyActionListener value="#{columna}"
+													target="#{plantillaBean.columnaSeleccionada}" />
+												<p:confirm header="${messages['DLG_CONFIRMACION']}"
+													message="#{messages['MSG_PREGUNTA_ELIMINAR_REGISTRO'].concat(' ').concat(columna.descripcion)}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+											<p:remoteCommand name="quitarColumna"
+												actionListener="#{plantillaBean.quitarColumna}"
+												update="@this detalleColumna" />
+										</p:column>
+										<p:column style="width:20em!important"
+											headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE']}">
+											<h:outputText value="#{columna.nombreColumna}" />
+										</p:column>
+										<p:column style="width:20em!important"
+											headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}">
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{columna.descripcion}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{columna.descripcion}"
+														label="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_DESCRIPCION']}"
+														styleClass="form-control-form-act-usua-acti-usua">
+														<p:ajax process="@this" update="@this" />
+													</p:inputText>
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column style="width:20em!important"
+											headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA_COLUMNA']}">
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{columna.etiquetaColumna}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{columna.etiquetaColumna}"
+														title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_ETIQUETA_COLUMNA']}"
+														styleClass="form-control-form-act-usua-acti-usua">
+														<p:ajax process="@this" update="@this" />
+													</p:inputText>
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column style="width:20em!important"
+											headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_DATO']}">
+											<h:outputText value="#{titles[columna.tipoDato]}" />
+										</p:column>
+										<p:column style="width:20em!important"
+											headerText="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_OBSERVACIONES']}">
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{columna.observaciones}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{columna.observaciones}"
+														title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_OBSERVACIONES']}"
+														styleClass="form-control-form-act-usua-acti-usua">
+														<p:ajax process="@this" update="@this" />
+													</p:inputText>
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+									</p:dataTable>
+								</p:panelGrid>
+							</p:rowExpansion>
+						</p:dataTable>
+					</div>
+				</h:panelGroup>
+
+				<h:panelGroup
+					rendered="#{plantillaBean.recursoId eq 'GestionarReporteConsultarTag'}">
+					<br />
+					<br />
+					<br />
+					<div class="col-md-2"></div>
+					<div class="panel-body form-horizontal cuadrito col-md-12">
+						<div class="row">
+							<ui:include
+								src="/gestion-informacion/reporte/contentConsult.xhtml" />
+						</div>
+					</div>
+				</h:panelGroup>
+
+				<h:panelGroup
+					rendered="#{plantillaBean.recursoId eq 'GestionarReporteConsultarTag'}">
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<p:commandButton value="${titles['TTL_FINALIZE']}"
+								title="${titles['TTL_FINALIZE']}" process="@this"
+								update="contains" resetValues="true"
+								actionListener="#{plantillaBean.cancelar()}"
+								styleClass="btn btn-default"
+								style="background:#D1D1D1!important;color:#2A89B5!important;font-size: 1.6em!important; padding-left:4%!important; padding-right:4%!important; border-radius: 4px!important;" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup
+					rendered="#{plantillaBean.recursoId ne 'GestionarReporteConsultarTag'}">
+					<div class="col-md-12" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-4 media-btn-vinculacion">
+							<p:commandButton value="${titles['TTL_CREATE']}"
+								title="${titles['TTL_CREATE']}"
+								onclick="jQuery('.ui-row-toggler[aria-expanded=false]').click()"
+								rendered="#{plantillaBean.recursoId eq 'GestionarReporteCrearTag'}"
+								process="@this,contains" update="contains"
+								action="#{plantillaBean.persist}" styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;" />
+							<p:commandButton value="${titles['TTL_EDIT']}"
+								title="${titles['TTL_EDIT']}"
+								onclick="jQuery('.ui-row-toggler[aria-expanded=false]').click()"
+								rendered="#{plantillaBean.recursoId eq 'GestionarReporteModificarTag'}"
+								process="@this,contains" update="contains"
+								actionListener="#{plantillaBean.update}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;" />
+							<p:commandButton value="${titles['TTL_REPORTES_MODIFICAR']}"
+								title="${titles['TTL_REPORTES_MODIFICAR']}"
+								rendered="#{plantillaBean.recursoId eq 'GestionarReporteModificarTag2'}"
+								process="@this,contains" update="contains"
+								actionListener="#{plantillaBean.abrirAccion(plantillaBean.id, '/gestionar', 'recursoId=GestionarReporteModificarTag')}"
+								styleClass="btn btn-primary"
+								style="font-size:1.5em!important; padding-top:0!important;" />
+							<p:commandButton value="${titles['TTL_REPORTES_ELIMINAR']}"
+								title="${titles['TTL_REPORTES_ELIMINAR']}"
+								rendered="#{plantillaBean.recursoId eq 'GestionarReporteEliminarTag'}"
+								process="@this" update="@form"
+								actionListener="#{plantillaBean.confirmarBorrar()}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+							<p:commandButton value="${titles['TTL_REPORTES_A_CATALOGO']}"
+								title="${titles['TTL_REPORTES_A_CATALOGO']}"
+								rendered="#{plantillaBean.recursoId eq 'GestionarReporteAgregarCatalogoTag'}"
+								process="@this" update="@form"
+								actionListener="#{plantillaBean.publicar()}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;" />
+							<p:commandButton value="${titles['TTL_REPORTES_R_CATALOGO']}"
+								title="${titles['TTL_REPORTES_R_CATALOGO']}"
+								rendered="#{plantillaBean.recursoId eq 'GestionarReporteQuitarCatalogoTag'}"
+								process="@this" update="@form"
+								actionListener="#{plantillaBean.confirmarQuitar()}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>
+
+						<div class="col-md-2">
+							<p:commandButton value="${titles['TTL_CANCEL']}"
+								title="${titles['TTL_CANCEL']}" process="@this"
+								update="contains" resetValues="true"
+								actionListener="#{plantillaBean.cancelar()}"
+								styleClass="btn btn-default"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- MODAL QUITAR REPORTE DE CATALOGO -->
+		<p:dialog header="• ${messages['DLG_CONFIRMACION_QUITAR']} •"
+			id="quitarRep" minHeight="600" widgetVar="quitarRep" modal="true"
+			resizable="false" closeOnEscape="false" draggable="false"
+			closable="false" responsive="true">
+			<p:panel id="panelQuitarRep" style="background: transparent;">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="#{messages['MSG_PREGUNTA_QUITAR_PLANTILLA_XML']}"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+				</div>
+				<hr
+					style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnEliminarSA" value="${titles['TTL_YES']}"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							process="@this" update="@form"
+							actionListener="#{plantillaBean.quitar()}" />
+						<p:message for="btnEliminarSA" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_NO']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							actionListener="#{plantillaBean.cancelarQuitar}" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<!-- MODAL QUITAR VALOR MALLA -->
+		<p:dialog header="• ${messages['DLG_CONFIRMACION']} •"
+			id="quitarValorMalla" minHeight="600" widgetVar="quitarValorMalla"
+			modal="true" resizable="false" closeOnEscape="false"
+			draggable="false" closable="false" responsive="true">
+			<p:panel id="panelValorMalla" style="background: transparent;">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="#{messages['MSG_PREGUNTA_ELIMINAR_REGISTRO']}"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+				</div>
+				<hr
+					style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnEliminarValorMalla"
+							value="${titles['TTL_YES']}" styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							process="@this"
+							update="@this,frmPrincipal:mallasSeleccionadas,@widgetVar(ordenarValoresMallaDialog),frmPrincipal:panalOrdenarValoresMalla"
+							oncomplete="quitarValorMalla()">
+						</p:commandButton>
+						<p:message for="btnEliminarValorMalla" display="text" />
+						<p:remoteCommand name="quitarValorMalla"
+							actionListener="#{plantillaBean.quitarValorMallaReporte()}"
+							process="@this"
+							update="@this,frmPrincipal:mallasSeleccionadas,@widgetVar(ordenarValoresMallaDialog),frmPrincipal:panalOrdenarValoresMalla" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_NO']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							actionListener="#{plantillaBean.cancelarQuitar}" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<!-- MODAL BORRAR REPORTE -->
+		<p:dialog header="• ${messages['DLG_CONFIRMACION']} •"
+			id="borrarReporte" minHeight="600" widgetVar="borrarReporte"
+			modal="true" resizable="false" closeOnEscape="false"
+			draggable="false" closable="false" responsive="true">
+			<p:panel id="panelBorrarRerpote" style="background: transparent;">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="#{messages['MSG_PREGUNTA_ELIMINAR_REGISTRO']}"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+				</div>
+				<hr
+					style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnEliminarreporte"
+							value="${titles['TTL_YES']}" styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							process="@this" update="@this,frmPrincipal:mallasSeleccionadas"
+							oncomplete="borrarReporte()">
+						</p:commandButton>
+						<p:message for="btnEliminarreporte" display="text" />
+						<p:remoteCommand name="borrarReporte"
+							actionListener="#{plantillaBean.delete()}" process="@this"
+							update="@this,frmPrincipal:mallasSeleccionadas" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_NO']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+							actionListener="#{plantillaBean.cancelarQuitar}" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<!-- Lista de selección del formato de descarga -->
+		<p:dialog header="• ${titles['TTL_ORDENAR_VALORES_MALLA']} •"
+			widgetVar="ordenarValoresMallaDialog" modal="true"
+			closeOnEscape="false" draggable="false" closable="false"
+			height="auto" resizable="false"
+			style="background: #F1F1F1!important;opacity: 1!important;">
+			<h:form>				
+				<p:panel id="panelOrdenarValoresMalla"
+					style="background: #F1F1F1!important;opacity: 1!important;">
+					<div class="row" align="center" />
+					<div class="col-md-12" align="center" style="margin-top: 1%;">
+						<p:orderList value="#{plantillaBean.lstOrden}" var="item"
+							itemValue="#{item}" converter="valorMallaConverter"
+							controlsLocation="right" responsive="true" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							moveTopLabel="${titles['LBL_MOVE_TOP']}"
+							moveBottomLabel="${titles['LBL_MOVE_BOTTOM']}"
+							moveDownLabel="${titles['LBL_MOVE_DOWN']}"
+							moveUpLabel="${titles['LBL_MOVE_UP']}">
+							<p:column style="width:40px">
+								<h:outputText value="#{item.orden}" />
+							</p:column>
+							<p:column headerText="hola">
+								<h:outputText value="#{item.nombre}" />
+							</p:column>
+						</p:orderList>
+					</div>
+					<div class="row" align="center" />
+					<hr
+						style="display: block; margin-top: 1em; margin-bottom: 1em; margin-left: auto; margin-right: auto; border: 0.5px solid #CCCCCC; width: 95%;" />
+					<div class="row" align="center" />
+					<div class="row" align="center">
+						<div class="col-md-2"></div>
+						<div class="col-md-4">
+							<p:commandButton id="btnGenerar" value="${titles['TTL_OK']}"
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;border-radius:4px!important;margin-bottom:1%;"
+								process="@this,@form"
+								update="@form,frmPrincipal:mallasSeleccionadas,@widgetVar(ordenarValoresMallaDialog)"
+								actionListener="#{plantillaBean.calcularOrdenValores()}" />
+							<p:defaultCommand target="btnGenerar" />
+						</div>
+						<div class="col-md-4">
+							<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+								update="@this" styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;margin-bottom:1%;"
+								onclick="PF('ordenarValoresMallaDialog').hide();" />
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+	
+</ui:composition>

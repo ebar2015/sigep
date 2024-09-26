@@ -1,0 +1,400 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<h:form id="formOtrosIngresos">
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="#{titles.LBL_DATOS_OIR}" styleClass="advisor" />
+					<br />
+					<p:outputLabel value="#{titles.LBL_DATOS_OIR2}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				<div class="col-md-12" style="text-align: right;">
+					<div style="padding-right: 1%; display: inline-block">
+						<div id="btnNuevoOtroIngreso">
+							<p:commandButton update="formOtrosIngresos" disabled="#{bienesRentasBean.estadoBtnOtroIn}" value="#{titles.LBL_ADD_NEW}"
+								actionListener="#{bienesRentasBean.crearIngresoNoLaboral}" styleClass="btn btn-transparent" process="@this"
+								onclick="window.location.href='#tabViewBienesRentas:formOtrosIngresos:panelFormOtrosIngresos_content'" icon="fa fa-fw fa-plus-circle"
+								oncomplete="window.location.href='#tabViewBienesRentas:formOtrosIngresos:panelFormOtrosIngresos_content'" id="btnNuevoIngresoNo"
+							 />
+						</div>
+					</div>
+					<div class="col-md-6" align="right" style="padding-right: 10px !important;">	
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12" descr="aligVal2" style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="tablaOtrosIngresos" var="dataOtrosIngresos" value="#{bienesRentasBean.listaOtrosIngresos}" paginator="true"
+                    currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}" reflow="true" emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+					<p:column headerText="#{titles.LBL_CONCEPTO}" style="word-wrap: break-word!important;"
+						sortBy="#{dataOtrosIngresos.conceptoIngreso}">
+						<h:outputText value="#{dataOtrosIngresos.conceptoIngreso}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_PARAMETRICA_VALOR}" style="word-wrap: break-word!important;"
+						sortBy="#{dataOtrosIngresos.valor}">
+						<p:outputLabel value="#{dataOtrosIngresos.valor}">
+							<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+						</p:outputLabel>
+					</p:column>
+					<p:column headerText="#{titles.LBL_DESCR_ACTIVIDAD}" style="word-wrap: break-word!important;"
+						sortBy="#{dataOtrosIngresos.nombreActividad}">
+						<h:outputText value="#{dataOtrosIngresos.nombreActividad}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_FORMA_BENEFICIO}" style="word-wrap: break-word!important;"
+						sortBy="#{dataOtrosIngresos.nombreBeneficio}">
+						<h:outputText value="#{dataOtrosIngresos.nombreBeneficio}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_TABLA_ACCIONES}" style="word-wrap: break-word!important; text-align:center!important;">
+						
+						<p:commandButton title="#{titles.TTL_BR_VISUALIZAR}" process="@this" icon="icon-view" 
+						    update="tabViewBienesRentas:formOtrosIngresos:panelFormOtrosIngresos"
+							actionListener="#{bienesRentasBean.verDetalleOtroIngreso}" styleClass="icon-btn btn-view-data" >
+							<f:setPropertyActionListener value="#{dataOtrosIngresos}" target="#{bienesRentasBean.otrosIngresos}" />
+						</p:commandButton>
+						
+						<p:commandButton title="#{titles.TTL_EDIT}" icon="icon-edit" process="@this" update="tabViewBienesRentas:formOtrosIngresos" 
+							action="#{bienesRentasBean.mostrarDialogoEditarOtrosIngresos()}" 
+							styleClass="icon-btn btn-view-data"
+							oncomplete="window.location.href='#tabViewBienesRentas:formOtrosIngresos:panelFormOtrosIngresos_content'" >
+							<f:setPropertyActionListener value="#{dataOtrosIngresos}" target="#{bienesRentasBean.otrosIngresos}" />
+						</p:commandButton>
+						<p:commandButton title="#{titles.TTL_DELETE}" icon="icon-delete" process="@this" update="tabViewBienesRentas:formOtrosIngresos" action="#{bienesRentasBean.mostrarDialogoEliminarOtrosIngresos()}"
+							styleClass="icon-btn">
+							<f:setPropertyActionListener value="#{dataOtrosIngresos}" target="#{bienesRentasBean.otrosIngresos}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+			<div class="row" align="right">
+				<div class="col-md-12" align="right" style="margin-top: 1%;">
+					<div class="col-md-4"></div>
+					<div class="col-md-3"></div>
+					<div class="col-md-5" align="left" style="opacity: 1 !important;">
+						<p:outputLabel value="#{titles.TTL_BIENES_RENTAS_TOTAL_OTROS}" styleClass="log-label form-label" style="color: #3b7c9d!important; margin-left: 1%;" />
+						<p:outputLabel disabled="true" id="valorTotalIngresos" value="$#{bienesRentasBean.valorTotal}" style="color: #3b7c9d!important; margin-left: 1%;" styleClass="log-label form-label" />
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-lg-12" align="center">
+					<div class="col-md-12">
+						<h:outputText styleClass="log-label form-label-formularios" value="#{titles.LBL_NO_OIR}&#160;" />
+						<p:selectBooleanCheckbox value="#{bienesRentasBean.sinOtrosIngresos}">
+							<p:ajax update="tablaOtrosIngresos valorTotalIngresos btnNuevoIngresoNo panelFormOtrosIngresos" listener="#{bienesRentasBean.guardarCheckOtrosIngresos}" />
+						</p:selectBooleanCheckbox>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton disabled="#{bienesRentasBean.btnGuardarOtroIngresoDeshabilitado}" title="#{bienesRentasBean.btnGuardarOtroIngresoMensaje}"
+						styleClass="btn btn-primary" process="@this" style="font-size:1.5em!important; padding-top:0!important;" actionListener="#{bienesRentasBean.guardarContinuarOtrosIngresos}" value="#{titles.LBL_SAVE_CONT}" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_CANCEL}" type="button" onclick="$('#dlgAbortOtros').modal('show');" styleClass="btn btn-default" style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<div id="formularioOtrosIngresos" >
+			<p:panel id="panelFormOtrosIngresos" visible="#{bienesRentasBean.lbMostrarFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">#{titles.LBL_NEW_INGRESO}</span>
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel for="txtConceptoOIR" styleClass="log-label form-label-formularios display-block" value="#{titles.LBL_CONCEPTO}:">
+							</p:outputLabel>
+							<p:inputText id="txtConceptoOIR" required="true" maxlength="50" onkeypress="return noConsecutivos(event, this.value)" title="${titles['TTL_INGRESE']} ${titles['LBL_CONCEPTO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{bienesRentasBean.otrosIngresos.conceptoIngreso}" styleClass="form-control-acti-usua form-control" class="form-control-acti-usua">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtConceptoOIR" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="txtNumSaldo" styleClass="log-label form-label-formularios display-block" value="#{titles.LBL_PARAMETRICA_VALOR}:">
+							</p:outputLabel>
+							<p:inputNumber id="txtNumSaldo" required="true" disabled="#{!bienesRentasBean.lbEditarFormulario}"
+								converterMessage="El valor debe ser numérico y la parte decimal separada por punto" 
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+								symbol="$ "
+								decimalSeparator=","
+                                thousandSeparator="."
+                                decimalPlaces="2"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']} ${titles['TTL_TIPO_NUMERICO']}" 
+								value="#{bienesRentasBean.otrosIngresos.valor}" 
+								>
+								<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+							</p:inputNumber>
+							<p:keyFilter for="txtNumSaldo" mask="num"/>
+							<p:message for="txtNumSaldo" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="txtDescActividad" styleClass="log-label form-label-formularios display-block" value="#{titles.LBL_DESCR_ACTIVIDAD}:">
+							</p:outputLabel>
+							<p:selectOneMenu id="txtDescActividad" required="true" title="${titles['TTL_SELECT']} ${titles['LBL_DESCR_ACTIVIDAD']}"
+								filter="true" filterMatchMode ="contains"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+								value="#{bienesRentasBean.otrosIngresos.codDescripcionActividad}" styleClass="form-control-form-act-usua"
+								>
+								<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+								<f:selectItems value="#{webUtils.descripcionActividadBR}" />
+							</p:selectOneMenu>
+							<p:message for="txtDescActividad" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel for="txtFormaBeneficios" styleClass="log-label form-label-formularios display-block" value="#{titles.LBL_FORMA_BENEFICIO}:">
+							</p:outputLabel>
+							<p:selectOneMenu id="txtFormaBeneficios" required="true" 
+								filter="true" filterMatchMode ="contains"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" value="#{bienesRentasBean.otrosIngresos.codFormaBeneficio}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FORMA_BENEFICIO']}" 
+								disabled="#{!bienesRentasBean.lbEditarFormulario}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+								<f:selectItems value="#{webUtils.formaBeneficiosBR}" />
+							</p:selectOneMenu>
+							<p:message for="txtFormaBeneficios" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_BR_BTN_ADICIONAR']}" process="formOtrosIngresos" 
+						    disabled="#{!bienesRentasBean.lbEditarFormulario}"
+						    update="tablaOtrosIngresos valorTotalIngresos panelFormOtrosIngresos"
+							actionListener="#{bienesRentasBean.guardarOtrosIngresos()}" styleClass="btn btn-primary" style="font-size:1.5em!important; padding-top:0!important;" onclick="mostrarValidacion();" />
+					</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this"
+							update="panelFormOtrosIngresos valorTotalIngresos"
+							actionListener="#{bienesRentasBean.limpiarOtrosIngrsos()}" 
+							title="#{bienesRentasBean.strToolTipBtnLimpiar}"
+							disabled="#{!bienesRentasBean.lbEditarFormulario}"  >
+						
+							   <p:resetInput target="panelFormOtrosIngresos" />
+							  </p:commandButton>
+					</div>						
+					<div class="col-md-3"></div>
+					<script>
+						function mostrarValidacion(){
+							if(document.getElementById('tabViewBienesRentas:formOtrosIngresos:txtConceptoOIR').value=="" || document.getElementById('tabViewBienesRentas:formOtrosIngresos:txtNumSaldo').value==""){ 
+								if(document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtDescActividad").value == "" ){
+								   document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtDescActividad").nextSibling.innerHTML='<span class="ui-message-error-detail">Se requiere un valor</span>';
+								   document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtDescActividad").parentNode.firstChild.classList.add("ui-state-error");
+								}else{
+									document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtDescActividad").nextSibling.innerHTML='';
+									document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtDescActividad").parentNode.firstChild.classList.remove("ui-state-error");
+								}
+								if(document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtNumSaldo").value == ""){
+								   document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtNumSaldo").nextSibling.innerHTML='<span class="ui-message-error-detail">Se requiere un valor</span>';
+								   document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtNumSaldo").parentNode.firstChild.classList.add("ui-state-error");
+								}
+								else{
+									document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtNumSaldo").nextSibling.innerHTML='';
+									document.getElementById("tabViewBienesRentas:formOtrosIngresos:txtNumSaldo").parentNode.firstChild.classList.remove("ui-state-error");
+								}
+							}
+						}
+					</script>
+				</div>
+			</p:panel>
+			<br />
+		</div>
+	</h:form>
+	<div class="modal fade" id="dialogEditarOtrosIngresos" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${titles['BR_TITULO_EDICION']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="${titles['TTL_YES']}" process="@this" 
+								actionListener="#{bienesRentasBean.editarIngresoNoLaboral}"
+									update="tabViewBienesRentas:formOtrosIngresos:panelFormOtrosIngresos" 
+									onclick="$('#dialogEditarOtrosIngresos').modal('hide');" styleClass="btn btn-primary"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3" align="center">
+								<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" onclick="$('#dialogEditarOtrosIngresos').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="dialogEliminarOtrosIngresos" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${titles['LBL_BR_ELIMINA_CUENTA']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="${titles['TTL_YES']}" styleClass="btn btn-primary" update="tabViewBienesRentas:formOtrosIngresos" actionListener="#{bienesRentasBean.eliminarOtroIngreso}"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3" align="center">
+								<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" onclick="$('#dialogEliminarOtrosIngresos').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Modal confirmacion check eliminación -->
+	
+	<div class="modal fade" id="dialogEliminarTodosOtrosIngresos" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2" style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${titles['TTL_BR_BORRAR_TODO']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									styleClass="btn btn-primary"
+									update="tabViewBienesRentas:formOtrosIngresos"
+									actionListener="#{bienesRentasBean.bloquearRegistrarOtrosIngresos()}"
+									onclick="$('#dialogEliminarTodosOtrosIngresos').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									update="tabViewBienesRentas:formOtrosIngresos"
+									styleClass="btn btn-default"
+									actionListener="#{bienesRentasBean.cancelarEliminacionOtrosIngresos()}"
+									onclick="$('#dialogEliminarTodosOtrosIngresos').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dlgAbortOtros"
+		role="dialog">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_DIALOGO_CANCELAR']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" >
+							<p:commandButton
+								value="${titles['TTL_YES']}"
+								process="@this"
+								styleClass="btn btn-primary btn-si"
+								onclick="$('#dlgAbortOtros').modal('hide'); location.href='../index.xhtml';"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+								/>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_NO']}"
+								styleClass="btn btn-default"
+								onclick="$('#dlgAbortOtros').modal('hide')" 
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+								/>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="es" lang="es" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" template="/resources/template/basicTemplate.xhtml">
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDAD}" />
+	<ui:param name="pageSubtitle" value="#{titles.LBL_NOMENCLATURA_Y_ESCALA}" />
+
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2>
+					<p:outputLabel value="#{titles.LBL_NOMENCLATURA_Y_ESCALA}" styleClass="page-subtitle" />
+				</h2>
+			</div>
+		</div>
+		<div class="row" style="background-color: transparent;">
+				<p:tabView id="tabViewNomenclaturaEscala" dynamic="true" style="background-color: transparent;">
+					<p:ajax event="tabChange" update="tabViewNomenclaturaEscala" listener="#{nomenclaturaSalarialBean.cambiarVisibilidadContenido()}" />
+					<p:tab id="tabNomenclatura" title="#{titles.LBL_NOMENCLATURA_TIT}" disabled="false">
+							<p:panel rendered="#{nomenclaturaSalarialBean.verContenidoNomenclatura}">
+								<ui:include src="nomenclatura.xhtml" />
+							</p:panel>
+					</p:tab>
+					<p:tab id="tabEscalaSalarial" title="#{titles.TTL_GI_TABLERO_CEP_EMP_ESCALA_SALARIAL}" disabled="false">
+							<p:panel rendered="#{nomenclaturaSalarialBean.verContenidoEscalaSalarial}">
+								<ui:include src="escalaSalarial.xhtml" />
+							</p:panel>
+					</p:tab>
+				</p:tabView>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,572 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core_1_1"
+	xmlns:p="http://primefaces.org/ui">
+	<style>
+.display-block {
+	display: block;
+}
+</style>
+	<script type="text/javascript">
+		    $(window).on('load', function() {
+			    var msg =  #{bienesRentasBean.mensage};
+			    	$('#msgDatoDomiclio').modal({backdrop: 'static', keyboard: false})  ;
+			      	$('#msgDatoDomiclio').modal('show');
+			});
+
+		    function cerrarPop(){
+		    		$('#msgDatoDomiclio').modal('toggle');
+		    }
+		    
+		    function disbleMuns(){
+		    	var index = document.getElementById("tabViewBienesRentas:pPanelDom:cmbPais").value;
+			    if(index == 169){
+			    	   $("#col").attr("style", "display:block");
+			    	   $("#otro").attr("style", "display:none");
+			     }else{
+			    	   $("#col").attr("style", "display:none");
+			    	   $("#otro").attr("style", "display:block");
+				 }
+			}
+	</script>
+	<p:panel id="tabHojaDeVida" class="tarjetaPersonalBR">
+		<ui:include src="tarjetaPersonaDeclaracion.xhtml" />
+	</p:panel>
+	<br />
+	<br />
+	<div
+		class="row row-background-white"
+		style="margin-left: 0px !important;">
+		<br /> <br />
+		<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+		<br />
+		<hr class="hr-style hr-style-two" />
+		<span class="span-style">${titles['TTL_BR_TAP_DATOS_DOMICILIO']}</span> <br />
+		<div
+			class="row"
+			align="right">
+			<div class="col-md-12">
+				<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+			</div>
+		</div>
+		<h:form id="pPanelDom">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_PAIS']}:" for="cmbPais" styleClass="log-label form-label-formularios display-block" />
+						<h:selectOneMenu id="cmbPais" title="${titles['TTL_SELECT']} ${titles['LBL_PAIS']}" 
+							update="cmbDep cmbMun" 
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{bienesRentasBean.domicilio.codPaisResidencia}" styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.pais}" />
+							<p:ajax update="pPanelDom:panelBanderaPais pPanelDom:panelBanderaTelefono cmbDep cmbMun" 
+								event="change" oncomplete="disbleMuns();" listener="#{bienesRentasBean.cambiarBanderaPais()}" />
+						</h:selectOneMenu>
+						<p:message for="cmbPais" display="text" />
+					</div>
+					<div id="col" style="display: block">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:" for="cmbDep" styleClass="display-block log-label form-label-formularios">
+							</p:outputLabel>
+							<h:selectOneMenu id="cmbDep" title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}" 
+								value="#{bienesRentasBean.domicilio.codDepartamentoResidencia}" 
+								required="#{not bienesRentasBean.localidadHabilitada}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getDeptos(169)}" />
+								<p:ajax listener="#{bienesRentasBean.agregarIndicativoDepartamento()}" 
+									process="@this" update="cmbMun indicativoTelRes indicativoTel" />
+							</h:selectOneMenu>
+							<p:message for="cmbDep" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel for="cmbMun" styleClass="log-label form-label-formularios" value="${titles['LBL_MUNICIPIO']}:">
+							</p:outputLabel>
+							<h:selectOneMenu id="cmbMun" title="${titles['TTL_SELECT']} ${titles['LBL_MUNICIPIO']}" 
+								value="#{bienesRentasBean.domicilio.codMunicipioResidencia}" 
+								required="#{not bienesRentasBean.localidadHabilitada}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getMunicipios(bienesRentasBean.domicilio.codDepartamentoResidencia)}" />
+							</h:selectOneMenu>
+							<p:message for="cmbMun" display="text" />
+						</div>
+					</div>
+					<div id="otro" style="display: none">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:" for="cmbDep1" styleClass="display-block log-label form-label-formularios">
+							</p:outputLabel>
+							<h:selectOneMenu id="cmbDep1" title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}" 
+								value="#{bienesRentasBean.domicilio.codDepartamentoResidencia}" 
+								styleClass="form-control-form-act-usua" disabled="true">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							</h:selectOneMenu>
+						</div>
+						<p:message for="cmbDep1" display="text" />
+						<div class="col-md-4">
+							<p:outputLabel for="cmbMun1" styleClass="log-label form-label-formularios" value="${titles['LBL_MUNICIPIO']}:">
+							</p:outputLabel>
+							<h:selectOneMenu
+								id="cmbMun1" title="${titles['TTL_SELECT']} ${titles['LBL_MUNICIPIO']}" 
+								value="#{bienesRentasBean.domicilio.codMunicipioResidencia}" 
+								styleClass="form-control-form-act-usua" disabled="true">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							</h:selectOneMenu>
+							<p:message for="cmbMun1" display="text" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']}:"
+							for="txtDirRes"
+							styleClass="log-label form-label-formularios display-block" />
+						<p:inputText
+							id="txtDirRes" readonly="#{facesContext.renderResponse}" style="display: inline-block!important; max-width: 180px!important;"
+							required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+							disabled="true"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							value="#{bienesRentasBean.mostrarDireccionGenerada()}"
+							styleClass="form-control-acti-usua form-control">
+						</p:inputText>
+						<p:commandButton value="${titles['TTL_EDIT']}" update="tabViewBienesRentas:pPanelDom:pnlEditarDireccion" process="@this" 
+							actionListener="#{bienesRentasBean.mostrarPanelEditarDireccion(true)}"  style="display: inline-block!important;"
+							oncomplete="window.location.href='#tabViewBienesRentas:pPanelDom:pnlEditarDireccion';">
+						</p:commandButton>
+						<p:message for="txtDirRes" display="text" />
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-sm-12"
+								style="padding: 0px !important">
+								<p:outputLabel
+									value="${titles['LBL_INDICATIVO']}:"
+									for="indicativoTelRes"
+									style="width:30%;"
+									styleClass="log-label form-label-formularios" />
+								<p:outputLabel
+									value="${titles['TTL_BIENES_RENTAS_TELEFONO_RESIDENCIA']}:"
+									for="txtTelResi"
+									style="width:70%;"
+									styleClass="log-label form-label-formularios" />
+							</div>
+						</div>
+						<div class="row">
+							<p:panel
+								id="panelBanderaTelefono"
+								style="padding: 0px!important;"
+								styleClass="col-sm-12">
+								<div style="padding-right: 0px; width: 30%; float: left;">
+									<p:panel
+										id="indicativoTelRes"
+										class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+										style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+										<img
+											src="..#{bienesRentasBean.banderaPais}"
+											height="13"
+											width="18"
+											alt=""
+											title="Bandera del país" />
+										<h:outputLabel
+											value="+#{bienesRentasBean.domicilio.indicativo}"
+											styleClass="label-indicativo" />
+									</p:panel>
+									<p:message
+										for="indicativoTelRes"
+										display="text" />
+								</div>
+								<div style="width: 70%; float: right;">
+									<p:inputText
+										id="txtTelResi"
+										required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										value="#{bienesRentasBean.domicilio.telefonoResidencia}"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_TELEFONO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+										class="form-control-acti-usua"
+										autocomplete="false"
+										maxlength="#{maxNumeros.maxTamanoNumResidencia}"
+										onkeypress="return numbervalida(event)"
+										style="border-radius:0px 3px 3px 0px!important;">
+										<f:attribute value="#{maxNumeros.minTamanoNumResidencia}" name="minLength" />
+										<f:attribute value="#{maxNumeros.maxTamanoNumResidencia}" name="maxLength" />
+										<f:validator validatorId="numberValidator" />
+									</p:inputText>
+									<p:message for="txtTelResi" display="text" />
+								</div>
+							</p:panel>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div
+								class="col-sm-12"
+								style="padding: 0px !important">
+								<p:outputLabel
+									value="${titles['LBL_INDICATIVO']}:"
+									for="indicativoTel"
+									style="width:30%;"
+									styleClass="log-label form-label-formularios" />
+								<p:outputLabel
+									value="${titles['LBL_TELEFONO_CELULAR']}"
+									for="txtTelCel"
+									style="width:70%;"
+									styleClass="log-label form-label-formularios" />
+							</div>
+						</div>
+						<div class="row">
+							<p:panel
+								id="panelBanderaPais"
+								style="padding: 0px!important;"
+								styleClass="col-sm-12">
+								<div style="padding-right: 0px; width: 30%; float: left;">
+									<p:panel
+										id="indicativoTel"
+										class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+										style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+										<img
+											src="..#{bienesRentasBean.banderaPais}"
+											height="13"
+											width="18"
+											alt=""
+											title="Bandera del país" />
+										<h:outputLabel
+											value="+#{bienesRentasBean.domicilio.indicativo}"
+											styleClass="label-indicativo" />
+									</p:panel>
+									<p:message
+										for="indicativoTel"
+										display="text" />
+								</div>
+								<div style="width: 70%; float: right;">
+									<p:inputText
+										id="txtTelCel"
+										required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_CELULAR']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+										value="#{bienesRentasBean.domicilio.numCelular}"
+										class="form-control-acti-usua"
+										autocomplete="false"
+										maxlength="#{maxNumeros.maxNumCelular}"
+										onkeypress="return numbervalida(event)"
+										style="border-radius:0px 3px 3px 0px!important;">
+										<f:attribute value="#{maxNumeros.minNumCelular}" name="minLength" />
+										<f:attribute value="#{maxNumeros.maxNumCelular}" name="maxLength" />
+										<f:validator validatorId="numberValidator" />
+									</p:inputText>
+									<p:message
+										for="txtTelCel"
+										display="text" />
+								</div>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			
+				<div class="col-md-12" align="center">
+					<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 3%;">
+							<p:commandButton id="btnGuardarDatosDomicilioBR" 
+							                 disabled="#{bienesRentasBean.btnGuardarDomicilioDeshabilitado}"
+							                 title="#{bienesRentasBean.btnGuardarDomicilioMensaje}"
+							                 styleClass="btn btn-primary" 
+							                 value="${titles['TTL_BIENES_RENTAS_GUARDAR_CONTINUAR']}"
+							                 process="pPanelDom"
+							                 update="tabViewBienesRentas"
+							                 action="#{bienesRentasBean.guardarDatosDomicilio()}"
+							                 style="font-size:1.5em!important; padding-top:0!important;"
+							                  />
+						</div>
+						<div class="col-md-2" style="margin-bottom: 2%;">
+							<p:commandButton styleClass="btn btn-default"
+							                 value="${titles['TTL_CANCEL']}"
+							                 style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+							                 onclick="location.href='../index.xhtml'" />
+						</div>
+					<div class="col-md-4"></div>
+		     	</div>
+		<!-- **************************************************************************************************************************** -->
+			<p:spacer height="4" />
+		     	<p:panel visible="#{bienesRentasBean.estadoPanelDireccion}" id="pnlEditarDireccion">
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style"> ${titles['TTL_EDITAR_DIRECCION']}
+						</span>
+						<br />
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-12">
+									<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['LBL_VIA_PRINCIPAL']}" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-3">
+									<p:outputLabel for="tipovia" value="${titles['TTL_VIA']}" styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="tipovia" title="#{titles.TTL_SELECT} #{titles.TTL_VIA}" 
+										value="#{bienesRentasBean.editarDireccion.tipoVia}" 
+										converter="tipoViaConverter" filterMatchMode="contains"
+										filter="true" styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{tipoVia}" var="tipovia" itemLabel="#{tipovia.sigla}" itemValue="#{tipovia}" />
+										<p:ajax listener="#{bienesRentasBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-3">
+									<p:outputLabel for="numero" value="${titles['TTL_NUMERO']}" styleClass="log-label form-label-formularios" style="width:100% !important;" />
+									<p:inputText id="numero" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}" value="#{bienesRentasBean.editarDireccion.numero}"
+										maxlength="3" onkeypress="return numbervalida(event)" class="form-control-acti-usua" autocomplete="false" style="width:30%!important;">
+										<p:ajax event="change" listener="#{bienesRentasBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+									</p:inputText>
+									<h:selectOneMenu id="primerLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{bienesRentasBean.editarDireccion.primerLetra}"
+										filterMatchMode="contains" filter="true" converter="tipoLetraConverter" styleClass="form-control-form-act-usua" style="width:70%!important;">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax listener="#{bienesRentasBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-1">
+									<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+									<p:selectBooleanCheckbox value="#{bienesRentasBean.editarDireccion.bis}">
+										<p:ajax event="change" listener="#{bienesRentasBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+									</p:selectBooleanCheckbox>
+									<p:spacer width="5" />
+									<p:outputLabel id="bis" value="${titles['LBL_BIS']}" title="#{titles.TTL_SELECT} #{titles.LBL_BIS}" styleClass="log-label form-label-formularios" />
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="segundaLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{bienesRentasBean.editarDireccion.segundaLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-3">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="orientacion"
+										title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}"
+										value="#{bienesRentasBean.editarDireccion.orientacion}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoOrientacionConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoOrientacion}"
+											var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+											itemValue="#{tipoorientacion}" />
+										<p:ajax
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-12">
+									<p:outputLabel styleClass="log-label form-label-formularios"
+										value="${titles['LBL_VIA_SECUNDARIA']}" style="font-weight: 600!important;" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-2">
+									<p:outputLabel value="${titles['TTL_NUMERO']}"
+										for="segundoNumero"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="segundoNumero"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}"
+										value="#{bienesRentasBean.editarDireccion.segundoNumero}"
+										maxlength="3" onkeypress="return numbervalida(event)"
+										class="form-control-acti-usua" autocomplete="false">
+										<p:ajax event="change"
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="tercerLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{bienesRentasBean.editarDireccion.tercerLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<p:inputText id="tercerNumero" maxlength="3"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}"
+										value="#{bienesRentasBean.editarDireccion.tercerNumero}"
+										class="form-control-acti-usua" autocomplete="false"
+										onkeypress="return numbervalida(event)">
+										<p:ajax event="change"
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="segundaOrientacion"
+										title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}"
+										value="#{bienesRentasBean.editarDireccion.segundaOrientacion}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoOrientacionConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoOrientacion}"
+											var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+											itemValue="#{tipoorientacion}" />
+										<p:ajax
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['TTL_COMPLEMENTO']}"
+										for="complemento"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="complemento"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_COMPLEMENTO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+										value="#{bienesRentasBean.editarDireccion.complemento}"
+										class="form-control-acti-usua" autocomplete="false"
+										maxlength="100">
+										<p:ajax event="change"
+											listener="#{bienesRentasBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<p:outputLabel value="${titles['TTL_DIRECCION_GENERADA']}"
+										for="direccionGenerada"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="direccionGenerada"
+										title="#{titles.TTL_DIRECCION_GENERADA}"
+										value="#{bienesRentasBean.editarDireccion.direccionGenerada}"
+										class="form-control-acti-usua" readonly="true" />
+								</div>
+							</div>
+						</div>
+						<br />
+						<br />
+						<!-- 						Boton de la direccion  -->
+						<div class="row" align="center">
+							<div class="col-md-4"></div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_OK']}"
+									styleClass="btn btn-primary btn-update-disable"
+									style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									process="@this"
+									update="pnlEditarDireccion txtDirRes"
+									actionListener="#{bienesRentasBean.agergarDireccion()}"
+									 />
+							</div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}"
+									styleClass="btn btn-default btn-update-disable" process="@this" update="pnlEditarDireccion txtDirRes"
+									style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									actionListener="#{bienesRentasBean.mostrarPanelEditarDireccion(false)}"
+									 
+									 />
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</p:panel>
+		     	<!-- **************************************************************************************************************************** -->
+		</h:form>
+	</div>
+	<br />
+	<div
+		class="modal fade"
+		id="msgDatoDomiclio"
+		role="dialog"
+		style="background: rgba(255, 255, 255, 0.45);">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<br />
+							<br />
+							<h4>
+								<p:outputLabel
+									id="txtfinal"
+									value="${titles['TTL_MEG_DATOS_HV_BR']}"
+									style="color: #265379!important; font-weight: normal!important;" />
+							</h4>
+							<br />
+							<br />
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4"></div>
+							<div
+								class="col-md-4"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_TO_CONTINUE']}"
+									styleClass="btn btn-primary"
+									onclick="cerrarPop();"
+									style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

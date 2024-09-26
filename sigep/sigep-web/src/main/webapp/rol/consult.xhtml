@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{reporteBean.id}' />
+		<f:viewParam name="recursoId" value='#{reporteBean.recursoId}' />
+		<f:event type="preRenderView" listener='#{reporteBean.retrieve}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['LBL_MENU_ADMN']}" />
+	<ui:param name="pageSubtitle"
+		value="#{reporteBean.reporte.descripcion}" />
+
+	<f:event listener="#{reporteBean.validateForm}" type="postValidate" />
+
+	<ui:define name="botones">
+		<p:commandButton
+			value="${titles['TTL_SUB_TRANSVERSAL_REPORTEADOR_CONSULTAR']}"
+			icon="ui-icon-search" process="@form" update="@this contains"
+			actionListener="#{reporteBean.generarReporte}"
+			styleClass="btn btn-primary" />
+		<p:commandButton value="${titles['TTL_DOWNLOAD_ALL']}" ajax="false"
+			rendered="#{reporteBean.xmlArchivo.extension eq PFExtension.XLS and reporteBean.habilitarBotonesExportar}"
+			immediate="true" icon="ui-icon-arrowstop-1-s"
+			title="#{reporteBean.xmlArchivo.extension.value().toLowerCase()}"
+			styleClass="btn btn-primary">
+			<p:dataExporter type="xls" target="resultados"
+				tableTitle="${menu[reporteBean.reporte.menu]}"
+				fileName="#{reporteBean.nombreArchivoDescarga}" />
+		</p:commandButton>
+		<p:commandButton value="${titles['TTL_DOWNLOAD_ALL']}" ajax="false"
+			rendered="#{reporteBean.xmlArchivo.extension eq PFExtension.XLSX and reporteBean.habilitarBotonesExportar}"
+			immediate="true" icon="ui-icon-arrowstop-1-s"
+			title="#{reporteBean.xmlArchivo.extension.value().toLowerCase()}"
+			styleClass="btn btn-primary">
+			<pe:exporter type="xlsx" target="resultados"
+				tableTitle="${menu[reporteBean.reporte.menu]}"
+				fileName="#{reporteBean.nombreArchivoDescarga}" />
+		</p:commandButton>
+		<p:commandButton value="${titles['TTL_DOWNLOAD_ALL']}" ajax="false"
+			rendered="#{reporteBean.xmlArchivo.extension eq PFExtension.CSV and reporteBean.habilitarBotonesExportar}"
+			immediate="true" icon="ui-icon-arrowstop-1-s"
+			title="#{reporteBean.xmlArchivo.extension.value().toLowerCase()}"
+			styleClass="btn btn-primary">
+			<p:dataExporter type="csv" target="resultados"
+				tableTitle="${menu[reporteBean.reporte.menu]}"
+				fileName="#{reporteBean.nombreArchivoDescarga}" />
+		</p:commandButton>
+		<p:commandButton value="${titles['TTL_DOWNLOAD_ALL']}" ajax="false"
+			rendered="#{reporteBean.xmlArchivo.extension eq PFExtension.TXT and reporteBean.habilitarBotonesExportar}"
+			icon="ui-icon-arrowstop-1-s"
+			title="#{reporteBean.xmlArchivo.extension.value().toLowerCase()}"
+			styleClass="btn btn-primary">
+			<p:fileDownload value="#{reporteBean.fileDownload}" />
+		</p:commandButton>
+	</ui:define>
+	<ui:define name="restablecer">
+		<p:commandButton value="${titles['TTL_RESET']}"
+			icon="ui-icon-arrowreturnthick-1-w" process="@this"
+			update="@this contains" actionListener="#{reporteBean.init()}"
+			styleClass="btn btn-primary">
+			<p:ajax resetValues="true" />
+		</p:commandButton>
+	</ui:define>
+	
+	<ui:define name="main">
+		<ui:include src="/reporte/contentConsult.xhtml" />
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/basicTemplate.xhtml">
+
+	<ui:param name="pageTitle" value="${titles['TTL_ENTIDADES']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_CAPTURAR_DATOS_POLITICA_EMPLEO_PUBLICO']}" />
+
+	<ui:define name="content">
+		<style>
+.ui-datatable-even .ui-selectoneradio td {
+	background-color: #f2f2f2 !important;
+	border-style: hidden !important;
+}
+
+.ui-datatable-odd .ui-selectoneradio td {
+	background-color: white !important;
+	border-style: hidden !important;
+}
+
+.ui-inputfield.ui-inputmask.ui-widget.ui-state-default.ui-corner-all {
+	font-size: 13px !important;
+	margin-top: 10px !important;
+	height: 30px !important;
+	width: 50% !important;
+	background-color: #fff !important;
+	border-radius: 3px !important;
+	color: #000 !important;
+}
+
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all {
+	font-size: 13px !important;
+	margin-top: 10px !important;
+	height: 30px !important;
+	width: 50% !important;
+	background-color: #fff !important;
+	border-radius: 3px !important;
+	color: #000 !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-choose
+	{
+	font-size: 1.2em !important;
+}
+</style>
+		<h:form id="frGestionarPerfuntasForm">
+			<p:panel id="frmGestionarPreguntas"
+				style="background: transparent !important;">
+				<div class="row">
+					<div class="col-md-12" align="center"
+						style="margin-bottom: 3% !important;">
+						<h2>
+							<p:outputLabel
+								value="• ${titles['LBL_CAPTURAR_DATOS_POLITICA_EMPLEO_PUBLICO']} •"
+								styleClass="page-subtitle" />
+						</h2>
+					</div>
+				</div>
+				<div class="row row-background-white" id="child-tab-data-basic">
+					<br />
+					<br />
+
+					<p:panel id="panelentidades">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-2"></div>
+								<div class="col-md-4" style="margin-bottom: 1% !important;">
+									<p:outputPanel autoUpdate="true">
+										<p:outputLabel value="#{titles.TTL_ENTIDADES}"
+											styleClass="log-label form-label-formularios" />
+										<p:selectOneMenu id="somSector1"
+											value="#{politicasEmpleoPublicoBean.idEntidadSelect}"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua"
+											style="white-space:pre;"
+											title="${titles['TTL_SELECT']} ${titles['TTL_ENTIDADES']}"
+											disabled="#{politicasEmpleoPublicoBean.lbHabilitarEntidad}">
+											<p:ajax process="@this"
+												listener="#{politicasEmpleoPublicoBean.habilitarCuestionario()}"></p:ajax>
+											<f:selectItem itemValue="#{null}"
+												itemLabel="#{titles.TTL_SELECT}" />
+											<f:selectItems
+												value="#{politicasEmpleoPublicoBean.getLstEntidadesRol() }" />
+
+										</p:selectOneMenu>
+										<p:message for="somSector1" />
+									</p:outputPanel>
+
+								</div>
+								<div class="col-md-4" style="margin-bottom: 1% !important;">
+									<p:outputPanel autoUpdate="true">
+										<p:outputLabel value="#{titles.LBL_CUESTIONARIO}"
+											styleClass="log-label form-label-formularios" />
+										<p:selectOneMenu id="somSector"
+											value="#{politicasEmpleoPublicoBean.idCuestionario}"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua"
+											title="${titles['TTL_SELECT']} ${titles['LBL_CUESTIONARIO']}"
+											disabled="#{politicasEmpleoPublicoBean.lbHabilitarCuestionario}">
+											<f:selectItem itemValue="#{null}"
+												itemLabel="#{titles.TTL_SELECT}" />
+											<f:selectItems
+												value="#{politicasEmpleoPublicoBean.getLstTiposCuestionarios()}" />
+											<p:ajax event="change" process="@this"
+												listener="#{politicasEmpleoPublicoBean.consultarPreguntasCuestionario()}"
+												update=" frGestionarPerfuntasForm:tblPregunta"></p:ajax>
+										</p:selectOneMenu>
+										<p:message for="somSector" />
+									</p:outputPanel>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						</div>
+					</p:panel>
+
+
+
+					<div class="row">
+						<div class="col-md-12"
+							style="padding-left: 20% !important; padding-right: 71% !important;"></div>
+					</div>
+
+
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable paginator="true"  reflow="true"
+							id="tblPregunta"
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+							value="#{politicasEmpleoPublicoBean.lstpreguntasCuestionarios}"
+							var="pregunta" 
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+							<p:column headerText="#{titles.LBL_PREGUNTA}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{pregunta.dsPregunta}">
+								<h:outputText value="#{pregunta.dsPregunta}" />
+							</p:column>
+
+							<p:column headerText="#{titles.LBL_RESPUESTA}"
+								style="word-wrap: break-word!important; text-align:center">
+
+								<h:inputText value="#{pregunta.dsRespuesta}"
+									rendered="#{pregunta.idTipoPregunta==1}"
+									title="${titles['TTL_INGRESE']} {titles['LBL_PARAMETRICA_DESCRIPCION']}"
+									class="inputtext-valor" />
+
+								<p:commandButton id="ver" title="Ver Detalle Pregunta"
+									rendered="#{pregunta.idTipoPregunta==2 || pregunta.idTipoPregunta==7 || pregunta.idTipoPregunta==8 || pregunta.idTipoPregunta==13 }"
+									icon="icon-view" styleClass="icon-btn" process="@this"
+									actionListener="#{politicasEmpleoPublicoBean.consultarDetallePreguntas(pregunta)}"
+									update="frGestionarPerfuntasForm"
+									onclick="window.location.href='#frGestionarPerfuntasForm:j_idt137'"
+									oncomplete="window.location.href='#frGestionarPerfuntasForm:j_idt137'">
+								</p:commandButton>
+
+								<p:selectOneRadio class="radio-trasp"
+									value="#{pregunta.dsRespuesta}" style="border: none!important;"
+									rendered="#{pregunta.idTipoPregunta==3 || 
+								                              pregunta.idTipoPregunta==4 || 
+								                              pregunta.idTipoPregunta==5 ||
+								                              pregunta.idTipoPregunta==6 }"
+									title="${titles['TTL_SELECT']} ${titles['TTL_OPCION']}">
+									<f:selectItem itemLabel="Si" itemValue="1"
+										title="${titles['TTL_SELECT']} ${titles['TTL_OPCION']}" />
+									<f:selectItem itemLabel="No" itemValue="2"
+										title="${titles['TTL_SELECT']} ${titles['TTL_OPCION']}" />
+									<p:ajax event="change" process="tblPregunta"
+										listener="#{politicasEmpleoPublicoBean.consultarDetallePreguntaSeleccionada(pregunta)}"
+										update="frGestionarPerfuntasForm 
+				                                      frGestionarPerfuntasForm:tblPregunta
+				                                      frGestionarPerfuntasForm:pgtipopregunta02">
+									</p:ajax>
+								</p:selectOneRadio>
+
+								<p:inputMask id="date" value="#{pregunta.dsRespuesta}"
+									mask="99/99/9999" rendered="#{pregunta.idTipoPregunta==9}"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_FECHA']}"
+									style="width: 50%!important;    height: 3%!important;" />
+								<p:inputNumber id="valor" value="#{pregunta.dsRespuesta}"
+									decimalPlaces="0" thousandSeparator=""
+									rendered="#{pregunta.idTipoPregunta==10}"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']}"
+									style="width: 32%!important;
+						                       height: 3%!important;">
+									<p:ajax process="tblPregunta"></p:ajax>
+								</p:inputNumber>
+								<p:fileUpload class="fileUpload" widgetVar="imgFile"
+									rendered="#{pregunta.idTipoPregunta==11}"
+									fileUploadListener="#{politicasEmpleoPublicoBean.documentoUpload}"
+									mode="advanced" dragDropSupport="true"
+									label="${titles['LBL_SUBIR']}" process="@this" auto="true"
+									fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
+									sizeLimit="#{politicasEmpleoPublicoBean.dsTamanoParametro}"
+									invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}"
+									invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+									fileLimitMessage="${titles['LBL_ADJUNTOS_CANTIDAD_EXCEDIDA']}"
+									update="labelDocumentoIdentificacionPDF">
+									<p:outputLabel
+										value="#{politicasEmpleoPublicoBean.nombreArchivoDocumento}"
+										id="labelDocumentoIdentificacionPDF" />
+
+
+									<f:attribute name="pregunta" value="#{pregunta}" />
+								</p:fileUpload>
+
+								<p:inputNumber id="valor8" value="#{pregunta.dsRespuesta}"
+									rendered="#{pregunta.idTipoPregunta==12}"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']}"
+									style="width: 32%!important;    height: 3%!important;"
+									maxValue="100" minValue="0" decimalPlaces="0"
+									thousandSeparator="">
+								</p:inputNumber>
+
+
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+
+
+					<p:panel id="pgtipopregunta02"
+						rendered="#{politicasEmpleoPublicoBean.lbtipopregunta02}"
+						style="margin-bottom: 3%!important;">
+
+						<div
+							style="font-size: 16px !important; text-align: center !important;">
+							#{politicasEmpleoPublicoBean.strEncabezadoPregunta}</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<h:form id="formprueba">
+										<p:dataTable paginator="true"
+											rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+											currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											 reflow="true" id="tblDetallePreguntasUnica"
+											value="#{politicasEmpleoPublicoBean.lstpreguntasCuestionariosDetalle}"
+											var="detallePregunta"
+											emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+											<p:column headerText="#{titles.LBL_PREGUNTA}" sortBy="#{detallePregunta.dsDetallePregunta}">
+												<h:outputText value="#{detallePregunta.dsDetallePregunta}" />
+											</p:column>
+											<p:column headerText="#{titles.LBL_RESPUESTA}"
+												style="word-wrap: break-word!important; text-align:center!important;"
+												sortBy="#{detallePregunta.dsDetalleRespuesta}">
+												<p:selectOneRadio
+													value="#{detallePregunta.dsDetalleRespuesta}"
+													rendered="#{detallePregunta.idTipoPreguntaDetalle==3 || 
+																                              detallePregunta.idTipoPreguntaDetalle==4 || 
+																                              detallePregunta.idTipoPreguntaDetalle==5 ||
+																                              detallePregunta.idTipoPreguntaDetalle==14}"
+													title="${titles['TTL_SELECT']} ${titles['TTL_OPCION']}">
+													<f:selectItem itemLabel="Si" itemValue="1"
+														title="${titles['TTL_SELECT']} ${titles['TTL_OPCION']}" />
+													<f:selectItem itemLabel="No" itemValue="2"
+														title="${titles['TTL_SELECT']} ${titles['TTL_OPCION']}" />
+
+													<p:ajax event="change" process="@this" update="panelInput">
+													</p:ajax>
+												</p:selectOneRadio>
+
+												<h:inputText value="#{detallePregunta.dsDetalleRespuesta}"
+													rendered="#{detallePregunta.idTipoPreguntaDetalle==1 }"
+													title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']}"
+													requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+
+												<p:panel id="panelInput"
+													style="background-color: transparent;">
+													<h:inputText
+														value="#{detallePregunta.dsDetalleRespuestaDetalle}"
+														rendered="#{detallePregunta.idTipoPreguntaDetalle==14 and detallePregunta.dsDetalleRespuesta ==1}"
+														title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']}"
+														requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+												</p:panel>
+
+												<p:inputNumber id="valor"
+													value="#{detallePregunta.dsDetalleRespuesta}"
+													rendered="#{detallePregunta.idTipoPreguntaDetalle==10}"
+													title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']}"
+													style="width: 50%!important;
+														                       height: 3%!important;"
+													decimalPlaces="0" thousandSeparator="" />
+											</p:column>
+										</p:dataTable>
+									</h:form>
+								</div>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+
+					<p:panel id="pgtipopregunta06"
+						rendered="#{politicasEmpleoPublicoBean.lbtipopregunta06}"
+						style="margin-bottom: 3%!important;">
+						<br />
+						<div
+							style="font-size: 16px !important; text-align: center !important;">
+							#{politicasEmpleoPublicoBean.strEncabezadoPregunta}</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<h:form id="formprueba1">
+										<p:dataTable paginator="true"
+											rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+											currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											 selectionMode="single"
+											rowKey="#{detallePregunta.dsDetallePregunta}"
+											selection="#{politicasEmpleoPublicoBean.selectedRespuestaUnica}"
+											reflow="true" id="tblDetallePreguntas"
+											value="#{politicasEmpleoPublicoBean.lstpreguntasCuestionariosDetalle}"
+											var="detallePregunta"
+											emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+
+											<p:ajax event="rowSelect"
+												listener="#{politicasEmpleoPublicoBean.onRowSelectSingle}"
+												update="frGestionarPerfuntasForm" />
+
+											<p:column headerText="#{titles.LBL_PREGUNTA}" sortBy="#{detallePregunta.dsDetallePregunta}">
+												<h:outputText value="#{detallePregunta.dsDetallePregunta}" />
+											</p:column>
+											<p:column headerText="#{titles.LBL_RESPUESTA}"
+												style="word-wrap: break-word!important; text-align:center!important;">
+
+												<h:inputText
+													value="#{detallePregunta.dsDetalleRespuestaDetalle}"
+													rendered="#{detallePregunta.idTipoPreguntaDetalle==13}"
+													disabled="#{!politicasEmpleoPublicoBean.lbVerDetalleRespuestaOtros}"
+													title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR']}"
+													requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" />
+											</p:column>
+
+										</p:dataTable>
+									</h:form>
+								</div>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+
+					<p:panel id="pgtipopregunta08"
+						rendered="#{politicasEmpleoPublicoBean.lbtipopregunta08}"
+						style="margin-bottom: 3%!important;">
+						<br />
+						<div
+							style="font-size: 16px !important; text-align: center !important;">
+							#{politicasEmpleoPublicoBean.strEncabezadoPregunta}</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<h:form id="formprueba2">
+										<p:dataTable paginator="true"
+											rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}" 
+											currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											 rowKey="#{detallePregunta.dsDetallePregunta}"
+											selection="#{politicasEmpleoPublicoBean.lstselectedRespuestaMultiple}"
+											reflow="true" id="tblDetallePreguntas"
+											value="#{politicasEmpleoPublicoBean.lstpreguntasCuestionariosDetalle}"
+											var="detallePregunta"
+											emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+											<p:column selectionMode="multiple"
+												style="width:50px!important;text-align:center" />
+											<p:column headerText="#{titles.LBL_PREGUNTA}" sortBy="#{detallePregunta.dsDetallePregunta}">
+												<h:outputText value="#{detallePregunta.dsDetallePregunta}" />
+											</p:column>
+
+
+										</p:dataTable>
+									</h:form>
+								</div>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+
+
+					<p:panel
+						rendered="#{politicasEmpleoPublicoBean.lbtipopregunta02 or politicasEmpleoPublicoBean.lbtipopregunta06 or politicasEmpleoPublicoBean.lbtipopregunta08}">
+						<div class="row" align="center">
+
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_RESPONDER']}"
+									styleClass="btn btn-secondary"
+									style="font-size:1.5em!important;"
+									actionListener="#{politicasEmpleoPublicoBean.guardarDetalleRespuesta()}"
+									onclick="window.location.href='#frGestionarPerfuntasForm:tblPregunta:j_idt110'"
+									oncomplete="window.location.href='#frGestionarPerfuntasForm:tblPregunta:j_idt110'">
+								</p:commandButton>
+							</div>
+
+						</div>
+					</p:panel>
+					<br /> <br />
+					<div class="row" align="center">
+						<br /> <br />
+						<div class="col-md-2"></div>
+						<div class="col-md-4">
+							<p:commandButton value="${titles['TTL_SAVE']}"
+								styleClass="btn btn-primary" update="frGestionarPerfuntasForm"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important;"
+								actionListener="#{politicasEmpleoPublicoBean.ValidarLeyCuotas()}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-4">
+							<p:commandButton id="limpiarInfoP1"
+								value="${titles['TTL_CANCEL']}" process="@this"
+								actionListener="#{politicasEmpleoPublicoBean.confirmarCancelar()}"
+								styleClass="btn btn-default"
+								style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							</p:commandButton>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+
+				<!-- MODAL DE CONFIRMACIÓN DE CANCELAR -->
+				<p:dialog id="ConfirmarCancelar3" minHeight="600"
+					header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="ConfirmarCancelar3"
+					modal="true" resizable="false" closeOnEscape="false"
+					draggable="false" closable="false" responsive="true">
+					<p:panel id="panelConfirmacionCancelar3"
+						style="background: transparent;">
+						<div class="col-md-12" align="center">
+							<p:outputLabel value="${messages['MSG_PREGUNTA_CANCELAR']}"
+								style="font-size:1.2em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_YES']}"
+									styleClass="btn btn-primary" process="@this"
+									style="padding-left:12%!important;padding-right:12%!important; font-size:1.2em!important;"
+									actionListener="#{politicasEmpleoPublicoBean.cancelar_cuestionario()}"
+									update="@form" onclick="PF('ConfirmarCancelar3').hide();">
+
+								</p:commandButton>
+							</div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_NO']}" process="@this"
+									styleClass="btn btn-default"
+									style="padding-left:12%!important;padding-right:12%!important; font-size:1.2em!important;"
+									onclick="PF('ConfirmarCancelar3').hide();">
+
+								</p:commandButton>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+				</p:dialog>
+
+				<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+					widgetVar="dlgRespuestaGuardada" id="dlgRespuestaGuardada"
+					minHeight="300" modal="true" resizable="false"
+					closeOnEscape="false" responsive="true" draggable="false"
+					closable="false" appendTo="@(body)">
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"
+						align="center">
+						<center>
+							<h5>${messages['MSG_DATOS_GUARDADOS']}</h5>
+						</center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<p:commandButton value="${titles['TTL_OK']}" process="@this"
+							styleClass="btn btn-primary"
+							onclick="PF('dlgRespuestaGuardada').hide();" />
+					</div>
+					<br />
+				</p:dialog>
+
+
+
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

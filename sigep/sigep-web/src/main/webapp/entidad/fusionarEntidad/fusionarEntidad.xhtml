@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/template/basicTemplate.xhtml"
+                >
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TTL_FUSIONAR_ENTIDAD}" />
+
+    <ui:define name="content">
+	<h:form id="formFusionarEntidad">
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <h2>
+                    <p:outputLabel value="• ${titles['TTL_FUSIONAR_ENTIDAD']} •"
+                                   styleClass="page-subtitle" />
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="row row-background-white" id="child-tab-data-basic">            
+			<p:outputPanel id="panelFusionarEntidad">            
+            
+            	<div class="row">
+	                <div class="col-md-12">
+	                 <br />
+	                    <div class="col-md-6">
+	                        <p:outputLabel
+	                            value="${titles['TTL_ENTIDAD_A_FUSIONAR']}:"
+	                            styleClass="log-label form-label-formularios"
+	                            for="cmbEntidadesFE" />
+	                        <h:outputText style="font-weight: bold;" 
+	                        	id="cmbEntidadesFE" value="#{fusionarEntidadBean.entidadActual.nombreEntidad}" />
+	                    </div>
+	                    <div class="col-md-6">
+	                        <p:outputLabel
+	                        	for="cmbEntidadDestFE"
+	                            styleClass="log-label form-label-formularios"
+	                            value="${titles['LBL_ENTIDAD_DESTINO']}:" />
+	                        <h:selectOneMenu
+	                        	id="cmbEntidadDestFE"
+	                        	required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+	                        	title="${titles['TTL_SELECT']} ${titles['LBL_ENTIDAD_DESTINO']}"
+	                        	value="#{fusionarEntidadBean.entidadDestino.codEntidad}"	                        	
+	                            styleClass="form-control-form-act-usua"
+	                            style="width:100%!important;">
+	                            <f:selectItem 
+	                                itemLabel="${titles['TTL_SELECT']} ${titles['LBL_ENTIDAD_DESTINO']}" 
+	                                itemValue="#{null}" />
+	                            <f:selectItems value="#{fusionarEntidadBean.getEntidadesUsuario()}"/>
+	                            <p:ajax process="@this" update="tblPersonasActivas" listener="#{fusionarEntidadBean.cargarPersonasEntidad()}" />
+
+	                        </h:selectOneMenu>
+	                        <p:message for="cmbEntidadDestFE" display="text" />                         
+	                    </div>
+	                     <div class="col-md-4"></div>
+	
+	                </div>
+	            </div>
+	            
+	            <br /><br />
+				<div class="col-md-12">
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style"> ${titles.TTL_PERSONAS_ACTIVAS_ASOCIADAS_ENTIDAD} 
+					</span> <br /> <br />
+				</div>
+		        <hr class="hr-style" />
+		        
+		        <div>
+	            	<p:panel id="panelTablePersonActivasInfo" widgetVar="panelTablePersonActivasInfo" 
+	            		style="background: transparent;">								
+						<p:dataTable id="tblPersonasActivasInfo" lazy="true" var="lstPersonasEntidadInfo" 
+							paginator="true" widgetVar="tblPersonasActivasInfo"
+							reflow="true" emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							styleClass="noHeader"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							value="#{fusionarEntidadBean.lstPersonasEntidadActivas}"
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}">
+							<p:column>
+								<div class="row" align="center">
+									<p:spacer height="2" />
+									<div class="col-lg-12">
+										<h:outputText style="font-weight: bold; font-size: 2em !important;"
+											styleClass="log-label form-label-formularios" value="#{lstPersonasEntidadInfo.primerNombre} #{lstPersonasEntidadInfo.primerApellido}" />
+									</div>
+								</div>
+							</p:column>
+						</p:dataTable>
+					</p:panel>		                                     
+                </div>
+	           
+				<br /><br />
+				<div class="col-md-12">
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style"> ${titles.TTL_FORMULARIO} 
+					</span> <br /> <br />
+				</div>
+		        <hr class="hr-style" />
+
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <br />
+	
+	                    <div class="col-md-4">
+	                        <p:outputLabel
+	                        	for="cmbTipoNormaFE"
+	                            styleClass="log-label form-label-formularios"
+	                            value="${titles['TTL_TIPO_NORMA']}:" />
+	                        <h:selectOneMenu
+	                        	id="cmbTipoNormaFE"
+	                        	required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+	                        	title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_NORMA']}"
+	                        	value="#{fusionarEntidadBean.tipoNorma.codTipoNorma}"	                        	
+	                            styleClass="form-control-form-act-usua"
+	                            style="width:100%!important;">
+	                            <f:selectItem 
+	                                itemLabel="${titles['TTL_SELECT_NORMA']}" 
+	                                itemValue="#{null}" />
+	                            <f:selectItems value="#{webUtils.getListasParametricas(1038)}" />
+	                            <p:ajax process="@this" update="@this cmbNumNormaFE cmbFechaNormaFE" event="change"/>
+	                        </h:selectOneMenu>
+	                        <p:message for="cmbTipoNormaFE" display="text" />
+	                    </div>
+	                    <div class="col-md-4">
+	                    	<p:outputLabel value="${titles['LBL_FECHA_NORMA']}:"
+								for="cmbFechaNormaFE"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cmbFechaNormaFE" mask="true"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								yearRange="#{rangoAnios}" navigator="true"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_PUBLICACION']}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+								value="#{fusionarEntidadBean.tipoNorma.fechaNorma}" >
+								<p:ajax event="dateSelect" process="@this" update="@this cmbNumNormaFE cmbTipoNormaFE"/>
+								<p:ajax event="change" process="@this" update="@this cmbNumNormaFE cmbTipoNormaFE"/>																
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>							
+							<p:message for="cmbFechaNormaFE" display="text" />
+	                    </div>
+	                    <div class="col-md-4">
+	                    	<p:outputLabel
+	                    		value="${titles['TTL_NUMERO_NORMA']}:" 
+	                    		for="cmbNumNormaFE"
+	                    		styleClass="log-label form-label-formularios"/>
+	                    		<p:selectOneMenu id="cmbNumNormaFE" effect="fold" editable="true"
+	                    			required="true"   						
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									title="${titles['TTL_SELECT']}" styleClass="form-control-form-act-usua" value="#{fusionarEntidadBean.tipoNorma.numeroNorma}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{fusionarEntidadBean.getNumerosNorma(fusionarEntidadBean.tipoNorma.codTipoNorma,fusionarEntidadBean.tipoNorma.fechaNorma)}" />
+								</p:selectOneMenu>
+        						<p:message for="cmbNumNormaFE" display="text" />
+        					
+	                    </div>
+	
+	                </div>
+	            </div>
+	            
+	            <br /><br />
+	            
+				<div class="col-md-12">
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style"> ${titles.LBL_EMPLEADOS_ACTIVOS} 
+					</span> <br /> <br />
+				</div>
+		        <hr class="hr-style" />
+	            
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <br /><br />
+	
+	                    <div>
+		                    <p:panel id="panelTablePersonActivas" widgetVar="panelTablePersonActivas" style="background: transparent;">								
+								<p:dataTable id="tblPersonasActivas" editMode="cell" lazy="true" var="lstPersonasEntidad" paginator="true" widgetVar="tblPersonasActivas"
+									reflow="true" emptyMessage="${messages['MSG_TABLAS_VINCULACION_SIN_REGISTROS']}"
+									currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									value="#{fusionarEntidadBean.lstPersonasEntidad}"
+									rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+									editable="#{not fusionarEntidadBean.estadoActu}">
+									<p:ajax event="cellEdit" listener="#{fusionarEntidadBean.celdaEditada}" update="tblPersonasActivas" />
+									<p:column headerText="#{titles.TTL_NOMBRES}" sortBy="#{lstPersonasEntidad.primerNombre} #{lstPersonasEntidad.primerApellido}">
+										<h:outputText value="#{lstPersonasEntidad.primerNombre} #{lstPersonasEntidad.primerApellido}" />
+									</p:column>
+									<p:column headerText="${titles['TTL_CARGO_ACTUAL']}" sortBy="#{lstPersonasEntidad.numeroIdentificacion}">
+										<h:outputText value="#{lstPersonasEntidad.nombreCargo}" />
+									</p:column>
+									<p:column headerText="#{titles.TTL_DEPENDENCIA}" sortBy="#{lstPersonasEntidad.primerNombre} #{lstPersonasEntidad.primerApellido}">										
+				                        <h:selectOneMenu 
+				                        	id="codDependenciaEntidad"				                        	
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				                        	title="${titles['TTL_SELECT']} ${titles['LBL_DEPENDENCIA']}"
+											value="#{lstPersonasEntidad.codDependenciaEntidad}" 
+				                            class="form-select">
+				                            <f:selectItem 
+				                                itemLabel="${titles['TTL_SELECT_DEPENDENCIA']}" itemValue="" noSelectionOption="true" />
+				                            <f:selectItems
+												value="#{fusionarEntidadBean.getDependenciasEntidad(fusionarEntidadBean.entidadDestino.codEntidad)}"/>
+				                        		<p:ajax event="change" process="@this"></p:ajax>
+				                        </h:selectOneMenu>
+									</p:column>
+									<p:column headerText="${titles['TTL_REASIGNAR']}">										
+				                        <h:selectOneMenu 
+				                        	id="codCargo"				                        	
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				                        	title="${titles['TTL_SELECT']} ${titles['TTL_REASIGNAR_CARGO']}"
+											value="#{lstPersonasEntidad.codCargo}" 
+				                            class="form-select">
+				                            <f:selectItem 
+				                                itemLabel="${titles['TTL_SELECT_CARGO']}" itemValue="" noSelectionOption="true" />
+				                            <f:selectItems
+												value="#{fusionarEntidadBean.getCargosEntidad(fusionarEntidadBean.entidadDestino.codEntidad)}"/>
+				                        		<p:ajax event="change" process="@this"></p:ajax>
+				                        </h:selectOneMenu>										       							       
+									</p:column>
+									<p:column headerText="">
+								        <p:commandButton id="btnFusionarEntidad" 
+										value="${titles['TTL_REASIGNAR_CARGO']}"
+										process="@this" 
+										update="formFusionarEntidad:panelTablePersonActivas"
+										actionListener="#{fusionarEntidadBean.cambiarCargoPersona(lstPersonasEntidad)}"										
+										styleClass="btn btn-primary"
+										style="padding-left:10%!important; padding-right:10%!important; margin-left: 18%!important; max-height: 30px!important; font-size: 12px!important">
+										
+										</p:commandButton>
+								    </p:column>
+								</p:dataTable>
+							</p:panel>		                                     
+	                    </div>      
+	
+	                </div>
+	            </div>
+	            <br></br>
+	            <div class="row" align="center"> 
+	              <div class="col-md-12">  
+	               <div class="col-md-2"></div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton id="btnFusionarEntidad" 
+						value="${titles['TTL_FUSIONAR_ENTIDAD_BTN']}"							
+						action="#{fusionarEntidadBean.fusionarEntidad}"
+						process="panelFusionarEntidad"
+						update="formFusionarEntidad"
+						styleClass="btn btn-primary"
+						style="width: 12.3em!important; font-size: 1.5em;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton id="btnGuardadoParcial" 
+						value="${titles['TTL_GUARDADO_PARCIAL']}"							
+						action="#{fusionarEntidadBean.guardadoParcial}"
+						process="panelFusionarEntidad"
+						update="panelFusionarEntidad"
+						styleClass="btn btn-secondary"
+						style="width: 12.3em!important; font-size: 1.5em;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							action="#{fusionarEntidadBean.regresarGestionarEntidad()}"
+							styleClass="btn btn-default"
+							process="@this"
+							style="width: 12.3em!important; font-size: 1.5em;"/>
+					</div>					
+
+	             </div>
+	            </div>
+	        </p:outputPanel>
+
+        </div>
+
+	</h:form>
+    </ui:define>
+    
+</ui:composition>

@@ -1,0 +1,518 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core_1_1"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form
+		id="frmParticipacion"
+		rendered="true">
+		<div
+			class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div class="row">
+				<div
+					class="col-md-12"
+					style="text-align: center;">
+					<p:outputLabel
+						value="#{titles.TTL_TITULO_PARTICIPACION_JUNTAS}"
+						styleClass="advisor advisor-media " />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				<div class="col-lg-12">
+					<div
+						class="col-md-6"
+						align="left">
+						<div style="display: inline-block;">
+							<p:commandButton
+								value="#{titles.LBL_ADD_NEW}"
+								styleClass="btn btn-transparent"
+								icon="fa fa-fw fa-plus-circle"
+								id="txtAgregarNuevo"
+								process="@this"
+								disabled="#{bienesRentasBean.sinParticipacion}"
+								update="frmParticipacion"
+								actionListener="#{bienesRentasBean.agregarNuevoParticipacion()}"
+							 />
+						</div>
+					</div>
+					<div
+						class="col-md-6"
+						align="right">
+						<p:commandButton disabled="#{bienesRentasBean.btnGuardadoDefinitivoDeshabilitado}"
+							title="#{bienesRentasBean.btnGuardadoDefinitivoMensaje}" id="btnGuardardoDef"
+							value="#{titles.LBL_SAVE_ALL}"
+							process="@this"
+							update="tabViewBienesRentas"
+							actionListener="#{bienesRentasBean.verificarGuardadoDefinitivo()}"
+						
+							
+							styleClass="btn btn-azul"
+							style="border-right: 1px groove #245379 !important" />
+					</div>
+					<p:blockUI block="bodyBR" trigger="btnGuardardoDef" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12">
+						<p:dataTable
+							id="participacionTable"
+							var="participacion"
+							value="#{bienesRentasBean.participaciones}"
+							paginator="true"
+                            currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							reflow="true"
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_TIPO_VINCULACION']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{participacion.codTipoVinculacion}">
+								<h:outputText
+									value="#{bienesRentasBean.obtenerValorParametrica(participacion.codTipoVinculacion)}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_CALIDAD_SOCIO']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{participacion.codCalidadSocio}">
+								<h:outputText
+									value="#{bienesRentasBean.obtenerValorParametrica(participacion.codCalidadSocio)}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_CALIDAD_MIEMBRO']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{participacion.codCalidadMiembro}">
+								<h:outputText
+									value="#{bienesRentasBean.obtenerValorParametrica(participacion.codCalidadMiembro)}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_ENTIDAD_CORPORATION']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{participacion.entidad}">
+								<h:outputText value="#{participacion.entidad}" />
+							</p:column>
+							<p:column
+								headerText="${titles['LBL_ACCIONES']}"
+								style="word-wrap: break-word!important; text-align:center!important;">
+								<p:commandButton
+									id="btnActual"
+									title="#{titles.TTL_EDIT}"
+									icon="icon-edit"
+									process="@this"
+									styleClass="icon-btn"
+									onclick="$('#dlgActualiza').modal('show')"
+									actionListener="#{bienesRentasBean.seleccionarParticipacion(participacion)}"/>
+								<p:commandButton
+									id="btnEliminar"
+									title="#{titles.TTL_DELETE}"
+									icon="icon-delete"
+									process="@this"
+									styleClass="icon-btn"
+									onclick="$('#dlgSupre').modal('show')"
+									actionListener="#{bienesRentasBean.seleccionarParticipacion(participacion)}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<div
+				class="row"
+				align="center">
+				<div
+					class="col-md-12"
+					style="margin-top: 1.5%;">
+					<h:outputText
+						styleClass="log-label form-label-formularios"
+						value="#{titles.TTL_BIENES_RENTAS_NO_TENGO_JUNTAS}"
+						style="color: #00537B" />
+					<p:spacer width="5" />
+					<p:selectBooleanCheckbox
+						id="chkSinJuntas"
+						value="#{bienesRentasBean.sinParticipacion}">
+						<p:ajax listener="#{bienesRentasBean.guardarSinParticipacion}" update="tabViewBienesRentas:frmParticipacion" />
+					</p:selectBooleanCheckbox>
+				</div>
+			</div>
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton disabled="#{bienesRentasBean.btnGuardarParticipacionJuntasDeshabilitado}"
+						title="#{bienesRentasBean.btnGuardarParticipacionJuntasMensaje}"
+						styleClass="btn btn-primary"
+						style="font-size:1.5em!important; padding-top:0!important;"
+						value="#{titles.LBL_SAVE_CONT}"
+						process="@this"
+						update="tabViewBienesRentas"
+						actionListener="#{bienesRentasBean.guardarUltimotab()}"/>
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton
+							value="#{titles.TTL_CANCEL}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+							type="button"
+							process="@this"
+							onclick="$('#dlgAbortarRegis').modal('show')"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<p:panel
+			id="frmRegisJuntas"
+			visible="#{bienesRentasBean.formParticipacionHabilitado}">
+			<div class="row row-background-white">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['BR_NUEVA_PARTICIPACION']}</span> <br /> <br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								for="cmbTipoVin"
+								styleClass="display-block log-label form-label-formularios"
+								value="${titles['TTL_BR_PARTICIPACION_TIPO']}:" />
+							<p:selectOneMenu
+								id="cmbTipoVin"
+								required="true"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_BR_PARTICIPACION_TIPO']}"
+								value="#{bienesRentasBean.participacionSeleccionada.codTipoVinculacion}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								filter="true" filterMatchMode ="contains">
+								<p:ajax
+									listener="#{bienesRentasBean.alternarMiembroSocio}"
+									update="cmbCaliSocio cmbCaliMiembro" />
+								<f:selectItem
+									itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tipoVinculacionJunta}" />
+							</p:selectOneMenu>
+							<p:message
+								for="cmbTipoVin"
+								display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								for="cmbCaliSocio"
+								styleClass="log-label form-label-formularios display-block"
+								value="${titles['TTL_BR_PARTICIPACION_CALIDAD_S']}:">
+							</p:outputLabel>
+							<p:selectOneMenu
+								id="cmbCaliSocio"
+								required="true"
+								styleClass="form-control-form-act-usua"
+								value="#{bienesRentasBean.participacionSeleccionada.codCalidadSocio}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_BR_PARTICIPACION_CALIDAD_S']}"
+								disabled="#{bienesRentasBean.estadoCalidadSocio}"
+								filter="true" filterMatchMode ="contains"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem
+									itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.calidadSocioBr}" />
+							</p:selectOneMenu>
+							<p:message
+								for="cmbCaliSocio"
+								display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								for="cmbCaliMiembro"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_BR_PARTICIPACION_CALIDAD_M']}:" />
+							<p:selectOneMenu
+								id="cmbCaliMiembro"
+								required="true"
+								filter="true" filterMatchMode ="contains"
+								styleClass="form-control-form-act-usua"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{bienesRentasBean.participacionSeleccionada.codCalidadMiembro}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_BR_PARTICIPACION_CALIDAD_M']}"
+								disabled="#{bienesRentasBean.estadoCalidadMiembro}">
+								<f:selectItem
+									itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.calidadMiembroBr}" />
+							</p:selectOneMenu>
+							<p:message
+								for="cmbCaliMiembro"
+								display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								for="txtNomEntid"
+								styleClass="log-label form-label-formularios"
+								value="${titles['TTL_BIENES_RENTAS_ENTIDAD_CORPORATION']}" />
+							<p:inputText
+								id="txtNomEntid"
+								required="true" maxlength="254"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_BR_PARTICIPACION_TIPO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{bienesRentasBean.participacionSeleccionada.entidad}">
+								<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+							<p:message
+								for="txtNomEntid"
+								display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton
+							value="${titles['TTL_BR_BTN_ADICIONAR']}"
+							styleClass="btn btn-primary"
+							style="font-size:1.5em!important; padding-top:0!important;"
+							process="frmRegisJuntas"
+							update="frmParticipacion"
+							actionListener="#{bienesRentasBean.guardarParticipacion()}" />
+					</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this"
+							update="frmParticipacion"
+							actionListener="#{bienesRentasBean.limpiarParticipacion()}" 
+							title="#{bienesRentasBean.strToolTipBtnLimpiar}" >
+							<p:resetInput
+										target="frmRegisJuntas" />		
+					  </p:commandButton>
+					</div>						
+					<div class="col-md-3"></div>
+				</div>
+			</div>
+		</p:panel>
+		<br />
+		
+	</h:form>
+	<div
+		class="modal fade"
+		id="dialogRespuParticipacion"
+		role="dialog" 
+		data-backdrop="static" 
+		data-keyboard="false" >
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${titles['TTL_BR_BORRAR_TODO']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnDeshabiTablaJuntas"
+								value="${titles['TTL_OK']}"
+								process="@this"
+								styleClass="btn btn-primary"
+								update="tabViewBienesRentas:frmParticipacion"
+								actionListener="#{bienesRentasBean.limpiarFormParticipacion()}"
+								onclick="$('#dialogRespuParticipacion').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_CANCEL']}"
+								process="@this"
+								styleClass="btn btn-default"
+								actionListener="#{bienesRentasBean.cancelarEliminacionTablaParticipacion()}"
+								update="tabViewBienesRentas:frmParticipacion"
+								onclick="$('#dialogRespuParticipacion').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dlgSupre"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_INTERROGA_ELIMINACION']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnElimi"
+								value="Si"
+								process="@this"
+								update="frmParticipacion"
+								styleClass="btn btn-primary"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+								actionListener="#{bienesRentasBean.eliminarParticipacion()}"
+								onclick="$('#dlgSupre').modal('hide');"/>
+						</div>
+						<div class="col-md-3">
+						<p:commandButton
+							value="No"
+							styleClass="btn btn-default"
+							style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+							onclick="$('#dlgSupre').modal('hide');" />
+							
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+		
+		
+		
+
+		<div
+		class="modal fade"
+		id="dlgActualiza"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2"
+			style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="#{titles.LBL_CONF_EDITAR_REG}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnEdit"
+								value="Si"
+								title="Editar"
+								process="@this"
+								update="frmParticipacion"
+								styleClass="btn btn-primary"
+								style="padding-left:35%!important;padding-right:35%!important;font-size:1.5em!important; padding-top:0!important;"
+								actionListener="#{bienesRentasBean.actualizarParticipacion()}"
+								onclick="$('#dlgActualiza').modal('hide');"/>
+						</div>
+						<div class="col-md-3">
+						<p:commandButton
+							value="No"
+							title="No"
+							styleClass="btn btn-default"
+							style="padding-left:35%!important;padding-right:35%!important;font-size:1.5em!important; padding-top:0!important;"
+							onclick="$('#dlgActualiza').modal('hide');" />
+							
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dlgAbortarRegis"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_DIALOGO_CANCELAR']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_YES']}"
+								process="@this"
+								styleClass="btn btn-primary"
+								onclick="location.href='../index.xhtml';" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_NO']}"
+								styleClass="btn btn-default"
+								onclick="$('#dlgAbortarRegis').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

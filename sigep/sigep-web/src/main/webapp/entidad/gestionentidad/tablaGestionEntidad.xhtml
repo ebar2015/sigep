@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <div class="row row-background-white">
+    <br /> <br />
+    <hr class="hr-style hr-style-two" style ="width: 96%!important;" />
+				<span class="span-style" >
+					 ${titles['LBL_TABLA_ENTIDADES']}
+				</span> <br /> <br />
+        <div class="col-md-12">
+            <p:scrollPanel mode="native" id="panelScroll">
+                <p:dataTable id="tablaConsulta"
+                             value="#{gestionEntidadBean.lstEntidades}" var="entidad"
+                             paginator="true"
+                             class="paginador-prueba"
+							 reflow="true" 
+							 rows="#{paginatorSize}"
+							 rowsPerPageTemplate="#{paginatorsSize}"
+							 currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowKey="#{entidad.codEntidad}"
+                             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+                             rowSelectMode="checkbox">
+                    <p:ajax event="rowSelectCheckbox"
+                            process="@this"
+                            listener="#{gestionEntidadBean.rowSelectListener}"
+                            update="botonesEntidad"/>
+                      <p:ajax event="rowSelect" 
+                            process="@this"
+                            listener="#{gestionEntidadBean.rowSelectListener}"
+                            update="botonesEntidad"/>
+                            
+                    <p:ajax event="rowUnselectCheckbox"
+                            process="@this"
+                            update="botonesEntidad"
+                            listener="#{gestionEntidadBean.rowUnselectListener}"/>
+                            
+                    <p:ajax event="toggleSelect"
+                            process="@this"
+                            update="botonesEntidad"
+                            listener="#{gestionEntidadBean.toggleSelected}"/>
+                                                        
+                    <p:column selectionMode="multiple"
+                              style="width:16px;text-align:center">
+                    </p:column>
+                     
+                     <p:column sortBy="#{entidad.codigoSigep}"  headerText="#{titles.TTL_COD_SIGEP}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codigoSigep}" />
+					</p:column>
+                              
+                              
+                    <p:column sortBy="#{entidad.nombreEntidad}"  headerText="${titles['TTL_DENOMINACION']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.nombreEntidad}" />
+					</p:column>
+					
+					 <p:column sortBy="#{entidad.sigla}"  headerText="${titles.TTL_SIGLA}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.sigla}" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.nit}"  headerText="${titles.TTL_NIT}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.nit}" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.codigoDane}"  headerText="${titles.TTL_CODIGO_DANE}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codigoDane}" />
+					</p:column>
+
+					<p:column sortBy="#{entidad.codigoCuin}"  headerText="${titles['TTL_CODIGO_CUIN']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codigoCuin}" />
+					</p:column>
+
+                 	<p:column sortBy="#{entidad.codEstadoGestion}"  headerText="${titles['TTL_ESTADO_GESTION_ENTIDAD']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codEstadoGestion}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.codTipoEntidad}"  headerText="${titles['TTL_TIPO_ENTIDAD']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codTipoEntidad}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+					
+                 	<p:column sortBy="#{entidad.codSectorAdministrativo}"  headerText="${titles.TTL_SECTOR}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codSectorAdministrativo}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+                    
+                    <p:column sortBy="#{entidad.codOrden}"  headerText="${titles['LBL_ORDEN']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codOrden}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+                    
+               		 <p:column sortBy="#{entidad.codClasificacionOrganica}"  headerText="${titles['LBL_CLASIFICACION_ORGANICA']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codClasificacionOrganica}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+                    
+                  	<p:column sortBy="#{entidad.codNaturaleza}"  headerText="${titles['TTL_NATURALEZA_JURIDICA']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codNaturaleza}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+                  
+                  	<p:column sortBy="#{gestionEntidadBean.flgDependencia}"  headerText="${titles.TTL_DEPENDENCIA_ESPECIAL}"
+						style="word-wrap: break-word!important;">
+						<p:selectBooleanCheckbox value="#{entidad.flgDependenciaEspecial == 1 ? true : false }" disabled="true" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.codEstadoEntidad}"  headerText="${titles['TTL_ESTADO']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codEstadoEntidad}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.codCategoriaMunicipio}"  headerText="${titles.TTL_CATEGORIA_MUNICIPIO}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codCategoriaMunicipio}" converter="parametricaBgDecimalConverter" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.codDepartamento}"  headerText="${titles.LBL_DEPARTAMENTO}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codDepartamento}" converter="departamentoConverter" />
+					</p:column>
+					
+					<p:column sortBy="#{entidad.codMunicipio}"  headerText="${titles['LBL_MUNICIPIO']}"
+						style="word-wrap: break-word!important;">
+						<h:outputText value="#{entidad.codMunicipio}" converter="municipioConverter" />
+					</p:column>
+					
+                    <p:column headerText="${titles.LBL_TABLA_ACCIONES}">
+                        <p:commandButton title="${titles.TTL_EDIT}" icon="icon-edit"
+                                         styleClass="icon-btn"
+                                         process="@this"
+                                         action="#{gestionEntidadBean.btAccionEntidadListener(entidad, 'modificarEntidad?faces-redirect=true')}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.TTL_CONSULT}" icon="icon-lupa"
+                                         styleClass="icon-btn"
+                                         action="#{gestionEntidadBean.btAccionEntidadListener(entidad, 'consultarDatosEntidad?faces-redirect=true')}">
+                        </p:commandButton>                        
+                        <p:commandButton title="${titles.TTL_DELETE}" icon="icon-delete"
+                                         styleClass="icon-btn"
+                                         action="#{gestionEntidadBean.btAccionEntidadListener(entidad, 'eliminarEntidad?faces-redirect=true')}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.LBL_NOMENCLATURA_Y_ESCALA}"
+                                         icon="icon-nomenclatura" styleClass="icon-btn" process="@this"
+                                         action="#{gestionEntidadBean.nomenclaturaEscala(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton id="ambito"
+                        				 title="${titles.TTL_GESTIONAR_AMBITO_POLITICAS}" icon="icon-ambito"
+                                         styleClass="icon-btn"
+                                         action="#{gestionEntidadBean.btAccionEntidadListener(entidad, 'gestionAmbitoAplicacion?faces-redirect=true')}">
+                                         
+                        </p:commandButton>
+                        <p:commandButton title="${titles.TTL_ESTRUCTURA}" icon="icon-estructura"
+                                         styleClass="icon-btn" process="@this"
+                                         action="#{gestionEntidadBean.estructuraEntidad(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.LBL_PLANTA}" icon="icon-planta"
+                                         styleClass="icon-btn" action="#{gestionEntidadBean.gestionarPlantas(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.LBL_FUSIONAR}" 
+                        				 icon="icon-fusionar" styleClass="icon-btn" process="@this"
+                                         action="#{gestionEntidadBean.fusionarEntidad(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.LBL_SITUACION_ADMIN_PARTICULAR}" icon="icon-asign-role"
+                                         styleClass="icon-btn" process="@this"
+                                         action="#{gestionEntidadBean.gestionarSituacionesParticulares(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.TTL_ESCINDIR}" icon="icon-escindir"
+                                         styleClass="icon-btn"
+                                         action="#{gestionEntidadBean.escindirEntidad(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.TTL_LIQUIDAR}" icon="icon-liquidar"
+                                         styleClass="icon-btn" process="@this"
+                                         action="#{gestionEntidadBean.liquidarEntidad(entidad)}">
+                        </p:commandButton>
+                        <p:commandButton title="${titles.LBL_GESTIONAR_ESTADO}"
+                                         icon="icon-gestion-estado" styleClass="icon-btn" process="@this"
+                                         action="#{gestionEntidadBean.gestionarEstadoEntidad(entidad)}">
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <br />
+                <!-- Tabla oculta utilizada para exportar a excel -->
+                <p:dataTable id="tablaExport"
+                             value="#{gestionEntidadBean.lstEntidades}" var="entidad"
+                             rendered="false">
+                    <p:column headerText="#{titles.TTL_COD_SIGEP}">
+                        <h:outputText value="#{entidad.codigoSigep}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['TTL_DENOMINACION']}">
+                        <h:outputText value="#{entidad.nombreEntidad}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_DEPARTAMENTO}">
+                        <h:outputLabel value="#{entidad.codDepartamento}"
+                                       converter="departamentoConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_MUNICIPIO']}">
+                        <h:outputLabel value="#{entidad.codMunicipio}"
+                                       converter="municipioConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.TTL_SIGLA}">
+                        <h:outputLabel value="#{entidad.sigla}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.TTL_TIPO_NORMA}">
+                        <h:outputLabel value="#{gestionEntidadBean.getNorma(entidad.codNorma).codTipoNorma}" 
+                        				converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.TTL_NUMERO_NORMA}">
+                        <h:outputLabel value="#{gestionEntidadBean.getNorma(entidad.codNorma).numeroNorma}"/>
+                    </p:column>
+                    
+                    <p:column headerText="${titles.TTL_FECHA_NORMA}">
+                        <h:outputLabel value="#{gestionEntidadBean.getFechaNorma(gestionEntidadBean.getNorma(entidad.codNorma))}"/>
+                    </p:column>
+                    
+					<p:column headerText="${titles.TTL_OBJETO}">
+                        <h:outputLabel value="#{gestionEntidadBean.getNorma(entidad.codNorma).objetoNorma}"/>
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_ORDEN']}">
+                        <h:outputLabel value="#{entidad.codOrden}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.TTL_SECTOR}">
+                        <h:outputLabel value="#{entidad.codSectorAdministrativo}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+				    <p:column headerText="${titles['LBL_SUBORDEN']}">
+                        <h:outputLabel value="#{entidad.codSuborden}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_ADSCRITA_VINCULADA}">
+                        <h:outputLabel value="#{entidad.codAdscritaVinculada}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_CATEGORIA']}">
+                        <h:outputLabel value="#{entidad.codCategoria}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['TTL_TIPO_ENTIDAD']}">
+                        <h:outputLabel value="#{entidad.codTipoEntidad}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_CATEGORIA_DNP']}">
+                        <h:outputLabel value="#{gestionEntidadBean.getCategoriaDNP(entidad.codCategoria)}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_ENTIDAD_POSCONFLICTO']}">
+                        <h:outputLabel value="#{entidad.entidadPostconfilcto}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_PERSONERIA_JURIDICA']}">
+                        <h:outputLabel value="#{gestionEntidadBean.getSINO(entidad.personeriaJuridica)}" />
+                    </p:column>
+                    
+					<p:column headerText="${titles['LBL_SISTEMA_S_CARRERA']}">
+                        <h:outputLabel value="#{gestionEntidadBean.getEntidadSistemaRegimen(entidad.codEntidad, 1)}"/>
+                    </p:column>
+                    
+                    <p:column headerText="${titles['LBL_REGIMEN_SALARIAL']}">
+                        <h:outputLabel value="#{gestionEntidadBean.getEntidadSistemaRegimen(entidad.codEntidad, 2)}"/>
+                    </p:column>
+                    
+					<p:column headerText="${titles['LBL_NATURAEZA_S_DE_EMPLEOS']}">
+                        <h:outputLabel value="#{gestionEntidadBean.getEntidadSistemaRegimen(entidad.codEntidad, 3)}"/>
+                    </p:column>
+                    
+					<p:column headerText="${titles['TTL_ESTADO_ENTIDAD']}">
+                        <h:outputLabel value="#{entidad.codEstadoEntidad}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>  
+					
+					<p:column headerText="${titles['TTL_ESTADO_GESTION_ENTIDAD']}">
+                        <h:outputLabel value="#{entidad.codSubestadoEntidad}"
+                                       converter="parametricaBgDecimalConverter" />
+                    </p:column>
+                      
+                    <p:column headerText="${titles.TTL_NIT}">
+                        <h:outputLabel value="#{entidad.nit}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_TRANSVERSAL_TERCEROS_DIGITO_VERIFICACION}">
+                        <h:outputLabel value="#{entidad.digitoVerificacion}" />
+                    </p:column>    
+                                                  
+					<p:column headerText="${titles.TTL_CODIGO_DANE}">
+                        <h:outputLabel value="#{entidad.codigoDane}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.TTL_CODIGO_CUIN}">
+                        <h:outputLabel value="#{entidad.codigoCuin}"/>
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_CORREO_INSTITUCIONAL}">
+                        <h:outputLabel value="#{entidad.emailEntidad}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_PAGINA_WEB}">
+                        <h:outputLabel value="#{entidad.paginaWeb}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_TIPO_ZONA}">
+                        <h:outputLabel value="#{null}" 
+                        				converter="parametricaBgDecimalConverter"/>
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_DIRECCION_FISICA}">
+                        <h:outputLabel value="#{entidad.direccion}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_CODIGO_POSTAL}">
+                        <h:outputLabel value="#{entidad.codigoPostal}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_INDICATIVO}">
+                        <h:outputLabel value="+#{gestionEntidadBean.getIndicativoPais(entidad.codPais)}#{creacionEntidadBean.obtenerIndicativoDepartamento(entidad.codDepartamento)}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_EXPERIENCIA_DOCENTE_TELEFONO}">
+                        <h:outputLabel value="#{entidad.telefonoEntidad}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_INDICATIVO}">
+                        <h:outputLabel value="+#{gestionEntidadBean.getIndicativoPais(entidad.codPais)}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_CELULAR}">
+                        <h:outputLabel value="#{entidad.celular}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_INDICATIVO}">
+                        <h:outputLabel value="+#{gestionEntidadBean.getIndicativoPais(entidad.codPais)}#{creacionEntidadBean.obtenerIndicativoDepartamento(entidad.codDepartamento)}" />
+                    </p:column>
+                    
+                    <p:column headerText="${titles.LBL_FAX}">
+                        <h:outputLabel value="#{entidad.fax}" />
+                    </p:column>
+                    
+					<p:column headerText="${titles.LBL_REPRESENTANTE_LEGAL}">
+                        <h:outputLabel value="#{entidad.codRepresentanteLegal}" />
+                    </p:column>
+                </p:dataTable>
+            </p:scrollPanel>
+        </div>
+    </div>
+</html>

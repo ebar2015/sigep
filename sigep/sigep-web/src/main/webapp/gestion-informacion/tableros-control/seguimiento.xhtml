@@ -1,0 +1,604 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{seguimientoBean.id}" />
+		<f:viewParam name="recursoId" value="#{seguimientoBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{seguimientoBean.dialog}" />
+		<f:event listener="#{seguimientoBean.retrieve}" type="preRenderView" />
+		<f:event listener="#{seguimientoBean.showDialog}" type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_GI_BREADCRUMBS']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_REPORTES_CATALOGO']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_GI_BREADCRUMB_SEGUIMIENTO']}" />
+
+
+	<ui:define name="main">
+		<h:outputStylesheet>
+			tr:nth-child(even) {
+				background: #ffffff !important;
+			}
+			
+			tr:nth-child(odd) {
+				background: #f2f2f2 !important;
+			}
+		</h:outputStylesheet>
+		<h:messages globalOnly="true" styleClass="error" />
+		<f:event listener="#{seguimientoBean.validateForm}"
+			type="postValidate" />
+
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• ${titles['TTL_GI_BREADCRUMB_SEGUIMIENTO']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<h:panelGroup id="parametros2"
+			rendered="#{not seguimientoBean.habilitarRolesAdmin}">
+			<div class="row">
+				<div class="col-md-12">
+					<p:selectOneRadio id="codOrdenAdmin"
+						value="#{seguimientoBean.filtro.codOrden}" unselectable="true"
+						layout="responsive" columns="3">
+						<f:selectItems value="#{cifrasEmpleoPublicoBean.listaOrden}"
+							var="orden" itemLabel="#{orden.nombreParametro}"
+							itemValue="#{orden.codTablaParametrica.intValue()}" />
+						<f:selectItem
+							itemLabel="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TODOS']}"
+							itemValue="#{null}" />
+					</p:selectOneRadio>
+				</div>
+			</div>
+		</h:panelGroup>
+		<h:panelGroup id="parametros"
+			rendered="#{seguimientoBean.habilitarConsulta and seguimientoBean.habilitarRolesAdmin}">
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+							styleClass="log-label form-label-formularios" for="codOrden" />
+						<h:selectOneMenu id="codOrden"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+							value="#{seguimientoBean.filtro.codOrden}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{cifrasEmpleoPublicoBean.listaOrden}"
+								var="orden" itemLabel="#{orden.nombreParametro}"
+								itemValue="#{orden.codTablaParametrica.intValue()}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+							styleClass="log-label form-label-formularios"
+							for="codClasificacionOrganica" />
+						<h:selectOneMenu id="codClasificacionOrganica"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+							value="#{seguimientoBean.filtro.codClasificacionOrganica}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems
+								value="#{cifrasEmpleoPublicoBean.listaClasificacionOrganica}"
+								var="clasificacionOrganica"
+								itemLabel="#{clasificacionOrganica.nombreParametro}"
+								itemValue="#{clasificacionOrganica.codTablaParametrica.intValue()}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+							styleClass="log-label form-label-formularios"
+							for="codNaturalezaJuridica" />
+						<h:selectOneMenu id="codNaturalezaJuridica"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+							value="#{seguimientoBean.filtro.codNaturalezaJuridica}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems
+								value="#{cifrasEmpleoPublicoBean.listaNaturalezaJuridica}"
+								var="naturalezaJuridica"
+								itemLabel="#{naturalezaJuridica.nombreParametro}"
+								itemValue="#{naturalezaJuridica.codTablaParametrica.intValue()}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']}"
+							styleClass="log-label form-label-formularios" for="entidad" />
+						<p:inputText id="entidad" class="form-control" required="false"
+							autocomplete="off"
+							title="${titles['TTL_INGRESE']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							value="#{seguimientoBean.filtro.entidad}">
+							<f:attribute value="3" name="minLength" />
+							<f:attribute value="255" name="maxLength" />
+							<f:validator validatorId="textOnlyTildesValidator" />
+						</p:inputText>
+						<p:message for="entidad" display="text" />
+					</div>
+
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+							styleClass="log-label form-label-formularios" for="codSector" />
+						<h:selectOneMenu id="codSector"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+							value="#{seguimientoBean.filtro.codSector}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{cifrasEmpleoPublicoBean.listaSectores}"
+								var="sector" itemLabel="#{sector.nombreParametro}"
+								itemValue="#{sector.codTablaParametrica.intValue()}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_CATEGORIA']}"
+							styleClass="log-label form-label-formularios" for="codCategoria" />
+						<h:selectOneMenu id="codCategoria"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['LBL_CATEGORIA']}"
+							value="#{seguimientoBean.filtro.codCategoria}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{cifrasEmpleoPublicoBean.listaCategoria}"
+								var="categoria" itemLabel="#{categoria.nombreParametro}"
+								itemValue="#{categoria.codTablaParametrica.intValue()}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_DEPARTAMENTO_ENTIDAD']}"
+							styleClass="log-label form-label-formularios"
+							for="codDepartamento" />
+						<h:selectOneMenu id="codDepartamento"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_DEPARTAMENTO_ENTIDAD']}"
+							value="#{seguimientoBean.filtro.codDepartamento}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getDeptos(169)}" />
+							<p:ajax process="@this" update="codMunicipio" />
+						</h:selectOneMenu>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_MUNICIPIO_ENTIDAD']}"
+							styleClass="log-label form-label-formularios" for="codMunicipio" />
+						<h:selectOneMenu id="codMunicipio"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['TTL_MUNICIPIO_ENTIDAD']}"
+							value="#{seguimientoBean.filtro.codMunicipio}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems
+								value="#{webUtils.getMunicipios(seguimientoBean.filtro.codDepartamento)}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+
+		<!-- DataTable  -->
+		<br />
+		<h:panelGroup>
+			<div class="row row-background-white">
+				<br />
+				<div class="col-md-12" align="right">
+					<p:commandButton id="cancelBtn" value="${titles['TTL_FINALIZE']}"
+						title="${titles['TTL_FINALIZE']}" process="@this" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{seguimientoBean.cancelar()}" icon="fa fa-fw fa-backward">
+					</p:commandButton>
+					<p:spacer width="2" />
+					<p:commandButton id="searchBtn" value="${titles['TTL_CONSULT']}"
+						title="${titles['TTL_CONSULT']}" process="@form" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{seguimientoBean.montarDatos()}"
+						icon="fa fa-fw fa-search">
+					</p:commandButton>
+					<h:panelGroup id="exportarBtn">
+						<p:spacer width="2" />
+						<p:commandButton id="exportXLSXBtn"
+							value="${titles['TTL_DOWNLOAD']} Excel"
+							title="${titles['TTL_DOWNLOAD']} Excel"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false">
+							<pe:exporter type="xlsx" target="dataTableCifras"
+								fileName="#{titles.TTL_GI_BREADCRUMB_SEGUIMIENTO} #{fechaSistemaString}"
+								orientation="Landscape" facetFontSize="12" facetFontStyle="BOLD"
+								cellFontSize="12" cellFontStyle="NORMAL"
+								postProcessor="#{seguimientoBean.postProcessXLSX}" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="exportPDFBtn"
+							value="${titles['TTL_DOWNLOAD']} PDF"
+							title="${titles['TTL_DOWNLOAD']} PDF"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false" rendered="false">
+							<pe:exporter type="pdf" target="dataTableCifras"
+								fileName="#{titles.TTL_GI_BREADCRUMB_SEGUIMIENTO} #{fechaSistemaString}"
+								tableTitle="${titles['TTL_GI_BREADCRUMB_SEGUIMIENTO']}"
+								orientation="Landscape" facetFontSize="12" facetFontStyle="BOLD"
+								cellFontSize="12" cellFontStyle="NORMAL" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="exportCSVBtn"
+							value="${titles['TTL_DOWNLOAD']} CSV"
+							title="${titles['TTL_DOWNLOAD']} CSV"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false" rendered="false">
+							<p:dataExporter type="csv" target="dataTableCifras"
+								fileName="#{titles.TTL_GI_BREADCRUMB_SEGUIMIENTO} #{fechaSistemaString}"
+								tableTitle="${titles['TTL_GI_BREADCRUMB_SEGUIMIENTO']}" />
+						</p:commandButton>
+					</h:panelGroup>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableCifra" widgetVar="panelTableCifra"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable id="dataTableCifras" lazy="true" var="dataCifra"
+								tableStyle="width:auto" styleClass="zebra" paginator="true"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								value="#{seguimientoBean.listaCifras}" rowKey="#{item.id}"
+								rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}">
+								<!-- Inicio Cabeceras -->
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SEGUIMIENTO_ANIO']}"
+											styleClass="tematica cifras-empleo-publico" colspan="12" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_PLANTA_PERSONAL']}"
+											styleClass="tematica-col seguimiento2" colspan="8" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_EMPLEADOS_PUBLICOS']}"
+											styleClass="tematica-col seguimiento2" colspan="2" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CONTRATACION_PRESTACION_SERVICIOS']}"
+											styleClass="tematica-col seguimiento2" colspan="2" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_INDICADORES']}"
+											styleClass="tematica-col seguimiento2" colspan="10" />
+									</p:row>
+									<p:row>
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_COD_ENTIDAD']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column style="width:40em!important"
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<!-- 
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+											styleClass="tematica cifras-empleo-publico" />
+										 -->
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SUBORDEN']}"
+											styleClass="tematica cifras-empleo-publico" />										
+										<p:column headerText="${titles['TTL_DEPARTAMENTO_ENTIDAD']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column headerText="${titles['TTL_MUNICIPIO_ENTIDAD']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column headerText="${titles['TTL_CATEGORIA_MUNICIPIO']}"
+											styleClass="tematica cifras-empleo-publico" />																				
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+											styleClass="tematica cifras-empleo-publico" />
+											<p:column headerText="${titles['TTL_DEPENDENCIA_ESPECIAL']}"
+											styleClass="tematica cifras-empleo-publico" />	
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ASESOR']}"
+											styleClass="tematica cifras-empleo-publico" />
+										<p:column
+											headerText="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_FECHA_CUMPLIMIENTO']}"
+											styleClass="tematica cifras-empleo-publico" />
+
+										<!-- Inicio Seguimiento -->
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_PLANTA_NORMA']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLATA_APROBADA_REAL']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLANTA_PERMANENTE_DISTRIBUIDA']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLANTA_TEMPORAL_DISTRIBUIDA']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PLANTA_TRANSITORIA_DISTRIBUIDA']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_NUMERO_EMPLEOS_PLANTA_DISTRIBUIDA']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_EMPLEADOS_VINCULADOS']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_VACANTES_REPORTA_ENTIDAD']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_HV_ACTIVAS_EP']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="#{titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_DEC_BIENES_RENTAS_VIGENCIA']} #{anioActual -1}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_TOTAL_HV_ACTIVAS_C']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_CONTRATOS_VIGENTES']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_VINCULADOS_SOBRE_CARGOS_PLANTA']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PESO_PORCENTAJE_VINCULACION']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PORCENTAJE_VINCULACION']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_NUMERO_CONT_VIG_SOBRE_HV_ACT_CONT']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PESO_PORCENTAJE_CONTRATO']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_PORCENTAJE_CONTRATOS']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_IPVC']}"
+											styleClass="tematica-col seguimiento2" />
+										<p:column
+											headerText="${titles['TTL_GI_TABLERO_CEP_SEG_OBSERVACIONES']}"
+											styleClass="tematica-col seguimiento2" />
+										<!-- Fin Seguimiento -->
+									</p:row>
+								</p:columnGroup>
+								<!-- Fin Cabeceras -->
+
+								<!-- Inicio Detalle -->
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.codEntidad}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.entidad}" />
+								</p:column>
+								<!-- 
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.sector}" />
+								</p:column>
+							 	-->
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.orden}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.suborden}" />
+								</p:column>								
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.departamento}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.municipio}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.categoriaMunicipio}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.clasificacionOrganica}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{titles[dataCifra.flgDependenciaEspecial]}" />
+								</p:column>								
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.naturalezaJuridica}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.nombreAsesor}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.fechaCumplimientoMeta}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+								</p:column>
+
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.totalPlantaNorma}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.plataAprobadaReal}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.plantaPermanenteDistribuida}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.plantaTemporalDistribuida}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.plantaTransitoriaDistribuida}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText
+										value="#{dataCifra.totalNumeroEmpleosPlantaDistribuida}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.numeroEmpleadosVinculados}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.vacantesReportaEntidad}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText
+										value="#{dataCifra.totalHVActivasEmpleadosPublicos}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText
+										value="#{dataCifra.numeroDeclaracionesBienesRentasVigencia}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.totalActivasContratistas}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.numeroContratosVigentes}" />
+								</p:column>
+								<p:column
+									styleClass="tematica numero total#{seguimientoBean.getNoVinculado(dataCifra.numeroVinculadosSobreNumeroCargosPlanta)}">
+									<h:outputText
+										value="#{dataCifra.numeroVinculadosSobreNumeroCargosPlanta}"
+										rendered="#{dataCifra.numeroVinculadosSobreNumeroCargosPlanta.doubleValue() ne -0.01}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText
+										value="${titles['TTL_GI_TABLERO_CEP_NO_VINCULADO']}"
+										rendered="#{dataCifra.numeroVinculadosSobreNumeroCargosPlanta.doubleValue() eq -0.01}" />
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.pesoPorcentajeVinculacion}" />
+								</p:column>
+								<p:column styleClass="tematica numero total">
+									<h:outputText value="#{dataCifra.porcentajeVinculacion}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica numero total#{seguimientoBean.getError(dataCifra.numeroContratosVigentesSobreNumeroHVActivasContratistas)}">
+									<h:outputText
+										value="#{dataCifra.numeroContratosVigentesSobreNumeroHVActivasContratistas}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero">
+									<h:outputText value="#{dataCifra.pesoPorcentajeContrato}" />
+								</p:column>
+								<p:column styleClass="tematica numero total">
+									<h:outputText value="#{dataCifra.porcentajeContratos}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero total">
+									<p:graphicImage dir="resources"
+										rendered="#{dataCifra.ipvc gt -1}"
+										styleClass="seguimiento-semaforo"
+										name="images/gi/#{seguimientoBean.getSemaforo(dataCifra.ipvc)}.png"
+										title="#{seguimientoBean.getSemaforo(dataCifra.ipvc)}"
+										alt="#{seguimientoBean.getSemaforo(dataCifra.ipvc)}"
+										height="16" width="16" />
+									<h:outputText value="#{dataCifra.ipvc}"
+										rendered="#{dataCifra.ipvc gt -1}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText value="${titles['TTL_GI_TABLERO_CEP_NO_APLICA']}"
+										rendered="#{dataCifra.ipvc le -1}" />
+								</p:column>
+								<p:column styleClass="tematica texto">
+									<h:outputText value="#{dataCifra.observacionesSEG}" />
+								</p:column>
+
+								<!-- Inicio Totales -->
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="11" footerText="" />
+										<p:column styleClass="tematica total-texto-total"
+											footerText="${titles['TTL_GI_TABLERO_CEP_PAV_TOTAL']}" />
+
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.totalPlantaNorma}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.plataAprobadaReal}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.plantaPermanenteDistribuida}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.plantaTemporalDistribuida}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.plantaTransitoriaDistribuida}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.totalNumeroEmpleosPlantaDistribuida}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.numeroEmpleadosVinculados}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.vacantesReportaEntidad}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.totalHVActivasEmpleadosPublicos}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.numeroDeclaracionesBienesRentasVigencia}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.totalActivasContratistas}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.listaCifras.total.numeroContratosVigentes}" />
+										<p:column
+											styleClass="tematica total-numero#{seguimientoBean.getNoVinculado(seguimientoBean.listaCifras.total.numeroVinculadosSobreNumeroCargosPlanta)}"
+											footerText="#{seguimientoBean.listaCifras.total.numeroVinculadosSobreNumeroCargosPlanta.doubleValue() ne -1 ? seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.numeroVinculadosSobreNumeroCargosPlanta) : titles.TTL_GI_TABLERO_CEP_NO_VINCULADO}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.pesoPorcentajeVinculacion)}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.porcentajeVinculacion)}" />
+										<p:column
+											styleClass="tematica total-numero#{seguimientoBean.getError(getPesoPorcentajeContrato.numeroContratosVigentesSobreNumeroHVActivasContratistas)}"
+											footerText="#{seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.numeroContratosVigentesSobreNumeroHVActivasContratistas)}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.pesoPorcentajeContrato)}" />
+										<p:column styleClass="tematica total-numero"
+											footerText="#{seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.porcentajeContratos)}" />
+										<p:column
+											styleClass="tematica total-numero seguimiento-semaforo-#{seguimientoBean.getSemaforo(seguimientoBean.listaCifras.total.ipvc)}"
+											footerText="#{seguimientoBean.formatoPorcentaje(seguimientoBean.listaCifras.total.ipvc)}" />
+									</p:row>
+								</p:columnGroup>
+								<!-- Fin Totales -->
+							</p:dataTable>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<p:defaultCommand target="frmPrincipal:searchBtn" />
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

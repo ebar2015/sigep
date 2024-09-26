@@ -1,0 +1,493 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <hr class="hr-style hr-style-two" />
+    <span
+        style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">#{titles.TTL_DATOS_DEMOGRAFICOS}</span>
+    <br /><br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <p:outputLabel for="itCorreoInstitucional"
+                               value="#{titles.LBL_CORREO_INSTITUCIONAL}:"
+                               styleClass="log-label form-label-formularios" />
+                <p:inputText id="itCorreoInstitucional"
+                             validator="emailValidator"
+                             maxlength="60"
+                             onkeypress="return sololetrasEmail(event);"
+                             value="#{creacionEntidadBean.entidadN.emailEntidad}"
+                             styleClass="form-control-acti-usua form-control"
+                             title="${titles['TTL_INGRESE']} ${titles['LBL_CORREO_INSTITUCIONAL']} ${titles['TTL_TIPO_ALFANUMERICO']}">
+                    <p:ajax event="blur" process="@this" update="msgCorreoInstitucional"/>
+                    <f:validator validatorId="maxByteLengthValidator" />
+                </p:inputText>
+                <p:message for="itCorreoInstitucional" id="msgCorreoInstitucional"/>
+            </div>
+            <div class="col-md-4">
+                <p:outputLabel for="itPaginaWebEntidad"
+                               value="#{titles.LBL_PAGINA_WEB}:"
+                               styleClass="log-label form-label-formularios" />
+                <p:inputText id="itPaginaWebEntidad"
+                             validator="urlValidator"
+                             value="#{creacionEntidadBean.entidadN.paginaWeb}"
+                             styleClass="form-control-acti-usua form-control"
+                             title="${titles['TTL_INGRESE']} ${titles['LBL_PAGINA_WEB']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                             maxlength="255">
+                    <f:validator validatorId="maxByteLengthValidator" />        
+                    <p:ajax event="blur" process="@this"
+                            update="msgPaginaWebEntidad"/>
+                </p:inputText>
+                <p:message for="itPaginaWebEntidad" id="msgPaginaWebEntidad"/>
+            </div>
+            <div class="col-md-4">
+                <p:outputLabel for="sorTipoZona"
+                               value="${titles.LBL_TIPO_ZONA}:"
+                               styleClass="log-label form-label-formularios" />
+                <p:selectOneRadio id="sorTipoZona"
+                                  columns="2"
+                                  layout="grid"
+                                  value="#{creacionEntidadBean.zonaUrbana}"
+                                  title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_ZONA']}">
+                    <f:selectItem itemLabel="#{titles.LBL_ZONA_URBANA}" itemValue="true" />
+                    <f:selectItem itemLabel="#{titles.LBL_ZONA_RURAL}" itemValue="false" />
+                    <p:ajax process="@this" update="sorTipoZona @widgetVar(itDireccionEntidad1) @widgetVar(itDireccionEntidad2)" />
+                </p:selectOneRadio>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <p:outputLabel value="#{titles.LBL_DIRECCION_FISICA}"
+                               styleClass="log-label form-label-formularios" />
+                <div class="ui-inputgroup">
+                	<p:panel widgetVar="itDireccionEntidad1"
+					        style="border: none">
+                          <h:inputText 
+                          		id="iTDireccionGenerada"
+                          		rendered="#{creacionEntidadBean.zonaUrbana}" 
+								readonly="#{!creacionEntidadBean.zonaUrbana}" 
+								onkeypress="return noConsecutivos(event, this.value)"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_DIRECCION_FISICA']} ${titles['TTL_TIPO_ALFANUMERICO']} URBANA"
+								value="#{creacionEntidadBean.mostrarDireccionGenerada()}"
+								disabled="#{creacionEntidadBean.zonaUrbana}"
+								class="form-control-acti-usua"
+								style="width: 72% !important;border-radius:3px 0px 0px 3px!important;"
+								maxlength="500">
+							</h:inputText>
+							<p:commandButton rendered="#{creacionEntidadBean.zonaUrbana}" 
+							           value="${titles['TTL_EDIT']}" 
+							           styleClass="white-button"
+							           update="@widgetVar(dlg2)" process="@this" 
+							           style="width: 27% !important;color: #245379;border-radius:0px 3px 3px 0px!important;opacity: 1;height: 2.5em;border-left: none;"
+							           actionListener="#{creacionEntidadBean.setEstadoPanelDireccion(true)}" >
+							</p:commandButton>
+                    </p:panel>
+                    <p:panel widgetVar="itDireccionEntidad2"
+					         style="border: none">
+                    		 <h:inputText rendered="#{!creacionEntidadBean.zonaUrbana}" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_DIRECCION_FISICA']} ${titles['TTL_TIPO_ALFANUMERICO']} RURAL"
+								value="#{creacionEntidadBean.editarDireccion.complemento}"
+								class="form-control-acti-usua"
+								style="width: 72% !important;border-radius:3px 0px 0px 3px!important;"
+								maxlength="500" >
+								<f:ajax event="blur" actionListener="#{creacionEntidadBean.direccionGeneradaFisica()}" />
+							</h:inputText>
+							<p:commandButton rendered="#{!creacionEntidadBean.zonaUrbana}" 
+							           value="${titles['TTL_EDIT']}" 
+							           styleClass="white-button" disabled="true"
+							           style="width: 27% !important;color: #245379;border-radius:0px 3px 3px 0px!important;opacity: 1;"
+							            >
+							</p:commandButton>
+                    </p:panel>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p:outputLabel 
+                    value="#{titles.LBL_CODIGO_POSTAL}:"
+                    styleClass="log-label form-label-formularios" />
+                <p:inputText 
+                    value="#{creacionEntidadBean.entidadN.codMunicipio}" converter="codigoPostalConverter"
+                    styleClass="form-control-acti-usua form-control" disabled="true"
+                    title="${titles['TTL_INGRESE']} ${titles['LBL_CODIGO_POSTAL']} ${titles['TTL_TIPO_NUMERICO']}">
+                </p:inputText>
+            </div>
+            <div class="col-md-4">
+                <p:outputLabel 
+                    value="#{titles.LBL_UBICACION_GEORREFERENCIAL}"
+                    styleClass="log-label form-label-formularios" />
+                <br />
+                <p:gmap center="#{creacionEntidadBean.centroMapa}"
+                        zoom="15" type="ROADMAP"
+                        widgetVar="wvMapaEntidad" id="wvMapaEntidad"
+                        model="#{creacionEntidadBean.modeloMapa}"
+                        style="width:100%;height:200px"
+                        title="${titles['TTL_INGRESE']} ${titles['LBL_CODIGO_POSTAL']} ${titles['TTL_TIPO_NUMERICO']}">
+                    <p:ajax event="geocode" update="@this"
+                            listener ="#{creacionEntidadBean.geolocalizacionListener}"/>
+                </p:gmap>
+            </div>
+        </div>
+    </div>    
+    <br />
+    
+    <!-- **************************************************************************************************************************** -->
+		     	<p:dialog header="${titles['TTL_EDITAR_DIRECCION']}" widgetVar="dlg2"  resizable="false" position="center"
+		     			responsive="true" style="font-size: 9px!important; height:auto!important; widht:auto!important; max-width: 1100px; 
+		     				align-content: center; left:0px!important" dynamic="true">
+						<br />
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-12">
+									<p:outputLabel styleClass="log-label form-label-formularios" value="Vía Principal" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-3">
+									<p:outputLabel for="tipovia" value="${titles['TTL_VIA']}" styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="tipovia" title="#{titles.TTL_SELECT} #{titles.TTL_VIA}" value="#{creacionEntidadBean.editarDireccion.tipoVia}" 
+										converter="tipoViaConverter" filterMatchMode="contains"
+										filter="true" styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{tipoVia}" var="tipovia" itemLabel="#{tipovia.sigla}" itemValue="#{tipovia}" />
+										<p:ajax process="@this" update="direccionGenerada" listener="#{creacionEntidadBean.itDireccionGenerada()}"/>
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-3">
+									<p:outputLabel for="numero" value="${titles['TTL_NUMERO']}" styleClass="log-label form-label-formularios" style="width:100% !important;" />
+									<p:inputText id="numero" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}" value="#{creacionEntidadBean.editarDireccion.numero}"
+										maxlength="3" onkeypress="return numbervalida(event)" class="form-control-acti-usua" autocomplete="false" style="width:30%!important;">
+										<p:ajax event="change" listener="#{creacionEntidadBean.generarDireccion()}" process="@this" update="direccionGenerada" />
+									</p:inputText>
+									<h:selectOneMenu id="primerLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{creacionEntidadBean.editarDireccion.primerLetra}"
+										filterMatchMode="contains" filter="true" converter="tipoLetraConverter" styleClass="form-control-form-act-usua" style="width:70%!important;">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax listener="#{creacionEntidadBean.itDireccionGenerada()}" process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-1">
+									<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+									<p:selectBooleanCheckbox value="#{creacionEntidadBean.editarDireccion.bis}">
+										<p:ajax event="change" listener="#{creacionEntidadBean.itDireccionGenerada()}" process="@this" update="direccionGenerada" />
+									</p:selectBooleanCheckbox>
+									<p:spacer width="5" />
+									<p:outputLabel id="bis" value="${titles['LBL_BIS']}" title="#{titles.TTL_SELECT} #{titles.LBL_BIS}" styleClass="log-label form-label-formularios" />
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="segundaLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{creacionEntidadBean.editarDireccion.segundaLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-3">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="orientacion"
+										title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}"
+										value="#{creacionEntidadBean.editarDireccion.orientacion}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoOrientacionConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoOrientacion}"
+											var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+											itemValue="#{tipoorientacion}" />
+										<p:ajax
+											listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-12">
+									<p:outputLabel styleClass="log-label form-label-formularios"
+										value="Vía Secundaria" style="font-weight: 600!important;" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-2">
+									<p:outputLabel value="${titles['TTL_NUMERO']}"
+										for="segundoNumero"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="segundoNumero"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}"
+										value="#{creacionEntidadBean.editarDireccion.segundoNumero}"
+										maxlength="3" onkeypress="return numbervalida(event)"
+										class="form-control-acti-usua" autocomplete="false">
+										<p:ajax event="change"
+											listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="tercerLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{creacionEntidadBean.editarDireccion.tercerLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax
+											listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<p:inputText id="tercerNumero" maxlength="3"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERICO}"
+										value="#{creacionEntidadBean.editarDireccion.tercerNumero}"
+										class="form-control-acti-usua" autocomplete="false"
+										onkeypress="return numbervalida(event)">
+										<p:ajax event="change"
+											listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+								<div class="col-sm-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="segundaOrientacion"
+										title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}"
+										value="#{creacionEntidadBean.editarDireccion.segundaOrientacion}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoOrientacionConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoOrientacion}"
+											var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+											itemValue="#{tipoorientacion}" />
+										<p:ajax listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['TTL_COMPLEMENTO']}"
+										for="complemento"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="complemento"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_COMPLEMENTO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+										value="#{creacionEntidadBean.editarDireccion.complemento}"
+										class="form-control-acti-usua" autocomplete="false"
+										maxlength="100">
+										<p:ajax event="change"
+											listener="#{creacionEntidadBean.itDireccionGenerada()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<p:outputLabel value="${titles['TTL_DIRECCION_GENERADA']}"
+									for="direccionGenerada"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="direccionGenerada"
+									title="#{titles.TTL_DIRECCION_GENERADA}"
+									value="#{creacionEntidadBean.editarDireccion.direccionGenerada}"
+									class="form-control-acti-usua" readonly="true" />
+							</div>
+						</div>
+						<br />
+						<br />
+						<!-- 						Boton de la direccion  -->
+						<div class="row" align="center">
+							<div class="col-md-4"></div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton id="btEditarDireccion" value="${titles['TTL_OK']}"
+									styleClass="btn btn-primary btn-update-disable"
+									style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									process="@this"
+									update="@widgetVar(dlg2) @widgetVar(itDireccionEntidad1) @widgetVar(itDireccionEntidad2)"
+									actionListener="#{creacionEntidadBean.agergarDireccion()}"
+									oncomplete="geocode();"/>
+							</div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}"
+									styleClass="btn btn-default btn-update-disable"
+									style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									actionListener="#{creacionEntidadBean.mostrarPanelEditarDireccion(false)}"
+									onclick="PF('dlg2').hide();"
+									 />
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+						</p:dialog> 
+		     	<!-- **************************************************************************************************************************** -->
+
+    <p:panel widgetVar="wvPnTelefonos"
+             style="border: none">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding: 0px !important">
+                            <p:outputLabel value="${titles.LBL_INDICATIVO}"
+                                           style="width: 30%;"
+                                           styleClass="log-label form-label-formularios" />
+                            <p:outputLabel value="${titles.LBL_EXPERIENCIA_DOCENTE_TELEFONO}:"
+                                           style="width: 70%;"
+                                           styleClass="log-label form-label-formularios" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="padding-right: 0px; width: 30%; float: left;">
+                            <p:panel  class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+                                      style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+                                <img src="../../resources/images/banderas/co.png" alt="" width="18"/>
+                                <p:outputLabel for="itTelefonoEntidad"
+                                               value="+#{creacionEntidadBean.obtenerIndicativoPais(creacionEntidadBean.entidadN.codPais)}#{creacionEntidadBean.obtenerIndicativoDepartamento(creacionEntidadBean.entidadN.codDepartamento)}"
+                                               styleClass="label-indicativo" />
+                            </p:panel>
+                        </div>
+                        <div style="width: 70%; float: right;">
+                            <p:inputText id="itTelefonoEntidad"
+                                         value="#{creacionEntidadBean.entidadN.telefonoEntidad}"
+                                         class="form-control-acti-usua" maxlength="20"
+                                         style="border-radius:0px 3px 3px 0px!important;"
+                                         onkeypress="return numbervalida(event)"
+                                         title="${titles['TTL_INGRESE']} ${titles['LBL_EXPERIENCIA_DOCENTE_TELEFONO']} ${titles['TTL_TIPO_NUMERICO']}">
+                                         <f:attribute value="7" name="minLength" />
+										 <f:attribute value="20" name="maxLength" />
+										 <f:validator validatorId="numberValidator" />
+                            </p:inputText>
+                            <p:message for="itTelefonoEntidad" display="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding: 0px !important">
+                            <p:outputLabel value="${titles.LBL_INDICATIVO}"
+                                           style="width: 30%;"
+                                           styleClass="log-label form-label-formularios" 
+                                           title="${titles['TTL_INGRESE']} ${titles['LBL_INDICATIVO']} ${titles['TTL_TIPO_NUMERICO']}"/>
+                            <p:outputLabel value="${titles.LBL_CELULAR}:"
+                                           style="width: 70%;"
+                                           styleClass="log-label form-label-formularios" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="padding-right: 0px; width: 30%; float: left;">
+                            <p:panel  class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+                                      style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+                                <img src="../../resources/images/banderas/co.png" alt="" width="18"/>
+                                <p:outputLabel for="itCelularEntidad"
+                                               value="+#{creacionEntidadBean.obtenerIndicativoPais(creacionEntidadBean.entidadN.codPais)}"
+                                               styleClass="label-indicativo" />
+                            </p:panel>
+                        </div>
+                        <div style="width: 70%; float: right;">
+                            <p:inputText id="itCelularEntidad"
+                                         class="form-control-acti-usua" maxlength="20"
+                                         value="#{creacionEntidadBean.entidadN.celular}"
+                                         style="border-radius:0px 3px 3px 0px!important;"
+                                         onkeypress="return numbervalida(event)"
+                                         title="${titles['TTL_INGRESE']} ${titles['LBL_CELULAR']} ${titles['TTL_TIPO_NUMERICO']}">
+                                         <f:attribute value="7" name="minLength" />
+										 <f:attribute value="20" name="maxLength" />
+										 <f:validator validatorId="numberValidator" />
+                            </p:inputText>
+                            <p:message for="itCelularEntidad" display="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding: 0px !important">
+                            <p:outputLabel value="${titles.LBL_INDICATIVO}"
+                                           style="width: 30%;"
+                                           styleClass="log-label form-label-formularios" />
+                            <p:outputLabel value="${titles.LBL_FAX}:"
+                                           style="width: 70%;"
+                                           styleClass="log-label form-label-formularios" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="padding-right: 0px; width: 30%; float: left;">
+                            <p:panel  class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+                                      style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+                                <img src="../../resources/images/banderas/co.png" alt="" width="18"/>
+                                <p:outputLabel for="itFaxEntidad"
+                                               value="+#{creacionEntidadBean.obtenerIndicativoPais(creacionEntidadBean.entidadN.codPais)}#{creacionEntidadBean.obtenerIndicativoDepartamento(creacionEntidadBean.entidadN.codDepartamento)}"
+                                               styleClass="label-indicativo" />
+                            </p:panel>
+                        </div>
+                        <div style="width: 70%; float: right;">
+                            <p:inputText id="itFaxEntidad"
+                                         value="#{creacionEntidadBean.entidadN.fax}"
+                                         class="form-control-acti-usua" maxlength="20"
+                                         style="border-radius:0px 3px 3px 0px!important;"
+                                         onkeypress="return numbervalida(event)"
+                                         title="${titles['TTL_INGRESE']} ${titles['LBL_FAX']} ${titles['TTL_TIPO_NUMERICO']}">
+                                         <f:attribute value="7" name="minLength" />
+										 <f:attribute value="20" name="maxLength" />
+										 <f:validator validatorId="numberValidator" />
+                            </p:inputText>
+                             <p:message for="itFaxEntidad" display="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p:panel>
+    <br />
+   <div class="row">
+	   <div class="col-md-12">
+	   		<div class="col-md-4"> 
+            <p:outputLabel for="itRepresentanteLegal"
+                           value="#{titles.LBL_REPRESENTANTE_LEGAL}:"
+                           styleClass="log-label form-label-formularios" />
+            <p:inputText id="itRepresentanteLegal"
+                         value="#{creacionEntidadBean.entidadN.codRepresentanteLegal}"
+                         styleClass="form-control-acti-usua form-control"
+                         title="${titles['TTL_INGRESE']} ${titles['LBL_REPRESENTANTE_LEGAL']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                         maxlength="126">
+                         <f:validator validatorId="maxByteLengthValidator" />
+            </p:inputText>
+    		</div>
+    	</div>
+    </div>
+    <br /> <br /> <br /><br /> <br />
+    <script type="text/javascript">
+	    function geocode() {
+	    	var direccion = document.getElementById("tabViewCrearEntidad:formularioCaracterizacion:iTDireccionGenerada").value;
+	    	PF('wvMapaEntidad').geocode(direccion);	
+	    }
+     </script>	
+</html>

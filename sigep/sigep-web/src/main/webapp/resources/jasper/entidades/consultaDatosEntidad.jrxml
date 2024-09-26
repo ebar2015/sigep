@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82288996-747a-440f-a5e1-6335ee83af09">
+	<property name="ireport.zoom" value="0.8264462809917362"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="b4dfa4ed-a379-47b5-bad2-35b21f603d46">
+		<field name="nombrePolitica" class="java.lang.String"/>
+		<field name="descripcionPolitica" class="java.lang.String"/>
+		<field name="nombreTipoPolitica" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="TipoEntidad" class="java.lang.String"/>
+	<parameter name="CodSIGEP" class="java.lang.String"/>
+	<parameter name="NombreEntidad" class="java.lang.String"/>
+	<parameter name="NIT" class="java.lang.String"/>
+	<parameter name="DepartamentoEntidad" class="java.lang.String"/>
+	<parameter name="MunicipioEntidad" class="java.lang.String"/>
+	<parameter name="Sigla" class="java.lang.String"/>
+	<parameter name="Norma" class="java.lang.String"/>
+	<parameter name="TipoNorma" class="java.lang.String"/>
+	<parameter name="NumeroNorma" class="java.lang.String"/>
+	<parameter name="FechaNorma" class="java.lang.String"/>
+	<parameter name="ObjetoNorma" class="java.lang.String"/>
+	<parameter name="FuncionPublicaImagen" class="java.lang.String"/>
+	<parameter name="TodoNuevoPaisImagen" class="java.lang.String"/>
+	<parameter name="DigitoVerificacion" class="java.lang.String"/>
+	<parameter name="CodDANE" class="java.lang.String"/>
+	<parameter name="CodCUIN" class="java.lang.String"/>
+	<parameter name="CodOrden" class="java.lang.String"/>
+	<parameter name="CodSectorAdmin" class="java.lang.String"/>
+	<parameter name="CodSubOrden" class="java.lang.String"/>
+	<parameter name="EsAdscrito" class="java.lang.String"/>
+	<parameter name="NombreEntidadAdscrita" class="java.lang.String"/>
+	<parameter name="CodCategoria" class="java.lang.String"/>
+	<parameter name="CodDNP" class="java.lang.String"/>
+	<parameter name="EsEntidadPostConflicto" class="java.lang.String"/>
+	<parameter name="CodPersoneriaJuridica" class="java.lang.String"/>
+	<parameter name="CodSistemaCarrera" class="java.lang.String"/>
+	<parameter name="CodEscalaSalarial" class="java.lang.String"/>
+	<parameter name="CodNaturalezaEmpleo" class="java.lang.String"/>
+	<parameter name="CodEstadoEntidad" class="java.lang.String"/>
+	<parameter name="CodSubEstadoEntidad" class="java.lang.String"/>
+	<parameter name="ItemDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="CorreoInstitucional" class="java.lang.String"/>
+	<parameter name="PaginaWeb" class="java.lang.String"/>
+	<parameter name="TipoZona" class="java.lang.String"/>
+	<parameter name="DireccionFisica" class="java.lang.String"/>
+	<parameter name="CodigoPostal" class="java.lang.String"/>
+	<parameter name="Telefono" class="java.lang.String"/>
+	<parameter name="Celular" class="java.lang.String"/>
+	<parameter name="Fax" class="java.lang.String"/>
+	<parameter name="RepresentanteLegal" class="java.lang.String"/>
+	<field name="nombrePolitica" class="java.lang.String"/>
+	<field name="descripcionPolitica" class="java.lang.String"/>
+	<title>
+		<band height="80" splitType="Stretch">
+			<image>
+				<reportElement x="391" y="0" width="181" height="80" uuid="556475a5-ca83-464f-8fa7-33b80bcff881"/>
+				<imageExpression><![CDATA[$P{TodoNuevoPaisImagen}]]></imageExpression>
+			</image>
+			<image scaleImage="RetainShape">
+				<reportElement x="0" y="0" width="264" height="71" uuid="52b36548-8153-4e80-8765-56666172a3e7"/>
+				<imageExpression><![CDATA[$P{FuncionPublicaImagen}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="670" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" x="27" y="78" width="140" height="20" backcolor="#CCCCCC" uuid="b45273cb-76c4-43b1-905c-c957eee8842e"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TipoEntidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="210" y="78" width="143" height="20" backcolor="#CCCCCC" uuid="53b02787-5f3b-4d9d-9ee1-ac2ef8948aa2"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodSIGEP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="401" y="78" width="147" height="39" backcolor="#CCCCCC" uuid="06f8c23d-507f-4eb3-be0b-50d30bd5eae7"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NombreEntidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="27" y="154" width="140" height="20" backcolor="#CCCCCC" uuid="4508372e-abb0-4da4-8360-4a5223a31056"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DepartamentoEntidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="210" y="154" width="143" height="20" backcolor="#CCCCCC" uuid="678fac6c-8c5b-4c24-a45f-8141d899c790"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MunicipioEntidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="401" y="154" width="147" height="20" backcolor="#CCCCCC" uuid="cc4d30ff-9285-46a0-b624-1aeffee3e888"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Sigla}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="27" y="202" width="140" height="20" backcolor="#CCCCCC" uuid="bb8f6792-afb4-4ee7-8ae3-ec396189681f"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TipoNorma}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="210" y="202" width="143" height="20" backcolor="#CCCCCC" uuid="6f7ea130-a02e-462e-9984-b39a61699d3b"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ObjetoNorma}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="401" y="202" width="147" height="20" backcolor="#CCCCCC" uuid="6ddd47b6-9120-4584-b4d9-79818dc94789"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NumeroNorma}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="27" y="252" width="140" height="20" backcolor="#CCCCCC" uuid="705dc6e0-cf3e-4c09-8ec6-bca76264d9c5"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FechaNorma}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="27" y="58" width="140" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="5493d6a4-d900-4f46-84f6-aba5170d14e4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Tipo de Entidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="210" y="58" width="143" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="fc7f51ea-8589-4daa-940f-4fb8e074e9bb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Código SIGEP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="401" y="58" width="147" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="4cd4247c-2f86-4060-a52a-828d5b6ff758"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Nombre de la Entidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="27" y="117" width="140" height="37" forecolor="#245378" backcolor="#CCCCCC" uuid="e22656e6-fe07-470b-b482-7f00c3ae7dfc"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Departamento de Domicilio de la Entidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="210" y="117" width="143" height="37" forecolor="#245378" backcolor="#CCCCCC" uuid="9ebf6277-e2bb-4de9-a678-4170d082fe2b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Municipio de Domicilio de la Entidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="401" y="117" width="147" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="4ff235ae-cdff-4eb2-864b-178dbe100904"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Sigla]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="401" y="182" width="147" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="29e0b027-e405-4a5a-9775-2e4d78308448"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Número Norma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="27" y="182" width="140" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="2cb99b9f-73ee-4bb8-9acc-ffaf0bc39579"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Tipo de la Norma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="27" y="232" width="140" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="d0829866-90f1-4ded-8d6a-442aab125799"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Fecha de Norma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="210" y="182" width="143" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="a993bb38-9b26-4cdb-8b9c-d3a5de0d37b3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Objeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="156" y="0" width="262" height="56" forecolor="#245278" backcolor="#CCCCCC" uuid="c083285f-d11d-4751-8618-090dca65fc21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN BÁSICA DE LA ENTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="156" y="278" width="262" height="56" forecolor="#245278" backcolor="#CCCCCC" uuid="14060c3c-6e65-421d-bf3f-ba46bc514472"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CARACTERIZACIÓN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="364" width="130" height="20" backcolor="#CCCCCC" uuid="9fa25c94-b044-453b-b1fb-dbc10c546b72"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodOrden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="344" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="781c961a-b380-4502-a6ae-e2e3df1353de"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Orden]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="344" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="8556d222-07e3-484c-a3d9-cd37479e7e6a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Sector Administrativo]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="364" width="130" height="33" backcolor="#CCCCCC" uuid="d07ffb1a-c09b-4f6c-a750-56f013e93e69"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodSectorAdmin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="344" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="34ec998b-202e-4e91-8473-a093364e88f3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Sub-orden]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="291" y="364" width="130" height="33" backcolor="#CCCCCC" uuid="08c33773-fa7a-407b-ae9d-a2701b1f7f9d"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodSubOrden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="433" y="344" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="2b99c2af-c122-4aa9-ae84-74161eec0119"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Adscrita/Vinculada]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="364" width="130" height="20" backcolor="#CCCCCC" uuid="ba2fcd4d-0bb4-49f8-89ce-35820eef9e38"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EsAdscrito}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="403" width="130" height="34" forecolor="#245378" backcolor="#CCCCCC" uuid="2291da2e-4bbd-47de-b062-77b33a71a15d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Nombre de la Entidad Adscrita/Vinculada]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="437" width="130" height="20" backcolor="#CCCCCC" uuid="cf2f055d-b6a0-457d-942a-94ef4cb6a0c7"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NombreEntidadAdscrita}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="403" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="d13f2fe3-dc10-45ff-9572-8d148fc2f19b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Tipo de Entidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="437" width="130" height="20" backcolor="#CCCCCC" uuid="b9a641f3-0af9-4597-a1c2-080c1261e9e9"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TipoEntidad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="433" y="403" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="941a082f-b01c-4862-b607-95b356eaedb5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Categoría DNP]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="437" width="130" height="20" backcolor="#CCCCCC" uuid="3e343832-ef47-450f-b2c6-ba548448a737"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodDNP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="467" width="130" height="31" forecolor="#245378" backcolor="#CCCCCC" uuid="d2543fdb-320b-42a2-bee5-638464044aa2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Entidades del Posconflicto (Paz)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="498" width="130" height="20" backcolor="#CCCCCC" uuid="bcf023bf-8885-433a-8270-3048b82a6319"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EsEntidadPostConflicto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="467" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="ae902bad-0760-4cbe-85f4-8ea2168c8e39"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Personería Jurídica]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="498" width="130" height="20" backcolor="#CCCCCC" uuid="82eb547e-1448-47d8-8f9d-9c897c6b437a"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodPersoneriaJuridica}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="527" width="556" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="948610a3-25d7-4dd1-8cf6-0095827f9ba4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Sistema(s) de Carrera]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="547" width="556" height="25" backcolor="#CCCCCC" uuid="ec9cf3c3-0f0e-481b-88d8-5507ffc9094b"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodSistemaCarrera}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="572" width="556" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="70741849-3925-4cc6-a905-307a2a6faff4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Régimen Escala Salarial]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="592" width="556" height="25" backcolor="#CCCCCC" uuid="338f0b53-56d0-4a79-aa4d-3b793d17770b"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodEscalaSalarial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="290" y="467" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="adcddba2-fc8a-42b3-ae0e-e039ea70e2b1"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Estado de la Entidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="290" y="498" width="130" height="20" backcolor="#CCCCCC" uuid="066b70e2-a29e-47e9-8942-f6d3acecea54"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodEstadoEntidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="498" width="130" height="20" backcolor="#CCCCCC" uuid="462b0317-1083-405f-bfa5-bda081aba3d2"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodSubEstadoEntidad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="433" y="467" width="130" height="31" forecolor="#245378" backcolor="#CCCCCC" uuid="cd1b4e03-bda5-495a-80ce-7f396f9c658c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Estado de Gestión de la Entidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="403" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="f892c097-8f8d-4b00-866b-79f55ce06c6c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Categoría]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="291" y="437" width="130" height="20" backcolor="#CCCCCC" uuid="b9ab3c05-80cf-47bd-8575-cedcada7a6c1"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodCategoria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="617" width="556" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="0ad3c1e1-9495-422c-bed2-e6f85a4b191a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Naturaleza del(los) empleado(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="637" width="556" height="25" backcolor="#CCCCCC" uuid="a14f6f39-2b82-4eca-818e-f4682bf49a92"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodNaturalezaEmpleo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<summary>
+		<band height="532">
+			<componentElement>
+				<reportElement key="table" style="table" positionType="Float" mode="Opaque" x="7" y="476" width="541" height="56" uuid="a1812650-9831-4577-8566-7cd611eff91d"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="dataset1" uuid="ede4e8f4-b3b2-4f40-84ab-ee41aeea01fd">
+						<dataSourceExpression><![CDATA[$P{ItemDataSource}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="200" uuid="84cccae8-8bbb-4373-8117-4ea1ed79b89c">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="200" height="30" forecolor="#245278" uuid="7e33586b-3867-44e3-aa3c-f8feafffdd6b"/>
+								<textElement textAlignment="Center">
+									<font fontName="SansSerif" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[NOMBRE DE LA POLÍTICA]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="200" height="30" uuid="f8b81b41-b836-4065-bfc7-91100ef46e84"/>
+								<textFieldExpression><![CDATA[$F{nombrePolitica}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="341" uuid="ffa0b1ac-d6e4-41b3-a673-d32b7a2c8da8">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="341" height="30" forecolor="#245278" uuid="6e0f3a41-b679-4e1b-a8c9-1b333f590d7b"/>
+								<textElement textAlignment="Center">
+									<font fontName="SansSerif" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[DESCRIPCIÓN DE LA POLÍTICA]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="341" height="30" uuid="5c6cd65a-236f-4864-8598-fd81e0e09867"/>
+								<textFieldExpression><![CDATA[$F{descripcionPolitica}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement x="150" y="20" width="262" height="56" forecolor="#245278" backcolor="#CCCCCC" uuid="2fe771c7-980f-42cf-8c07-721070563dd2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE REGISTRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="90" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="9f495784-4fb2-42b9-a055-6f90b1515a71"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="110" width="130" height="20" backcolor="#CCCCCC" uuid="1842c970-9379-4519-8f3c-d12cc9aa882d"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="90" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="44a91d09-61da-4272-a27d-8355f7796b68"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Dígito de Verificación]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="110" width="130" height="20" backcolor="#CCCCCC" uuid="2745ba9d-316e-4c30-9b10-c4a40d2ccf09"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DigitoVerificacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="90" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="4dc5b8cb-9d4e-4903-8662-1b9bc133084d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Código DANE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="291" y="110" width="130" height="20" backcolor="#CCCCCC" uuid="041ff978-bc68-4612-b276-1e214ea3d6f5"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodDANE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="433" y="90" width="130" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="fe23386c-0020-4679-af15-6a0faf5b4adc"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Código CUIN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="110" width="130" height="20" backcolor="#CCCCCC" uuid="87a7ac2f-9634-42e4-9d97-24b6cea2323f"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodCUIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="143" width="262" height="56" forecolor="#245278" backcolor="#CCCCCC" uuid="133d26d3-d458-4f42-99a5-b6a9f426c21e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEMOGRÁFICOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="207" width="171" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="e8846953-ced6-419f-b029-aae47dab57f2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Correo Institucional]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="7" y="227" width="171" height="34" backcolor="#CCCCCC" uuid="e38c2871-b553-4899-a0dc-9e592b6d1205"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CorreoInstitucional}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="189" y="207" width="179" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="9e03ec73-8b60-4e91-9ee1-5359d4a83630"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Página Web]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="189" y="227" width="179" height="34" backcolor="#CCCCCC" uuid="a8a71a68-82e6-4ceb-8dcf-d4ab2d762d78"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PaginaWeb}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="380" y="207" width="183" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="b109822a-17da-404b-86f9-5387452563ca"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Tipo de Zona]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="380" y="227" width="183" height="20" backcolor="#CCCCCC" uuid="b98e1618-279b-4a5a-ab1e-e131b58a9d5a"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TipoZona}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="265" width="361" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="e15f2f1e-59fa-4d2e-9f7a-0b4d2eeeb822"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Dirección Física]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="7" y="285" width="361" height="20" backcolor="#CCCCCC" uuid="7e764b6b-fcaf-4823-80c6-c52e7713ba20"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DireccionFisica}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="380" y="265" width="183" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="2a2d2e29-c691-4802-a699-75a93ea163fb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Código Postal]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="380" y="285" width="183" height="20" backcolor="#CCCCCC" uuid="36582c5a-fb14-4b70-9441-667d29c270b5"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CodigoPostal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="313" width="168" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="8fcb5cdd-d553-4805-8621-b3ea99647133"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="10" y="333" width="168" height="20" backcolor="#CCCCCC" uuid="d431746f-b1f9-4e5d-a23b-2f95bf689981"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Telefono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="189" y="313" width="179" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="a676346d-b443-4e44-bbac-404034ebe8eb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Celular]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="189" y="333" width="179" height="20" backcolor="#CCCCCC" uuid="30bc94d9-501e-4085-8923-e6f6f10883dd"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Celular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="380" y="313" width="183" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="118e176c-34df-40a4-af93-67754440ef1c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Fax]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="380" y="333" width="183" height="20" backcolor="#CCCCCC" uuid="d79e49e0-aaef-4e61-b379-11f3f72cf5da"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Fax}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="363" width="168" height="20" forecolor="#245378" backcolor="#CCCCCC" uuid="c9d8af00-80d7-4c02-a336-265cefb94812"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Representante Legal]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="10" y="383" width="168" height="20" backcolor="#CCCCCC" uuid="45c3a8c8-77a3-4b2c-9da6-3e2e62890a27"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RepresentanteLegal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="412" width="412" height="56" forecolor="#245278" backcolor="#CCCCCC" uuid="116aeae3-ba9e-4290-a4f6-f22d04919455"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["POLÍTICAS ASIGNADAS A LA ENTIDAD " + $P{NombreEntidad}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

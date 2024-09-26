@@ -1,0 +1,503 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="formularioBienPatrimonial">
+		<div
+			class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div
+				class="row"
+				style="padding-bottom: 1em !important">
+				<div
+					class="col-md-12"
+					align="center">
+					<p:outputLabel
+						value="#{titles.TTL_TITULO_BIENES_PATRIMONIALES}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				<div class="col-md-12" style="text-align: right;">
+					<div style="padding-right: 1%; display: inline-block">
+						<p:commandButton							
+							styleClass="btn btn-transparent"
+							value="#{titles.LBL_ADD_NEW}"
+							process="@this"
+							update="panelFormRegistroBien"
+							disabled="#{bienesRentasBean.sinBienes}"
+							actionListener="#{bienesRentasBean.agregarNuevoBien}"						
+							onclick="verFormularioBienPatrimonial();"
+							icon="fa fa-fw fa-plus-circle" />
+					</div>
+					<div
+						class="col-md-6"
+						align="right">
+						
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12" descr="aligVal3">
+						<p:dataTable
+							id="tablaBienesPatrimonio"
+							var="dataBienPatrimonio"
+							value="#{bienesRentasBean.bienes}"
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_TIPO_BIEN']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataBienPatrimonio.nombreTipoBien}">
+								<p:outputLabel value="#{dataBienPatrimonio.nombreTipoBien}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_BIEN_ID']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataBienPatrimonio.identificacion}">
+								<p:outputLabel value="#{dataBienPatrimonio.identificacion}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_VALOR']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataBienPatrimonio.valor}">
+								<p:outputLabel value="#{dataBienPatrimonio.valor}">
+									<f:convertNumber
+										currencySymbol="$"
+										type="currency"
+										locale="es_CO"
+										groupingUsed="true" />
+								</p:outputLabel>
+							</p:column>
+							<p:column
+								headerText="${titles['LBL_ACCIONES']}"
+								style="word-wrap: break-word!important; text-align:center!important;">
+								<p:commandButton
+									title="#{titles.TTL_EDIT}"
+									icon="icon-edit"
+									styleClass="icon-btn"
+									process="@this"
+									update="tabViewBienesRentas:formularioBienPatrimonial"
+									action="#{bienesRentasBean.mostrarDialogoEditarBienPatrimonial()}"
+									oncomplete="window.location.href='#tabViewBienesRentas:formularioBienPatrimonial:panelFormRegistroBien'">
+									<f:setPropertyActionListener
+										value="#{dataBienPatrimonio}"
+										target="#{bienesRentasBean.patrimonioSeleccionado}" />
+								</p:commandButton>
+								<p:commandButton
+									title="#{titles.TTL_DELETE}"
+									process="@this"
+									icon="icon-delete"
+									styleClass="icon-btn"
+									action="#{bienesRentasBean.mostrarDialogoEliminarBienPatrimonial()}">
+									<f:setPropertyActionListener
+										value="#{dataBienPatrimonio}"
+										target="#{bienesRentasBean.patrimonioSeleccionado}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div
+					class="col-lg-12"
+					align="center">
+					<div class="col-md-12">
+						<h:outputText
+							styleClass="log-label form-label-formularios"
+							value="#{titles.LBL_NO_PATRI}&#160;" />
+						<p:selectBooleanCheckbox value="#{bienesRentasBean.sinBienes}" >
+						<p:ajax listener="#{bienesRentasBean.guardarSinBienes}" update="tabViewBienesRentas:formularioBienPatrimonial"/>
+						</p:selectBooleanCheckbox>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton disabled="#{bienesRentasBean.btnGuardarPatrimonioDeshabilitado}"
+						title="#{bienesRentasBean.btnGuardarPatrimonioMensaje}"
+						styleClass="btn btn-primary"
+						process="@this"
+						style="font-size:1.5em!important; padding-top:0!important;"
+						actionListener="#{bienesRentasBean.guardarContinuarBienPatrimonial}"
+						value="#{titles.LBL_SAVE_CONT}" />
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton
+						value="#{titles.TTL_CANCEL}"
+						type="button"
+						onclick="mostrarDialogCancelarBP();"
+						styleClass="btn btn-default"
+						style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<div
+			id="divFormularioBienPatrimonial"
+			class="row">
+			<p:panel id="panelFormRegistroBien" visible="#{bienesRentasBean.formBienesHabilitado}">
+				<div class="row row-background-white">
+					<br />
+					<p:spacer height="2" />
+					<hr class="hr-style hr-style-two" />
+					<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						${titles['TTL_BR_BIENES_HDR_NUEVO_BIEN']}</span> <br /> <br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['TTL_BR_BIENES_TIPO']}:"
+									for="comboTipoBien"
+									styleClass="display-block log-label form-label-formularios" />
+								<p:selectOneMenu
+									id="comboTipoBien"
+									required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									filter="true" filterMatchMode ="contains"
+									styleClass="form-control-form-act-usua"
+									title="${titles['TTL_SELECT']} ${titles['TTL_BR_BIENES_TIPO']}"
+									value="#{bienesRentasBean.patrimonioSeleccionado.codTipoBien}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.tipoBien}" />
+								</p:selectOneMenu>
+								<p:message
+									for="comboTipoBien"
+									display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['TTL_BR_BIENES_ID']}:"
+									for="txtIdenticaBien"
+									styleClass="log-label form-label-formularios display-block" />
+								<p:inputText
+									id="txtIdenticaBien"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									maxlength="254"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_BR_BIENES_ID']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									value="#{bienesRentasBean.patrimonioSeleccionado.identificacion}"
+									styleClass="form-control-acti-usua form-control">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message
+									for="txtIdenticaBien"
+									display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel
+									value="#{titles.TTL_BR_BIENES_VALOR}"
+									for="txtValorNum"
+									styleClass="log-label form-label-formularios display-block" />									
+								<p:inputNumber
+									id="txtValorNum"
+									converterMessage="El valor debe ser numérico y la parte decimal separada por punto"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									validatorMessage="Debe ingresar un valor entre 0.1 y 9999999999999999"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR444']} ${titles['TTL_TIPO_NUMERICO']}"
+									value="#{bienesRentasBean.patrimonioSeleccionado.valor}"
+									onkeyup="return validateKey(event);"
+									onkeydown="return validateKey(event);"
+									onkeypress="return validateKey(event);"		
+									symbol="$ "									
+									converter="javax.faces.BigDecimal"
+									decimalSeparator=","
+									thousandSeparator="."
+									decimalPlaces="2"
+									>
+																	
+									
+								</p:inputNumber>									
+								<p:keyFilter for="txtValorNum" mask="num"/>
+								<p:message for="txtValorNum" display="text" />
+							</div>
+					
+						</div>
+					</div>
+					<br /> <br />
+					<div class="col-md-12" align = "center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 3%;">
+							<p:commandButton id="btnGuardarBienPatrimonial"
+								value="${titles['TTL_BR_BTN_ADICIONAR']}"
+								style="font-size:1.5em!important; padding-top:0!important;"
+								styleClass="btn btn-primary"
+								resetValues="true"
+								validateClient="true"
+								process="formularioBienPatrimonial"
+								update="panelFormRegistroBien tablaBienesPatrimonio"
+								actionListener="#{bienesRentasBean.guardarBienPatrimonial}" />
+						</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this"
+							update="panelFormRegistroBien"
+							actionListener="#{bienesRentasBean.limpiarBienPatrimonial()}" 
+							title="#{bienesRentasBean.strToolTipBtnLimpiar}">
+						  </p:commandButton>
+					</div>							
+						<div class="col-md-3"></div>
+					</div>
+				</div>
+			</p:panel>
+			<br />
+		</div>
+	</h:form>
+	<div
+		class="modal fade"
+		id="dialogRespuBienes"
+		role="dialog" 
+		data-backdrop="static" 
+		data-keyboard="false" >
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${titles['TTL_BR_BORRAR_TODO']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnDeshabiTablaBienes"
+								value="${titles['TTL_OK']}"
+								process="@this"
+								styleClass="btn btn-primary"
+								update="tabViewBienesRentas:formularioBienPatrimonial"
+								actionListener="#{bienesRentasBean.limpiarFormBienes()}"
+								onclick="$('#dialogRespuBienes').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_CANCEL']}"
+								process="@this"
+								styleClass="btn btn-default"
+								actionListener="#{bienesRentasBean.cancelarEliminacionTablaBienes()}"
+								update="tabViewBienesRentas:formularioBienPatrimonial"
+								onclick="$('#dialogRespuBienes').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dialogCancelarBienPatrimonial"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_DIALOGO_CANCELAR']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									styleClass="btn btn-primary"
+									actionListener="#{bienesRentasBean.cancelarFormularioBienesPatrimonial}"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogCancelarBienPatrimonial').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dialogEditarBienPatrimonial"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['MSG_CONF_EDITAR_REG']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									process="@this"
+									update="tabViewBienesRentas:formularioBienPatrimonial:panelFormRegistroBien"
+									onclick="$('#dialogEditarBienPatrimonial').modal('hide');"
+									actionListener="#{bienesRentasBean.editarBien()}"
+									styleClass="btn btn-primary"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogEditarBienPatrimonial').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dialogEliminarBienPatrimonial"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${titles['LBL_BR_ELIMINA_CUENTA']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									styleClass="btn btn-primary"
+									update="tabViewBienesRentas:formularioBienPatrimonial"
+									actionListener="#{bienesRentasBean.eliminarBienPatrimonial}"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogEliminarBienPatrimonial').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">	
+	function verFormularioBienPatrimonial(){
+		$("#divFormularioBienPatrimonial").attr("style","display:block");
+	}
+
+	function verFormularioEditarBienPatrimonial(){
+		$("#divFormularioBienPatrimonial").attr("style", "display:block");
+		$("#dialogEditarBienPatrimonial").modal('hide');
+	}
+
+	function mostrarDialogCancelarBP(){			
+		$('#dialogCancelarBienPatrimonial').modal({backdrop : 'static', keyboard : false});
+	}
+	function validateKey(event){
+		if(event.which == 13 || event.keyCode == 13){
+			event.stopPropagation();
+			event.preventDefault();
+			document.getElementById("tabViewBienesRentas:formularioBienPatrimonial:btnGuardarBienPatrimonial").focus();
+			return false;
+		}
+	}	
+	
+	</script>
+</ui:composition>

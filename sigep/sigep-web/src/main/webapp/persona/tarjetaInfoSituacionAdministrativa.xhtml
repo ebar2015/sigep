@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<p:outputPanel id="panelCargoActual">
+
+		<p:panel id="subPanelCargoActual" rendered="#{consultarVinculacionBean.blnVinculacionActiva}">
+			<div class="row row-background-white">
+				<br /><br />
+				<hr class="hr-style hr-style-two" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_BR_INFORMACION_SITUACIONES_ADMINISTRATIVAS']} </span> <br />
+					
+				<div class="col-md-12">
+					<br />
+				
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['LBL_CARGO_SA']}&#58;&#160;" styleClass="log-label form-label" style="color: #263948!important; font-weight:600;"/>
+						<p:outputLabel value="#{consultarVinculacionBean.ultimaVinculacionActiva.nombreCargo}" styleClass="log-label form-label"/>
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['LBL_TRANSVERSAL_RECURSO_CODIGO']}&#58;&#160;" styleClass="log-label form-label" style="color: #263948!important; font-weight:600;"/>
+						<p:outputLabel value="#{consultarVinculacionBean.ultimaVinculacionActiva.titularidad}" styleClass="log-label form-label"/>
+					</div>
+				
+				</div>
+				<div class="col-md-12" >
+					<br />
+				
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['LBL_GRADO']}&#58;&#160;" styleClass="log-label form-label" style="color: #263948!important; font-weight:600;"/>
+						<p:outputLabel value="#{consultarVinculacionBean.ultimaVinculacionActiva.codigoEntidad}" styleClass="log-label form-label"/>
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['LBL_TIPO_VACANCIA']}&#58;&#160;" styleClass="log-label form-label" style="color: #263948!important; font-weight:600;"/>
+						<p:outputLabel value="#{consultarVinculacionBean.ultimaVinculacionActiva.nombreEntidad}" styleClass="log-label form-label"/>
+					</div>
+				
+				</div>
+				<div class="col-md-12" >
+					<br />
+				
+					<div class="col-md-12">
+						<p:outputLabel value="${titles['LBL_NOMBRE_ULTIMA_PERSONA_OCUPO_CARGO']}&#58;&#160;" styleClass="log-label form-label" style="color: #263948!important; font-weight:600;"/>
+						<p:outputLabel value="#{consultarVinculacionBean.ultimaVinculacionActiva.nombreDependencia}" styleClass="log-label form-label">
+						</p:outputLabel>
+					</div>
+				
+				
+				</div>
+				
+			
+			</div>
+		</p:panel>
+	</p:outputPanel>
+	<br /> <br />	
+	
+</ui:composition>

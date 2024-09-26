@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/dialogTemplate.xhtml">
+	<ui:param name="pageTitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_PLANTILLA_XML_AGREGAR_CUENTA_CORREO']}" />
+
+	<ui:define name="main">
+		<h:panelGroup id="agregarDetalleDialog">
+			<p:panelGrid columns="6"
+				columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3"
+				layout="grid" styleClass="ui-panelgrid-blank">
+
+				<p:outputLabel for="nombreCuenta"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_CUENTA']}" />
+				<p:inputText id="nombreCuenta"
+					placeholder="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_CUENTA']}"
+					value="#{plantillaBean.cuentaCorreoSeleccionada.nombreCuenta}"
+					required="#{empty plantillaBean.cuentaCorreoSeleccionada.porPerfil}"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:validator validatorId="emailValidator" />
+					<p:ajax process="@this" update="agregarDetalleDialog" />
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="nombreCuenta" display="icon" />
+
+				<p:outputLabel for="porPerfil"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_PERFIL']}" />
+				<p:selectOneMenu id="porPerfil"
+					value="#{plantillaBean.cuentaCorreoSeleccionada.porPerfil}"
+					filter="true" filterMatchMode="contains" effect="fade"
+					required="#{empty plantillaBean.cuentaCorreoSeleccionada.nombreCuenta}"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+						itemValue="#{null}" />
+					<f:selectItems value="#{perfiles}" var="perfil"
+						itemLabel="#{perfil.descripcion}"
+						itemValue="#{perfil.descripcion}" />
+					<p:ajax process="@this" update="agregarDetalleDialog"
+						event="change" />
+				</p:selectOneMenu>
+				<p:message for="porPerfil" display="icon" />
+
+
+				<p:outputLabel for="bandeja"
+					value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_BANDEJA']}" />
+				<p:selectOneMenu id="bandeja" filter="true" required="true"
+					filterMatchMode="contains"
+					title="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_TIPO_BANDEJA']}"
+					value="#{plantillaBean.cuentaCorreoSeleccionada.bandeja}" var="t"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+						noSelectionOption="true" itemValue="${titles['TTL_SELECT']}" />
+					<f:selectItems var="#{bandeja}" value="#{tiposBandeja}"
+						itemLabel="#{bandeja}" itemValue="#{bandeja}" />
+					<p:column>
+						<h:outputText value="#{t}" />
+					</p:column>
+					<p:clientValidator />
+				</p:selectOneMenu>
+				<p:message for="bandeja" display="icon" />
+
+				<h:outputText />
+				<h:outputText />
+				<h:outputText />
+			</p:panelGrid>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton icon="ui-icon-plus" title="${titles['TTL_OK']}"
+			value="${titles['TTL_OK']}" process="@this agregarDetalleDialog"
+			update="agregarDetalleDialog"
+			actionListener="#{plantillaBean.seleccionarCuentaCorreoDialogo}" />
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/template/basicTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.LBL_ADMIN_ESTADO_GESTION_ENTIDAD}" />
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel id="frmGestionarEstadoEntidad" style="background: transparent !important;">
+
+                <div class="row">
+                    <div class="col-md-12" align="center">
+                        <h2>
+                            <p:outputLabel value="• ${titles['LBL_ADMIN_ESTADO_GESTION_ENTIDAD']} •" styleClass="page-subtitle" />
+                        </h2>
+                    </div>
+                </div>
+                <div class="row row-background-white" id="child-tab-data-basic">
+                    <br /><br />
+                    <div class="row" >
+                        <div class="col-md-12">
+                       		<div class="col-md-4"></div>
+                            <div class="col-md-4" >
+                                <p:outputLabel for= "iDSOMmONEDAMonto"
+                                    styleClass="log-label form-label-formularios" 
+                                    value="${titles['LBL_ADMIN_ESTADO_GESTION_ENTIDAD']}:" />
+                                <h:selectOneMenu id="iDSOMmONEDAMonto"
+                                                 value="#{gestionarEstadoEntidadBean.entidadHistorico.idEstadoNuevo}"
+                                                 title="${titles['TTL_SELECT']} ${titles['LBL_ADMIN_ESTADO_GESTION_ENTIDAD']} "
+                                                 required="true"
+                                                 requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+                                                 styleClass="form-control-form-act-usua">
+                                    <f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+                                    <f:selectItems value="#{webUtils.getLstMaestroEstadosGestionEntidad()}" />
+                                    <p:ajax event="change" process="@this"/> 
+                                </h:selectOneMenu>
+                                <p:message for="iDSOMmONEDAMonto" display="text" />
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br />
+                            <div class="col-md-12">
+                                <br />
+                                <p:outputLabel for="iTObservacion"
+                                    value="${titles['LBL_RECAUDOS_CREAR_MULTA_OBSERVACIONES']}:"
+                                    styleClass="log-label form-label-formularios" />
+                                <p:inputText  id="iTObservacion"
+                                              title="${titles['TTL_INGRESE']} ${titles['LBL_RECAUDOS_CREAR_MULTA_OBSERVACIONES']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+                                              class="form-control-acti-usua"
+                                              style="width:100%!important; height: 68px!important;"
+                                              maxlength="2000"
+                                              value="#{gestionarEstadoEntidadBean.entidadHistorico.dsObservaciones}"
+                                              required="true"
+                                              requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"/>
+                                <p:message for="iTObservacion" display="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <br /> <br />							
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:panel >
+                                <p:dataTable id="tablaConsultaHistorico"
+                                             
+                                             paginator="true"
+                                             reflow="true" 
+                                             rows="#{paginatorSize}"
+ 											 rowsPerPageTemplate="#{paginatorsSize}"
+                                             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             var="dataTableHistorico"
+                                             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+                                             value="#{gestionarEstadoEntidadBean.lstHistoricoEntidad}">
+                                    <p:column headerText="#{titles['LBL_PRESUPUESTO_CREAR_PROYECTO_ESTADO']}">
+                                        <h:outputText value="#{dataTableHistorico.nombreParametro}"/>
+                                    </p:column>
+                                    <p:column headerText="#{titles.LBL_OBSERVACIONES_REGISTRADAS}">
+                                        <h:outputText value="#{dataTableHistorico.dsObservaciones}"/>
+                                    </p:column>
+                                    <p:column headerText="${titles['LBL_FECHA_HORA_REGISTRO']}">
+                                        <h:outputText value="#{dataTableHistorico.audFechaActualizacion}">
+                                            <f:convertDateTime pattern=" dd/MM/yyyy hh:mm:ss"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="${titles['LBL_NOMBRES_APELLIDOS']}">
+                                        <h:outputText value="#{dataTableHistorico.primerNombre} #{dataTableHistorico.primerApellido}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel> 
+                        </div>
+                        <div class="col-md-12" align = "center" style="padding-left: 9%!important; ">
+                        <br /><br />
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3" style="margin-bottom: 1%!important">
+                                <p:commandButton 							
+                                    styleClass="btn btn-primary"
+                                    value="${titles['LBL_GUARDAR_ESTADO']}"
+                                    action="#{gestionarEstadoEntidadBean.guardar()}"
+                                    style="width: 12.3em!important;height: 2.6em!important;"
+                                    update="frmGestionarEstadoEntidad dlgGestionarEstadoEntidad"/>
+                            </div>
+                            <div class="col-md-3">
+                                <p:commandButton  resetValues="true"						
+                                                  styleClass="btn btn-default"
+                                                  style="width: 12.3em!important;height: 2.6em!important;"
+                                                  value="${titles['TTL_CANCEL']}"
+                                                  process="@this" onclick="PF('dlgGestionarEstadoEntidadCancelar').show();"/>
+                            </div>
+                        </div>
+                        <p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" 
+                       		widgetVar="dlgGestionarEstadoEntidad" id="dlgGestionarEstadoEntidad" minHeight="300" 
+                            modal="true" resizable="false" closeOnEscape="false"
+                            responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+                            <br />
+                            <div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+                                <center>
+                                    <h5>#{gestionarEstadoEntidadBean.strMensaje}</h5>
+                                </center>
+                            </div>
+                            <br />
+                            <div class="row" align="center">
+                                <p:commandButton value="${titles['TTL_OK']}"
+                                                 process="@this" 
+                                                 styleClass="btn btn-primary"
+                                                 onclick="PF('dlgGestionarEstadoEntidad').hide();" />
+                            </div>
+                            <br />
+                        </p:dialog>	
+                        <p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgGestionarEstadoEntidadCancelar" id="dlgGestionarEstadoEntidadCancelar" minHeight="300" 
+                                  modal="true" resizable="false" closeOnEscape="false"
+                                  responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+                            <br />
+                            <div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+                                <center> <h5>${titles['LBL_ACCION_CANCELADA']}</h5></center>
+                            </div>
+                            <br />
+                            <div class="row" align="center">
+                                <p:commandButton value="${titles['TTL_OK']}"
+                                                 process="@this" 
+                                                 styleClass="btn btn-default"
+                                                 onclick="PF('dlgGestionarEstadoEntidadCancelar').hide();"
+                                                 action="#{gestionarEstadoEntidadBean.cancelar()}"/>
+                            </div>
+                            <br />
+                        </p:dialog>								
+                    </div>	
+                </div>	
+            </p:panel>	
+        </h:form>
+    </ui:define>
+</ui:composition>

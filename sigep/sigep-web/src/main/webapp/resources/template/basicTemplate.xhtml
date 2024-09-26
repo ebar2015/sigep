@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:x="http://java.sun.com/jsp/jstl/xml"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+    <title>${titles['TTL_SYSTEM_SHORT_NAME']} :: #{empty pageTitle
+            ? 'Page Title' : pageTitle}</title>
+
+    <h:outputStylesheet name="#{contrasteBean.temaAplicado}"/>
+    <h:outputStylesheet name="/css/bootstrap.css"/>
+    <h:outputStylesheet name="/css/sweetalert2.css"/>
+    <h:outputStylesheet name="/css/fontawesome.min.css"/>
+    <h:outputScript library="js" name="ventana.js"/>
+        <h:outputScript library="js" name="controlCierreSesion.js"
+                        rendered="false" />
+        <h:outputScript library="js" name="bootstrap.min.js" />
+        <h:outputScript library="js" name="sweetalert2.min.js" />
+
+        <link rel="shortcut icon" type="image/x-icon"
+              href="#{resource['favicon.ico']}" />
+
+        <f:metadata>
+            <f:viewParam name="recurso" value='#{controlRecursoBean.recurso}' />
+            <f:viewParam name="recursoId" value='#{controlRecursoBean.recursoId}' />
+        </f:metadata>		
+			
+		<p:importConstants type="co.gov.dafp.sigep2.filtro.FiltroUsuario" var="h"/>
+		<meta charset="UTF-8" />
+		<meta content="#{h.VALUE_X_FRAME_OPTIONS}" name="#{h.HEADER_X_FRAME_OPTIONS}" />
+		<meta content="#{h.VALUE_PRAGMA}" name="#{h.HEADER_PRAGMA}" />
+		<meta content="#{h.VALUE_CACHE_CONTROL}" name="#{h.HEADER_CACHE_CONTROL}" />
+		<meta content="#{h.VALUE_X_UA_COMPATIBLE}" name="#{h.HEADER_X_UA_COMPATIBLE}" />
+		<meta content="#{h.VALUE_EXPIRES}" name="#{h.HEADER_EXPIRES}" />
+		<meta content="#{h.VALUE_X_XSS_PROTECTION}" name="#{h.HEADER_X_XSS_PROTECTION}" />
+		<meta content="#{h.VALUE_X_CONTENT_TYPE_OPTIONS}" name="#{h.HEADER_X_CONTENT_TYPE_OPTIONS}" />
+		<meta content="#{h.VALUE_DESCRIPTION}" name="#{h.HEADER_DESCRIPTION}" />
+		<meta content="#{h.VALUE_KEYWORDS}" name="#{h.HEADER_KEYWORDS}" />
+		<meta content="#{h.VALUE_VIEWPORT}" name="#{h.HEADER_VIEWPORT}" />
+
+        <script type="text/javascript">
+            function ackServer() {
+                try {
+                    var tok = '#{sesionBean.getToken()}';
+                    if (tok != '11111-11111-11111-0000') {
+                        if (tok != null) {
+                        	if(tok.trim()!=null){
+                        		 $.ajax({
+                                     type: 'GET',
+                                     url: '#{sesionBean.getUrlAck()}sigepack/ack/' + tok,
+                                     headers: {
+                                         'Accept': 'text/plain',
+                                         'Content-Type': 'text/plain'
+                                     },
+                                     crossDomain: true,
+                                 }).done(function (data) {
+                                     console.log("Respuesta: ->" + data);
+                                     if (data == 'true') {
+                                         location.href = '${facesContext.externalContext.requestContextPath}';
+                                     }
+                                 });	
+                        	}else{
+                        		console.log("La variable tok esta vacia"); 
+                        	}
+                        }
+                    }
+                } catch (err) {
+                    console.log("error: " + err);
+                }
+            }
+          
+      
+          //<![CDATA[
+            $(window).on('load', function () {
+	            var menu = document.getElementsByClassName("ui-panelmenu-content ui-widget-content ui-helper-hidden");
+	            for (i = 0; i < menu.length; i ++ ) {
+	              if(menu[i] !== null) {
+	                  menu[i].style.display = 'none';
+	                }
+	            }
+	            });
+            //]]>
+        </script>
+
+        <script>
+            function handleDrop(event, ui) {
+                var droppedCar = ui.draggable;
+                droppedCar.fadeOut('fast');
+            }
+            window.sync = function (t) {
+                PF('knob').setValue(t.current);
+            }
+            function redirectToIndex() {
+                window.location.href = getContextPath() + '/sigep2/index.xhtml';
+            }
+
+            function onload() {
+                var element = document.getElementById('frmPrincipal:submit');
+                //element.onclick = validate;
+            }
+
+            function redireccionarAPortal() {
+                location.href = '#{urlPortal}';
+            }
+
+        </script>
+
+        <style>
+            .ui-dialog {
+                font-size: 1.2em !important;
+                font-family: Helvetica Neue, Helvetica, Arial, sans-serif !Important;
+            }
+
+            .ui-dialog-content p {
+                text-align: justfy !important;
+                padding: 2% !important;
+            }
+
+            .side {
+                font-size: 1.2em !important;
+                border-radius: 0 !important;
+                color: black;
+
+            }
+
+           
+        </style>
+        	<script>
+	//<![CDATA[
+            function showBtn() {
+              var big = document.getElementById("sidebarBig");
+              var small = document.getElementById("sidebarSmall");
+                if (big !== null && small !== null) {
+                      if (screen.width < 1000 ) {
+                    	  console.log('small');
+                          small.style.display = "block";
+                          big.style.display = "none";
+                        } else {
+                          big.style.display = "block";
+                          small.style.display = "none";
+                        }
+                }
+            }
+
+            window.addEventListener("resize", function () {
+              showBtn();
+            });
+            $(window).on('load', function () {
+          	  console.log('small2');
+              showBtn();
+            });
+            //]]>
+      </script>
+
+        <script type="text/javascript" 
+        	    src="https://maps.google.com/maps/api/js?sensor=false&amp;key=AIzaSyAmEh65NRgzkvxrl7iU0J4tmBdsRH51rr8"></script>
+        <ui:insert name="csspersonalizado"/>
+    </h:head>
+
+    <h:body onload="setInterval('ackServer()', 3000);"
+            style="font-size: 0.9em; font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important; overflow-x: hidden;"
+            id="bodyBR">
+        <p:ajaxStatus onstart="PF('loadingDialog').show()"
+                      onsuccess="PF('loadingDialog').hide()"
+                      oncomplete="PF('loadingDialog').hide()"
+                      onerror="PF('loadingDialogError').show()"/>
+
+
+        <div class="headerT" id="header">
+            <ui:insert name="header">
+                <ui:include src="/resources/template/header.xhtml"/>
+            </ui:insert>
+        </div>
+
+        <div class="bodyT" id="content">
+            <ui:include src="/resources/template/menu.xhtml"/>
+            <ui:include src="/resources/template/modales.xhtml"/>
+
+            <div class="ui-fluid">
+                <f:view encoding="${configurationView['CNS_ENCODING']}"
+                        locale="#{lenguajeBean.locale}">
+                    <ui:fragment rendered="#{sesionBean.sesionValida}">
+                        <ui:debug
+                                rendered="#{facesContext.application.projectStage == 'Production'}"/>
+
+                        <div id="center" style="min-height: 110vh">
+                            <div class="col-md-10"
+                                 style="padding: 20px 3%;border: 0 none; min-height: 462px;">
+
+                                <ui:insert name="content">
+                                </ui:insert>
+                            </div>
+                            <div class="col-md-2" style="border: 0 none; margin-top: 0%; padding-right: 0%;">
+                                <ui:include src="/resources/template/sidebar.xhtml"/>
+                            </div>
+                        </div>
+                    </ui:fragment>
+                </f:view>
+            </div>
+
+        </div>
+
+        <div class="footerT" id="footer">
+            <ui:insert name="footer">
+                <ui:include src="/resources/template/footerTemplate.xhtml"/>
+            </ui:insert>
+        </div>
+        
+        <p:dialog widgetVar="loadingDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false"
+				style="width:auto;height:auto">
+				<p:graphicImage dir="resources" name="/images/loading.gif"
+					rendered="#{progressBarView.progress eq 0}" height="45" width="70"
+					alt="${messages['DLG_PROCESANDO']}"
+					title="${messages['MSG_PROCESANDO']}" />
+			</p:dialog>
+
+			<p:dialog widgetVar="loadingDialogError" modal="true"
+				draggable="false" closable="true" resizable="false"
+				header="${messages['DLG_PROCESO_FALLIDO']}">
+				<h:outputText value="${messages['DLG_PAGE_EXCEPTION_ERROR']}" />
+			</p:dialog>
+
+			<p:dialog modal="true" widgetVar="statusDialog" showHeader="false"
+				draggable="false" closable="false" resizable="false">
+				<p:graphicImage dir="resources" name="/images/loading.gif"
+					height="45" width="45" alt="${messages['DLG_PROCESANDO']}"
+					title="${messages['MSG_PROCESANDO']}" />
+				<h:outputText value="${messages['MSG_PROCESANDO']}" />
+			</p:dialog>
+        
+        
+    </h:body>
+</html>

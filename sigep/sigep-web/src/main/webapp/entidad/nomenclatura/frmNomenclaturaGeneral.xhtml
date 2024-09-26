@@ -1,0 +1,1261 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/resources/template/basicTemplate.xhtml">
+
+	
+	<ui:param name="pageTitle" value="${titles['TTL_ENTIDADES']}"/>
+	<ui:param name="pageSubtitle" value="${titles['TTL_ENTIDADES_NOMENCLATURA_GENERAL']}"/>
+	          
+	<ui:define name="content">
+		<div class="row"  style="margin-left: 0px; padding-top: 2em;">
+			<h:form id="frNomenclaturaGeneral">
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<h:panelGroup>
+							<h2 style="margin: 0px;">
+								<p:outputLabel value="• ${titles['TTL_ENTIDADES_NOMENCLATURA_GENERAL']} •" styleClass="page-subtitle" style="color: #263948!important;" />
+							</h2>
+						</h:panelGroup>
+					</div>
+				</div>
+				<p:panel id="pnlListaNomenclaturas">
+					<p:panel id="pnlbtnsListaNomenclatura">
+						<div id="idDivNuevanomenclatura" align="right" >
+							<p:commandButton id="btnNuevaNomenclatura" value="#{titles.TTL_ENTIDADES_NOMENCLATURA_NUEVA}"
+								icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+								actionListener= "#{nomenclaturaGeneralBean.agregarNomenclatura()}"
+								process="@this" 
+								update="frNomenclaturaGeneral"
+								>
+							</p:commandButton>
+						</div>
+					</p:panel>
+				
+					<p:dataTable id="tblNomenclaturas"
+						paginator="true"
+						rows="#{paginatorSize}"
+						rowsPerPageTemplate="#{paginatorsSize}"
+						reflow="true"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"					                
+			            var="nomenclatura" 
+			            value="#{nomenclaturaGeneralBean.lstNomenclaturas}"
+			            emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+			            
+						<p:column sortBy="#{nomenclatura.codNomenclatura}" 
+							style="word-wrap: break-word!important; text-align: center;" 
+							filterBy="#{nomenclatura.codNomenclatura}"  filterMatchMode="contains">
+							<f:facet name="header" ><h:outputText value="${titles['LBL_NOMENCLATURA_CODIGO']}" /></f:facet>
+							<h:outputText value="#{nomenclatura.codNomenclatura}" />
+						</p:column>
+						<p:column sortBy="#{nomenclatura.nombreNomenclatura}" 
+							style="word-wrap: break-word!important;"
+							filterBy="#{nomenclatura.nombreNomenclatura}" filterMatchMode="contains">
+							<f:facet name="header" ><h:outputText value="${titles['TTL_ENTIDADES_NOMENCLATURA_NOMBRE']}" /></f:facet>
+							<h:outputText value="#{nomenclatura.nombreNomenclatura}" />
+						</p:column>
+						
+						<p:column sortBy="#{nomenclatura.nombreRamaOrganizacional}" 
+						 	style="word-wrap: break-word!important;"
+						 	filterBy="#{nomenclatura.nombreRamaOrganizacional}"  filterMatchMode="contains">
+							<f:facet name="header"><h:outputText value="${titles.TTL_ENTIDADES_NOMENCLATURA_RAMA_ORGANIZACIONAL}" /></f:facet>
+							<h:outputLabel value="#{nomenclatura.nombreRamaOrganizacional}"/>
+						</p:column>
+									
+						<p:column sortBy="#{nomenclatura.nombreSistemaCarrera}"  
+							style="word-wrap: break-word!important;"
+							filterBy="#{nomenclatura.nombreSistemaCarrera}"  filterMatchMode="contains">
+							<f:facet name="header"><h:outputText value="${titles['TTL_ENTIDADES_NOMENCLATURA_SISTEMA_CARRERA']}" /></f:facet>
+							<h:outputText value="#{nomenclatura.nombreSistemaCarrera}"/>
+						</p:column>											
+
+						<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+							style="opacity: 1!important; text-align:center!important;">
+							<p:commandButton id="idModificarNomenclatura" title="${titles['TTL_ENTIDADES_NOMENCLATURA_MODIFICAR']}"
+								             icon="icon-edit" styleClass="icon-btn" process="@this"
+								             action="#{nomenclaturaGeneralBean.modificarNomenclatura(nomenclatura)}"
+								            
+										     >
+							</p:commandButton>	
+							
+							
+							<p:commandButton id="idConsultarNomenclatura" title="${titles['TTL_ENTIDADES_NOMENCLATURA_CONSULTAR']}"
+								             icon="icon-view" styleClass="icon-btn" process="@this"
+								             action="#{nomenclaturaGeneralBean.consultarNomenclatura(nomenclatura)}"
+								             update="frNomenclaturaGeneral"
+								             oncomplete="window.location.href='#frNomenclaturaGeneral'">
+							</p:commandButton>	
+							<p:commandButton id="idEliminarNomenclatura" title="${titles['TTL_ENTIDADES_NOMENCLATURA_ELIMINAR']}"
+								             icon="icon-delete" styleClass="icon-btn" process="@this" update="frNomenclaturaGeneral:dlgConfirmarAccion frNomenclaturaGeneral"
+								             action="#{nomenclaturaGeneralBean.eliminarNomenclatura(nomenclatura)}">
+											
+							</p:commandButton>								             
+							<p:commandButton id="idIncrementarEscalaNomenclatura" title="${titles['TTL_INCREMENTAR']}"
+								             icon="icon-incrementar" styleClass="icon-btn" process="@this"
+								             action="#{nomenclaturaGeneralBean.seleccionarNomenclaturaIncrementarescala(nomenclatura)}"
+								             update="frNomenclaturaGeneral"
+								             >
+								   
+							</p:commandButton>									
+							<p:commandButton id="idAsociarNomenclatura" title="${titles['TTL_ENTIDADES_NOMENCLATURA_ASOCIAR']}"
+								             icon="icon-asociar" styleClass="icon-btn" process="@this"
+								             action="#{nomenclaturaGeneralBean.seleccionaNomenclaturaAsociar(nomenclatura)}"
+								             update="frNomenclaturaGeneral">
+								   
+							</p:commandButton>
+							
+							<p:commandButton id="idEquivalenciasNomenclatura" title="${titles['TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS']}"
+								             icon="icon-equivalencia" styleClass="icon-btn" process="@this"
+								             action="#{nomenclaturaGeneralBean.accionSeleccionarNomenclaturaEquivalencias(nomenclatura)}"
+								             update="frNomenclaturaGeneral"
+								             oncomplete="window.location.href='#frNomenclaturaGeneral'">
+							</p:commandButton>																             
+																											
+						</p:column>
+					</p:dataTable>
+					
+				</p:panel>
+					<br /><br />			
+				<p:panel id="PnlFrmNomenclatura" rendered="#{nomenclaturaGeneralBean.lbVerFrmNomenclatura}">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h:panelGroup>
+								<h2 style="margin: 0px;">
+									<p:outputLabel value="• #{nomenclaturaGeneralBean.strMsgAcciones} •" styleClass="page-subtitle" style="color: #263948!important;" />
+								</h2>
+							</h:panelGroup>
+						</div>
+					</div>					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_ENTIDADES_NOMENCLATURA_NOMBRE']}:" styleClass="log-label form-label-formularios" 
+								               for="idNombreNomenclatura"/>
+								<p:inputText id="idNombreNomenclatura" required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							                 title="${titles['TTL_INGRESE']} ${titles['TTL_ENTIDADES_NOMENCLATURA_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}" 
+								             value="#{nomenclaturaGeneralBean.nomenclaturaProcesar.nombreNomenclatura}"
+								             class="form-control-acti-usua"
+								             disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+								     		 <f:validator validatorId="textOnlyTildesValidator" />
+								 </p:inputText>
+								<p:message for="idNombreNomenclatura" display="text" />
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_ENTIDADES_NOMENCLATURA_RAMA_ORGANIZACIONAL']}:"
+									styleClass="log-label form-label-formularios" for="iDSOMRamaOrganizacional"/>
+								<p:selectOneMenu id="iDSOMRamaOrganizacional"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ENTIDADES_NOMENCLATURA_RAMA_ORGANIZACIONAL']}"
+									value="#{nomenclaturaGeneralBean.nomenclaturaProcesar.codRamaOrganizacional}"
+									required="true"
+									filter="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								    <f:selectItems value="#{webUtils.getTipoClasificacionOrganica()}" />
+								 </p:selectOneMenu>
+								 <p:message for="iDSOMRamaOrganizacional" display="text" />
+							</div>	
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_ENTIDADES_NOMENCLATURA_SISTEMA_CARRERA']}:"
+									styleClass="log-label form-label-formularios" for="iDSOMSistemaCarrera"/>
+								<p:selectOneMenu id="iDSOMSistemaCarrera"
+									title="${titles['TTL_SELECT']} ${titles['TTL_ENTIDADES_NOMENCLATURA_SISTEMA_CARRERA']}"
+									value="#{nomenclaturaGeneralBean.nomenclaturaProcesar.codSistemaCarrera}"
+									required="true"
+									filter="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								    <f:selectItems value="#{webUtils.getTipoSistemaCarrera()}" />
+								 </p:selectOneMenu>
+								 <p:message for="iDSOMSistemaCarrera" display="text" />
+							</div>														
+						</div>
+					</div>
+					
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_TIPO_NORMA']}" styleClass="log-label form-label-formularios"/>
+								<p:selectOneMenu id="sltTipoNorma" styleClass="form-control-form-act-usua"
+									             value="#{nomenclaturaGeneralBean.normaNomenclatura.codTipoNorma}" 
+									             disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}"
+									             filter="true">
+								<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tiposNormaEntidad}" />
+									<p:ajax event="change" process="@this"/> 
+								 </p:selectOneMenu>
+								 <p:message for="sltTipoNorma" display="text" />
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_FECHA_NORMA']}:" styleClass="log-label form-label-formularios" for="idCTFechaNorma" />
+								<p:calendar mask="true" 
+								   title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_NORMA']}"
+									id="idCTFechaNorma"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									value="#{nomenclaturaGeneralBean.normaNomenclatura.fechaNorma}"
+									pattern="#{fechaFormato}" 
+									locale="#{lenguajeBean.localeCode}"
+									maxdate="today" readonlyInput="true" yearRange="#{rangoAnios}" navigator="true"
+									disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+									<p:ajax event="dateSelect"></p:ajax>
+								</p:calendar>
+								<p:message for="idCTFechaNorma" display="text" />								
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" styleClass="log-label form-label-formularios"/>
+								<p:autoComplete id="idNumeroNorma"
+                                    value="#{nomenclaturaGeneralBean.normaSeleccionada}"
+                                    converter="normaBdConverter"
+                                    var="normSelect" 
+                                    itemLabel="#{normSelect.numeroNorma}"  itemValue="#{normSelect}"
+                                    completeMethod="#{nomenclaturaGeneralBean.completeMethodNorma}"
+                                    valueChangeListener="#{nomenclaturaGeneralBean.vclNorma}"
+                                    minQueryLength="1"
+                                    maxResults="20"
+                                    onkeypress="return numbervalida(event)"
+                                    disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+		                        </p:autoComplete>
+							</div>
+													
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}" styleClass="log-label form-label-formularios" />
+								<p:inputText rows="2" cols="10" id="iTAJustificacion" counterTemplate="Quedan {0} caracteres." 
+								                 autoResize="false" style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+									             styleClass="form-control-acti-usua form-control" 
+									             value="#{nomenclaturaGeneralBean.nomenclaturaProcesar.justificacion}" 
+									             maxlength="255"
+									             disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}"	/>
+								<p:message for="iTAJustificacion" display="text" />
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div> 										
+				</p:panel>
+				
+				<p:panel id="pnlFrmOpcionesIncrementoSalarial" rendered="#{nomenclaturaGeneralBean.lbEsIncrementoSalarial}">
+					<hr class="hr-style" />
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h:panelGroup>
+								<h4 style="margin: 0px;">
+									<p:outputLabel value="${titles['LBL_ENTIDAD_NOMENCLATURA_OPCIONES_INCREMENTO']}" styleClass="page-subtitle" 
+									               style="color: #263948!important;" />
+								</h4>
+							</h:panelGroup>
+						</div>
+						<br /> <br />
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<p:outputLabel value="#{titles.TTL_INCREMENTO_SALARIAL_INFO}" styleClass="advisor" />
+							</div>
+						</div>
+						<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+						<br />
+					</div>						
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_TIPO_NORMA']}" styleClass="log-label form-label-formularios"/>
+								<p:selectOneMenu id="sltTipoNormaIncremento" styleClass="form-control-form-act-usua"
+									             value="#{nomenclaturaGeneralBean.normaIncremento.codTipoNorma}"
+									             filter="true">
+								<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tiposNormaEntidad}" />
+									<p:ajax event="change" process="@this"/> 
+								 </p:selectOneMenu>
+								 <p:message for="sltTipoNormaIncremento" display="text" />
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_FECHA_NORMA']}:" styleClass="log-label form-label-formularios" for="idCTFechaNorma" />
+								<p:calendar mask="true" 
+								   title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_NORMA']}"
+									id="idCTFechaNormaIncremento"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									value="#{nomenclaturaGeneralBean.normaIncremento.fechaNorma}"
+									pattern="#{fechaFormato}" 
+									locale="#{lenguajeBean.localeCode}"
+									maxdate="today" readonlyInput="true" yearRange="#{rangoAnios}" navigator="true"
+									>
+									<p:ajax event="dateSelect"></p:ajax>
+								</p:calendar>
+								<p:message for="idCTFechaNormaIncremento" display="text" />								
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" styleClass="log-label form-label-formularios"/>
+								<p:autoComplete id="idNumeroNormaIncremento"
+                                    value="#{nomenclaturaGeneralBean.normaSeleccionadaIncremento}"
+                                    converter="normaBdConverter"
+                                    var="normSelect" 
+                                    itemLabel="#{normSelect.numeroNorma}"  itemValue="#{normSelect}"
+                                    completeMethod="#{nomenclaturaGeneralBean.completeMethodNormaIncremento}"
+                                    valueChangeListener="#{nomenclaturaGeneralBean.vclNormaIncremento}"
+                                    minQueryLength="1"
+                                    maxResults="20">
+		                        </p:autoComplete>
+							</div>
+													
+						</div>
+					</div>	
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_ENTIDAD_NOMENCLATURA_OPCIONES_INCREMENTO']}:"
+								    title="${titles['TTL_SELECT']} ${titles['LBL_ENTIDAD_NOMENCLATURA_OPCIONES_INCREMENTO']}"
+									styleClass="log-label form-label-formularios" />    
+								<p:selectOneRadio id="idSOROpcionesIncremento" value="#{nomenclaturaGeneralBean.strOpcionIncremento}">
+						            <f:selectItem itemLabel="%" itemValue="0" />
+						            <f:selectItem itemLabel="${titles['LBL_PARAMETRICA_VALOR']}" itemValue="1" />
+						            <p:ajax event="change" update="frNomenclaturaGeneral:pnlFrmOpcionesIncrementoSalarial" listener="#{nomenclaturaGeneralBean.handleOpcionIncrementoSelection}" />
+						        </p:selectOneRadio>
+							</div>	
+						<div class="col-md-4" >
+							<p:outputLabel value="${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}:"
+								styleClass="log-label form-label-formularios" for="idCTValorIncremento"/>
+							<p:inputNumber id="idCTValorIncremento"
+			                                 decimalSeparator=","
+		                                 thousandSeparator="."
+		                                 decimalPlaces="2"
+							             title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}  ${titles['TTL_TIPO_NUMERICO']}"
+							             requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							             validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+								         value="#{nomenclaturaGeneralBean.lbgValorIncremento}"
+								         converter="javax.faces.BigDecimal"
+								         converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}" >
+								         
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+							</p:inputNumber>
+							<p:message for="idCTValorIncremento" display="text" />
+						</div>
+					</div>
+					</div>	
+					<div class="row">
+						<div class="col-md-12" align="center">
+						<div class="col-md-4" style="margin-left: 6.3em"></div>						
+						<div class="col-md-3" style="padding-top: 25px;">
+							<p:commandButton id="idBtAplicaOpcionesIncremento"
+											 value="#{titles.TTL_APLICAR}"
+							                 styleClass="btn btn-primary"
+							                 style="width: 12.3em!important;"
+							                 action="#{nomenclaturaGeneralBean.solicitaConfirmacionaplicarIncrementoEscalaDenominaciones()}"
+							                 update="dlgConfirmarAccion"
+							                 process="pnlFrmOpcionesIncrementoSalarial">
+							</p:commandButton>
+						</div>						
+						</div>
+					</div>
+				</p:panel>
+
+				<p:panel id="pnlListaDenominaciones" rendered="#{nomenclaturaGeneralBean.lblVerDenominaciones}">
+					<hr class="hr-style" />
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h:panelGroup>
+								<h4 style="margin: 0px;">
+									<p:outputLabel value="${titles['LBL_ENTIDAD_NOMENCLATURA_DENOMINACIONES']}" styleClass="page-subtitle" style="color: #263948!important;" />
+								</h4>
+							</h:panelGroup>
+						</div>
+					</div>	
+					<p:panel id="pnlbtnsDenominaciones">
+						<div id="btnDivNuevaDenomincacion" align="right" >
+							<p:commandButton id="tbADenominacjonNueva" value="#{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_NUEVO}"
+								             icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+								             rendered="#{!nomenclaturaGeneralBean.lbEsIncrementoSalarial and !nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+								<p:ajax process="@this" listener="#{nomenclaturaGeneralBean.agregarDenominacion()}" 
+										update="dlgNuevaDenominacion panelNuevaDenominacion" />
+							</p:commandButton>
+						</div>
+					</p:panel>
+					<p:dataTable id="tblDenominaciones"
+					             paginator="true"
+					             reflow="true"
+					             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					             var="nomeclaturaDenominacion" 
+					             value="#{nomenclaturaGeneralBean.lstDenominacionesNomenclatura}"
+					             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+					             editMode="cell" 
+					             editable="true"
+					             rows="#{paginatorSize}"
+								 rowsPerPageTemplate="#{paginatorsSize}"
+					             selection="#{nomenclaturaGeneralBean.nomenclaturaDenominacionDestino}"
+       						     rowKey="#{nomeclaturaDenominacion.codNomenclaturaDenominacion}" >
+       					
+       					<p:column sortBy="#{nomeclaturaDenominacion.nivelCargo}" style="word-wrap: break-word!important;"
+       							filterBy="#{nomeclaturaDenominacion.nivelCargo}"  filterMatchMode="contains">
+							<f:facet name="header"><h:outputText value="${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}" /></f:facet>
+							<h:outputText value="#{nomeclaturaDenominacion.codNivelJerarquico}" converter="parametricaBgDecimalConverter"/>
+						</p:column>
+       					
+       					<p:column sortBy="#{nomeclaturaDenominacion.nombreCargo}" style="word-wrap: break-word!important;"
+       						filterBy="#{nomeclaturaDenominacion.nombreCargo}"  filterMatchMode="contains">
+							<f:facet name="header"><h:outputText value="${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}" /></f:facet>
+							<h:outputText value="#{nomeclaturaDenominacion.codDenominacion}" converter="denominacionIDConverter"/>
+						</p:column>
+       					
+       					<p:column sortBy="#{nomeclaturaDenominacion.codigoCargo}" style="word-wrap: break-word!important;"
+       						filterBy="#{nomeclaturaDenominacion.codigoCargo}"  filterMatchMode="contains">
+							<f:facet name="header"><h:outputText value="${titles['LBL_NOMENCLATURA_CODIGO_DENOMINACION']}" /></f:facet>
+							<h:outputText value="#{nomeclaturaDenominacion.codCodigo}" converter="parametricaBgDecimalConverter"/>
+						</p:column>
+       							
+       					<p:column sortBy="#{nomeclaturaDenominacion.gradoCargo}" style="word-wrap: break-word!important;"
+       						filterBy="#{nomeclaturaDenominacion.gradoCargo}"  filterMatchMode="contains" rendered="#{!nomenclaturaGeneralBean.flgIsGnrlTerritorial}">
+							<f:facet name="header"><h:outputText value="${titles['LBL_CT_GRADO_EMPLEO']}" /></f:facet>
+							<h:outputText value="#{nomeclaturaDenominacion.codGrado}" converter="parametricaBgDecimalConverter"/>
+						</p:column>
+       					
+       					<p:column sortBy="#{nomeclaturaDenominacion.asignacionSalarial}" style="word-wrap: break-word!important;"
+       							filterBy="#{nomeclaturaDenominacion.asignacionSalarial}"  filterMatchMode="contains" rendered="#{!nomenclaturaGeneralBean.flgIsGnrlTerritorial}">
+							<f:facet name="header"><h:outputText value="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ASIGNACION_SAL']}" /></f:facet>
+							<h:outputText value="#{nomeclaturaDenominacion.asignacionSalarial}">
+								<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" maxFractionDigits="0"/>
+							</h:outputText>
+						</p:column>  
+       					<p:column headerText="#{titles.TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS_ORIGEN}"
+								  style="word-wrap: break-word!important; text-align:center"
+								  rendered="#{nomenclaturaGeneralBean.lbEsEquivalencias}">
+								  <p:selectBooleanCheckbox value="#{nomeclaturaDenominacion.lbOrigenEquivalencia}"/>
+						</p:column>	
+						<p:column headerText="#{titles.TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS_DESTINO}"
+								  style="word-wrap: break-word!important; text-align:center"
+								  rendered="#{nomenclaturaGeneralBean.lbEsEquivalencias}" selectionMode="single">
+								<p:selectOneRadio value="#{nomeclaturaDenominacion.lbDestinoEquivalencia}"/>
+						</p:column>	
+													
+
+						<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+							style="opacity: 1!important; text-align:center!important;"
+							rendered="#{!nomenclaturaGeneralBean.lbEsIncrementoSalarial and !nomenclaturaGeneralBean.lbEsEquivalencias}">
+							<p:commandButton id="idBtModificarDenominacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_MODIFICAR']}"
+								icon="icon-edit" styleClass="icon-btn" process="@this"
+								actionListener="#{nomenclaturaGeneralBean.modificarDenominacion(nomeclaturaDenominacion)}"
+								update="frNomenclaturaGeneral"
+								disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+							</p:commandButton>	
+							<p:commandButton id="idEliminarDenominacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ELIMINAR']}"
+								icon="icon-delete" styleClass="icon-btn" process="@this"
+								action="#{nomenclaturaGeneralBean.eliminarDenominacion(nomeclaturaDenominacion)}"
+								update="frNomenclaturaGeneral"
+								disabled="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}">
+							</p:commandButton>
+							<p:commandButton id="idConsultarDenominacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_CONSULTAR']}"
+								icon="icon-view" styleClass="icon-btn" process="@this"
+								action="#{nomenclaturaGeneralBean.consultarDenominacion(nomeclaturaDenominacion)}"
+								update="frNomenclaturaGeneral">
+							</p:commandButton>
+							<p:commandButton id="idOtrasAsignacionesDenominacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES']}"
+								icon="icon-otras_asignacion" styleClass="icon-btn" process="@this"
+								action="#{nomenclaturaGeneralBean.accionOtraAsignacionDenominacion(nomeclaturaDenominacion)}"
+								update="frNomenclaturaGeneral"
+								rendered="#{nomenclaturaGeneralBean.pintarBotonOtrasAsignaciones(nomeclaturaDenominacion)}">
+							</p:commandButton>																		
+						</p:column>
+						
+						
+	            		<p:column id ="idColumnaPorcIncremento" headerText="${titles['LBL_ENTIDAD_NOMENCLATURA_PORC_INCREMENTO']}"
+	            		          rendered="#{nomenclaturaGeneralBean.lbEsIncrementoSalarial}">
+	            			<p:cellEditor>
+			                    <f:facet name="output">
+			                        <h:outputText value="#{nomeclaturaDenominacion.incPorcentaje}"/>
+			                    </f:facet>
+			                    <f:facet name="input">
+									<p:inputNumber id="txtValorPorcentajeIndividualG" decimalSeparator=","
+										thousandSeparator="." decimalPlaces="2"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}  ${titles['TTL_TIPO_NUMERICO']}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+										value="#{nomeclaturaDenominacion.incPorcentaje}"
+										converter="javax.faces.BigDecimal"
+										converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+										<p:keyFilter mask="num"></p:keyFilter>
+										<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+										<p:ajax event="change"
+			                        		update="tblDenominaciones" 
+			                                listener="#{nomenclaturaGeneralBean.aplicarIncrementoDenomincacionIndividual(nomeclaturaDenominacion,'0')}"></p:ajax>
+									</p:inputNumber>
+			                    </f:facet>
+	                		</p:cellEditor>
+	            		</p:column>	
+	            		
+	            		<p:column id ="idColumnaValorIncremento" headerText="${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}"
+	            		          rendered="#{nomenclaturaGeneralBean.lbEsIncrementoSalarial}">
+	            			<p:cellEditor>
+			                    <f:facet name="output">
+			                        <h:outputText value="#{nomeclaturaDenominacion.incValor}"/>
+			                    </f:facet>
+			                    <f:facet name="input">
+			                    	<p:inputNumber id="txtValorIndividualG" decimalSeparator=","
+										thousandSeparator="." decimalPlaces="2"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}  ${titles['TTL_TIPO_NUMERICO']}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+										value="#{nomeclaturaDenominacion.incValor}"
+										converter="javax.faces.BigDecimal"
+										converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+										<p:keyFilter mask="num"></p:keyFilter>
+										<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+										<p:ajax event="change"
+			                        		update="tblDenominaciones" 
+			                                listener="#{nomenclaturaGeneralBean.aplicarIncrementoDenomincacionIndividual(nomeclaturaDenominacion,'1')}"></p:ajax>
+									</p:inputNumber>
+			                    </f:facet>
+	                		</p:cellEditor>
+	            		</p:column>	
+						<p:column headerText="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ASIGNACION_SAL_N']}" style="word-wrap: break-word!important;"
+						          rendered="#{nomenclaturaGeneralBean.lbEsIncrementoSalarial}">
+							<h:outputText value="#{nomeclaturaDenominacion.nuevaAsignacionSalarial}">
+								<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" maxFractionDigits="0"/>
+							</h:outputText>
+						</p:column>	         		
+            			            								
+						
+						
+					</p:dataTable>				
+				</p:panel>
+				
+				<p:dialog widgetVar="dlgNuevaDenominacion" width="680px" height="340px" id="dlgNuevaDenominacion" modal="true" draggable="false" closable="false"
+						  resizable="false" showHeader="false">
+					<br />
+					<div class="modal-header" align="center">
+						<h4 class="modal-title">• #{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_NUEVO} •</h4>
+					</div>
+					<br />
+					<p:outputPanel id="panelNuevaDenominacion">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<p:outputLabel for="txtNivelJerarquico"
+										value="${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="txtNivelJerarquico"
+										title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}"
+										filter="true"
+										required="true"
+										disabled ="#{nomenclaturaGeneralBean.lbConsultaDenominacion}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										value="#{nomenclaturaGeneralBean.nomenclaturaDenominacionProcesar.codNivelJerarquico}">
+										<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.getNivelJerarquico()}" />
+									</p:selectOneMenu>
+									<p:message for="txtNivelJerarquico" display="text" />
+								</div>
+								<div class="col-md-6">
+									<p:outputLabel for="txtDenominacionEmpleo"
+										value="${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}:"
+										styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="txtDenominacionEmpleo" autocomplete="false"
+										title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}"
+										filter="true"
+										required="true"
+										disabled ="#{nomenclaturaGeneralBean.lbConsultaDenominacion}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										value="#{nomenclaturaGeneralBean.nomenclaturaDenominacionProcesar.codDenominacion}">
+										<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+										<f:selectItems value="#{nomenclaturaGeneralBean.getLstSIDenominaciones()}" /> 
+									</p:selectOneMenu>
+									<p:message for="txtDenominacionEmpleo" display="text" />
+								</div>													
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<p:outputLabel
+										value="${titles['LBL_NOMENCLATURA_CODIGO_DENOMINACION']}:"
+										for="txtCodigoDenominacionGeneral"
+										styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="txtCodigoDenominacionGeneral"
+										autocomplete="false"
+										title="${titles['TTL_SELECT']} ${titles['LBL_NOMENCLATURA_CODIGO_DENOMINACION']}"
+										filter="true"
+										required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										disabled ="#{nomenclaturaGeneralBean.lbConsultaDenominacion}"
+										value="#{nomenclaturaGeneralBean.nomenclaturaDenominacionProcesar.codCodigo}">
+										<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.getLstCodigoDenominacion()}" />
+									</p:selectOneMenu>
+									<p:message for="txtCodigoDenominacionGeneral" display="text" />
+								</div>
+								<div class="col-md-6">
+									<p:outputLabel for="txtGradoEmpleo"
+										value="${titles['LBL_CT_GRADO_EMPLEO']}:"
+										styleClass="log-label form-label-formularios" 
+										rendered="#{!nomenclaturaGeneralBean.flgIsGnrlTerritorial}"/>
+									<p:selectOneMenu id="txtGradoEmpleo"
+										title="${titles['TTL_SELECT']} ${titles['LBL_CT_GRADO_EMPLEO']}"
+										required="true"
+										filter="true"
+										disabled ="#{nomenclaturaGeneralBean.lbConsultaDenominacion}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										value="#{nomenclaturaGeneralBean.nomenclaturaDenominacionProcesar.codGrado}"
+										rendered="#{!nomenclaturaGeneralBean.flgIsGnrlTerritorial}">
+										<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.getEntidadGradosNomenclatura()}" />
+									</p:selectOneMenu>
+									<p:message for="txtGradoEmpleo" display="text" />
+								</div>	
+								
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<p:outputLabel value="#{titles.LBL_NOMENCLATURA_ASIGNACION}:"
+										for="txtAsigSalarial" styleClass="log-label form-label-formularios" 
+										rendered="#{!nomenclaturaGeneralBean.flgIsGnrlTerritorial}"/>
+									<p:inputNumber id="txtAsigSalarial"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_NOMENCLATURA_ASIGNACION']} ${titles['TTL_TIPO_NUMERICO']}. ${titles['LBL_DATOS_OIR2']}"
+										value="#{nomenclaturaGeneralBean.nomenclaturaDenominacionProcesar.asignacionSalarial}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										disabled ="#{nomenclaturaGeneralBean.lbConsultaDenominacion}"
+										emptyValue="sign" symbol="$" decimalSeparator=","
+										thousandSeparator="."
+										validatorMessage="${titles['LBL_FORMAT_INVALID']}"
+										decimalPlaces="2"
+										rendered="#{!nomenclaturaGeneralBean.flgIsGnrlTerritorial}">
+										<p:keyFilter mask="num"></p:keyFilter>
+										<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+									</p:inputNumber>
+									<p:message for="txtAsigSalarial" display="text" />
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<p:commandButton value="${titles['TTL_ADD']}"
+									styleClass="btn btn-primary btn-ventana-emergente"
+									disabled ="#{nomenclaturaGeneralBean.lbConsultaDenominacion}"
+									actionListener="#{nomenclaturaGeneralBean.guardarDenominacion()}"
+									process="panelNuevaDenominacion"
+									update="pnlListaDenominaciones panelNuevaDenominacion"/>
+								<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+									styleClass="btn btn-default btn-ventana-emergente"
+									update="panelNuevaDenominacion"
+									resetValues="true"
+									onclick="PF('dlgNuevaDenominacion').hide()"	/>
+							</div>
+						</div>
+					</p:outputPanel>
+					<br />
+				</p:dialog>
+
+				<p:panel id="pnlFrmAsociarEntidades" rendered="#{nomenclaturaGeneralBean.lbVerFrmAsociar}">
+					<hr class="hr-style" />
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h:panelGroup>
+								<h2 style="margin: 0px;">
+									<p:outputLabel value="• #{nomenclaturaGeneralBean.strMsgAcciones} •" styleClass="page-subtitle" style="color: #263948!important;" />
+								</h2>
+							</h:panelGroup>
+						</div>
+					</div>	
+				
+					<p:panel id="pnlFiltroBuscarEntidades">
+						<div class="col-md-12">
+							<div class="col-md-4">
+			                    <p:outputLabel value="${titles['TTL_COD_SIGEP']}:"
+			                                   styleClass="log-label form-label-formularios" />
+			                    <p:inputText class="form-control-acti-usua"
+			                                 style="width:100%!important;" maxlength="12"
+			                                 value="#{nomenclaturaGeneralBean.entFiltro.codigoSigep}"
+			                                 title="${titles['TTL_INGRESE']} ${titles['TTL_COD_SIGEP']} ${titles['TTL_TIPO_ALFANUMERICO']}"/>
+			                </div>
+			                <div class="col-md-4">
+			                    <p:outputLabel value="${titles['TTL_DENOMINACION']}:"
+			                                   styleClass="log-label form-label-formularios" />
+			                    <p:inputText class="form-control-acti-usua"
+			                                 style="width:100%!important;" maxlength="50"
+			                                 value="#{nomenclaturaGeneralBean.entFiltro.nombreEntidad}"
+			                                 title="${titles['TTL_INGRESE']} ${titles['TTL_DENOMINACION']} ${titles['TTL_TIPO_ALFANUMERICO']}" />
+			                </div>
+			                <div class="col-md-4">
+		                        <p:outputLabel value="${titles['TTL_SECTOR']}:"
+		                                       styleClass="log-label form-label-formularios" />
+		                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+		                                         style="width:100%!important;"
+		                                         value="#{nomenclaturaGeneralBean.entFiltro.codSectorAdministrativo}"
+		                                         title="${titles['TTL_SELECT']} ${titles['TTL_SECTOR']}">
+		                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+		                            <f:selectItems value="#{webUtils.getTipoSectorAdministrativo()}" />
+		                        </p:selectOneMenu>
+                    		</div>
+		                </div>
+		                <div class="col-md-12">
+		                	<div class="col-md-4">
+		                        <p:outputLabel styleClass="log-label form-label-formularios"
+		                                       value="${titles['LBL_CLASIFICACION_ORGANICA']}:" />
+		                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+		                                         style="width:100%!important;"
+		                                         value="#{nomenclaturaGeneralBean.entFiltro.codClasificacionOrganica}"
+		                                         title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_ORGANICA']}">
+		                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+		                            <f:selectItems value="#{webUtils.getTipoClasificacionOrganica()}" />
+		                        </p:selectOneMenu>
+                    		</div>
+		                    <div class="col-md-4">
+		                        <p:outputLabel value="${titles['TTL_NATURALEZA_JURIDICA']}:"
+		                                       styleClass="log-label form-label-formularios" />
+		                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+		                                         style="width:100%!important;"
+		                                         value="#{nomenclaturaGeneralBean.entFiltro.codNaturaleza}"
+		                                         title="${titles['TTL_SELECT']} ${titles['TTL_NATURALEZA_JURIDICA']}">
+		                            <f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+		                            <f:selectItems value="#{webUtils.getTipoNaturalezaJuridica()}" />
+		                        </p:selectOneMenu>
+		                    </div> 
+		                    <div class="col-md-4">
+		                        <p:outputLabel styleClass="log-label form-label-formularios"
+		                                       value="${titles['LBL_ORDEN']}:" />
+		                        <p:selectOneMenu styleClass="form-control-form-act-usua"
+		                                         style="width:100%!important;"
+		                                         value="#{nomenclaturaGeneralBean.entFiltro.codOrden}"
+		                                         title="${titles['TTL_SELECT']} ${titles['LBL_ORDEN']}">
+		                            <f:selectItem itemValue="#{null}" itemLabel="${titles.TTL_SELECT}" />
+		                            <f:selectItems value="#{webUtils.getTipoOrdenTerritorial()}" />
+		                        </p:selectOneMenu>
+		                    </div>		                                         		
+		                </div>
+		                <div class="row">
+			                <div class="col-md-12" align="center">
+			                <div class="col-md-4"/>
+			                	<div class="col-md-4" style="margin-bottom: 2%; margin-top:1.3em!important" >
+									<p:commandButton value="${titles['BTN_CT_BUSCAR']}" id="idBtBuscarEntidades" 
+				               			styleClass="btn btn-primary"
+				               			style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+				                       	process="@this pnlFiltroBuscarEntidades"
+				             			action="#{nomenclaturaGeneralBean.buscarEntidadesAsociar()}"
+				             			update="pnlFiltroBuscarEntidades pnlListaEntidades"
+				                    	>
+									</p:commandButton>
+								</div>
+			                </div>	
+		                </div>	
+					</p:panel>
+					<p:panel id="pnlListaEntidades">
+						<div class="col-md-12">
+						 <p:dataTable id="dtEntidades"
+	                             widgetVar="wvDtEntidades"
+	                             value="#{nomenclaturaGeneralBean.lstEntidadesDisponibles}"
+	                             var="entAmb"
+	                             
+								paginator="true"
+								rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	                             
+	                             rowKey="#{entAmb.codEntidad}"
+	                             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+	                             selection="#{nomenclaturaGeneralBean.lstEntidadesSeleccionadas}"
+	                            >                    
+			                    <p:column headerText="${titles.TTL_ENTIDAD_USUARIO}" selectionMode="multiple"
+			                              style="width: 18px; text-align: center"/>
+			                    <p:column headerText="#{titles.TTL_COD_SIGEP}">
+			                        <h:outputText value="#{entAmb.codigoSigep}" />
+			                    </p:column>
+			
+			                    <p:column headerText="${titles.TTL_DENOMINACION}"> 
+			                        <h:outputText value="#{entAmb.nombreEntidad}" />
+			                    </p:column>
+			
+			                    <p:column headerText="${titles.TTL_TIPO_ENTIDAD}">
+			                        <h:outputText value="#{entAmb.codTipoEntidad}" 
+			                                      converter="parametricaBgDecimalConverter"/>
+			                    </p:column>
+			                    <p:ajax event="rowSelect" update="@this @form" />
+    							<p:ajax event="rowUnselect" update="@this" />
+	                    	</p:dataTable>
+			                
+			                <div class="row">
+				                <div class="col-md-12" align="center">
+				                <div class="col-md-2"></div>
+				                	<div class="col-md-4" style="margin-bottom: 2%; margin-top:1.3em!important" >
+										<p:commandButton value="${titles['TTL_ENTIDADES_NOMENCLATURA_ASOCIAR']}" id="idBtAsociarAEntidades" 
+					               			styleClass="btn btn-primary"
+					               			style="font-size:1.5em!important;width: 12.5em!important;" 
+					                       	process="@this dtEntidades"
+					             			action="#{nomenclaturaGeneralBean.solicitaConfirmacionAsociarNomenclaturaEntidades()}"
+					                    	update="dlgConfirmarAccion">
+										</p:commandButton>
+									</div>
+				                	<div class="col-md-4" style="margin-bottom: 2%; margin-top:1.3em!important" >
+										<p:commandButton value="${titles['TTL_CANCEL']}" id="idBtcancelarAsociarAEntidades" 
+					               			styleClass="btn btn-default"
+					               			style="font-size:1.5em!important;width: 12.5em!important;" 
+					                       	process="@this"
+					             			action="#{nomenclaturaGeneralBean.solicitaConfirmacionCancelarAsociarNomenclaturaEntidades()}"
+					             			update="dlgConfirmarAccion">
+										</p:commandButton>
+									
+									</div>	
+				                </div>	
+			                </div>
+	                    </div>
+                    </p:panel>
+				</p:panel>
+				
+				<p:panel id="pnlFrmOtrasAsignaciones" rendered="#{nomenclaturaGeneralBean.lbEsEditarOtraAsignacion}">
+					<p:panel id="pnlListaOtraAsignaciones">
+						<hr class="hr-style" />
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h:panelGroup>
+									<h4 style="margin: 0px;">
+										<p:outputLabel value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES']}" 
+										               styleClass="page-subtitle" style="color: #263948!important;" />
+									</h4>
+								</h:panelGroup>
+							</div>
+						</div>
+						<p:panel id="pnlbtnOtrasAsignaciones">
+							<div id="divBtnOtrasAsignaciones" align="right">
+								<p:commandButton id="btnAgregarOtraAsignacion" value="#{titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_AGREGAR}"
+									             icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent">
+									<p:ajax process="@this" listener="#{nomenclaturaGeneralBean.agregarOtraAsignacionDenominacion()}" 
+											update="dlgDetalleOtraAsignacion" />
+								</p:commandButton>
+							</div>
+						</p:panel>							
+						<p:dataTable id="tblOtrasAsignaciones"
+						             
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						             
+						             var="otraAsignacion" 
+						             value="#{nomenclaturaGeneralBean.lstOtrasAsignaciones}"
+						             emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+							<p:column headerText="${titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_ASIGNACION}">
+                        		<h:outputLabel value="#{otraAsignacion.otrasAsignaciones}" converter="parametricaBgDecimalConverter"/>
+                    		</p:column>
+                    		<p:column headerText="${titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_VALOR}">
+                        		<h:outputText value="#{otraAsignacion.valorAsignacion}">
+                        			<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+                        		</h:outputText>
+                    		</p:column>
+                    		<p:column headerText="${titles['LBL_TABLA_ACCIONES']}" 
+									  style="opacity: 1!important; text-align:center!important;">
+								<p:commandButton id="idModificarOtraAsignacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_EDITAR']}"
+									             icon="icon-edit" styleClass="icon-btn" process="@this"
+									             action="#{nomenclaturaGeneralBean.editarAsignacionDenominacion(otraAsignacion)}" 
+									             update="frNomenclaturaGeneral:dlgDetalleOtraAsignacion">
+								</p:commandButton>	
+								<p:commandButton id="idConsultarOtraAsignacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_CONSULTAR']}"
+									             icon="icon-view" styleClass="icon-btn" process="@this"
+									             action="#{nomenclaturaGeneralBean.verAsignacionDenominacion(otraAsignacion)}" 
+									             update="frNomenclaturaGeneral:dlgDetalleOtraAsignacion">
+								</p:commandButton>	
+								<p:commandButton id="idEliminarOtraAsignacion" title="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_ELIMINAR']}"
+									             icon="icon-delete" styleClass="icon-btn" process="@this"
+									             action="#{nomenclaturaGeneralBean.solicitaConfirmacionEliminarOtraAsignacion(otraAsignacion)}"
+									             update="frNomenclaturaGeneral:dlgConfirmarAccion" >
+								</p:commandButton>								             
+																											
+							</p:column>	
+						</p:dataTable>
+					
+					</p:panel>
+					<p:dialog widgetVar="dlgDetalleOtraAsignacion" width="680px" height="350px" id="dlgDetalleOtraAsignacion" 
+							  modal="true" draggable="false"
+						      resizable="false" showHeader="false" closable="false">
+						<br />
+						<div class="modal-header" align="center">
+							<h4 class="modal-title">• #{titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES} •</h4>
+						</div>
+						<br />
+						<p:outputPanel id="panelDetalleOtraAsignacion">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-6">
+										<p:outputLabel for="txtOtraAsignacion"
+											value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_ASIGNACION']}:"
+											styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="txtOtraAsignacion"
+											title="${titles['TTL_SELECT']} ${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_ASIGNACION']}"
+											required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-acti-usua"
+											value="#{nomenclaturaGeneralBean.asignacionSalarialProcesar.otrasAsignaciones}"
+											disabled="#{nomenclaturaGeneralBean.lbEsConsultarOtraAsignacion}">
+											<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+											<f:selectItems value="#{webUtils.getTipoIngreso()}" />
+										</h:selectOneMenu>
+										<p:message for="txtOtraAsignacion" display="text" />
+									</div>
+									<br />
+									<br />
+									<div class="col-md-6">
+										<p:selectOneRadio id="idSOROpcionesAsignacion" value="#{nomenclaturaGeneralBean.strOpcionesAsignacion}"
+											disabled="#{nomenclaturaGeneralBean.lbEsConsultarOtraAsignacion}">
+								            <f:selectItem itemLabel="%" itemValue="0" />
+								            <f:selectItem itemLabel="Valor" itemValue="1" />
+								            <p:ajax event="change" listener="#{nomenclaturaGeneralBean.handleOpcionOtraAsignacion}" />
+								        </p:selectOneRadio>
+									</div>										
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-6" >
+										<p:outputLabel value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_VALOR']}:"
+											styleClass="log-label form-label-formularios" for="idCTValorOtraAsignacion"/>
+										<p:inputNumber   id="idCTValorOtraAsignacion"
+						                                 decimalSeparator=","
+					                                     thousandSeparator="."
+					                                     decimalPlaces="2"
+										                 title="${titles['TTL_INGRESE']} ${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_VALOR']}  
+										                 		${titles['TTL_TIPO_NUMERICO']}"
+										             	requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										            	validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+											        	value="#{nomenclaturaGeneralBean.llValorAsignacion}"
+											        	converter="javax.faces.BigDecimal"
+											         	converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}" 
+											         	disabled="#{nomenclaturaGeneralBean.lbEsConsultarOtraAsignacion}">
+											<p:keyFilter mask="num"></p:keyFilter>
+											<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+										</p:inputNumber>
+										<p:message for="idCTValorOtraAsignacion" display="text" />
+									</div>							
+									<div class="col-md-6">
+									<br />
+									<br />
+										<p:commandButton id="idBtcalcularOtraAsignacion" value="#{titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_CALCULAR}"
+										                 styleClass="btn btn-primary"
+										                 action="#{nomenclaturaGeneralBean.cacularOtraAsignacion()}"
+										                 update="idCTValorTotalOtraAsignacion"
+										                 disabled="#{nomenclaturaGeneralBean.lbEsConsultarOtraAsignacion}">
+										</p:commandButton>
+									</div>										
+								</div>
+							</div>
+							<div class="row">
+									<div class="col-md-12" >
+									<div class="col-md-6" >
+										<p:outputLabel value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_TOTAL']}:"
+											styleClass="log-label form-label-formularios" for="idCTValorTotalOtraAsignacion"/>
+										<p:inputNumber   id="idCTValorTotalOtraAsignacion"
+						                                 decimalSeparator=","
+					                                     thousandSeparator="."
+					                                     decimalPlaces="2"
+										                 title="${titles['TTL_INGRESE']} ${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_TOTAL']}  
+										                 		${titles['TTL_TIPO_NUMERICO']}"
+										             	requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										            	validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+											        	value="#{nomenclaturaGeneralBean.asignacionSalarialProcesar.valorAsignacion}"
+											        	converter="javax.faces.BigDecimal"
+											         	converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}" 
+											         	disabled="true">
+											<p:keyFilter mask="num"></p:keyFilter>
+											<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+										</p:inputNumber>
+										<p:message for="idCTValorTotalOtraAsignacion" display="text" />
+									</div>	
+									</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<p:commandButton value="${titles['TTL_SAVE']}"
+										styleClass="btn btn-primary"
+										style = "padding-left: 2.5%!important;  
+										padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" 
+										process="panelDetalleOtraAsignacion"
+										action="#{nomenclaturaGeneralBean.agregarOtraAsignacionLista()}"
+										update="pnlListaOtraAsignaciones panelDetalleOtraAsignacion"
+										disabled="#{nomenclaturaGeneralBean.lbEsConsultarOtraAsignacion}"/>
+									<p:commandButton value="${titles['TTL_CANCEL']}" 
+										styleClass="btn btn-primary"
+										style = "padding-left: 2.5%!important;  
+										padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" 
+										process="panelDetalleOtraAsignacion"
+										action="#{nomenclaturaGeneralBean.cerrarConsultarAsignacionSalarial()}"
+										/>
+								</div>
+							</div>
+							<br />							
+						</p:outputPanel>
+					</p:dialog>
+				</p:panel>
+				<p:panel id="pnlBotonesGuardar" rendered="#{nomenclaturaGeneralBean.lblverBotones}">
+					<br></br>
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<br /><br />
+							<div class="col-md-2"></div>
+							<div class="col-md-3" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_ENTIDAD_PLANTA_GUARDADO_PARCIAL']}" id="idBtGuardarParcial" 
+			               			styleClass="btn btn-primary"
+			               			style="font-size: 1.5em!important;width: 12.3em!important;" 
+			                       	process="@this PnlFrmNomenclatura"
+			             			action="#{nomenclaturaGeneralBean.guardarNomenclatura('0')}"
+			             			update="frNomenclaturaGeneral"
+			             			onstart="PF('dlgCargaNomenclaturaGeneral').show()"
+                            		oncomplete="PF('dlgCargaNomenclaturaGeneral').hide()"
+                            		onsuccess="PF('dlgCargaNomenclaturaGeneral').hide()"
+                            		disabled ="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura or 
+                            			nomenclaturaGeneralBean.nomenclaturaProcesar.flgDefinitivo == 1 ? true : false}"
+			                    	>
+								</p:commandButton>
+							</div>
+							<div class="col-md-3" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_GUARDADO_DEFINITIVO']}" id="idBtGuardarDefinitivo" 
+			               			styleClass="btn btn-secondary"
+			               			style="font-size: 1.5em!important;width: 12.3em!important;" 
+			                       	process="@this PnlFrmNomenclatura"
+			             			action="#{nomenclaturaGeneralBean.guardarNomenclatura('1')}"
+			             			update="frNomenclaturaGeneral"
+			             			onstart="PF('dlgCargaNomenclaturaGeneral').show()"
+                            		oncomplete="PF('dlgCargaNomenclaturaGeneral').hide()"
+                            		onsuccess="PF('dlgCargaNomenclaturaGeneral').hide()"
+                            		disabled ="#{nomenclaturaGeneralBean.lbEsConsultaNomenclatura}"
+			                    	>
+								</p:commandButton>
+							</div>
+							<div class="col-md-3" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}" id="idBtCancelar" 
+			               			styleClass="btn btn-default"
+			               			style="font-size: 1.5em!important;width: 12.3em!important;" 
+			                       	process="@this"
+			             			action="#{nomenclaturaGeneralBean.cancelar()}"
+			             			update="dlgConfirmarAccion frNomenclaturaGeneral panelNomenclaturaPlantaPersonalGeneral frNomenclaturaGeneral panelPlantaDenominacionGeneral">
+								</p:commandButton>
+							</div>								
+						</div>
+					</div>
+				</p:panel>
+				
+				<p:panel id="pnlBotonesIncremento" rendered="#{nomenclaturaGeneralBean.lbEsIncrementoSalarial}">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<div class="col-md-6" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_INCREMENTAR']}" id="idBtGuardarIncrementoSalarial" 
+			               			styleClass="btn btn-primary"
+			               			style="font-size:1.5em!important;" 
+			                       	process="@this pnlFrmOpcionesIncrementoSalarial" update="dlgConfirmarAccion"
+			             			action="#{nomenclaturaGeneralBean.solicitaConfirmacionGuardarIncrementoSalarial()}">
+								</p:commandButton>
+							</div>
+							<div class="col-md-6" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}" id="idBtCancelarIncrementoSalarial" 
+			               			styleClass="btn btn-default"
+			               			style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+			                       	process="@this" update="dlgConfirmarAccion"
+			             			action="#{nomenclaturaGeneralBean.solicitaConfirmacionCancelarIncrementoEscala()}">
+								</p:commandButton>
+							</div>							
+						</div>
+					</div>
+				</p:panel>
+				
+				<p:panel id="pnlBotonesEquivalencia" rendered="#{nomenclaturaGeneralBean.lbEsEquivalencias}">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<div class="col-md-6" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS']}" id="idBtEquivalenciasNomenclatura" 
+			               			styleClass="btn btn-primary"
+			               			style="width: 12.5em!important;font-size:1.5em!important;" 
+			                       	process="@this pnlListaDenominaciones" update="dlgConfirmarAccion"
+			             			action="#{nomenclaturaGeneralBean.solicitarConfirmacionEquivalenciasFusionar()}">
+								</p:commandButton>
+							</div>
+							<div class="col-md-6" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}" id="idBtCancelarEquivalenciasNomenclatura" 
+			               			styleClass="btn btn-default"
+			               			style="width: 12.5em!important;font-size:1.5em!important;" 
+			                       	process="@this" update="dlgConfirmarAccion"
+			             			action="#{nomenclaturaGeneralBean.solicitaConfirmacionCancelarEquivalenciasNomenclatura()}">
+								</p:commandButton>
+							</div>							
+						</div>
+					</div>
+				</p:panel>
+
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles['TTL_SALIR']}" id="idBtSalir"
+						styleClass="btn btn-primary"
+						style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+						process="@this" action="#{nomenclaturaGeneralBean.regresar()}"
+						update="frNomenclaturaGeneral panelNomenclaturaPlantaPersonalGeneral frNomenclaturaGeneral panelPlantaDenominacionGeneral"
+						>
+						<p:tooltip for="idBtSalir" value="${titles.TTL_RETORNAR_MENU_PRINCIPAL}" position="top" />
+					</p:commandButton>
+				</div>
+
+				<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccion" id="dlgConfirmarAccion" minHeight="300" 
+					modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{nomenclaturaGeneralBean.strMsgAccionConfirmar}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{nomenclaturaGeneralBean.procesarRespuestaConfirmacion()}"
+		    		   			update="frNomenclaturaGeneral panelNomenclaturaPlantaPersonalGeneral frNomenclaturaGeneral panelPlantaDenominacionGeneral"
+		    		    		onclick="PF('dlgConfirmarAccion').hide();" />
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccion').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</p:dialog>	
+											
+			</h:form>
+		</div>
+		<p:dialog widgetVar="dlgCargaNomenclaturaGeneral" modal="true" draggable="false"
+     		closable="false" resizable="false" showHeader="false"
+       		style="width:auto;height:auto">
+        	<img src="../../../resources/images/loading.gif" alt="" height="45" width="70"/>
+   		</p:dialog>
+
+		<p:dialog widgetVar="wdgtDetallePlantasAsociadasNomenclaturaGeneral"
+			width="680px" id="dlgNomenclaturaPlantaPersonal" modal="true"
+			draggable="false" closable="false" height="auto" resizable="false"
+			responsive="true" header="• #{titles.TTL_ENTIDADES_NOMENCLATURA_ELIMINAR} •" >
+			<br />
+			
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="${messages['MSG_ENTIDAD_NOMENCLATURA_INFO_PLANTA_PERSONAL']}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+			<div class="row">
+			<div class="col-md-12" align="center">
+			<p:outputPanel id="panelNomenclaturaPlantaPersonalGeneral">
+				<p:scrollPanel style="width: 100%" id="panelScrollPlantaPersonal">
+					<p:dataTable id="dtTablaNomenclaturaPlantaPersonal"
+						value="#{nomenclaturaGeneralBean.listaPlantasNomGeneral}"
+						var="descripcionPlantaPersonal"
+						paginator="true"
+						rows="5" style="width: 600px"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="${titles.TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD}">
+							<h:outputText value="#{descripcionPlantaPersonal.nombreEntidad}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_GESTION_PLANTA_NOMBRE']}">
+							<h:outputText value="#{descripcionPlantaPersonal.nombrePlanta}" />
+						</p:column>
+					</p:dataTable>
+				</p:scrollPanel>
+				</p:outputPanel>
+			</div>
+		</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles['TTL_OK']}" process="@this"
+						styleClass="btn btn-primary"
+						onclick="PF('wdgtDetallePlantasAsociadasNomenclaturaGeneral').hide()"
+						style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+				</div>
+			</div>
+		</p:dialog>
+
+<!-- Dialogo de confirmacion check de personalizar Nomenclatura General  -->
+	<p:dialog widgetVar="wdgtDetalleVinculacionPlantaAsociada"
+			width="680px" id="dlgPlantaVinculacionAsociada" modal="true"
+			draggable="false" closable="false" height="auto" resizable="false"
+			responsive="true"
+			header="• #{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ELIMINAR} •">
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="${messages['MSG_ENTIDAD_NOMENCLATURA_DENOMINACION_INFO_PLANTA_PERSONAL']}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<hr
+				style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputPanel id="panelPlantaDenominacionGeneral">
+						<p:scrollPanel style="width: 100%"
+							id="panelScrollPlantaDenominacionGeneral">
+							<p:dataTable id="dtTablaPlantaDenominacionGeneral"
+								value="#{nomenclaturaGeneralBean.lstPlantaDetalleDenominacion}"
+								var="descripcionPlantaDenominacion"
+								rowKey="#{descripcionPlantaDenominacion.codEntidadPlantaDetalle}"
+								paginator="true" rows="5" style="width: 600px"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+								<p:column headerText="${titles.TTL_ENTIDAD}">
+									<h:outputText
+										value="#{descripcionPlantaDenominacion.nombreEntidad}" />
+								</p:column>
+								<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_NOMBRE}">
+									<h:outputText
+										value="#{descripcionPlantaDenominacion.nombrePlanta}" />
+								</p:column>
+								<p:column headerText="${titles.LBL_PERSONA_VINCULADA}">
+									<h:outputText
+										value="#{descripcionPlantaDenominacion.nombrePersona}" />
+								</p:column>
+							</p:dataTable>
+						</p:scrollPanel>
+					</p:outputPanel>
+				</div>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles['TTL_OK']}" process="@this"
+						styleClass="btn btn-primary"
+						onclick="PF('wdgtDetalleVinculacionPlantaAsociada').hide()"
+						style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+				</div>
+			</div>
+	</p:dialog>
+
+
+	</ui:define>
+</ui:composition>

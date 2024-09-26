@@ -1,0 +1,279 @@
+package co.gov.dafp.sigep2.constante;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+
+import co.gov.dafp.sigep2.util.FileUtil;
+import co.gov.dafp.sigep2.util.logger.Logger;
+
+public final class SQLNames {
+	private static Logger logger = Logger.getInstance(SQLNames.class);
+
+	private static final String CONFIGURACION_BUNDLE = "co.gov.dafp.sigep2.queries";
+	private static final String CONFIG_PATH = "CONFIG_PATH";
+	private static Properties properties = null;
+	private static String classPath;
+
+	public static final String SELECT = "select";
+	public static final String INNER = "inner";
+	public static final String LEFT = "left";
+	public static final String RIGTH = "rigth";
+	public static final String WHERE = "where";
+	public static final String AND = "and";
+	public static final String OR = "or";
+	public static final String UNION = " union ";
+	public static final String UNION_ALL = " union all ";
+
+	// USUARIO
+	public static final String USUARIO_SQL = "USUARIO_SQL";
+	public static final String USUARIO_ENTITY_SQL = "USUARIO_ENTITY_SQL";
+	public static final String USUARIO_PASS_SQL = "USUARIO_PASS_SQL";
+	public static final String USUARIO_FIND_BY_ESTADO_SQL = "USUARIO_FIND_BY_ESTADO_SQL";
+	public static final String USUARIO_FIND_BY_BLOQUEADO_SQL = "USUARIO_FIND_BY_BLOQUEADO_SQL";
+	public static final String USUARIO_FIND_BY_LOGIN_SQL = "USUARIO_FIND_BY_LOGIN_SQL";
+	public static final String USUARIO_FIND_BY_LOGIN_FULL_SQL = "USUARIO_FIND_BY_LOGIN_FULL_SQL";
+	public static final String USUARIO_FIND_BY_CORREO_SQL = "USUARIO_FIND_BY_CORREO_SQL";
+	public static final String USUARIO_FIND_BY_TICKET_SQL = "USUARIO_FIND_BY_TICKET_SQL";
+	public static final String USUARIO_FIND_BY_COD_PERSONA = "USUARIO_FIND_BY_COD_PERSONA";
+	public static final String USUARIO_PERSONA = "USUARIO_PERSONA";
+	public static final String USUARIO_BY_PERSONA = "USUARIO_BY_PERSONA";
+	public static final String ACTIVO_USUARIO_ENTIDAD_FIND_BY_CODUSUARIO_CODENTIDAD = "ACTIVO_USUARIO_ENTIDAD_FIND_BY_CODUSUARIO_CODENTIDAD";
+	public static final String USUARIO_ENTIDAD_CONTRATO_VINCULACION_SQL = "USUARIO_ENTIDAD_CONTRATO_VINCULACION_SQL";
+
+	public static final String USUARIO_ROL_ENTIDAD_VALIDAR_DESASOCIACION_SQL = "USUARIO_ROL_ENTIDAD_VALIDAR_DESASOCIACION_SQL";
+	public static final String USUARIO_ROL_ENTIDAD_VALIDAR_DESASOCIACION_BY_USUARIO_ENTIDAD = "USUARIO_ROL_ENTIDAD_VALIDAR_DESASOCIACION_BY_USUARIO_ENTIDAD";
+
+	public static final String ROL_SQL = "ROL_SQL";
+	public static final String ROL_ENTITY_SQL = "ROL_ENTITY_SQL";
+	public static final String ROL_FIND_BY_ESTADO_SQL = "ROL_FIND_BY_ESTADO_SQL";
+	public static final String ROL_FIND_BY_NOMBRE_SQL = "ROL_FIND_BY_NOMBRE_SQL";
+	public static final String ROL_FIND_BY_DESCRIPCION_SQL = "ROL_FIND_BY_DESCRIPCION_SQL";
+
+	public static final String USUARIO_ROL_SQL = "USUARIO_ROL_SQL";
+	public static final String USUARIO_ROL_FIND_BY_ESTADO_SQL = "USUARIO_ROL_FIND_BY_ESTADO_SQL";
+	public static final String USUARIO_ROL_FIND_BY_USUARIO_X_ROL_SQL = "USUARIO_ROL_FIND_BY_USUARIO_X_ROL_SQL";
+	
+	public static final String USUARIO_ENTIDAD_ACTIVA="USUARIO_ENTIDAD_ACTIVA";
+
+	// USUARIO ROL ENTIDAD
+	public static final String USUARIO_ROL_ENTIDAD_ENTITY_SQL = "USUARIO_ROL_ENTIDAD_ENTITY_SQL";
+	public static final String USUARIO_ROL_ENTIDAD_SQL = "USUARIO_ROL_ENTIDAD_SQL";
+	public static final String USUARIOROLENTIDAD_USUARIOENTIDAD = "USUARIOROLENTIDAD_USUARIOENTIDAD";
+	public static final String USUARIO_ROL_ENTIDAD_BY_USUARIO_ENTIDAD = "USUARIO_ROL_ENTIDAD_BY_USUARIO_ENTIDAD";
+	public static final String USUARIO_ROL_ENTIDAD_BY_ROL = "USUARIO_ROL_ENTIDAD_BY_ROL";
+	public static final String V_USUARIO_ROL_ENTIDAD_SQL = "V_USUARIO_ROL_ENTIDAD_SQL";
+	public static final String V_USUARIO_ROL_ENTIDAD_BY_ASOCIACION = "V_USUARIO_ROL_ENTIDAD_BY_ASOCIACION";
+	public static final String V_USUARIO_ROL_ENTIDAD_BY_ENTIDAD = "V_USUARIO_ROL_ENTIDAD_BY_ENTIDAD";
+
+	public static final String ENTIDAD_BASICA_SQL = "ENTIDAD_BASICA_SQL";
+
+	public static final String ENTIDAD_USUARIO_BASICA_SQL = "ENTIDAD_USUARIO_BASICA_SQL";
+	public static final String ENTIDAD_USUARIO_BASICA_TODAS_SQL = "ENTIDAD_USUARIO_BASICA_TODAS_SQL";
+	public static final String ENTIDAD_USUARIO_FIND_BY_USUARIO_SQL = "ENTIDAD_USUARIO_FIND_BY_USUARIO_SQL";
+	public static final String ENTIDAD_USUARIO_FIND_BY_PREDECESORA_SQL = "ENTIDAD_USUARIO_FIND_BY_PREDECESORA_SQL";
+	public static final String ENTIDAD_USUARIO_FIND_BY_NOMBRE_SQL = "ENTIDAD_USUARIO_FIND_BY_NOMBRE_SQL";
+	public static final String ENTIDAD_USAURIOENTIDAD = "ENTIDAD_USAURIOENTIDAD";
+
+	public static final String UPDATE_ESTADO_USUARIO = "UPDATE_ESTADO_USUARIO";
+	public static final String USUARIOENTIDAD_USUARIO = "USUARIOENTIDAD_USUARIO";
+	public static final String USUARIO_ENTIDAD_ASOCIACION = "USUARIO_ENTIDAD_ASOCIACION";
+
+	// PERSONA
+	public static final String PERSONA_SQL = "PERSONA_SQL";
+	public static final String PERSONA_FIND_BY_TIPODOCUMENTO_AND_NUMEROIDENTIFICACION = "PERSONA_FIND_BY_TIPODOCUMENTO_AND_NUMEROIDENTIFICACION";
+	public static final String PERSONA_FILTER_BY_ENTIDAD = "PERSONA_FILTER_BY_ENTIDAD";
+	public static final String PERSONA_ASOCIADA_ENTIDAD = "PERSONA_ASOCIADA_ENTIDAD";
+
+	// DATOS CONTACTO
+	public static final String DATO_CONTACTO_SQL = "DATO_CONTACTO_SQL";
+	public static final String DATO_CONTACTO_BY_PERSONA = "DATO_CONTACTO_BY_PERSONA";
+
+	// DATOS ADICIONALES
+	public static final String DATO_ADICIONAL_SQL = "DATO_ADICIONAL_SQL";
+	public static final String DATO_ADICIONAL_BY_PERSONA = "DATO_ADICIONAL_BY_PERSONA";
+
+	// NACIONALIDAD PERFIL
+	public static final String NACIONALIDAD_PERFIL_SQL = "NACIONALIDAD_PERFIL_SQL";
+	public static final String NACIONALIDAD_PERFIL_BY_PERSONA = "NACIONALIDAD_PERFIL_BY_PERSONA";
+	public static final String NACIONALIDAD_PERFIL_BY_PERSONA_AND_PAIS = "NACIONALIDAD_PERFIL_BY_PERSONA_AND_PAIS";
+
+	// ARCHIVO CARGUE
+	public static final String PROCESO_ARCHIVO_SQL = "PROCESO_ARCHIVO_SQL";
+	public static final String PROCESO_ARCHIVO_FIND_BY_DESCRIPCION_SQL = "PROCESO_ARCHIVO_FIND_BY_DESCRIPCION_SQL";
+	public static final String PROCESO_ARCHIVO_FIND_BY_PLANTILLA_SQL = "PROCESO_ARCHIVO_FIND_BY_PLANTILLA_SQL";
+	public static final String PROCESO_ARCHIVO_FIND_BY_MENU_SQL = "PROCESO_ARCHIVO_FIND_BY_MENU_SQL";
+	public static final String PROCESO_ARCHIVO_FIND_BY_MODULO_SQL = "PROCESO_ARCHIVO_FIND_BY_MODULO_SQL";
+	public static final String PROCESO_ARCHIVO_FIND_BY_PLANTILLAS_SQL = "PROCESO_ARCHIVO_FIND_BY_PLANTILLAS_SQL";
+
+	public static final String ARCHIVO_CARGUE_SQL = "ARCHIVO_CARGUE_SQL";
+	public static final String ARCHIVO_CARGUE_FIND_BY_ESTADO_SQL = "ARCHIVO_CARGUE_FIND_BY_ESTADO_SQL";
+	public static final String ARCHIVO_CARGUE_FIND_BY_NOMBRE_ARCHIVO_SQL = "ARCHIVO_CARGUE_FIND_BY_NOMBRE_ARCHIVO_SQL";
+
+	public static final String RECURSO_ACTIVO_PERFIL_USUARIO_VW_SQL = "RECURSO_ACTIVO_PERFIL_USUARIO_VW_SQL";
+	public static final String RECURSO_ACTIVO_PERFIL_USUARIO_VW_FIND_BY_CODIGO_VENTANA_SQL = "RECURSO_ACTIVO_PERFIL_USUARIO_VW_FIND_BY_CODIGO_VENTANA_SQL";
+	public static final String RECURSO_ACTIVO_PERFIL_USUARIO_VW_FIND_BY_CODIGO_PADRE_SQL = "RECURSO_ACTIVO_PERFIL_USUARIO_VW_FIND_BY_CODIGO_PADRE_SQL";
+	public static final String RECURSO_ACTIVO_PERFIL_USUARIO_VW_FIND_BY_LOGIN_SQL = "RECURSO_ACTIVO_PERFIL_USUARIO_VW_FIND_BY_LOGIN_SQL";
+	public static final String RECURSO_ACTIVO_PERFIL_USUARIO_VW_ORDER_BY = "RECURSO_ACTIVO_PERFIL_USUARIO_VW_ORDER_BY";
+	public static final String ROL_USUARIO_ENTIDAD_SQL = "ROL_USUARIO_ENTIDAD_SQL";
+	public static final String ROL_USUARIO_ENTIDAD_FIND_BY_LOGIN_SQL = "ROL_USUARIO_ENTIDAD_FIND_BY_LOGIN_SQL";
+
+	// TIPO DOCUMENTO
+	public static final String TIPO_DOCUMENTO_SQL = "TIPO_DOCUMENTO_SQL";
+
+	// TIPO GENERO
+	public static final String GENERO_SQL = "GENERO_SQL";
+
+	// CLASE LIBRETA MILITAR
+	public static final String CLASE_LIBRETA_MILITAR_SQL = "CLASE_LIBRETA_MILITAR_SQL";
+
+	// TIPO ASOCIACION
+	public static final String TIPO_ASOCIACION_SQL = "TIPO_ASOCIACION_SQL";
+
+	// TIPO ENTIDAD
+	public static final String TIPO_ENTIDAD_SQL = "TIPO_ENTIDAD_SQL";
+
+	// CLASIFICACION ORGANICA
+	public static final String CLASIFICACION_ORGANICA_SQL = "CLASIFICACION_ORGANICA_SQL";
+
+	// PAIS
+	public static final String PAIS_SQL = "PAIS_SQL";
+
+	// DEPARTAMENTO
+	public static final String DEPARTAMENTO_SQL = "DEPARTAMENTO_SQL";
+
+	// MUNICIPIO
+	public static final String MUNICIPIO_SQL = "MUNICIPIO_SQL";
+
+	// TIPO ZONA
+	public static final String TIPO_ZONA_SQL = "TIPO_ZONA_SQL";
+
+	// ESTADO CIVIL
+	public static final String ESTADO_CIVIL_SQL = "ESTADO_CIVIL_SQL";
+
+	// POBLACION_ETNICA_SQL
+	public static final String POBLACION_ETNICA_SQL = "POBLACION_ETNICA_SQL";
+
+	// TIPO DISCAPACIDAD
+	public static final String TIPO_DISCAPACIDAD_SQL = "TIPO_DISCAPACIDAD_SQL";
+
+	// PROCESO BACKGROUND
+	public static final String PROCESO_BACKGROUND_SQL = "PROCESO_BACKGROUND_SQL";
+	public static final String PROCESO_BACKGROUND_FIND_BY_DESCRIPCION_SQL = "PROCESO_BACKGROUND_FIND_BY_DESCRIPCION_SQL";
+	public static final String PROCESO_BACKGROUND_FIND_BY_PLANTILLAS_SQL = "PROCESO_BACKGROUND_FIND_BY_PLANTILLAS_SQL";
+
+	// USUARIO ENTIDAD
+	public static final String USUARIO_ENTIDAD_SQL = "USUARIO_ENTIDAD_SQL";
+	public static final String USUARIO_ENTIDAD_FIND_BY_CODUSUARIO_CODENTIDAD = "USUARIO_ENTIDAD_FIND_BY_CODUSUARIO_CODENTIDAD";
+	public static final String FIND_USUARIOS_BY_ENTIDAD = "FIND_USUARIOS_BY_ENTIDAD";
+	public static final String UPDATE_ACTIVO_USUARIO_ENTIDAD = "UPDATE_ACTIVO_USUARIO_ENTIDAD";
+	public static final String USUARIO_BY_ENTIDAD_SQL = "USUARIO_BY_ENTIDAD_SQL";
+
+	// REPORTES
+	public static final String REPORTE_SQL = "REPORTE_SQL";
+	public static final String REPORTE_FIND_BY_DESCRIPCION_SQL = "REPORTE_FIND_BY_DESCRIPCION_SQL";
+	public static final String REPORTE_FIND_BY_PLANTILLA_SQL = "REPORTE_FIND_BY_PLANTILLA_SQL";
+	public static final String REPORTE_FIND_BY_PLANTILLAS_SQL = "REPORTE_FIND_BY_PLANTILLAS_SQL";
+
+	// PERMISOS URUARIO ROL
+	public static final String PERMISO_USUARIO_ROL_SQL = "PERMISO_USUARIO_ROL_SQL";
+	public static final String PERMISO_USUARIO_ROL_FIND_BY_USUARIO_SQL = "PERMISO_USUARIO_ROL_FIND_BY_USUARIO_SQL";
+	public static final String PERMISO_USUARIO_ROL_FIND_BY_CONTROL_HTML_SQL = "PERMISO_USUARIO_ROL_FIND_BY_CONTROL_HTML_SQL";
+	public static final String PERMISO_USUARIO_ROL_FIND_BY_ACCION_SQL = "PERMISO_USUARIO_ROL_FIND_BY_ACCION_SQL";
+	public static final String PERMISO_USUARIO_ROL_FIND_BY_ROL_SQL = "PERMISO_USUARIO_ROL_FIND_BY_ROL_SQL";
+	public static final String PERMISO_USUARIO_ROL_ORDER_BY = "PERMISO_USUARIO_ROL_ORDER_BY";
+
+	// HOJA DE VIDA
+	public static final String CONSULTAR_HOJA_VIDA_SQL = "CONSULTAR_HOJA_VIDA_SQL";
+	public static final String CONSULTAR_EXPERIENCIA_PROFESIONAL_SQL = "CONSULTAR_EXPERIENCIA_PROFESIONAL_SQL";
+	public static final String CONSULTAR_EXPERIENCIA_PROFESIONAL_BY_PERSONA_SQL = "CONSULTAR_EXPERIENCIA_PROFESIONAL_BY_PERSONA_SQL";
+	public static final String CONSULTAR_EXPERIENCIA_DOCENTE_SQL = "CONSULTAR_EXPERIENCIA_DOCENTE_SQL";
+	public static final String EXPERIENCIA_DOCENTE_BY_CODIGOEXPDOCENTE = "EXPERIENCIA_DOCENTE_BY_CODIGOEXPDOCENTE";
+	public static final String EXPERIENCIA_DOCENTE_BY_PERSONA = "EXPERIENCIA_DOCENTE_BY_PERSONA";
+	public static final String EXPERIENCIA_DOCENTE_NUMERO_FILAS = "EXPERIENCIA_DOCENTE_NUMERO_FILAS";
+	public static final String EXPERIENCIA_DOCENTE_NUMERO_FILAS_BY_PERSONA = "EXPERIENCIA_DOCENTE_NUMERO_FILAS_BY_PERSONA";
+	public static final String CONTAR_EXPERIENCIAS_PROFESIONAL_SQL = "CONTAR_EXPERIENCIAS_PROFESIONAL_SQL";
+	public static final String LISTAR_EXPERIENCIA_DOCENTE_SQL = "LISTAR_EXPERIENCIA_DOCENTE_SQL";
+	public static final String OBTENER_NOMBRES_EXPERIENCIA_DOCENTE_SQL = "OBTENER_NOMBRES_EXPERIENCIA_DOCENTE_SQL";
+
+	// AUDITORIA CONFIGURACION
+	public static final String AUDITORIA_CONFIGURACION_SQL = "AUDITORIA_CONFIGURACION_SQL";
+
+	// ACCION AUDITORIA
+	public static final String ACCION_AUDITORIA_SQL = "ACCION_AUDITORIA_SQL";
+	// PARAMETRICA
+	public static final String LISTAR_TABLAS_PARAMETRICA = "LISTAR_TABLAS_PARAMETRICA";
+	public static final String LISTAR_PARAMETROS_PARAMETRICA = "LISTAR_PARAMETROS_PARAMETRICA";
+
+	// Evaluacion de desempeno
+	public static final String CONSULTAR_EVALUACION_DESEMPENO = "CONSULTAR_EVALUACION_DESEMPENO";
+	public static final String CONSULTAR_PERSONAS_FILTRO = "CONSULTAR_PERSONAS_FILTRO";
+	public static final String CONSULTAR_PERSONAS_FILTRO_NOMBRE = "CONSULTAR_PERSONAS_FILTRO_NOMBRE";
+	public static final String CONSULTAR_PERSONAS_FILTRO_NOMBRE_SEGUNDO = "CONSULTAR_PERSONAS_FILTRO_NOMBRE_SEGUNDO";
+	public static final String CONSULTAR_PERSONAS_FILTRO_APELLIDO = "CONSULTAR_PERSONAS_FILTRO_APELLIDO";
+	public static final String CONSULTAR_PERSONAS_FILTRO_APELLIDO_SEGUNDO = "CONSULTAR_PERSONAS_FILTRO_APELLIDO_SEGUNDO";
+	public static final String CONSULTAR_PERSONAS_FILTRO_NUM_DOC = "CONSULTAR_PERSONAS_FILTRO_NUM_DOC";
+	public static final String CONSULTAR_PERSONAS_FILTRO_TIP_DOC = "CONSULTAR_PERSONAS_FILTRO_TIP_DOC";
+
+	// VIAS
+	public static final String TIPO_VIA_SQL = "TIPO_VIA_SQL";
+
+	// NIVEL EDUCATIVO
+	public static final String NIVEL_EDUCATIVO_SQL = "NIVEL_EDUCATIVO_SQL";
+
+	// AREA CONOCIMIENTO
+	public static final String AREA_CONOCIMIENTO_SQL = "AREA_CONOCIMIENTO_SQL";
+
+	// ORIENTACION
+	public static final String TIPO_ORIENTACION_SQL = "TIPO_ORIENTACION_SQL";
+
+	// Cargo
+	public static final String CONSULTAR_CARGOS_SQL = "CONSULTAR_CARGOS_SQL";
+	public static final String CONSULTAR_CARGOS_ENTIDAD_SQL = "CONSULTAR_CARGOS_ENTIDAD_SQL";
+
+	// Motivo Retiro
+	public static final String CONSULTAR_MOTIVO_RETIRO_SQL = "CONSULTAR_MOTIVO_RETIRO_SQL";
+
+	// TIPO_LETRA_SQL
+	public static final String TIPO_LETRA_SQL = "TIPO_LETRA_SQL";
+
+	// Jornada Laboral
+	public static final String CONSULTAR_JORNADA_LABORAL_SQL = "CONSULTAR_JORNADA_LABORAL_SQL";
+
+	// Formulario de Gerencia publica
+	public static final String OBTENER_PARAMETRICAS_CABEZA_FAMILIA = "OBTENER_PARAMETRICAS_CABEZA_FAMILIA";
+
+	public static final String INSTITUCION_EDUCATIVA_SQL = "INSTITUCION_EDUCATIVA_SQL";
+
+	public static final String TIPO_INSTITUCION_EDUCATIVA_SQL = "TIPO_INSTITUCION_EDUCATIVA_SQL";
+
+	static {
+		if (properties == null) {
+			properties = new Properties();
+			String configPath = System.getProperty(CONFIG_PATH);
+			if (configPath == null || configPath.isEmpty()) {
+				configPath = ConfigurationBundleConstants.getString(ConfigurationBundleConstants.CNS_RAIZ_SISTEMA) + ":"
+						+ FileUtil.getFileSeparator();
+			}
+			classPath = configPath + CONFIGURACION_BUNDLE.replace(".", FileUtil.getFileSeparator()) + ".properties";
+			try {
+				InputStream stream = new FileInputStream(classPath);
+				properties.load(stream);
+			} catch (IOException e) {
+				logger.error(MessagesBundleConstants.DLG_PROCESO_FALLIDO, e);
+				properties = null;
+			}
+		}
+	}
+
+	public static String getSQL(String key) {
+		try {
+			return properties.getProperty(key) + " ";
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return "";
+	}
+}

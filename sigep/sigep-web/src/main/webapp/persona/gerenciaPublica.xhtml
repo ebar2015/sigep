@@ -1,0 +1,1334 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{gerenciaPublicaBean.id}' />
+		<f:viewParam name="dialog" value='#{gerenciaPublicaBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{gerenciaPublicaBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{gerenciaPublicaBean.showDialog}' />
+	</f:metadata>
+
+	<div class="row row-background-white">
+		<p:panel id="panelGerPubliInfoPersonal">
+			<br />
+			<br />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">
+				${titles['TTL_INFORMACION_PERSONAL']} </span>
+			<br />
+			<div class="row" align="right">
+				<div class="col-md-12">
+					<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel
+							value="${titles['TTL_HOMBRE_MUJER_CABEZA_FAMILIA']}:"
+							for="gerPubliCabezaFamilia"
+							styleClass="log-label form-label-formularios" />
+						<h:selectOneMenu
+							title="#{titles.TTL_SELECT} #{titles.TTL_CABEZA_FAMILIA}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{gerenciaPublicaBean.datoAdicional.codCabezaHogar}"
+							required="true" id="gerPubliCabezaFamilia"
+							styleClass="form-control-form-act-usua"
+							onchange="datosModificados(1);">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.cabezaFamilia}" />
+						</h:selectOneMenu>
+						<p:message for="gerPubliCabezaFamilia" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_VICTIMA_DESPLAZAMIENTO']}:"
+							for="gerPubliVictimaDesplazamiento"
+							styleClass="log-label form-label-formularios" />
+						<h:selectOneMenu id="gerPubliVictimaDesplazamiento"
+							title="#{titles.TTL_SELECT} #{titles.LBL_VICTIMA_DESPLAZAMIENTO}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							value="#{gerenciaPublicaBean.datoAdicional.codVictimaDesplazamiento}"
+							required="true" styleClass="form-control-form-act-usua"
+							onchange="datosModificados(1);">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.victimaDesplazamiento}" />
+						</h:selectOneMenu>
+						<p:message for="gerPubliVictimaDesplazamiento" display="text" />
+					</div>
+					<div class="col-md-4 media-txt" >
+						<p:outputLabel for="gerPubliOrientacionSexual"
+							value="${titles['LBL_USTED_ES']}:"
+							styleClass="log-label form-label-formularios" />
+						<h:selectOneMenu id="gerPubliOrientacionSexual"
+							title="#{titles.TTL_SELECT} #{titles.TTL_ORIENTACION_SEXUAL}"
+							value="#{gerenciaPublicaBean.datoAdicional.codOrientacionSexual}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua"
+							
+							>
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.orientacionSexual}" />
+							<p:ajax listener="#{gerenciaPublicaBean.mostrarOtraOrientacion}"
+								    process="@this"
+								    update="panelGerPubliOtraOrientacion" oncomplete="datosModificados(1);"
+								/>
+						</h:selectOneMenu>
+						<p:message for="gerPubliOrientacionSexual" display="text" />
+					</div>
+				</div>
+			</div>
+			<p:outputPanel id="panelGerPubliOtraOrientacion">
+				<p:panel id="subPanelGerPubliOtraOrientacion"
+					rendered="#{gerenciaPublicaBean.flgOtraOrientacion}">
+					<div class="row">
+						<div class="col-md-12">
+							<br />
+							<div class="col-md-4">
+								<p:outputLabel for="gerPubliOtraOrientacionSexual"
+									value="${titles['TTL_OTRA_ORIENTACION_SEXUAL']}:"
+									styleClass="log-label form-label-formularios" />
+								<h:inputText id="gerPubliOtraOrientacionSexual"
+									title="#{titles.TTL_SELECT} #{titles.TTL_OTRA_ORIENTACION_SEXUAL}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									value="#{gerenciaPublicaBean.datoAdicional.otraOrientacionSexual}"
+									styleClass="form-control-acti-usua form-control"
+									onchange="datosModificados(1);">
+									<p:message for="gerPubliOtraOrientacionSexual" display="text" />
+								</h:inputText>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+			</p:outputPanel>
+			<br />
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-4 media-btn-gerencia"></div>
+				<div class="col-md-2" style="margin-bottom: 4%;">
+					<p:panel id="pgpInfoPer0"
+						rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+						style="padding: 0%;">
+						<p:commandButton id="btnGuardarInformacionPersonalGP" process="panelGerPubliInfoPersonal"
+							update="panelGerPubliInfoPersonal panelFormulario frmPrincipal:tabHojaDeVida"
+							actionListener="#{gerenciaPublicaBean.guardarDatosAdicionales}"
+							styleClass="btn btn-primary"
+							style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+							value="${titles['TTL_SAVE']}" 
+							oncomplete="datosModificados(0);"/>
+					</p:panel>
+					<p:panel id="pgpInfoPer1"
+						rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+						style="padding: 0%;">
+						<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+							process="panelGerPubliInfoPersonal"
+							update="panelGerPubliInfoPersonal panelFormulario frmPrincipal:tabHojaDeVida"
+							actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(1)}"
+							styleClass="btn btn-primary"
+							style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+					</p:panel>
+				</div>
+				<div class="col-md-2" style="margin-bottom: 4%;">
+					<p:commandButton id="limpiarInfoP" value="${titles['TTL_CANCEL']}"
+						process="@this"
+						update="frmPrincipal:tabHojaDeVida:panelGerPubliInfoPersonal"
+						actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+						styleClass="btn btn-default"
+						style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+						
+					</p:commandButton>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</p:panel>
+		<p:outputPanel id="panelFormulario">
+			<p:panel id="panelGerPubliLogros"
+				rendered="#{gerenciaPublicaBean.flgFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">
+					${titles['TTL_LOGROS_MANEJOS_RECURSOS']} </span>
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<br />
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4" style="padding-top: 2% !important;">
+							<p:outputLabel
+								value="${titles['LBL_EXPERIENCIA_LABORAL_ADMINISTRACION_RECURSOS_ECONOMICOS']}:"
+								title="#{titles.TTL_SELECT} #{titles.LBL_EXPERIENCIA_LABORAL_ADMINISTRACION_RECURSOS_ECONOMICOS}"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectOneRadio id="rdbLogros"
+								value="#{gerenciaPublicaBean.flgLogros}">
+								<f:selectItem itemLabel="Si" itemValue="true" />
+								<f:selectItem itemLabel="No" itemValue="false" />
+								<p:ajax event="change"
+									update="panelGerPubliLogros frmPrincipal:tabHojaDeVida"
+									process="@this"
+									listener="#{gerenciaPublicaBean.habilitarLogroRecurso()}"
+									 oncomplete="datosModificados(1);"/>
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4" style="padding-top: 2% !important;">
+							<p:outputLabel
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								for="txtNombreEntidad"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="txtNombreEntidad"
+								title="#{titles.TTL_SELECT} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION}"
+								disabled="#{not gerenciaPublicaBean.flgLogros}"
+								value="#{gerenciaPublicaBean.logroRecurso.nombreEntidad}"
+								required="true" styleClass="form-control-form-act-usua"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{gerenciaPublicaBean.listaNombreEntidad}" />
+							</h:selectOneMenu>
+							<p:message for="txtNombreEntidad" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="txtNumeroEmpleados"
+								value="${titles['LBL_CANTIDAD_EMPLEADOS_ENTIDAD']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText id="txtNumeroEmpleados"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_CANTIDAD_EMPLEADOS_ENTIDAD}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{not gerenciaPublicaBean.flgLogros}"
+								onkeypress="return numbervalida(event)"
+								value="#{gerenciaPublicaBean.logroRecurso.numEmpleados}"
+								maxlength="6" styleClass="form-control-acti-usua form-control"
+								onchange="datosModificados(1);"
+								>
+							</h:inputText>
+							<p:message for="txtNumeroEmpleados" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4" style="padding-top: 2% !important;">
+							<p:outputLabel value="${titles['LBL_PERSONAL_A_CARGO']}:"
+								for="txtEmpleadosMando"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText id="txtEmpleadosMando" maxlength="4"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_PERSONAL_A_CARGO}"
+								disabled="#{not gerenciaPublicaBean.flgLogros}"
+								onkeypress="return numbervalida(event)"
+								value="#{gerenciaPublicaBean.logroRecurso.numPersonasCargo}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control"
+								onchange="datosModificados(1);"
+								>
+							</h:inputText>
+							<p:message for="txtEmpleadosMando" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_ASIGNACION_RECURSOS_ECONOMICOS']}:"
+								styleClass="log-label form-label-formularios">
+							</p:outputLabel>
+							<p:inputNumber id="asignacionRecursos"
+								value="#{gerenciaPublicaBean.logroRecurso.valorRecursoEconomico}"
+								symbol="$ " emptyValue="zero" decimalSeparator=","
+								thousandSeparator="." decimalPlaces="0"
+								disabled="#{not gerenciaPublicaBean.flgLogros}"
+								title="Ingresar el valor en pesos colombianos" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								validatorMessage="El valor ingresado no puede ser interpretado como un valor de moneda, ingrese un valor númerico precedido del caracter $, ejemplo: $999"
+								maxlength="9" maxValue="999999999"
+								oncomplete="datosModificados(1);"
+								>
+							</p:inputNumber>
+							<p:message for="asignacionRecursos" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_LOGRO_SOBRESALIENTE']}:"
+								for="txtLogroSobre"
+								styleClass="log-label form-label-formularios" />
+							<p:inputTextarea rows="2" cols="25" id="txtLogroSobre"
+								title="#{titles.LBL_LOGRO_SOBRESALIENTE} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{not gerenciaPublicaBean.flgLogros}"
+								counterTemplate="Quedan {0} caracteres." autoResize="false"
+								style="resize: none;overflow-x: hidden; word-wrap: break-word!important;"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaBean.logroRecurso.logroSobresaliente}"
+								onchange="datosModificados(1);"
+								>
+								<f:validateLength minimum="0" maximum="3000" />
+							</p:inputTextarea>
+							<p:message for="txtLogroSobre" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:panel id="pgplogroRecurso0"
+							rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton id="btnGuardarLogrosGP" value="${titles['TTL_SAVE']}"
+								process="panelGerPubliLogros"
+								update="panelGerPubliLogros frmPrincipal:tabHojaDeVida"
+								actionListener="#{gerenciaPublicaBean.guardarLogroRecurso}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);">
+							</p:commandButton>
+						</p:panel>
+						<p:panel id="pgplogroRecurso1"
+							rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+								process="panelGerPubliLogros"
+								update="panelGerPubliLogros frmPrincipal:tabHojaDeVida"
+								actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(2)}"
+								styleClass="btn btn-primary"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="panelGerPubliLogros frmPrincipal:tabHojaDeVida"
+							actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+			<p:panel id="panelGerPubliPublicacion"
+				rendered="#{gerenciaPublicaBean.flgFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style"> ${titles['TTL_PUBLICACIONES']} </span>
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_HA_REALIZADO_PUBLICACIONES']}:"
+								title="#{titles.TTL_SELECT} #{titles.LBL_HA_REALIZADO_PUBLICACIONES}"
+								styleClass="log-label form-label-formularios" for="rdbPubli" />
+							<br />
+							<p:selectOneRadio id="rdbPubli"
+								value="#{gerenciaPublicaBean.flgPublicacion}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="Si" itemValue="true" />
+								<f:selectItem itemLabel="No" itemValue="false" />
+								<p:ajax event="change"
+									update="panelGerPubliPublicacion frmPrincipal:tabHojaDeVida"
+									process="@this"
+									listener="#{gerenciaPublicaBean.habilitarPublicacion()}"
+									oncomplete="datosModificados(1);"/>
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_ARTICULO']}:"
+								for="cmbTipArtic" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbTipArtic"
+								title="#{titles.TTL_SELECT} #{titles.LBL_ARTICULO}"
+								value="#{gerenciaPublicaBean.publicacion.codTipoArticulo}"
+								styleClass="form-control-form-act-usua"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tipoArticulo}" />
+							</h:selectOneMenu>
+
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NOMBRE_ARTICULO']}:"
+								for="txtNombreArticulo"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreArticulo" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ARTICULO} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaBean.publicacion.nombreArticulo}"
+								required="true"
+								equiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreArticulo" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4 media-txt-1">
+							<p:outputLabel
+								value="${titles['LBL_LIBRO_RESULTADO_INVESTIGACION']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbResultadoInvestigacion"
+								title="#{titles.TTL_SELECT} #{titles.LBL_LIBRO_RESULTADO_INVESTIGACION}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								value="#{gerenciaPublicaBean.publicacion.codTipoPublicacion}"
+								styleClass="form-control-form-act-usua"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.libroResultadoInvestigacion}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4 media-txt-1">
+							<p:outputLabel value="${titles['LBL_NOMBRE_LIBRO']}:"
+								for="txtNombreLibro"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreLibro" required="true" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_LIBRO} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaBean.publicacion.nombreLibro}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreLibro" display="text" />
+						</div>
+						<div class="col-md-4 media-txt-2">
+							<p:outputLabel
+								value="${titles['LBL_TIPOS_PRODUCCION_BIBLIOGRAFICA']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbProduccionBibliografica"
+								title="#{titles.TTL_SELECT} #{titles.LBL_TIPOS_PRODUCCION_BIBLIOGRAFICA}"
+								value="#{gerenciaPublicaBean.publicacion.codOtroTipoPublicacion}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								styleClass="form-control-form-act-usua"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.demasTiposProduccionBiblografica}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NOMBRE_PUBLICACION']}:"
+								for="txtNombrePublicacion"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombrePublicacion" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_PUBLICACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaBean.publicacion.nombrePublicacion}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombrePublicacion" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:panel id="pgppublicacion0"
+							rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton id="btnGuardarPublicacionesGP" value="${titles['TTL_SAVE']}"
+								process="panelGerPubliPublicacion"
+								update="panelGerPubliPublicacion"
+								actionListener="#{gerenciaPublicaBean.guardarPublicacion}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;" />
+						</p:panel>
+						<p:panel id="pgppublicacion1"
+							rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+								process="panelGerPubliPublicacion"
+								update="panelGerPubliPublicacion"
+								actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(3)}"
+								disabled="#{not gerenciaPublicaBean.flgPublicacion}"
+								styleClass="btn btn-primary"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="panelGerPubliPublicacion"
+							actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+			<p:panel id="panelGerPubliEvaluacion"
+				rendered="#{gerenciaPublicaBean.flgFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">
+					${titles['TTL_EVALUACION_DESEMPENO']} </span>
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_EVALUACION_GESTION_CARGOS_DESEMPENADOS']}:"
+								title="#{titles.TTL_SELECT} #{titles.LBL_EVALUACION_GESTION_CARGOS_DESEMPENADOS}"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneRadio id="rdbEval"
+								value="#{gerenciaPublicaBean.flgEvaluacion}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="Si" itemValue="true" />
+								<f:selectItem itemLabel="No" itemValue="false" />
+								<p:ajax event="change"
+									update="panelGerPubliEvaluacion frmPrincipal:tabHojaDeVida"
+									process="@this"
+									listener="#{gerenciaPublicaBean.habilitarEvaluacion()}" 
+									oncomplete="datosModificados(1);"/>
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="lblNombreEntidad"
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="lblNombreEntidad"
+								title="#{titles.TTL_SELECT} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION}"
+								value="#{gerenciaPublicaBean.evaluacion.nombreEntidadPublica}"
+								styleClass="form-control-form-act-usua"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{not gerenciaPublicaBean.flgEvaluacion}"
+								required="true">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{gerenciaPublicaBean.listaNombreEntidad}" />
+								<p:ajax event="change"
+									update="cmbCargoEmpresaP cmbCargoEntidadP frmPrincipal:tabHojaDeVida"
+									process="@this"
+									listener="#{gerenciaPublicaBean.deshabilitarCargo()}"
+									oncomplete="datosModificados(1);" />
+							</h:selectOneMenu>
+							<p:message for="lblNombreEntidad" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CARGO_ENTIDAD_PUBLICA']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbCargoEntidadP"
+								title="#{titles.TTL_SELECT} #{titles.LBL_CARGO_ENTIDAD_PUBLICA}"
+								disabled="#{!gerenciaPublicaBean.flgActCargoPub}"
+								value="#{gerenciaPublicaBean.evaluacion.cargoGrado}"
+								styleClass="form-control-form-act-usua"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="0" />
+								<f:selectItems value="#{gerenciaPublicaBean.listaCargoPub}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CARGO_EMPRESA_PRIVADA']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbCargoEmpresaP"
+								title="#{titles.TTL_SELECT} #{titles.LBL_CARGO_EMPRESA_PRIVADA}"
+								value="#{gerenciaPublicaBean.evaluacion.cargoEntidadPrivada}"
+								disabled="#{!gerenciaPublicaBean.flgActCargoPriv}"
+								styleClass="form-control-form-act-usua"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="0" />
+								<f:selectItems value="#{gerenciaPublicaBean.listaCargoPri}" />
+							</h:selectOneMenu>
+
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CALIFICACION_OBTENIDA']}:"
+								for="txtCalificacion"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText id="txtCalificacion" maxlength="3"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_CALIFICACION_OBTENIDA} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								required="true" styleClass="form-control-acti-usua form-control"
+								disabled="#{!gerenciaPublicaBean.flgEvaluacion}"
+								value="#{gerenciaPublicaBean.evaluacion.resultadoEvaluacion}"
+								onkeypress="return numbervalida(event)"
+								onchange="datosModificados(1);">
+							</h:inputText>
+							<p:message for="txtCalificacion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_ESCALA_CALIFICACION']}:"
+								for="txtEscala" styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtEscala" maxlength="100"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_ESCALA_CALIFICACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{!gerenciaPublicaBean.flgEvaluacion}"
+								value="#{gerenciaPublicaBean.evaluacion.escalaEvaluacion}"
+								onchange="datosModificados(1);">
+								<f:attribute value="100" name="maxLength" />
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtEscala" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_INICIO_2']}:"
+								for="cldFechaInicioE"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaInicioE" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_INICIO_2} #{titles['TTL_TIPO_NUMERICO']} "
+								effect="slideDown" mask="true" mode="popup" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								disabled="#{not gerenciaPublicaBean.flgEvaluacion}"
+								value="#{gerenciaPublicaBean.evaluacion.fechaInicioEvaluacion}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+								<p:ajax event="dateSelect" update="cldFechaFinE" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="cldFechaInicioE" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TABLA_FECHA_FIN']}:"
+								for="cldFechaFinE" styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaFinE" required="true" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_TABLA_FECHA_FIN} #{titles['TTL_TIPO_NUMERICO']}"
+								effect="slideDown" mask="true" mode="popup"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								disabled="#{not gerenciaPublicaBean.flgEvaluacion}"
+								value="#{gerenciaPublicaBean.evaluacion.fechaFinEvaluacion}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:attribute name="startDateName"
+									value="${titles['LBL_FECHA_INICIO_2']}" />
+								<f:attribute name="endDateName"
+									value="${titles['LBL_TABLA_FECHA_FIN']}" />
+								<f:attribute name="startDate"
+									value="#{gerenciaPublicaBean.evaluacion.fechaInicioEvaluacion}" />
+								<f:validator validatorId="maxDateValidator" />
+								<f:validator validatorId="dateRangeValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="cldFechaFinE" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:panel id="pgpEvaluacion0"
+							rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton id="btnGuardarEvaluacionDesempenoGP" value="${titles['TTL_SAVE']}"
+								process="panelGerPubliEvaluacion"
+								update="panelGerPubliEvaluacion frmPrincipal:tabHojaDeVida"
+								actionListener="#{gerenciaPublicaBean.guardarEvaluacionDesempeno()}"
+								disabled="#{not gerenciaPublicaBean.flgEvaluacion}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);" />
+						</p:panel>
+						<p:panel id="pgpEvaluacion1"
+							rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+								process="panelGerPubliEvaluacion"
+								update="panelGerPubliEvaluacion frmPrincipal:tabHojaDeVida"
+								actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(4)}"
+								disabled="#{not gerenciaPublicaBean.flgEvaluacion}"
+								styleClass="btn btn-primary"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="panelGerPubliEvaluacion"
+							actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+						
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+			<p:panel id="pnlReconocimiento"
+				rendered="#{gerenciaPublicaBean.flgFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">
+					${titles['TTL_PREMIOS_RECONOCIMIENTOS']} </span>
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<br />
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="rdbReco"
+								value="${titles['LBL_OBTENCION_PREMIOS_GESTION']}:"
+								title="#{titles.TTL_SELECT} #{titles.LBL_OBTENCION_PREMIOS_GESTION}"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneRadio id="rdbReco"
+								value="#{gerenciaPublicaBean.flgReconocimiento}"
+								update="pnlReconocimiento" required="true">
+								<f:selectItem itemLabel="Si" itemValue="true" />
+								<f:selectItem itemLabel="No" itemValue="false" />
+								<p:ajax event="change"
+									update="pnlReconocimiento frmPrincipal:tabHojaDeVida"
+									process="@this"
+									listener="#{gerenciaPublicaBean.habilitarPremios()}" 
+									oncomplete="datosModificados(1);"/>
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TIPO']}:" for="rdbTipo"
+								title="#{titles.TTL_SELECT} #{titles.LBL_TIPO}"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneRadio id="rdbTipo"
+								disabled="#{!gerenciaPublicaBean.flgReconocimiento}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaBean.reconocimiento.flgEsPremio}"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="Premio" itemValue="true" />
+								<f:selectItem itemLabel="Reconocimiento" itemValue="false" />
+							</p:selectOneRadio>
+							<p:message for="rdbTipo" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								for="txtNombreEntidadOrg"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreEntidadOrg" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{gerenciaPublicaBean.reconocimiento.nombreEntidad}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								disabled="#{!gerenciaPublicaBean.flgReconocimiento}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreEntidadOrg" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_PREMIO']}:"
+								for="cldFechaPremio"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaPremio" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_PREMIO} #{titles['TTL_TIPO_NUMERICO']} "
+								effect="slideDown" mask="true" mode="popup"
+								value="#{gerenciaPublicaBean.reconocimiento.fechaReconocimiento}"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								disabled="#{!gerenciaPublicaBean.flgReconocimiento}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<p:message for="cldFechaPremio" display="text" />
+						</div>
+						<div class="col-md-4 media-txt-3">
+							<p:outputLabel value="${titles['LBL_PAIS_RESIDENCIA']}:"
+								for="cmbPaisResidencia"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbPaisResidencia"
+								title="#{titles.TTL_SELECT} #{titles.LBL_PAIS_RESIDENCIA}"
+								value="#{gerenciaPublicaBean.reconocimiento.codPais}"
+								styleClass="form-control-form-act-usua" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{!gerenciaPublicaBean.flgReconocimiento}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="" />
+								<f:selectItems value="#{webUtils.pais}" />
+								<p:ajax event="change"
+									update="cmbDepartamentoResidencia, cmbMunResidencia frmPrincipal:tabHojaDeVida"
+									listener="#{gerenciaPublicaBean.mostratPanelPorPais}"
+									oncomplete="datosModificados(1);" />
+							</h:selectOneMenu>
+							<p:message for="cmbPaisResidencia" display="text" />
+						</div>
+						<div class="col-md-4 media-txt-3">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+								for="cmbDepartamentoResidencia"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbDepartamentoResidencia"
+								title="#{titles.TTL_SELECT} #{titles.LBL_DEPARTAMENTO}"
+								value="#{gerenciaPublicaBean.reconocimiento.codDepartamento}"
+								disabled="#{gerenciaPublicaBean.flgActivarPorPais}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getDeptos(gerenciaPublicaBean.reconocimiento.codPais)}" />
+								<p:ajax event="change"
+									update="cmbMunResidencia frmPrincipal:tabHojaDeVida"
+									oncomplete="datosModificados(1);" />
+							</h:selectOneMenu>
+							<p:message for="cmbDepartamentoResidencia" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MUNICIPIO']}:"
+								for="cmbMunResidencia"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbMunResidencia"
+								title="#{titles.TTL_SELECT} #{titles.LBL_MUNICIPIO}"
+								value="#{gerenciaPublicaBean.reconocimiento.codMunicipio}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{gerenciaPublicaBean.flgActivarPorPais}"
+								styleClass="form-control-form-act-usua"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(gerenciaPublicaBean.reconocimiento.codDepartamento)}" />
+							</h:selectOneMenu>
+							<p:message for="cmbMunResidencia" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:panel id="pgpReconocimiento0"
+							rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton id="btnGuardarPremiosGP" value="${titles['TTL_SAVE']}"
+								actionListener="#{gerenciaPublicaBean.guardarReconocimiento}"
+								process="pnlReconocimiento" update="pnlReconocimiento"
+								disabled="#{!gerenciaPublicaBean.flgReconocimiento}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);" />
+						</p:panel>
+						<p:panel id="pgpReconocimiento1"
+							rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+								process="pnlReconocimiento" update="pnlReconocimiento"
+								actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(5)}"
+								disabled="#{!gerenciaPublicaBean.flgReconocimiento}"
+								styleClass="btn btn-primary"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="pnlReconocimiento frmPrincipal:tabHojaDeVida"
+							actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+							
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+			<p:panel id="pnlProyecto"
+				rendered="#{gerenciaPublicaBean.flgFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">${titles['TTL_PARTICIPACION_PROYECTOS']}
+				</span>
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<br />
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_PARTICIPACION_GESTION_PROYECTOS']}:"
+								title="#{titles.TTL_SELECT} #{titles.LBL_PARTICIPACION_GESTION_PROYECTOS}"
+								for="rdbParProye" styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectOneRadio id="rdbParProye"
+								value="#{gerenciaPublicaBean.flgPacionProyecto}"
+								update="pnlProyecto">
+								<f:selectItem itemLabel="Si" itemValue="true" />
+								<f:selectItem itemLabel="No" itemValue="false" />
+								<p:ajax event="change"
+									update="pnlProyecto frmPrincipal:tabHojaDeVida" process="@this"
+									listener="#{gerenciaPublicaBean.habilitarParProyecto()}"
+									oncomplete="datosModificados(1);" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_NOMBRE_PROYECTO']}:"
+								for="txtNombreProyecto"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreProyecto" required="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_PROYECTO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+								maxlength="999" styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaBean.participacionProyecto.nombreProyecto}"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreProyecto" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_ROL_DESEMPENADO']}:"
+								for="txtRolDesempenado"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtRolDesempenado"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_ROL_DESEMPENADO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+								required="true" maxlength="999"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaBean.participacionProyecto.rolLaborado}"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtRolDesempenado" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								for="txtNomEntidad"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNomEntidad" required="true" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaBean.participacionProyecto.nombreEntidad}"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNomEntidad" display="text" />
+
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PAIS_RESIDENCIA']}:"
+								for="cmbPaisR" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbPaisR" required="true"
+								title="#{titles.TTL_SELECT} #{titles.LBL_PAIS_RESIDENCIA}"
+								value="#{gerenciaPublicaBean.participacionProyecto.codPais}"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.pais}" />
+								<p:ajax event="change"
+									update="cmbDepartamentoR cmbCiudadR frmPrincipal:tabHojaDeVida"
+									listener="#{gerenciaPublicaBean.mostratPanelPorPaisProject}" 
+									oncomplete="datosModificados(1);"/>
+							</h:selectOneMenu>
+							<p:message for="cmbPaisR" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+								for="cmbDepartamentoR"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbDepartamentoR" required="true"
+								title="#{titles.TTL_SELECT} #{titles.LBL_DEPARTAMENTO}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaBean.participacionProyecto.codDepartamento}"
+								styleClass="form-control-form-act-usua"
+								disabled="#{gerenciaPublicaBean.flgActivarPorPaisProject}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getDeptos(gerenciaPublicaBean.participacionProyecto.codPais)}" />
+								<p:ajax event="change"
+									update="cmbCiudadR frmPrincipal:tabHojaDeVida" 
+									oncomplete="datosModificados(1);"/>
+							</h:selectOneMenu>
+							<p:message for="cmbDepartamentoR" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MUNICIPIO']}:"
+								for="cmbCiudadR" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="cmbCiudadR"
+								title="#{titles.TTL_SELECT} #{titles.LBL_MUNICIPIO}"
+								value="#{gerenciaPublicaBean.participacionProyecto.codMunicipio}"
+								styleClass="form-control-form-act-usua" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{gerenciaPublicaBean.flgActivarPorPaisProject}"
+								onchange="datosModificados(1);">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(gerenciaPublicaBean.participacionProyecto.codDepartamento)}" />
+							</h:selectOneMenu>
+							<p:message for="cmbCiudadR" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_INICIO_2']}:"
+								for="cldFechaInicioP"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaInicioP" required="true" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_INICIO_2} #{titles['TTL_TIPO_NUMERICO']}"
+								effect="slideDown" mask="true" mode="popup"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								value="#{gerenciaPublicaBean.participacionProyecto.fechaInicio}"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+								<p:ajax event="dateSelect"
+									update="cldFechaFinPro frmPrincipal:tabHojaDeVida" />
+							</p:calendar>
+							<p:message for="cldFechaInicioP" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}:"
+								for="cldFechaFinPro"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar id="cldFechaFinPro" navigator="true"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_FECHA_FIN_2} #{titles['TTL_TIPO_NUMERICO']}"
+								effect="slideDown" mask="true" mode="popup"
+								pattern="#{fechaFormato}" maxdate="#{fechaSistema}"
+								value="#{gerenciaPublicaBean.participacionProyecto.fechaTerminacion}"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								locale="#{lenguajeBean.localeCode}"
+								onselect="datosModificados(1);">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:attribute name="startDateName"
+									value="${titles['LBL_FECHA_INICIO_2']}" />
+								<f:attribute name="endDateName"
+									value="${titles['LBL_FECHA_FIN_2']}" />
+								<f:attribute name="startDate"
+									value="#{gerenciaPublicaBean.participacionProyecto.fechaInicio}" />
+								<f:validator validatorId="maxDateValidator" />
+								<f:validator validatorId="dateRangeValidator" />
+							</p:calendar>
+							<p:message for="cldFechaFinPro" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:panel id="pgpParticipacion0"
+							rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton id="btnGuardarParticipacionProyectosGP" value="${titles['TTL_SAVE']}"
+								process="pnlProyecto" update="pnlProyecto"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								actionListener="#{gerenciaPublicaBean.guardarParticipacionProyecto}"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;" 
+								oncomplete="datosModificados(0);"/>
+						</p:panel>
+						<p:panel id="pgpParticipacion1"
+							rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+							style="margin-bottom: 0%;">
+							<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+								process="pnlProyecto" update="pnlProyecto"
+								disabled="#{not gerenciaPublicaBean.flgPacionProyecto}"
+								actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(6)}"
+								styleClass="btn btn-primary"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(1);" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="pnlProyecto"
+							actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+						
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</p:panel>
+			<p:panel id="pnlInstitucion"
+				rendered="#{gerenciaPublicaBean.flgFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">${titles['TTL_PARTICIPACION_COORPORACIONES']}
+				</span>
+				<br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<br />
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="rdbParCor"
+								value="${titles['LBL_PARTICIPACION_COORPORACIONES_ENTIDADES']}:"
+								styleClass="log-label form-label-formularios"
+								title="#{titles.TTL_SELECT} #{titles.LBL_PARTICIPACION_COORPORACIONES_ENTIDADES}  #{titles['TTL_TIPO_ALFANUMERICO']}" />
+							<p:selectOneRadio id="rdbParCor"
+								value="#{gerenciaPublicaBean.flgInstitucion}"
+								update="pnlInstitucion">
+								<f:selectItem itemLabel="Si" itemValue="true" />
+								<f:selectItem itemLabel="No" itemValue="false" />
+								<p:ajax event="change"
+									update="pnlInstitucion frmPrincipal:tabHojaDeVida"
+									process="@this"
+									listener="#{gerenciaPublicaBean.habilitarParInstitucion()}"
+									oncomplete="datosModificados(1);" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="txtNomCoorporacion"
+								value="${titles['LBL_NOMBRE_COORPORACION_SOCIEDAD']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNomCoorporacion" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_COORPORACION_SOCIEDAD} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								required="true" styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaBean.participacionInstitucion.nombreEntidadOrganizacion}"
+								disabled="#{not gerenciaPublicaBean.flgInstitucion}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNomCoorporacion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_RAZON_SOCIAL_INSTITUCION']}:"
+								for="txtRazonSocial"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtRazonSocial"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_RAZON_SOCIAL_INSTITUCION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								required="true" maxlength="999"
+								value="#{gerenciaPublicaBean.participacionInstitucion.nombreRazonSocialInstitucion}"
+								disabled="#{not gerenciaPublicaBean.flgInstitucion}">
+								<f:validator validatorId="maxByteLengthValidator" 
+								onchange="datosModificados(1);"/>
+							</p:inputText>
+							<p:message for="txtRazonSocial" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="txtNomEntidadOrganizacion"
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNomEntidadOrganizacion" maxlength="999"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_NOMBRE_ENTIDAD_ORGANIZACION} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								value="#{gerenciaPublicaBean.participacionInstitucion.nombreInstitucion}"
+								disabled="#{not gerenciaPublicaBean.flgInstitucion}"
+								onchange="datosModificados(1);">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNomEntidadOrganizacion" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:panel id="pgpParticipacionInst0"
+							rendered="#{!gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton id="btnGuardarParticipacionCorporacionesGP" styleClass="btn btn-primary"
+								value="${titles['TTL_SAVE']}" process="pnlInstitucion"
+								update="pnlInstitucion"
+								actionListener="#{gerenciaPublicaBean.guardarParticipacionInstitucion}"
+								disabled="#{not gerenciaPublicaBean.flgInstitucion}"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);" />
+						</p:panel>
+						<p:panel id="pgpParticipacionInst1"
+							rendered="#{gerenciaPublicaBean.flgValidRolPermission}"
+							style="padding: 0%;">
+							<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+								process="pnlInstitucion" update="pnlInstitucion"
+								disabled="#{not gerenciaPublicaBean.flgInstitucion}"
+								actionListener="#{gerenciaPublicaBean.confirmarDatosGuardar(7)}"
+								styleClass="btn btn-primary"
+								style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="datosModificados(0);" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="pnlInstitucion"
+							actionListener="#{gerenciaPublicaBean.confirmarCancelar()}"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+					
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				<br />
+				<br />
+			</p:panel>
+		</p:outputPanel>
+	</div>
+
+	
+	<!-- MODAL DE CONFIRMACIÓN DE CANCELAR -->
+	<p:dialog id="ConfirmarCancelar3" minHeight="600"
+		widgetVar="ConfirmarCancelar3" modal="true" resizable="false"
+		closeOnEscape="false" draggable="false" closable="false"
+		responsive="true">
+		<p:panel id="panelConfirmacionCancelar3"
+			style="background: transparent;">
+			<div class="col-md-12" align="center">
+				<p:outputLabel value="${messages['MSG_PREGUNTA_CANCELAR']}"
+					style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+					escape="false" />
+			</div>
+			<hr
+				style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+			<div class="row" align="center">
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_YES']}"
+						styleClass="btn btn-primary"
+						process="@this"
+						style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+						actionListener="#{gerenciaPublicaBean.cancelar()}"
+						update="frmPrincipal:tabHojaDeVida:tabView frmPrincipal:tabHojaDeVida">
+
+					</p:commandButton>
+				</div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_NO']}" process="@this"
+						styleClass="btn btn-default"
+						style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+						actionListener="#{gerenciaPublicaBean.cancelarCancelar()}"
+						update="tabView frmPrincipal:tabHojaDeVida">
+
+					</p:commandButton>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</p:panel>
+	</p:dialog>
+
+</ui:composition>

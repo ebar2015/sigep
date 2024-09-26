@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<h:outputStylesheet name="/css/dialog.css" />
+		<h:outputStylesheet name="/css/style.css" />
+		<h:outputStylesheet name="/css/bootstrap.css" />
+		<h:outputScript library="js" name="ventana.js" />
+		<link rel="icon" href='#{resources["favicon.ico"]}' />
+		<title>#{empty pageTitle ? 'Page Title' : pageTitle}</title>
+			
+		<p:importConstants type="co.gov.dafp.sigep2.filtro.FiltroUsuario" var="h"/>
+		<meta charset="UTF-8" />
+		<meta content="#{h.VALUE_X_FRAME_OPTIONS}" name="#{h.HEADER_X_FRAME_OPTIONS}" />
+		<meta content="#{h.VALUE_PRAGMA}" name="#{h.HEADER_PRAGMA}" />
+		<meta content="#{h.VALUE_CACHE_CONTROL}" name="#{h.HEADER_CACHE_CONTROL}" />
+		<meta content="#{h.VALUE_X_UA_COMPATIBLE}" name="#{h.HEADER_X_UA_COMPATIBLE}" />
+		<meta content="#{h.VALUE_EXPIRES}" name="#{h.HEADER_EXPIRES}" />
+		<meta content="#{h.VALUE_X_XSS_PROTECTION}" name="#{h.HEADER_X_XSS_PROTECTION}" />
+		<meta content="#{h.VALUE_X_CONTENT_TYPE_OPTIONS}" name="#{h.HEADER_X_CONTENT_TYPE_OPTIONS}" />
+		<meta content="#{h.VALUE_DESCRIPTION}" name="#{h.HEADER_DESCRIPTION}" />
+		<meta content="#{h.VALUE_KEYWORDS}" name="#{h.HEADER_KEYWORDS}" />
+		<meta content="#{h.VALUE_VIEWPORT}" name="#{h.HEADER_VIEWPORT}" />
+
+		<h:outputScript>
+		function handleDrop(event, ui) {
+			var droppedCar = ui.draggable;
+
+			droppedCar.fadeOut('fast');
+		}
+		window.sync = function(t){  
+	        PF('knob').setValue(t.current);  
+	    }
+	</h:outputScript>
+	</h:head>
+
+	<h:body style="font-size:0.8em;">
+		<div class="ui-fluid" style="width: auto">
+			<f:view encoding="${configurationView['CNS_ENCODING']}"
+				locale="#{lenguajeBean.locale}">
+				<ui:fragment rendered="#{sesionBean.sesionValida}">
+					<ui:debug
+						rendered="#{facesContext.application.projectStage == 'Development'}" />
+					<h:form enctype="multipart/form-data">
+						<p:ajaxStatus onstart="PF('loadingDialog').show()"
+							onsuccess="PF('loadingDialog').hide()"
+							oncomplete="PF('loadingDialog').hide()"
+							onerror="PF('loadingDialogError').show()" />
+						<p:panel id="panelPrincipal">
+							<p:focus context="panelPrincipal" />
+							<h:panelGroup rendered="#{!empty pageSubtitle}">
+								<h1>
+									<p:outputLabel
+										value="#{empty pageSubtitle ? 'Page Title' : pageSubtitle}" />
+								</h1>
+							</h:panelGroup>
+							<p:separator />
+							<p:messages id="growl" showDetail="true" globalOnly="true" />
+							<p:separator />
+							<p:sticky target="stickyBotones"
+								rendered="#{sesionBean.sesionValida}" />
+							<h:panelGroup id="stickyBotones">
+								<div id="botones">
+									<ui:insert name="botones" />
+								</div>
+							</h:panelGroup>
+							<p:separator />
+							<ui:insert name="main" />
+						</p:panel>
+					</h:form>
+				</ui:fragment>
+
+				<ui:fragment rendered="#{not sesionBean.sesionValida}">
+					<p:graphicImage alt="${titles['TTL_SYSTEM_OWNER']}"
+						value="${configurationView['CNS_LOGO']}" />
+					<h:form>
+						<p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+							layout="grid" styleClass="ui-panelgrid-blank">
+							<h:panelGroup id="loginForm">
+								<div id="login">
+									<h1>
+										<h:outputText value="${titles['TTL_SYSTEM_NAME']}" />
+									</h1>
+								</div>
+							</h:panelGroup>
+						</p:panelGrid>
+					</h:form>
+				</ui:fragment>
+				<p:dialog widgetVar="loadingDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false"
+					style="width:auto;height:auto">
+					<p:graphicImage dir="resources" name="/images/loading.gif"
+						height="45" width="70" alt="${messages['DLG_PROCESANDO']}"
+						title="${messages['MSG_PROCESANDO']}" />
+				</p:dialog>
+
+				<p:dialog widgetVar="loadingDialogError" modal="true"
+					draggable="false" closable="true" resizable="false"
+					header="${messages['DLG_PROCESO_FALLIDO']}">
+					<h:outputText value="${messages['DLG_PAGE_EXCEPTION_ERROR']}" />
+				</p:dialog>
+
+				<p:dialog modal="true" widgetVar="statusDialog" showHeader="false"
+					draggable="false" closable="false" resizable="false">
+					<p:graphicImage dir="resources" name="/images/loading.gif"
+						height="45" width="45" alt="${messages['DLG_PROCESANDO']}"
+						title="${messages['MSG_PROCESANDO']}" />
+					<h:outputText value="${messages['MSG_PROCESANDO']}" />
+				</p:dialog>
+			</f:view>
+		</div>
+	</h:body>
+</ui:composition>

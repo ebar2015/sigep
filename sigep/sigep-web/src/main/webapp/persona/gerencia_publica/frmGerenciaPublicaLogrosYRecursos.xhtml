@@ -1,0 +1,296 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<p:panel id="pnlGerenciaPublicaLogrosRecursos">
+		<br /><br />
+		<div class="col-md-12 row row-background-white">	
+			<p:dataTable id="tblLogrosYRecursos" 
+	           paginator="true"
+	           reflow="true"
+	           rows="#{paginatorSize}"
+			   rowsPerPageTemplate="#{paginatorsSize}"
+	           currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+	           paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+	           var="logro" 
+	           value="#{gerenciaPublicaHVBean.lstLogrosYRecursos}"
+	           emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+	           
+	           <p:column sortBy="#{logro.nombreEntidad}"  style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}" /></f:facet>
+					<h:outputText value="#{logro.nombreEntidad}"/>
+				</p:column>
+	           
+	           <p:column sortBy="#{logro.numEmpleados}"  style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_EMPLEADOS_ORGANZACION']}" /></f:facet>
+					<h:outputText value="#{logro.numEmpleados}"/>
+				</p:column>
+	           
+	           <p:column sortBy="#{logro.numPersonasCargo}"  style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_EMPLEADOS_A_CARGO']}" /></f:facet>
+					<h:outputText value="#{logro.numPersonasCargo}"/>
+				</p:column>
+	          							
+				<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"  style="opacity: 1!important; text-align:center!important;">
+					<p:commandButton id="idModificarLogroRecurso" title="${titles['TTL_EDIT']}"
+						             icon="icon-edit" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.modificarLogroRecurso(logro)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlLogroRecursoNuevo"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+						             oncomplete="datosModificados(1);">
+					</p:commandButton>	
+					<p:commandButton id="idConsultarLogroRecurso" title="${titles['TTL_CONSULT']}"
+						             icon="icon-view" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.consultarLogroRecurso(logro)}"
+						             update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:pnlLogroRecursoNuevo"
+						             >
+					</p:commandButton>	
+					<!-- 
+					<p:commandButton id="idEliminarLogroRecurso" title="${titles['TTL_DELETE']}"
+						             icon="icon-delete" styleClass="icon-btn" process="@this"
+						             action="#{gerenciaPublicaHVBean.solicitarConfirmacionEliminarLogroRecurso(logro)}"
+						             update="frmPrincipal:tabHojaDeVida frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublica"
+						             rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					</p:commandButton>
+					 -->								             
+				</p:column>			
+			</p:dataTable>	
+			
+		</div>
+	
+		<br />
+		<h:panelGroup id="pnlLogroRecursoNuevo">
+			<p:panel id="pnlLogroRecurso" rendered="#{gerenciaPublicaHVBean.flgHabilitaPanelLogroRecurso}"
+						 class="col-md-12 row row-background-white" style="margin-top: 3.3em!important;" >
+				<p:spacer height="2" style="padding-top: 3em!important;"/>
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_MODIFICAR_LOGRO']}</span> 
+				<br /> <br />
+				
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col-md-12">
+					    <div class="col-md-4" style="display: inline-table;">
+					    <p:outputLabel
+										value="#{titles.TTL_TIPO_REGISTRO}:"
+										title="#{titles.TTL_SELECT} #{titles.LBL_EXPERIENCIA_LABORAL_ADMINISTRACION_RECURSOS_ECONOMICOS}"
+										styleClass="log-label form-label-formularios"
+										style="margin-bottom: 0.9em;" />
+					    <p:selectOneRadio id="rdbLogros"
+											value="#{gerenciaPublicaHVBean.logroRecursoProcesar.codTipoRegistro}"
+											disabled="#{gerenciaPublicaHVBean.flgLogroRecursoEsConsulta}">
+											<f:selectItem itemLabel="#{titles.LBL_RECURSO_ECONOMICO}" 	itemValue="1" />
+											<f:selectItem itemLabel="#{titles.LBL_PERSONAL}"            itemValue="2" />
+											<f:selectItem itemLabel="#{titles.LBL_AMBOS}"               itemValue="3" />
+											<p:ajax event="change" process="@this" listener="#{gerenciaPublicaHVBean.habilitaPanelesLogros()}"
+											        update="pnlGpRecursosEconomicos pnlGpRecursosPersonal
+											                frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica
+											                frmPrincipal:tabHojaDeVida"
+												    oncomplete="datosModificados(1);"/>
+								</p:selectOneRadio>
+					    
+					    </div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}:"
+								for="txtNombreEntidad"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText id="txtNombreEntidad"
+								title="#{titles.TTL_INGRESE} #{titles['LBL_NOMBRE_ENTIDAD_ORGANIZACION']}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								onkeypress="return numbervalida(event)"
+								value="#{gerenciaPublicaHVBean.logroRecursoProcesar.nombreEntidad}"
+								styleClass="form-control-acti-usua form-control"
+								disabled="true">
+							</h:inputText>							
+							<p:message for="txtNombreEntidad" display="text" />
+						</div>
+					
+					<div class="col-md-4" >
+							<p:outputLabel value="${titles['LBL_LOGRO_SOBRESALIENTE']}:"
+								for="txtLogroSobre"
+								styleClass="log-label form-label-formularios" />
+							<p:inputTextarea rows="2" cols="25" id="txtLogroSobre"
+								title="#{titles.LBL_LOGRO_SOBRESALIENTE} #{titles['TTL_TIPO_ALFANUMERICO']}"
+								counterTemplate="Quedan {0} caracteres." autoResize="false"
+								style="resize: none;overflow-x: hidden; word-wrap: break-word!important; height: 2.61em!important;"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control"
+								value="#{gerenciaPublicaHVBean.logroRecursoProcesar.logroSobresaliente}"
+								onchange="datosModificados(1);"
+								disabled="#{gerenciaPublicaHVBean.flgLogroRecursoEsConsulta}">
+								<f:validateLength minimum="0" maximum="3000" />
+								<p:keyFilter regEx="/[a-zA-Z 0-9 ñÑáéíóúÁÉÍÓÚ &amp;]/i" />
+							</p:inputTextarea>
+							<p:message for="txtLogroSobre" display="text" />
+						</div>
+					</div>
+				</div>	
+				<br /><br /><br />
+				<p:panel id="pnlGpRecursosEconomicos"  rendered="#{gerenciaPublicaHVBean.logroAdmonRecursoEconomico()}">
+				<hr class="hr-style hr-style-two" />
+				<p:spacer height="2" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_RECURSO_ECONOMICO']} </span> 
+				<br /> <br />
+					<div class="row">
+						<div class="col-md-12" align="center">		
+							<div class="col-md-4"></div>			
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['LBL_ASIGNACION_RECURSOS_ECONOMICOS']}:"
+									styleClass="log-label form-label-formularios">
+								</p:outputLabel>
+								<p:inputNumber id="asignacionRecursos"
+									value="#{gerenciaPublicaHVBean.logroRecursoProcesar.valorRecursoEconomico}"
+									symbol="$ " 
+									decimalSeparator=","
+									thousandSeparator="." decimalPlaces="0"
+									title="Ingresar el valor en pesos colombianos" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									onkeypress="return numbervalida(event)"
+									oncomplete="datosModificados(1);"
+									disabled="#{gerenciaPublicaHVBean.flgLogroRecursoEsConsulta}">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpReTammaxValor}" name="maxLength" />
+									<f:validator validatorId="numberValidator" />									
+								</p:inputNumber>
+								<p:message for="asignacionRecursos" display="text" />
+							</div>	
+							</div>
+					</div>
+				</p:panel>
+				<br />
+				<p:panel id="pnlGpRecursosPersonal" rendered="#{gerenciaPublicaHVBean.logroAdmonPersonal()}">
+				<br /><br />
+				<hr class="hr-style hr-style-two" />
+				<p:spacer height="2" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_ADMIN_PERSONAL']}</span> 
+				<br /> <br />											
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p:outputLabel for="txtNumeroEmpleados"
+									value="${titles['LBL_CANTIDAD_EMPLEADOS_ENTIDAD']}:"
+									styleClass="log-label form-label-formularios" />
+								<h:inputText id="txtNumeroEmpleados"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_CANTIDAD_EMPLEADOS_ENTIDAD}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									onkeypress="return numbervalida(event)"
+									value="#{gerenciaPublicaHVBean.logroRecursoProcesar.numEmpleados}"
+									maxlength="#{maxNumeros.gpReTammaxNumeroempleados}"
+									styleClass="form-control-acti-usua form-control"
+									onchange="datosModificados(1);"
+									disabled="#{gerenciaPublicaHVBean.flgLogroRecursoEsConsulta}">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpReTammaxNumeroempleados}" name="maxLength" />
+									<f:validator validatorId="numberValidator" />										
+								</h:inputText>
+								<p:message for="txtNumeroEmpleados" display="text" />
+							</div>	
+							<div class="col-md-4" style="margin-top: 1.9em;">
+								<p:outputLabel value="${titles['LBL_PERSONAL_A_CARGO']}:"
+									for="txtEmpleadosMando"
+									styleClass="log-label form-label-formularios" />
+								<h:inputText id="txtEmpleadosMando" maxlength="#{maxNumeros.gpReTammaxNumerocargos}"
+									title="#{titles.TTL_INGRESE} #{titles.LBL_PERSONAL_A_CARGO}"
+									onkeypress="return numbervalida(event)"
+									value="#{gerenciaPublicaHVBean.logroRecursoProcesar.numPersonasCargo}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-acti-usua form-control"
+									onchange="datosModificados(1);"
+									disabled="#{gerenciaPublicaHVBean.flgLogroRecursoEsConsulta}">
+									<f:attribute value="1" name="minLength" />
+									<f:attribute value="#{maxNumeros.gpReTammaxNumerocargos}" name="maxLength" />
+									<f:validator validatorId="numberValidator" />										
+								</h:inputText>
+								<p:message for="txtEmpleadosMando" display="text" />
+							</div>
+							
+						</div>
+					</div>
+				</p:panel>
+				
+				
+				<div class="row" align="center">
+				<BR /><BR />
+					<div class="col-md-4 media-btn-gerencia"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton id="btnGuardarLogrosGP" value="${titles['TTL_SAVE']}"
+											process="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"
+											update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica frmPrincipal:tabHojaDeVida
+											        frmPrincipal:informacionPersonalUsuario"
+											styleClass="btn btn-primary"
+											style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+											oncomplete="datosModificados(0);"
+											actionListener="#{gerenciaPublicaHVBean.guardarGerenciaPublica()}"
+											disabled="#{gerenciaPublicaHVBean.flgLogroRecursoEsConsulta}">
+						</p:commandButton>	
+					</div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+							action="#{gerenciaPublicaHVBean.solicitarConfirmacionCancelarLogroRecurso()}"
+							update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublica"
+							>
+						</p:commandButton>
+					</div>
+				</div>
+		</p:panel>
+		</h:panelGroup>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionGerenciaPublica" id="dlgConfirmarAccionGerenciaPublica" minHeight="300" 
+					modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{gerenciaPublicaHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{gerenciaPublicaHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionGerenciaPublica').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionGerenciaPublica').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>				
+	</p:panel>
+</ui:composition>
+
+

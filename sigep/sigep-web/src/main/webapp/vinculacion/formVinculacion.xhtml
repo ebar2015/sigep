@@ -1,0 +1,437 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<p:outputPanel id="panelVincular">
+		<p:panel id="subPanelVincular" rendered="#{personaVinculacionBean.visiblePanelVinc}">
+			
+			<br /> <br />
+			<div class="col-md-12" align="center">
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; text-align: center!important">
+				${titles['TTL_VINCULACION_SP']} </span>
+				</div>
+				
+				<br /> <br />
+			<div class="row row-background-white" id="child-tab-data-basic">
+				<br /> <br />
+				<hr class="hr-style hr-style-two " />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em; ">
+					${titles['TTL_DATOS_BASICOS_IDENTI']} </span> <br /> <br />
+				<div class="col-md-3" align="center">
+					<div class="col-md-12">
+						<h:graphicImage url="#{personaVinculacionBean.persona.imagenUsuario}"
+							height="150" width="150" style="border-radius:75px; margin-bottom:3%;">
+						</h:graphicImage>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<h4 class="h4-perfil h4-perfil-media">
+						<p:outputLabel class="title-datos-basicos"
+							value="#{personaVinculacionBean.persona.nombreUsuario}" />
+					</h4>
+					<br />
+					<div class="col-md-12"
+						style="margin-left: -1%; border-top: 1px solid #B3B3B3 !important;">
+						<br />
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['TTL_TIPO_IDENTIFICACION']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600!important;">
+							</p:outputLabel>
+							<p:outputLabel
+								value=" #{personaVinculacionBean.persona.nombreTipoDocuento}"
+								styleClass="log-label form-label"
+								style="text-transform: capitalize!important; ">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['TTL_NICK_NAME']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel
+								value="#{personaVinculacionBean.persona.numeroIdentificacion}"
+								styleClass="log-label form-label">
+							</p:outputLabel>
+						</div>
+					</div>
+					<div class="col-md-12" style="margin-left: -1%;">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['LBL_FECHA_NACIMIENTO']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600!important;;">
+							</p:outputLabel>
+							<p:outputLabel
+								value="#{personaVinculacionBean.persona.fechaNacimientoString}"
+								styleClass="log-label form-label">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_MAIL']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel value="#{personaVinculacionBean.persona.correoElectronico}"
+								styleClass="log-label form-label labelEmailPersonal"
+								style="text-transform: lowercase!important;">
+							</p:outputLabel>
+						</div>
+					</div>
+					<div class="col-md-12"
+						style="margin-left: -1%; border-bottom: 1px solid #B3B3B3 !important;">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['TTL_TRANSVERSAL_TIPO_GENERO']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel value="#{personaVinculacionBean.persona.nombreGenero}"
+								styleClass="log-label form-label"
+								style="text-transform: capitalize!important;">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			
+			<div class="row row-background-white" id="child-tab-data-basic">
+				<br />
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="#{personaVinculacionBean.strTextoEntidadAVincular}" styleClass="advisor" />
+				</div>
+				<br /> <br />
+				<hr class="hr-style hr-style-two" />
+				<br /> <br />
+				<br /><br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="clasificacionPlanta" value="${titles['LBL_CLASIFICACION_PLANTA']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="clasificacionPlanta" value="#{personaVinculacionBean.vinculacion.codClasificacionPlanta}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_PLANTA']}"
+								filter="true" filterMatchMode ="contains"
+								styleClass="form-control-form-act-usua"
+								scrollable="true" scrollHeight="100">
+								<f:selectItem itemValue="#{null}" itemLabel="${titles['TTL_SELECT']}"/>
+								<f:selectItems value="#{webUtils.getClasificacionPlantaByEntidad(personaVinculacionBean.lngValorEntidad)}" />
+								<p:ajax event="change" listener="#{personaVinculacionBean.limpiarCampos()}" process="@this" 
+									update="clasePlanta cargo naturalezaEmpleo tipoNombramiento dependenciaEstructural
+										vacantes fechaPosesion  personaExpuesta"/>
+							</p:selectOneMenu>
+							<p:message for="clasificacionPlanta" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="clasePlanta" value="${titles['LBL_CLASE_PLANTA']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="clasePlanta" value="#{personaVinculacionBean.vinculacion.codClasePlanta}" 
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CLASE']}"
+								styleClass="form-control-form-act-usua" default="${titles['TTL_SELECT']}" 
+								scrollable="true" scrollHeight="100"
+								filterMatchMode ="contains" filter="true">
+								<f:selectItem itemValue="#{null}" itemLabel="${titles['TTL_SELECT']}"/>
+								<f:selectItems value="#{webUtils.getClasePlantaByEntidad(personaVinculacionBean.lngValorEntidad,personaVinculacionBean.vinculacion.codClasificacionPlanta)}" />
+								<p:ajax event="change" process="@this" update="cargo clasePlanta clasificacionPlanta" listener="#{personaVinculacionBean.validarExistenciaCargo()}"/>
+							</p:selectOneMenu>
+							<p:message for="clasePlanta" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CARGO']}:" for="cargo" styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="cargo" value="#{personaVinculacionBean.vinculacion.codEntidadPlantaDetalle}" 
+								filter="true"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CARGO']}"
+								scrollable="true" scrollHeight="100" >
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+								<f:selectItems value="#{webUtils.getCargoPlanta(personaVinculacionBean.lngValorEntidad,personaVinculacionBean.vinculacion.codClasificacionPlanta,personaVinculacionBean.vinculacion.codClasePlanta )}" />
+								<p:ajax listener="#{personaVinculacionBean.validarCargo()}"
+									process="@this" update="@this naturalezaEmpleo, tipoNombramiento, 
+									panelDependenciaPlanta, vacantes, titularidadCargo, personaExpuesta" />
+							</p:selectOneMenu>
+							<p:message for="cargo" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="naturalezaEmpleo" styleClass="log-label form-label-formularios"
+								value="${titles['TTL_NATURALEZA_EMPLEO']}:"/>
+							<p:inputText id="naturalezaEmpleo" value="#{personaVinculacionBean.vinculacion.nombreNaturalezaEmpleo}" 
+								 readonly="true"  title="${titles['TTL_NATURALEZA_EMPLEO']}">
+							</p:inputText>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TIPO_NOMBRAMIENTO']}:" for="tipoNombramiento"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="tipoNombramiento" value="#{personaVinculacionBean.vinculacion.codTipoNombramiento}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_NOMBRAMIENTO']}"
+								styleClass="form-control-form-act-usua"
+								scrollable="true" scrollHeight="100"
+								filter="true" filterMatchMode ="contains">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+								<f:selectItems value="#{webUtils.getTipoNombramiento(personaVinculacionBean.vinculacion.codNaturalezaEmpleo)}" />
+								<p:ajax
+									listener="#{personaVinculacionBean.validarTitularidaEnCargo()}"
+									process="@this" update="titularidadCargo" />
+							</p:selectOneMenu>
+							<p:message for="tipoNombramiento" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputPanel id="panelDependenciaPlanta">
+								<p:panel rendered="#{!personaVinculacionBean.flgTipoPlanta}">
+									<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:" for="dependenciaGlobal" styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="dependenciaGlobal"
+										filter="true"
+										scrollable="true" scrollHeight="100"
+										value="#{personaVinculacionBean.vinculacion.codDependenciaEntidad}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+										title="${titles['TTL_SELECT']} ${titles['LBL_DEPENDENCIA']}"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+										<f:selectItems value="#{webUtils.getDependenciaEntidadFilter(personaVinculacionBean.lngValorEntidad)}" />
+									</p:selectOneMenu>
+									<p:message for="dependenciaGlobal" display="text" />
+								</p:panel>
+								<p:panel rendered="#{personaVinculacionBean.flgTipoPlanta}">
+									<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:" for="dependenciaEstructural" styleClass="log-label form-label-formularios" />
+									<p:inputText id="dependenciaEstructural" value="#{personaVinculacionBean.vinculacion.strNombreDependencia}"
+										readonly="true" title="${titles['LBL_DEPENDENCIA']}" />
+								</p:panel>
+							</p:outputPanel>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_VACANTES']}:" styleClass="log-label form-label-formularios" />
+							<p:inputText id="vacantes" class="form-control-acti-usua" value="#{personaVinculacionBean.vinculacion.vacantes}" 
+								readonly="true" title="${titles['TTL_VACANTES']}"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel styleClass="log-label form-label-formularios" for="fechaPosesion"
+								value="${titles['LBL_FECHA_POSESION']}:" />
+							<p:calendar id="fechaPosesion" mask="true" 
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+								maxdate="#{fechaSistema}" mode="popup" pattern="#{fechaFormato}" effect="slideDown"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_POSESION']}"
+								value="#{personaVinculacionBean.vinculacion.fechaPosesion}">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="fechaPosesion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel styleClass="log-label form-label-formularios"
+								value="${titles['TTL_CALIDAD_MEDICO_O_DOCENTE']}:" />
+							<p:selectOneRadio value="#{personaVinculacionBean.vinculacion.flgMedicoDocente}">
+								<f:selectItem itemLabel="${titles['TTL_YES']}" itemValue="1" />
+								<f:selectItem itemLabel="${titles['TTL_NO']}" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="titularidadCargo" styleClass="log-label form-label-formularios"
+								value="${titles['TTL_TITULARIDAD_CARGO']}:" />
+							<p:selectOneRadio id="titularidadCargo" value="#{personaVinculacionBean.vinculacion.flgTitularidadCargo}"
+								disabled="#{personaVinculacionBean.flgTitularidad}">
+								<f:selectItem itemLabel="${titles['TTL_YES']}" itemValue="1" />
+								<f:selectItem itemLabel="${titles['TTL_NO']}" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				
+				<div class="row">
+							<div class="col-md-12" align="center">
+								<p:outputLabel value="${titles['TTL_EXPUESTA_POLITICAMENTE']}"
+									for="personaExpuesta"
+									styleClass="log-label form-label-formularios"
+									style="color: #255377!important;font-size: 1.5em!important; font-weight: 600 !important;" />
+							</div>
+							<div class="col-lg-12" align="center">
+								<div class="col-md-12">
+									<p:selectOneRadio id= "personaExpuesta" value="#{personaVinculacionBean.vinculacion.personaExpuestaPublicamente}"
+									disabled="#{personaVinculacionBean.flgPersonaExpuestaPublicamente}">
+									<f:selectItem itemLabel="${titles['TTL_YES']}" itemValue="1" />
+									<f:selectItem itemLabel="${titles['TTL_NO']}" itemValue="0" />
+								</p:selectOneRadio>
+								</div>
+								<div class="col-md-12" style="text-align: center">
+									<a href="javascript:void(0);"
+										onclick="$('#dlgDetallePep').modal('show')"
+										style="text-decoration: underline; color: #255377; font-size: 1.5em !important; font-weight: 600;">
+										${titles['LBL_VER_DECRETO']} </a>
+								</div>
+							</div>
+						</div>
+				
+				<br /><br />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton id="btnGuardarVinculacion" value="${titles['TTL_SAVE']}" styleClass="btn btn-primary"
+							style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+							process="panelVincular" update="panelVincular frmPrincipalVincular:panelTableHV" actionListener="#{personaVinculacionBean.guardarVinculacion()}">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton id="btnCancelarRegSA" value="${titles['TTL_CANCEL']}"
+							onclick="$('#cancelarVinculacion').modal('show')"
+							styleClass="btn btn-default" style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+			
+			
+	<!-- Modal Detalle PEP -->
+	<div id="dlgDetallePep" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="width: 60%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<button type="button" class="close" data-dismiss="modal"
+						style="font-size: 20px; color: #000; background: transparent; width: 1.5em; margin-top: 0px;">
+						<span class="fa fa-times"></span>
+					</button>
+					<h4 class="modal-title" style="font-size: 2em !important;">•
+						Detalle PEP •</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12"
+							style="color: #255279; margin-top: 1%; margin-bottom: 1%; font-size: 1.3em !important;">
+							<div align="justify">Según el Decreto 1674 de 2016, es
+								Persona Expuesta Políticamente aquella que ostenta u ostentará,
+								después de su vinculación, uno de los siguientes cargos:</div>
+							<br />
+							<div align="justify">
+								<b style="color: #2B88B4;">1.</b> Presidente la República,
+								Vicepresidente la República, altos consejeros, director del
+								Departamento Administrativo de la Presidencia la República,
+								ministros y viceministros.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">2.</b> Secretarios Generales,
+								Tesoreros, Directores Financieros de los Ministerios, los
+								Departamentos Administrativos y las Superintendencias.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">3.</b> Presidentes, Directores,
+								Tesoreros, Directores Financieros de (i) los Establecimientos
+								Públicos, (ii) Unidades Administrativas Especiales, (íii) las
+								Empresas Públicas de Servicios Públicos Domiciliarios, (iv) las
+								Empresas Sociales del (v) las Empresas Industriales y
+								Comerciales del y (vi) las Sociedades de Economía Mixta.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">4.</b> Superintendentes y
+								Superintendentes Delegados.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">5.</b> Generales de las Fuerzas
+								Militares y de la Policía Nacional, e Inspectores de la Policía
+								Nacional.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">6.</b> Gobernadores, Alcaldes,
+								Diputados, Concejales, Tesoreros, Directores Financieros y
+								Secretarios Generales i) gobernaciones, ií) alcaldías, iíi)
+								concejos municipales y distritales y iv) asambleas
+								departamentales.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">7.</b> Senadores, Representantes a la
+								Cámara, secretarios de las comisiones constitucionales
+								permanentes del Congreso de la República y Directores
+								Administrativos del Senado y de la Cámara de Representantes.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">8.</b> Gerentes y Codirectores del
+								Banco la República.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">9.</b> Directores de las
+								Corporaciones Autónomas Regionales,
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">10.</b> Comisionados Nacionales del
+								Servicio Civil, Comisionados de la Autoridad Nacional de
+								Televisión, la Comisión de Regulación de Energía y de la
+								Comisión de Regulación de Agua Potable y Saneamiento Básico y la
+								Comisión de Regulación de Comunicaciones.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">11,</b> Magistrados, Magistrados
+								Auxiliares y Consejeros de Tribunales y Altas Cortes, jueces de
+								la república, Fiscal General de la Nación, Vice Fiscal General
+								de la Nación, Director de Fiscalías Nacionales, Director
+								Nacional de Seccionales y Seguridad Ciudadana.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">12.</b> Contralor General de la
+								República, Vicecontralor, Contralores Delegados, Contralores
+								territoriales, Contador, Procurador General de la Nación,
+								Viceprocurador General la Nación, Procuradores Delegados,
+								Defensor del Pueblo, Vice Defensor del Pueblo, Defensores
+								Delegados y Auditor General de la República.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">13.</b> Consejeros del Consejo
+								Nacional Electoral, Registrador Nacional del Estado Civil y
+								Registradores Delegados.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">14.</b> Representantes legales,
+								presidentes, directores y tesoreros de partidos y movimientos
+								políticos, y otras formas de asociación política reconocidas por
+								la ley.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">15.</b> Los directores y tesoreros de
+								patrimonios autónomos o fideicomisos que administren recursos
+								públicos.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		</p:panel>
+	</p:outputPanel>
+</ui:composition>

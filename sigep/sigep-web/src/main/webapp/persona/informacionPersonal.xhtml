@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	<f:metadata>
+		<f:viewParam name="id" value='#{informacionPersonalBean.id}' />
+		<f:viewParam name="dialog" value='#{informacionPersonalBean.dialog}' />
+		<f:viewParam name="recursoId"
+			value="#{informacionPersonalBean.recursoId}" />
+		<f:event type="preRenderView"
+			listener='#{informacionPersonalBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{informacionPersonalBean.showDialog}' />
+	</f:metadata>
+	<ui:param name="pageTitle" value="${titles['TTL_HOME']}" />
+	<ui:define name="mainDataUser">
+		<p:panel id="informacionPersonalUsuario">
+			<div class="row">
+				<div class="col-md-12">
+					<a href="#{imprimirDescargarHojaVidaBean.urlImprimir}"
+						target="_blank" class="btn btn-primary color-slide_imp">${titles['TTL_IMPRIMIR_HOJA_VIDA']}</a><br />
+					<a href="#{imprimirDescargarHojaVidaBean.urlDescargar}"
+						target="_blank" class="btn btn-primary color-slide_descg">${titles['TTL_DESCARGAR_HOJA_VIDA']}</a>
+				</div>
+			</div>
+		</p:panel>
+	</ui:define>
+	<ui:define name="main">
+		<div class="row">
+			<br />
+			<div class="col-md-12 roles-hv" align="center">
+				<c:forEach items="#{permisosUsuarioRol}" var="crud" varStatus="loop">
+					<div class="col-md-4" style="padding: 0px !important;">
+						<div class="col-md-12">						
+							<p:link outcome="#{crud.pagina}"
+								rendered="#{not crud.pagina.startsWith('javascript') and not crud.pagina.startsWith('http') and not crud.pagina.startsWith(' http')}">
+								<img src="../resources/#{crud.icono}"
+									alt="#{titles[crud.accion]}" title="#{titles[crud.accion]}"
+									style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</p:link>							
+							<p:link href="#" onclick="#{crud.pagina}"
+								rendered="#{crud.pagina.startsWith('javascript') and not crud.pagina.startsWith('http') and not crud.pagina.startsWith(' http')}">
+								<img src="../resources/#{crud.icono}"
+									alt="#{titles[crud.accion]}" title="#{titles[crud.accion]}"
+									style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</p:link>
+							<p:link href="#{crud.pagina}" 
+								rendered="#{crud.pagina.startsWith('http')}">
+								<img src="../resources/#{crud.icono}"
+									alt="#{titles[crud.accion]}" title="#{crud.pagina}"
+									style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</p:link>
+							
+							<div class="col-md-12" style="padding: 0%;">
+								<p:outputLabel value="#{titles[crud.accion]}"
+									styleClass="form-label-informacion-personal" />
+							</div>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+		<br />
+		<!-- Dialogo Certificado de Información Actual -->
+		<p:dialog id="dlg2" resizable="false" widgetVar="dlg2" modal="true"
+			width="750" position="center" height="auto" draggable="false"
+			responsive="true"
+			style="background-image: url(../resources/images/background.png) !important; 
+				background-size: contain;  
+				background-size: 685px 465px!important;">
+
+			<div class="row" align="center"
+				style="overflow-y: auto; max-height: 400px;">
+				<div class="col-md-12" align="left" style="margin: 0% 0% 0% 1%;">
+					<img src="../resources/images/logosigep120.png"></img>
+				</div>
+				<div class="col-md-8"
+					style="margin: 0% 0% 0% 5%; background-color: #E79B39 !important;">
+					<h3 style="display: inline-block; color: #FFFFFF !important;">
+						#{informacionPersonalBean.certificadoInformacion.titulo}</h3>
+				</div>
+				<p:panel columns="1" id="certificado"
+					style="color: #255279!important;
+					background-color: transparent; font-size: 1.4em;display: block;">
+					<h:outputText
+						style="display: inline-block;margin: 5% 5% 0% 7%;text-align: justify;"
+						value="#{informacionPersonalBean.contenidoText}" escape="false" />
+				</p:panel>
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3">
+						<p:commandButton value="#{titles.TTL_DOWNLOAD}" ajax="false"
+							onclick="this.form.target='_blank'"
+							action="#{informacionPersonalBean.descargarCertificado}"
+							immediate="true" styleClass="btn btn-primary" />
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="#{titles.TTL_PRINT}" ajax="false"
+							onclick="this.form.target='_blank'"
+							action="#{informacionPersonalBean.imprimirCertificado}"
+							immediate="true" styleClass="btn btn-primary"
+							style="background: #1C6F8D!important; border:0px;padding-left:10%!important;padding-right:10%!important;font-size:1.4em!important; margin-bottom:5%;" />
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+				<div class="col-md-12" align="right">
+					<img src="..#{informacionPersonalBean.footer.valorParametro}"></img>
+				</div>
+			</div>
+
+		</p:dialog>
+
+		<!-- Modal bienes y rentas 1 -->
+		<div class="modal fade" id="queDeseaHacerDialog1" role="dialog">
+			<div class="modal-dialog modal-dialog-2"
+				style="opacity: 0.9; top: 18%; width: 55%;">
+				<div class="modal-content">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title"
+							style="font-size: 3em; text-align: center !important; color: #263948 !important; font-family: 'Poppins' !important;">
+							• #{informacionPersonalBean.mensajeini} •</h4>
+					</div>
+					<br />
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center"
+								style="padding: 0px !important;">
+								<div class="col-md-1"></div>
+								<div class="col-md-5">
+									<a href="../bienesrentas/informacionPersona.xhtml"> <img
+										src="../resources/images/hoja-de-vida-13.jpg"
+										alt="#{titles.TTL_MI_DECLARACION_BIENES_RENTAS}"
+										title="#{titles.TTL_MI_DECLARACION_BIENES_RENTAS}"
+										style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+									</a>
+									<p:outputLabel
+										value="#{titles.TTL_MI_DECLARACION_BIENES_RENTAS}"
+										styleClass="form-label-informacion-personal"
+										style="line-height: 30px;" />
+								</div>
+								<div class="col-md-5">
+									<a href="../bienesrentas/consultarBienesRentas.xhtml"> <img
+										src="../resources/images/hoja-de-vida-16.jpg"
+										alt="#{titles.TTL_MIHISTORICOBIENESYRENTAS}"
+										title="#{titles.TTL_MIHISTORICOBIENESYRENTAS}"
+										style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+									</a>
+									<p:outputLabel value="#{titles.TTL_MIHISTORICOBIENESYRENTAS}"
+										styleClass="form-label-informacion-personal"
+										style="line-height: 30px;" />
+								</div>
+								<div class="col-md-1"></div>
+							</div>
+						</div>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal bienes y rentas 2 -->
+		<div class="modal fade" id="queDeseaHacerDialog2" role="dialog">
+			<div class="modal-dialog modal-dialog-2"
+				style="opacity: 0.9; top: 18%; width: 55%;">
+				<div class="modal-content">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title"
+							style="font-size: 3em; text-align: center !important; color: #263948 !important; font-family: 'Poppins' !important;">
+							• #{informacionPersonalBean.mensajeini} •</h4>
+						<div id="btnCerrarDialog1"
+							style="display: inline-block !important; width: 21px; position: absolute; top: 3px; right: 0px; cursor: pointer; font-size: 18px;"
+							onclick="$('#queDeseaHacerDialog2').modal('hide');">X</div>
+					</div>
+					<br />
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center"
+								style="padding: 0px !important;">
+								<div class="col-md-1"></div>
+								<div class="col-md-5">
+									<a href="../bienesrentas/informacionPersona.xhtml"> <img
+										src="../resources/images/hoja-de-vida-13.jpg"
+										alt="#{titles.TTL_MI_DECLARACION_BIENES_RENTAS}"
+										title="#{titles.TTL_MI_DECLARACION_BIENES_RENTAS}"
+										style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+									</a>
+									<p:outputLabel
+										value="#{titles.TTL_MI_DECLARACION_BIENES_RENTAS}"
+										styleClass="form-label-informacion-personal"
+										style="line-height: 30px;" />
+								</div>
+								<div class="col-md-5">
+									<a href="../bienesrentas/consultarBienesRentasP.xhtml"> <img
+										src="../resources/images/hoja-de-vida-16.jpg"
+										alt="#{titles.TTL_MIHISTORICOBIENESYRENTAS}"
+										title="#{titles.TTL_MIHISTORICOBIENESYRENTAS}"
+										style="max-height: 17em; min-height: 17em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+									</a>
+									<p:outputLabel value="#{titles.TTL_MIHISTORICOBIENESYRENTAS}"
+										styleClass="form-label-informacion-personal"
+										style="line-height: 30px;" />
+								</div>
+								<div class="col-md-1"></div>
+							</div>
+						</div>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function popUpBienes(){
+				var index = #{informacionPersonalBean.rolaprovado};
+				var rol =	#{informacionPersonalBean.rol};
+				console.log(rol);
+				console.log(index);
+				if(index){
+					if(rol == 0){
+						
+						$('#queDeseaHacerDialog2').modal('show');
+					}else{
+						$('#queDeseaHacerDialog1').modal({backdrop: 'static', keyboard: false})  ;
+						$('#queDeseaHacerDialog1').modal('show');
+					}
+				}else{
+					if(rol==3){
+						location.href = "../bienesrentas/consultarBienesRentasP.xhtml";
+					}else{
+						$('#queDeseaHacerDialog2').modal({backdrop: 'static', keyboard: false})  ;
+						$('#queDeseaHacerDialog2').modal('show');
+					}
+				}
+			}		
+					
+		</script>
+
+		<div class="modal fade" id="accionRealizarDialog" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<br /> <br />
+								<h4>
+									<p:outputLabel value="Elija la acción que desea realizar"
+										style="color: #265379!important; font-weight: normal!important;" />
+								</h4>
+								<h:selectOneMenu id="seleccioneAccion" value="Hola"
+									style="width: 52.5%;" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.pais}" />
+								</h:selectOneMenu>
+								<br /> <br />
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+										styleClass="btn btn-primary"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3" align="center">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+									</p:commandButton>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<sript> </sript>
+	</ui:define>
+</ui:composition>

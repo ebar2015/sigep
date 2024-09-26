@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<h:form id="formNomenclaturaBase">
+		<p:dialog widgetVar="wdgtNomenclaturaBase" width="1000px"
+			height="650px" id="dlgNomenclaturaBase" modal="true"
+			draggable="false" resizable="false" showHeader="false">
+			<br />
+			<div class="modal-header" align="center">
+				<h4 class="modal-title">• #{titles.TTL_NOMENCLATURA_BASE} •</h4>
+			</div>
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="${messages['MSG_ENTIDAD_NOMENCLATURA_INFO_NOMENCLATURA_BASE']}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+			<p:outputPanel id="panelNomenclaturaBase">
+				<p:scrollPanel mode= "native" style="width:650px;height:450px">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel for="txtNombreEntidadBuscar"
+								value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreEntidadBuscar" autocomplete="false"
+								value = "#{gestionarNomenclaturaEscalaBean.nomenclaturaExt.nombreEntidad}"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+								class="form-control-acti-usua" maxlength="200">
+							</p:inputText>
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel for="txtCodigoSigepBuscar"
+								value="${titles['TTL_CODIGO_SIGEP']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtCodigoSigepBuscar" autocomplete="false"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_SIGEP']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+								class="form-control-acti-usua" maxlength="200"
+								value = "#{gestionarNomenclaturaEscalaBean.nomenclaturaExt.codSigep}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:commandButton value="${titles['BTN_CT_BUSCAR']}"
+							styleClass="btn btn-primary" update="formNomenclaturaBase:dtNomenclaturaBase"
+							process="panelNomenclaturaBase"
+							actionListener="#{gestionarNomenclaturaEscalaBean.buscarNomenclaturaBase()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+					</div>
+				</div>
+				<br /><br />
+
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:dataTable id="dtNomenclaturaBase"
+							value="#{gestionarNomenclaturaEscalaBean.lstNomenclaturasBase}"
+							var="nomenclaturaBase"
+							rowKey="#{nomenclaturaBase.codNomenclatura}"
+							selection="#{gestionarNomenclaturaEscalaBean.nomenclaturaBaseSelect}"
+							paginator="true" rows="#{paginatorSize}" lazy="true"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							<p:column headerText="${titles['TTL_SELECT']}"
+								selectionMode="single" style="width:16px;text-align:center">
+							</p:column>
+							<p:column sortBy="">
+								<f:facet name="header">
+									<h:outputText value="#{titles.LBL_NOMENCLATURA_NOMBRE}" />
+								</f:facet>
+								<h:outputText value="#{nomenclaturaBase.nombreNomenclatura}" />
+							</p:column>
+							<p:column headerText="${titles.LBL_TABLA_ACCIONES}">
+								<p:commandButton id="btnVerDetalleNomenclaturaBase"
+									title="${titles['BTN_TABLA_VER']} ${titles['TTL_NOMENCLATURA_BASE']}" icon="icon-view"
+									process="@this" update="formNomenclaturaBase:detalleNomenclatura"
+									actionListener ="#{gestionarNomenclaturaEscalaBean.abrirFormularioDetalleNomenclaturaBase(nomenclaturaBase)}"
+									styleClass="icon-btn">
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+						<br />
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:commandButton value="${titles['TTL_APLICAR']}"
+							styleClass="btn btn-primary" update="dlgConfirmarAccionNomenclaturaBase"
+							process="panelNomenclaturaBase @this"
+							actionListener= "#{gestionarNomenclaturaEscalaBean.abrirConfirmacionNB('0')}"
+							style="padding-left: 2.5%!important; 
+							padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							styleClass="btn btn-default"
+							update="dlgConfirmarAccionNomenclaturaBase"
+							actionListener= "#{gestionarNomenclaturaEscalaBean.abrirConfirmacionNB('1')}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+					</div>
+				</div>
+				<br /><br />
+				</p:scrollPanel>
+			</p:outputPanel>
+		</p:dialog>
+		
+	<!-- Dialogo de creacion o seleccion de la entidad  -->
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+		widgetVar="dlgConfirmarAccionNomenclaturaBase"
+		id="dlgConfirmarAccionNomenclaturaBase" minHeight="300" modal="true"
+		resizable="false" closeOnEscape="false" responsive="true"
+		draggable="false" closable="false" appendTo="@(body)">
+		<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"
+			align="center">
+			<center>
+				<h5>#{gestionarNomenclaturaEscalaBean.strMensajeNomenclaturaBase}
+				</h5>
+			</center>
+		</div>
+		<br />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					update=" @widgetVar(wvDtDenominacionesNomenclatura) panelMensaje"
+					style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+					actionListener= "#{gestionarNomenclaturaEscalaBean.redireccionarAccionNB()}"
+					onclick="PF('dlgConfirmarAccionNomenclaturaBase').hide();"/>
+			</div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_CANCEL}" process="@this"
+					styleClass="btn btn-default"
+					update="formCrearNomenclatura panelMensaje"
+					actioListener="#{gestionarNomenclaturaEscalaBean.redireccionarAccionNB()}"
+					onclick="PF('dlgConfirmarAccionNomenclaturaBase').hide();"
+					style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+		<br />
+	</p:dialog>
+	
+	<p:dialog widgetVar="wdgtDetalleNomenclatura" width="680px"
+		id="detalleNomenclatura" modal="true" draggable="false" closable="false" height="auto"
+		resizable="false" responsive="true" >
+		<div class="modal-header" align="center">
+			<h4 class="modal-title">• #{titles.LBL_ENTIDAD_NOMENCLATURA_DENOMINACIONES} •</h4>
+		</div>
+		<br />
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<p:scrollPanel mode="native" style="width:650px;height:450px"  id="panelScrollDenominaciones">				
+					<p:dataTable value="#{gestionarNomenclaturaEscalaBean.lstDenominacionesNomenclaturaBase}"
+						var="detalleNomenclaturaBase"
+						paginator="true"
+						rows="#{paginatorSize}" style="width: 600px"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="#{titles.TTL_NOMENCLATURA_NIVEL_JERARQUICO}">
+							<h:outputText value="#{detalleNomenclaturaBase.codNivelJerarquico}" converter="parametricaBgDecimalConverter" />
+						</p:column>
+						<p:column headerText="#{titles.TTL_NOMENCLATURA_DENOMINCACION_EMPLEO}">
+							<h:outputText value="#{detalleNomenclaturaBase.codDenominacion}" converter="denominacionIDConverter" />
+						</p:column>
+						<p:column headerText="#{titles.LBL_CT_GRADO_EMPLEO}">
+							<h:outputText value="#{detalleNomenclaturaBase.codGrado}" converter="parametricaBgDecimalConverter" />
+						</p:column>
+						<p:column headerText="#{titles.LBL_NOMENCLATURA_ASIGNACION}">
+							<h:outputText value="#{detalleNomenclaturaBase.asignacionSalarial}">
+								<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />	
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+				</p:scrollPanel>
+			</div>
+		</div>
+		<br />
+	
+		<div class="row" align="center">
+			<div class="col-md-12" align="center">
+				<p:commandButton value="#{titles.TTL_CLOSE}" process="@this"
+					styleClass="btn btn-primary"
+					onclick="PF('wdgtDetalleNomenclatura').hide()"
+					style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+			</div>
+		</div>
+	</p:dialog>
+	</h:form>
+</ui:composition>

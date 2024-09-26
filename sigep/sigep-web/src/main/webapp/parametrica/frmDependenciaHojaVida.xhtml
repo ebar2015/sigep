@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['LBL_DEPENDENCIA_HOJA_VIDA']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_DEPENDENCIA_HOJA_VIDA} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="nombreDependenciaHV" maxlength="255"
+						placeholder=" ${titles['LBL_NOMBRE_DEPENDENCIA']}"
+						title="${titles['TTL_INGRESE']} ${titles['LBL_NOMBRE_DEPENDENCIA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						queryDelay="1000"
+						completeMethod="#{dependenciaHojaVidaBean.listarDependenciaHVFiltro}"
+						value="#{dependenciaHojaVidaBean.strBusquedaDependenciaHV}">
+						<p:ajax event="itemSelect" listener="#{dependenciaHojaVidaBean.filtrarDepedenciaHV()}" update ="dataTableDependenciaHV"/>
+					</p:autoComplete>
+					<p:message for="nombreDependenciaHV" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonSearchPais" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{dependenciaHojaVidaBean.filtrarDepedenciaHV()}"
+						process="@this nombreDependenciaHV"
+						update ="dataTableDependenciaHV"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_DEPENDENCIA_HOJA_VIDA}</span> <br /> <br />
+
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearDependenciaHV" process="@this"
+					update="panelDependenciaHV" actionListener="#{dependenciaHojaVidaBean.crearDependenciaHV()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelDependenciaHV';">
+					<p:resetInput target="frmPrincipal:panelDependenciaHV" />
+				</p:commandButton>
+					
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableDependenciaHV" paginator="true"
+					reflow="true" rowIndexVar="rowIndex"
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+				 	value="#{dependenciaHojaVidaBean.lstDependenciaHV}"
+					var="dataDependenciaHV"
+					lazy="true"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					
+					<p:column sortBy="#{dataDependenciaHV.nombreDependencia}" style="word-wrap: break-word!important; text-align: center;" >
+						<f:facet name="header" ><h:outputText value="${titles['LBL_NOMBRE_DEPENDENCIA']}" /></f:facet>
+						<h:outputText value="#{dataDependenciaHV.nombreDependencia}" />
+					</p:column>
+					
+					<p:column sortBy="#{dataDependenciaHV.flgActivo}" style="word-wrap: break-word!important; text-align: center;" >
+						<f:facet name="header" ><h:outputText value="${titles['TTL_ACTIVO']}" /></f:facet>
+						<p:selectBooleanCheckbox value="#{dataDependenciaHV.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+		
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarDependenciaHV" title="${titles['TTL_EDIT']}"
+							icon="icon-edit" styleClass="icon-btn btn-view-data"
+							process="@this" update="frmPrincipal:panelDependenciaHV"
+							immediate="true"
+							actionListener="#{dependenciaHojaVidaBean.modificarDependenciaHV(dataDependenciaHV)}"
+                    		oncomplete="window.location.href='#frmPrincipal:panelDependenciaHV';">
+                    		<p:resetInput target="frmPrincipal:panelDependenciaHV" />
+						</p:commandButton>
+						<p:commandButton id="btnVerDependenciaHV"
+							actionListener="#{dependenciaHojaVidaBean.consultarDependenciaHV(dataDependenciaHV)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view" styleClass="icon-btn"
+							process="@this" update="frmPrincipal:panelDependenciaHV"
+                    		oncomplete="window.location.href='#frmPrincipal:panelDependenciaHV';">
+                    		<p:resetInput target="frmPrincipal:panelDependenciaHV" />
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+							id="btnEliminarDependenciaHV" styleClass="icon-btn" process="@this"
+							actionListener="#{dependenciaHojaVidaBean.eliminarDependenciaHV()}" update="frmPrincipal:dlgConfirmarDependenciaHV">
+							<f:setPropertyActionListener value="#{dataDependenciaHV}" target="#{dependenciaHojaVidaBean.infoDependenciaHV}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelDependenciaHV">
+			<p:spacer height="2" />
+			<p:panel id="subPanelDependenciaHV" widgetVar="subPanelDependenciaHV" rendered="#{dependenciaHojaVidaBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<div class="col-md-12" >
+						<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 2em; white-space: pre-line!important;">
+							#{dependenciaHojaVidaBean.strAccionRealizada}</span>
+					</div>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_NOMBRE_DEPENDENCIA}:"
+								styleClass="log-label form-label-formularios"
+								for="txtNombreDependenciaHV" />
+							<p:inputText id="txtNombreDependenciaHV" required="true"
+								value="#{dependenciaHojaVidaBean.infoDependenciaHV.nombreDependencia}"
+								disabled="#{dependenciaHojaVidaBean.blnConsultarDependenciaHV}"
+								maxlength="255"
+								style="text-transform:uppercase;"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+								<f:validator validatorId="maxByteLengthValidator" />
+								
+							</p:inputText>
+							<p:message for="txtNombreDependenciaHV" display="text" />
+						</div>
+						
+						<div class="col-md-4" align="center">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoDependenciaHV"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true" id="activoDependenciaHV"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{dependenciaHojaVidaBean.blnConsultarDependenciaHV}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{dependenciaHojaVidaBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoDependenciaHV" display="text" />
+						</div>
+					</div>
+				
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							rendered="#{!dependenciaHojaVidaBean.blnConsultarDependenciaHV}"
+							styleClass="btn btn-primary"
+							disabled="#{dependenciaHojaVidaBean.blnConsultarDependenciaHV}" update="panelDependenciaHV dataTableDependenciaHV nombreDependenciaHV"
+							actionListener="#{dependenciaHojaVidaBean.guardarDependenciaHV()}"
+							process="frmPrincipal:panelDependenciaHV"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!dependenciaHojaVidaBean.blnConsultarDependenciaHV}"
+							styleClass="btn btn-default" update="dlgConfirmarDependenciaHV"
+							actionListener="#{dependenciaHojaVidaBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{dependenciaHojaVidaBean.blnConsultarDependenciaHV}"
+							styleClass="btn btn-primary" update="panelDependenciaHV nombreDependenciaHV"
+							actionListener="#{dependenciaHojaVidaBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarDependenciaHV" id="dlgConfirmarDependenciaHV" minHeight="300"
+			modal="true" draggable="false" closable="false"
+			resizable="false" responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center>
+					<h5>#{dependenciaHojaVidaBean.strMensaje}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary" update="panelDependenciaHV dataTableDependenciaHV"
+						actionListener="#{dependenciaHojaVidaBean.procesarRespuestaConfirmacion}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlgConfirmarDependenciaHV').hide();" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarDependenciaHV').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+	<script type="text/javascript">
+		function mayus(e) {
+			e.value = e.value.toUpperCase();
+		}
+	</script>
+</ui:composition>

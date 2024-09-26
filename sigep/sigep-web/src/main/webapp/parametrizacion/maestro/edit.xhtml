@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{administrarMaestroBean.maestroVO.id}' />
+		<f:viewParam name="dialog" value='#{administrarMaestroBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{administrarMaestroBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{administrarMaestroBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_TRANSVERSAL_ADMINISTRAR_MAESTRO']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_ADMINISTRAR_MAESTRO_EDITAR']}" />
+
+	<p:hotkey bind="ctrl+shift+a"
+		actionListener="#{administrarMaestroBean.add}" />
+
+	<f:event listener="#{administrarMaestroBean.validateForm}"
+		type="postValidate" />
+	<ui:define name="main">
+		<p:panelGrid columns="3"
+			columnClasses="ui-grid-col-3,ui-grid-col-6,ui-grid-col-3"
+			layout="grid" styleClass="ui-panelgrid-blank">
+			<p:outputLabel for="nombreTabla"
+				value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_NOMBRE_TABLA']}" />
+			<p:selectOneMenu id="nombreTabla" filter="true"
+				filterMatchMode="contains" value="#{administrarMaestroBean.maestro}"
+				converter="maestroConverter" var="t" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{maestros}" var="maestro"
+					itemLabel="#{maestro.nombreTabla}" itemValue="#{maestro}" />
+				<p:column>
+					<h:outputText value="#{t.nombreTabla}" />
+				</p:column>
+				<p:ajax listener="#{administrarMaestroBean.cargarMaestro()}"
+					event="change" process="@this" update="@this detalleMaestro" />
+			</p:selectOneMenu>
+			<p:message for="nombreTabla" display="icon" />
+			<p:outputLabel for="estadoTabla"
+				value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ESTADO_TABLA']}" />
+			<p:selectBooleanCheckbox id="estadoTabla"
+				title="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ESTADO_TABLA']}"
+				value="#{administrarMaestroBean.maestroVO.estado}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:selectBooleanCheckbox>
+			<p:message for="estadoTabla" display="icon" />
+		</p:panelGrid>
+		<p:separator />
+		<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid"
+			styleClass="ui-panelgrid-blank">
+			<p:dataTable id="detalleMaestro" editable="true" reflow="true"
+				rowKey="#{item.registro}"
+				value="#{administrarMaestroBean.detalleMaestro}" var="item"
+				emptyMessage="${messages['DLG_SIN_REGISTROS']}"
+				resizableColumns="true" scrollable="true" scrollWidth="95%"
+				rowStyleClass="#{(indice % 2) eq 0? 'fila-par' : 'fila-impar'}"
+				rowIndexVar="indice">
+				<p:ajax event="rowEdit"
+					listener="#{administrarMaestroBean.onRowEdit}"
+					update="detalleMaestro" />
+				<p:ajax event="rowEditCancel"
+					listener="#{administrarMaestroBean.onRowCancel}"
+					update="detalleMaestro" />
+				<p:ajax event="rowSelect"
+					listener="#{administrarMaestroBean.onRowSelect}"
+					update="detalleMaestro" />
+				<p:ajax event="rowUnselect"
+					listener="#{administrarMaestroBean.onRowUnselect}"
+					update="detalleMaestro" />
+				<p:column width="32">
+					<p:rowEditor />
+				</p:column>
+				<p:column sortBy="#{item.registro}" sortable="true" widht="300"
+					headerText="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_NOMBRE_REGISTRO']}"
+					filterable="true" filterBy="#{item.registro}"
+					filterMatchMode="contains">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{item.registro}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="nombreRegistro" value="#{item.registro}"
+								placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_NOMBRE_REGISTRO']}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<p:clientValidator />
+							</p:inputText>
+							<p:message for="nombreRegistro" display="icon" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column sortBy="#{item.aliasRegistro}" sortable="true" widht="300"
+					headerText="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO']}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{item.aliasRegistro}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="aliasRegistro" value="#{item.aliasRegistro}"
+								placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO']}">
+								<p:clientValidator />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column sortBy="#{item.aliasRegistro2}" sortable="true"
+					widht="300"
+					headerText="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO_2']}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{item.aliasRegistro2}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="aliasRegistro2" value="#{item.aliasRegistro2}"
+								placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO_2']}">
+								<p:clientValidator />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column sortBy="#{item.aliasRegistro3}" sortable="true"
+					widht="300"
+					headerText="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO_2']}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{item.aliasRegistro3}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="aliasRegistro3" value="#{item.aliasRegistro3}"
+								placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO_2']}">
+								<p:clientValidator />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column sortBy="#{item.estado}" widht="50"
+					headerText="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ESTADO_REGISTRO']}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{item.estado ? 'Activo' : 'Inactivo'}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectBooleanCheckbox id="estadoRegistro"
+								title="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ESTADO_REGISTRO']}"
+								value="#{item.estado}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<p:clientValidator />
+							</p:selectBooleanCheckbox>
+							<p:message for="estadoRegistro" display="icon" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+			</p:dataTable>
+		</p:panelGrid>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton value="${titles['TTL_EDIT']}" icon="ui-icon-disk"
+			process="@this contains" update="contains"
+			action="#{administrarMaestroBean.update}" />
+		<p:commandButton id="botonMas" icon="ui-icon-plus"
+			value="${titles['TTL_ADD']}"
+			actionListener="#{administrarMaestroBean.add}" process="@this"
+			update="@this">
+			<p:ajax event="dialogReturn" process="@this"
+				listener="#{administrarMaestroBean.seleccionarDetalleVO}"
+				update="detalleMaestro" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

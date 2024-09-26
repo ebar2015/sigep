@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <br />
+    <br />
+    <hr class="hr-style hr-style-two" />
+    <span class="span-style">#{titles.TTL_EDITAR_DIRECCION}</span>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                <p:outputLabel styleClass="log-label form-label-formularios"
+                               value="#{titles.LBL_VIA_PRINCIPAL}" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-3">
+                <p:outputLabel for="somTipoVia" value="#{titles.TTL_VIA}"
+                               styleClass="log-label form-label-formularios" />
+                <p:selectOneMenu id="somTipoVia"
+                                 value="#{direccionBean.direccionSeleccionada.codTipoVia}">
+                    <f:selectItem itemLabel="#{titles.TTL_SELECT}"
+                                  itemValue="#{null}" />
+                    <f:selectItems value="#{webUtils.tipoVia}" var="tipovia"/>
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-1">
+                <p:outputLabel for="itNumero" value="#{titles.TTL_NUMERO}"
+                               styleClass="log-label form-label-formularios"/>
+                <p:inputText id="itNumero"
+                             value="#{direccionBean.direccionSeleccionada.numero}"
+                             class="form-control-acti-usua">
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            event="keyup"
+                            process="@this" 
+                            update="itDireccionGenerada" />
+                </p:inputText>
+            </div>
+            <div class="col-sm-2">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:selectOneMenu id="somPrimerLetra"
+                                 value="#{direccionBean.direccionSeleccionada.codPrimerLetra}">
+                    <f:selectItem itemLabel="#{titles.TTL_SELECT}"
+                                  itemValue="#{null}" />
+                    <f:selectItems value="#{webUtils.tipoLetra}"/>
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-1">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:selectBooleanCheckbox
+                    value="#{direccionBean.direccionSeleccionada.bis}">
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectBooleanCheckbox>
+                <p:spacer width="5" />
+                <p:outputLabel id="bis" value="#{titles.LBL_BIS}"
+                               styleClass="log-label form-label-formularios" />
+            </div>
+            <div class="col-sm-2" style="margin-bottom: 3%;">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:selectOneMenu id="segundaLetra"
+                                 value="#{direccionBean.direccionSeleccionada.codSegundaLetra}">
+                    <f:selectItem itemLabel="#{titles.TTL_SELECT}"
+                                  itemValue="#{null}" />
+                    <f:selectItems value="#{webUtils.tipoLetra}"/>
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-3">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:selectOneMenu id="orientacion"
+                                 value="#{direccionBean.direccionSeleccionada.codOrientacion}">
+                    <f:selectItem itemLabel="#{titles.TTL_SELECT}"
+                                  itemValue="#{null}" />
+                    <f:selectItems value="#{webUtils.tipoOrientacion}" />
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectOneMenu>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                <p:outputLabel styleClass="log-label form-label-formularios"
+                               value="#{titles.LBL_VIA_SECUNDARIA}" 
+                               style="font-weight: 600!important;" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-2" style="margin-bottom: 3%;">
+                <p:outputLabel value="#{titles.TTL_NUMERO}"
+                               for="itSegundoNumero"
+                               styleClass="log-label form-label-formularios" />
+                <p:inputText id="itSegundoNumero"
+                             value="#{direccionBean.direccionSeleccionada.segundoNumero}"
+                             maxlength="10" autocomplete="false"
+                             class="form-control-acti-usua">
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            event="keyup"
+                            process="@this" update="itDireccionGenerada" />
+                </p:inputText>
+            </div>
+            <div class="col-sm-2" style="margin-bottom: 3%;">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:selectOneMenu id="tercerLetra"
+                                 value="#{direccionBean.direccionSeleccionada.codTercerLetra}"
+                                 filterMatchMode="contains" filter="true">
+                    <f:selectItem itemLabel="#{titles.TTL_SELECT}"
+                                  itemValue="#{null}" />
+                    <f:selectItems value="#{webUtils.tipoLetra}" />
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-2" style="margin-bottom: 3%;">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:inputText id="tercerNumero" maxlength="10"
+                             value="#{direccionBean.direccionSeleccionada.tercerNumero}"
+                             class="form-control-acti-usua" autocomplete="false">
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            event="keyup"
+                            process="@this" update="itDireccionGenerada" />
+                </p:inputText>
+            </div>
+            <div class="col-sm-2" style="margin-bottom: 5%;">
+                <label style="color: transparent; width: 100%;"
+                       class="log-label form-label">.</label>
+                <p:selectOneMenu id="segundaOrientacion"
+                                 value="#{direccionBean.direccionSeleccionada.codSegundaOrientacion}">
+                    <f:selectItem itemLabel="#{titles.TTL_SELECT}"
+                                  itemValue="#{null}" />
+                    <f:selectItems value="#{webUtils.tipoOrientacion}"/>
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            process="@this" update="itDireccionGenerada" />
+                </p:selectOneMenu>
+            </div>
+            <div class="col-sm-4">
+                <p:outputLabel value="#{titles.TTL_COMPLEMENTO}"
+                               for="complemento"
+                               styleClass="log-label form-label-formularios" />
+                <p:inputText id="complemento" maxlength="100"
+                             value="#{direccionBean.direccionSeleccionada.complemento}"
+                             class="form-control-acti-usua" autocomplete="false">
+                    <p:ajax listener="#{direccionBean.mostrarDireccion()}"
+                            event="keyup"
+                            process="@this" update="itDireccionGenerada" />
+                </p:inputText>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-6">
+                <p:outputLabel value="#{titles.TTL_DIRECCION_GENERADA}"
+                               for="itDireccionGenerada"
+                               styleClass="log-label form-label-formularios" />
+                <p:inputText id="itDireccionGenerada"
+                             value="#{direccionBean.direccionGenerada}"
+                             class="form-control-acti-usua" readonly="true">
+                </p:inputText>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12" align="center">
+            <div class="col-md-4"></div>
+            <div class="col-md-2" style="margin-bottom: 4%;">
+                <p:commandButton value="#{titles.TTL_SAVE}"
+                                 styleClass="btn btn-primary"
+                                 style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+                                 process="@this" update="#{btGuardarUpdate}"
+                                 actionListener="#{bean.btAgregarDireccionListener}"
+                                 onstart="PF('dlgCargaEntidad').show()"
+                                 oncomplete="PF('dlgCargaEntidad').hide()"/>
+            </div>
+            <div class="col-md-2" style="margin-bottom: 4%;">
+                <p:commandButton value="#{titles.TTL_CANCEL}"
+                                 styleClass="btn btn-default"
+                                 style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+                                 actionListener="#{bean.btCancelarEditarDireccionListener}"
+                                 process="@this"
+                                 update="#{btCancelarUpdate}"
+                                 onstart="PF('dlgCargaEntidad').show()"
+                                 oncomplete="PF('dlgCargaEntidad').hide()"/>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</html>
+

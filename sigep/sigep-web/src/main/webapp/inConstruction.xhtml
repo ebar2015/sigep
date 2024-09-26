@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/resources/template/basicTemplate.xhtml">
+
+	<ui:param name="pageTitle" value="Página en Construcción" />
+	<ui:param name="pageSubtitle" value=" " />
+
+	<ui:define name="content">
+		<p align="center">
+			<button type="button" class="btn btn-primary"
+				onclick="redirectToIndex()"
+				style="margin-bottom: 0%; margin-top: -0.5%; justify-content: center; padding-left: 5% !important; padding-right: 5% !important; font-size: 1.6em !important;">
+				Volver al Inicio</button>
+		</p>
+		<img src="resources/images/pagina_no_encontrada.jpg" height="415"
+			width="100%" />
+	</ui:define>
+</ui:composition>

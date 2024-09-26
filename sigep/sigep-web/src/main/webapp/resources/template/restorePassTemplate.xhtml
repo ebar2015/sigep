@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<h:outputStylesheet name="/css/style.css" />
+		<h:outputStylesheet name="/css/bootstrap.css" />
+		<h:outputScript library="js" name="ventana.js" />
+		<link rel="icon" href='#{resources["favicon.ico"]}' />
+
+		<f:metadata>
+			<f:viewParam name="recurso" value='#{controlRecursoBean.recurso}' />
+			<f:viewParam name="recursoId" value='#{controlRecursoBean.recursoId}' />
+		</f:metadata>
+
+		<title>${titles['TTL_SYSTEM_SHORT_NAME']} :: #{empty pageTitle
+			? 'Page Title' : pageTitle}</title>
+		<meta charset="UTF-8" />
+			
+		<p:importConstants type="co.gov.dafp.sigep2.filtro.FiltroUsuario" var="h"/>
+		<meta charset="UTF-8" />
+		<meta content="#{h.VALUE_X_FRAME_OPTIONS}" name="#{h.HEADER_X_FRAME_OPTIONS}" />
+		<meta content="#{h.VALUE_PRAGMA}" name="#{h.HEADER_PRAGMA}" />
+		<meta content="#{h.VALUE_CACHE_CONTROL}" name="#{h.HEADER_CACHE_CONTROL}" />
+		<meta content="#{h.VALUE_X_UA_COMPATIBLE}" name="#{h.HEADER_X_UA_COMPATIBLE}" />
+		<meta content="#{h.VALUE_EXPIRES}" name="#{h.HEADER_EXPIRES}" />
+		<meta content="#{h.VALUE_X_XSS_PROTECTION}" name="#{h.HEADER_X_XSS_PROTECTION}" />
+		<meta content="#{h.VALUE_X_CONTENT_TYPE_OPTIONS}" name="#{h.HEADER_X_CONTENT_TYPE_OPTIONS}" />
+		<meta content="#{h.VALUE_DESCRIPTION}" name="#{h.HEADER_DESCRIPTION}" />
+		<meta content="#{h.VALUE_KEYWORDS}" name="#{h.HEADER_KEYWORDS}" />
+		<meta content="#{h.VALUE_VIEWPORT}" name="#{h.HEADER_VIEWPORT}" />
+
+		<h:outputScript>
+			function handleDrop(event, ui) {
+				var droppedCar = ui.draggable;
+				droppedCar.fadeOut('fast');
+			}
+			window.sync = function(t){  
+	        	PF('knob').setValue(t.current);  
+	    	}
+		    function redirectToIndex() {
+				window.location.href = getContextPath() + '/sigep2/index.xhtml';
+			}
+		    function autoredirectToIndex() {
+				window.location.href = getContextPath() + '/sigep2/index.xhtml';
+				window.alert("${messages['MSG_FATAL_RECURSO_SESION_CERRADA']}");
+			}
+		</h:outputScript>
+	</h:head>
+
+	<h:body
+		style="font-size:0.9em;font-family: Helvetica Neue,Helvetica,Arial,sans-serif !Important; ">
+		<!-- HEADER -->
+		<div class="row"
+			style="background-color: #f0f0f0; padding-top: 1%; padding-bottom: 1%;">
+			<div class="col-md-8" style="float: left">
+				<div class="col-md-4" align="left">
+					<p:graphicImage dir="resources"
+						name="images/logos/gob-colombia.png" title="Gobierno de Colombia"
+						alt="Gobierno de Colombia" height="70" />
+				</div>
+				<div class="col-md-3" align="left">
+					<p:graphicImage dir="resources"
+						name="images/logos/lema-gobierno.png"
+						title="Lema Gobierno de Colombia" alt="Lema Gobierno de Colombia"
+						height="70" />
+				</div>
+			</div>
+			<div class="col-md-4" style="float: right" align="right">
+				<div class="col-md-12">
+					<div class="row">
+						<p:link href="javascript:fontSize(.1)" id="incfont">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/aplus.png" title="${titles['TTL_FONT_SIZE_UP']}"
+								alt="${titles['TTL_FONT_SIZE_UP']}" />
+						</p:link>
+						<p:spacer width="2" />
+						<p:link href="javascript:fontSize(-.1)" id="decfont">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/aminus.png" title="${titles['TTL_FONT_SIZE_DOWN']}"
+								alt="${titles['TTL_FONT_SIZE_DOWN']}" />
+						</p:link>
+					</div>
+					<p:spacer height="3" />
+					<div class="row">
+						<p:link href="https://www.facebook.com/FuncionPublica"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/facebook.svg" title="Facebook" alt="Facebook" />
+						</p:link>
+						<p:spacer width="2" />
+						<p:link href="https://twitter.com/dafp_colombia" target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/twitter.svg" title="Twitter" alt="Twitter" />
+						</p:link>
+						<p:spacer width="2" />
+						<p:link
+							href="https://www.linkedin.com/company/departamento-administrativo-de-la-funci%C3%B3n-p%C3%BAblica"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/linkedin.svg" title="Linked In"
+								alt="Linked In" />
+						</p:link>
+						<p:spacer width="2" />
+						<p:link href="http://www.youtube.com/webmasterdafp"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/youtube.svg" title="Toutube" alt="Toutube" />
+						</p:link>
+						<p:spacer width="2" />
+						<p:link href="https://www.flickr.com/photos/funcionpublica/albums"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/flickr.svg" title="Flickr" alt="Flickr" />
+						</p:link>
+						<p:spacer width="2" />
+						<p:link href="http://www.funcionpublica.gov.co/suscripcion-a-rss"
+							target="_blank">
+							<p:graphicImage dir="resources" height="24" width="24"
+								name="images/logos/rss.svg" title="RSS" alt="RSS" />
+						</p:link>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End HEADER -->
+		<div class="ui-fluid">
+			<f:view encoding="${configurationView['CNS_ENCODING']}"
+				locale="#{lenguajeBean.locale}">
+				<ui:debug
+					rendered="#{facesContext.application.projectStage == 'Development'}" />
+				<div id="banner"></div>
+				<div id="center">
+					<p:panelGrid columns="3"
+						columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1"
+						layout="grid" styleClass="ui-panelgrid-blank">
+						<h:outputText />
+						<h:panelGroup>
+							<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid"
+								styleClass="ui-panelgrid-blank">
+								<h:panelGroup>
+									<h1>
+										<p:outputLabel
+											value="#{empty pageTitle ? ' ' : pageTitle}" />
+									</h1>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h2>
+										<p:outputLabel
+											value="#{empty pageSubtitle ? ' ' : pageSubtitle}" />
+									</h2>
+								</h:panelGroup>
+							</p:panelGrid>
+						</h:panelGroup>
+						<h:outputText />
+						<h:outputText />
+						<h:form id="frmPrincipal" enctype="multipart/form-data">
+							<p:ajaxStatus onstart="PF('loadingDialog').show()"
+								onsuccess="PF('loadingDialog').hide()"
+								oncomplete="PF('loadingDialog').hide()"
+								onerror="PF('loadingDialogError').show()" />
+
+							<!-- dialogos -->
+
+							<p:remoteCommand name="sureExit" oncomplete="redirectToIndex()"
+								process="@this" update="@all"
+								actionListener="#{sesionBean.logout()}" />
+							<p:remoteCommand name="autoSureExit"
+								oncomplete="autoredirectToIndex()" process="@this" update="@all"
+								actionListener="#{sesionBean.logout()}" />
+							<p:panel id="panelPrincipal">
+								<p:outputLabel rendered="#{!renderMenu}" style="color:red"
+									value="${messages['MSG_MENU_INACTIVO']}" />
+								<p:separator rendered="#{!renderMenu}" />
+								<p:focus context="panelPrincipal" />
+								<h:panelGroup id="contains" rendered="#{renderMenu}">
+									<p:sticky target="stickyPanel"
+										rendered="#{sesionBean.sesionValida}" />
+									<h:panelGroup id="stickyPanel">
+										<div id="botones">
+											<p:toolbar id="tb">
+												<f:facet name="left">
+													<ui:insert name="botones" />
+												</f:facet>
+												<f:facet name="right">
+												</f:facet>
+											</p:toolbar>
+										</div>
+									</h:panelGroup>
+									<p:separator rendered="#{pageTitle ne titles['TTL_HOME']}" />
+									<p:growl id="growl" showDetail="true" globalOnly="true" />
+									<ui:insert name="main" />
+									<p:confirmDialog global="true" showEffect="fade"
+										hideEffect="fade">
+										<p:commandButton value="${titles['TTL_YES']}" type="button"
+											styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+										<p:commandButton value="${titles['TTL_NO']}" type="button"
+											styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+									</p:confirmDialog>
+								</h:panelGroup>
+							</p:panel>
+							<div id="clock">
+								<p:clock mode="server" />
+							</div>
+							<p:outputLabel style="font-size:0.8em;color:#FFFFFF;float:right"
+								value="${titles['TTL_REQUIRED']}" />
+						</h:form>
+					</p:panelGrid>
+				</div>
+				<h:form>
+					<p:idleMonitor timeout="#{timeout}" onidle="autoSureExit()" />
+				</h:form>
+				<h:outputText value="&#10;&#10;" style="white-space:pre;" />
+				<ui:include src="/resources/template/footerTemplate.xhtml" />
+			</f:view>
+			<p:dialog widgetVar="loadingDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false"
+				style="width:auto;height:auto">
+				<p:graphicImage dir="resources" name="/images/loading.gif"
+					height="45" width="70" alt="${messages['DLG_PROCESANDO']}"
+					title="${messages['MSG_PROCESANDO']}" />
+			</p:dialog>
+
+			<p:dialog widgetVar="loadingDialogError" modal="true"
+				draggable="false" closable="true" resizable="false"
+				header="${messages['DLG_PROCESO_FALLIDO']}">
+				<h:outputText value="${messages['DLG_PAGE_EXCEPTION_ERROR']}" />
+			</p:dialog>
+
+			<p:dialog modal="true" widgetVar="statusDialog" showHeader="false"
+				draggable="false" closable="false" resizable="false">
+				<p:graphicImage dir="resources" name="/images/loading.gif"
+					height="45" width="45" alt="${messages['DLG_PROCESANDO']}"
+					title="${messages['MSG_PROCESANDO']}" />
+				<h:outputText value="${messages['MSG_PROCESANDO']}" />
+			</p:dialog>
+		</div>
+	</h:body>
+</ui:composition>

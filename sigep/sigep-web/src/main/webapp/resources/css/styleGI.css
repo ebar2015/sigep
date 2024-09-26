@@ -1,0 +1,216 @@
+@CHARSET "ISO-8859-1";
+/*
+	Hoja de estilos exclusiva para los tableros de Gestion de la Informacion
+*/
+span th.tematica {
+	white-space: nowrap;
+}
+
+th.tematica {
+	color: #000000 !important;
+}
+
+.ui-datatable tbody td.tematica {
+	padding: 0.2em !important;
+}
+
+th.tematica-col {
+	color: #ffffff !important;
+	font-weight: 100 !important;
+	word-wrap: break-word !important;
+}
+
+th.cifras-empleo-publico {
+	background: rgb(255, 255, 255) !important;
+	width: 15em !important;
+	height: 1.3em !important;
+}
+
+th.plan-anual-vacantes {
+	background: #337ab7 !important;
+	width: 250em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.ley-cuotas {
+	background: #4295dc !important;
+	width: 200em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.ley-cuotas-max {
+	background: #4295dc !important;
+	width: 200em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.ley-cuotas-otro {
+	background: #4295dc !important;
+	width: 200em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.empleos {
+	background: #337ab7 !important;
+	width: 250em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.seguimiento {
+	background: #337ab7 !important;
+	width: 250em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+td img.seguimiento-semaforo {
+	position: relative;
+	float: left;
+}
+
+td.seguimiento-error {
+	background-image: url(../images/gi/error.png) !important;
+	font-weight: bold !important;
+}
+
+td.seguimiento-no-vinculado {
+	background: url(../images/gi/no-vinculado.png) !important;
+	font-weight: bold !important;
+}
+
+td.seguimiento-semaforo-amarillo {
+	background: url(../images/gi/amarillo.png) 0.2em !important;
+	background-repeat: no-repeat !important;
+}
+
+td.seguimiento-semaforo-verde {
+	background: url(../images/gi/verde.png) 0.2em !important;
+	background-repeat: no-repeat !important;
+}
+
+td.seguimiento-semaforo-rojo {
+	background: url(../images/gi/rojo.png) 0.2em !important;
+	background-repeat: no-repeat !important;
+}
+
+th.empleos-planta {
+	background: #337ab7 !important;
+	width: 250em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.acuerdos-gestion {
+	background: #387496 !important;
+	width: 250em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.capacitacion {
+	background: #132e46 !important;
+	width: 250em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.bienestar-incentivos {
+	background: #337ab7 !important;
+	width: 100em !important;
+	color: white !important;
+	font-weight: 100 !important;
+}
+
+th.horarios-flexibles {
+	background: rgb(54, 96, 146) !important;
+	width: 100em !important;
+	color: #FFFFFF !important;
+}
+
+th.teletrabajo {
+	background: rgb(22, 54, 92) !important;
+	width: 100em !important;
+	color: #FFFFFF !important;
+	font-weight: 100 !important;
+}
+
+th.bilinguismo {
+	background: rgb(15, 36, 62) !important;
+	width: 1000em !important;
+	color: #FFFFFF !important;
+	font-weight: 100 !important;
+}
+
+td.texto {
+	text-align: justify;
+	text-transform: uppercase;
+}
+
+td.numero {
+	text-align: right !important;
+}
+
+td.total {
+	font-weight: bold;
+}
+
+td.total-texto {
+	padding: 0.2em !important;
+	background: #000000 !important;
+	color: #000000 !important;
+}
+
+td.total-texto-total {
+	padding: 0.2em !important;
+	color: #000000 !important;
+	text-align: right !important;
+	font-weight: bold !important;
+	text-transform: uppercase;
+}
+
+td.total-numero {
+	padding: 0.2em !important;
+	text-align: right !important;
+	font-weight: bold !important;
+}
+
+tr td div button span.ui-button-text {
+	padding: 0em !important;
+}
+
+/* tr td div button.ui-widget, tr td button.ui-widget, div div div button.ui-widget{ */
+/* 	border: 0em solid !important; */
+/* } */
+#resultadosConsultaCatalogoGI th[role=columnheader] {
+	min-width: 15em !important;
+	width: 15em !important;
+}
+
+.ui-column-title {
+	font-size: 14px !important;
+}
+
+table tbody tr td {
+	font-size: 13px !important;
+}
+
+table tbody tr td input.ui-inputtext {
+	background: white !important;
+}
+
+table tbody tr td .ui-state-default {
+	font-size: 12px !important;
+}
+
+tr:nth-child(even) {
+	background: #ffffff !important;
+}
+
+tr:nth-child(odd) {
+	background: #f2f2f2 !important;
+}

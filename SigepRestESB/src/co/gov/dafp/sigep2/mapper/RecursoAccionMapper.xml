@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.gov.dafp.sigep2.interfaces.RecursoAccionMapper">
+	<resultMap id="BaseResultMap" type="co.gov.dafp.sigep2.bean.RecursoAccion">
+		<id column="cod_recurso" jdbcType="NUMERIC" property="id" />
+		<result column="cod_recurso_accion" jdbcType="NUMERIC" property="codRecursoAccion" />
+		<result column="cod_permiso_rol" jdbcType="NUMERIC" property="codPermisoRol" />
+		<result column="cod_permiso_rol_acciones" jdbcType="NUMERIC" property="codPermisoRolAcciones" />
+		<result column="padre" jdbcType="VARCHAR" property="padre" />
+		<result column="recurso" jdbcType="VARCHAR" property="recurso" />
+		<result column="seccion" jdbcType="VARCHAR" property="seccion" />
+		<result column="cod_rol" jdbcType="NUMERIC" property="codRol" />
+		<result column="nombre_rol" jdbcType="VARCHAR" property="nombreRol" />
+		<result column="descripcion_rol" jdbcType="VARCHAR" property="descripcionRol" />
+		<result column="flg_accion" jdbcType="BOOLEAN" property="flgAccion" />
+		<result column="flg_estado" jdbcType="BOOLEAN" property="flgEstado" />
+	</resultMap>
+
+	<resultMap id="CountResultMap" type="co.gov.dafp.sigep2.bean.RecursoAccion">
+		<result column="total" jdbcType="NUMERIC" property="total" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMapExt" type="co.gov.dafp.sigep2.bean.ext.RecursoAccionExt">
+		<id column="COD_USUARIO" jdbcType="NUMERIC" property="codUsuario" />
+	</resultMap>	
+
+	<select id="countByLikeNombreRol" parameterType="map" resultMap="CountResultMap">
+		select
+		<include refid="Count_Select" />
+		from v_recurso_accion
+		<include refid="Where_Main_Clause" />
+	</select>
+
+	<select id="selectByLikeNombreRol" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Select" />
+		from (select distinct
+		<include refid="Base_Select" />
+		from v_recurso_accion
+		<include refid="Where_Main_Clause" />
+		order by recurso, flg_accion) temp
+		OFFSET
+		#{recursoAccion.limitIni,
+		jdbcType=NUMERIC} ROWS
+		FETCH NEXT
+		#{recursoAccion.limitFin,
+		jdbcType=NUMERIC} ROWS
+		ONLY
+	</select>
+
+	<sql id="Base_Select">
+		cod_recurso,
+		cod_recurso_accion,
+		cod_permiso_rol,
+		cod_permiso_rol_acciones,
+		padre,
+		recurso,
+		seccion,
+		cod_rol,
+		nombre_rol,
+		descripcion_rol,
+		flg_accion,
+		flg_estado
+	</sql>
+
+	<sql id="Count_Select">
+		count(cod_recurso) total
+	</sql>
+	<sql id="Where_Main_Clause">
+		where
+		(upper(nombre_rol) like
+		upper(#{recursoAccion.nombreRol,jdbcType=VARCHAR})
+		or
+		upper(descripcion_rol) like
+		upper(#{recursoAccion.nombreRol,jdbcType=VARCHAR}))
+		<if test="inList != null">
+			and (recurso
+			<include refid="In_Clause" />
+		</if>
+		<if test="inList != null">
+			or seccion
+			<include refid="In_Clause" />
+			)
+		</if>
+	</sql>
+	<sql id="In_Clause">
+		in
+		(
+		<foreach collection="inList" item="criteria" separator=",">
+			<trim prefix="" prefixOverrides="or" suffix="">${criteria}</trim>
+		</foreach>
+		)
+	</sql>
+	<select id="selectByfiltro" parameterType="co.gov.dafp.sigep2.bean.RecursoAccion" resultMap="BaseResultMap">
+		select ra.* from v_recurso_accion ra
+		where 1=1
+		<if test="id != null">
+        	AND ra.COD_RECURSO= #{id,jdbcType=NUMERIC}
+      	</if>
+		
+		<if test="codRecursoAccion != null">
+        	AND ra.COD_RECURSO_ACCION = #{codRecursoAccion,jdbcType=NUMERIC}
+      	</if>
+		<if test="codPermisoRol != null">
+        	AND ra.COD_PERMISO_ROL = #{codPermisoRol,jdbcType=NUMERIC}
+      	</if>
+      	<if test="codPermisoRolAcciones != null">
+        	AND ra.COD_PERMISO_ROL_ACCIONES = #{codPermisoRolAcciones,jdbcType=NUMERIC}
+      	</if>
+      	<if test="padre != null">
+        	AND ra.PADRE = #{padre,jdbcType=VARCHAR}
+      	</if>
+      	<if test="recurso != null">
+        	AND ra.RECURSO = #{recurso,jdbcType=VARCHAR}
+      	</if>
+      	<if test="seccion != null">
+        	AND ra.SECCION = #{seccion,jdbcType=VARCHAR}
+      	</if>
+      	<if test="codRol != null">
+        	AND ra.COD_ROL = #{codRol,jdbcType=NUMERIC}
+      	</if>
+      	<if test="nombreRol != null">
+        	AND ra.NOMBRE_ROL = #{nombreRol,jdbcType=VARCHAR}
+      	</if>
+      	<if test="descripcionRol != null">
+        	AND ra.DESCRIPCION_ROL = #{descripcionRol,jdbcType=VARCHAR}
+      	</if>
+      	<if test="flgAccion != null">
+        	AND ra.FLG_ACCION = #{flgAccion,jdbcType=BOOLEAN}
+      	</if>
+      	<if test="flgEstado != null">
+        	AND ra.FLG_ESTADO = #{flgEstado,jdbcType=BOOLEAN}
+      	</if>
+	</select>
+	
+	<select id="getVistaRecursoUsuarioAccionFiltro" parameterType="co.gov.dafp.sigep2.bean.ext.RecursoAccionExt" resultMap="BaseResultMap">
+		select v.* from v_recurso_accion v 
+		inner  join usuario_rol_entidad ure on v.cod_rol = ure.cod_rol
+		inner  join usuario_entidad ue on ure.cod_usuario_entidad = ue.cod_usuario_entidad
+		where  ue.flg_activo = 1 and ure.flg_activo=1 and v.flg_estado=1
+		<if test="id != null">
+        	AND v.COD_RECURSO= #{id,jdbcType=NUMERIC}
+      	</if>
+		<if test="codUsuario != null">
+        	AND ue.COD_USUARIO= #{codUsuario,jdbcType=NUMERIC}
+      	</if>      	
+	</select>		
+	
+</mapper>

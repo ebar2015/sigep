@@ -1,0 +1,406 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{gestionarRolBean.id}" />
+		<f:viewParam name="recursoId" value="#{gestionarRolBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{gestionarRolBean.dialog}" />
+		<f:event listener="#{gestionarRolBean.retrieve}" type="preRenderView" />
+		<f:event listener="#{gestionarRolBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ROLES_MENU']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ROLES_BREADCRUMBS']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_ROLES_TITLE']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+        <script type="text/javascript">
+        	var tiempo = 1;
+			function resetValue(){
+				startTimer();
+			}
+			function startTimer() {
+				    interval = setInterval(() => {
+				      if(tiempo > 0) {
+				          tiempo--;
+				      } else {
+				    	$("input:text").val("");
+				        pauseTimer();
+				        tiempo = 1;
+				      }
+				    },1000);
+				  }
+
+			function pauseTimer() {
+			   clearInterval(interval);
+			}
+        </script>
+		<!-- Formulario -->
+		<div class="panel-body form-horizontal">
+			<div class="row">
+				<div class="col-md-12" align="center" style="margin-top: -1%;">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['TTL_ROLES_COL1']}"
+							style="color: #235379; font-size: 1.8em; font-weight: 500;" />
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-4 btn-search-separacion"
+						style="margin-left: 6%;">
+						<p:autoComplete id="nombreRol" forceSelection="true"
+							minQueryLength="3" maxResults="#{paginatorSize}" maxlength="255"
+							class="form-contxml-acti-usua" 
+							title="${titles['TTL_INGRESE']} ${titles['TTL_ROLES_COL1']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							value="#{gestionarRolBean.rol.nombre}"
+							completeMethod="#{gestionarRolBean.completeText}"
+							queryDelay="1000"
+							style="border-radius: 3px 0px 0px 3px!important; background-color: #ffffff!important;">
+							<p:ajax event="itemSelect" listener="#{gestionarRolBean.printTable()}" update="frmPrincipal"  process="@this"/>
+						</p:autoComplete>
+					</div>
+					<div class="col-md-3" style="margin-left: -10.5%;">
+						<p:commandButton value="#{titles.TTL_SEARCH}" id="searchBtn"
+							actionListener="#{gestionarRolBean.printTable()}"
+							update="frmPrincipal" process="@this,nombreRol"
+							styleClass="btn btn-buscar" onclick="resetValue();"
+							style="background-color: #2a89b5!important; margin-right: -6%;" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- DataTable  -->
+		<br />
+		<h:panelGroup>
+			<div class="row row-background-white">
+				<br />
+				<div class="col-md-12" align="right">
+					<c:forEach items="#{permisosUsuarioRol}" var="crud"
+						varStatus="loop">
+						<p:commandButton value="${titles['TTL_ROLES_ASIGNAR']}"
+							process="@this" styleClass="btn btn-transparent"
+							style="padding: 0% !important;"
+							action="#{gestionarRolBean.abrirAccion(0, crud.pagina)}"
+							rendered="#{crud.accion eq 'TTL_ASSOCIATE'}"
+							icon="fa fa-fw fa-users">
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton
+							value="${titles['TTL_ROLES_CONSULTAR_X_USUARIO']}"
+							process="@this" styleClass="btn btn-transparent"
+							style="padding: 0% !important;"
+							action="#{gestionarRolBean.abrirAccion(0, crud.pagina)}"
+							rendered="#{crud.accion eq 'TTL_CONSULTAR_ROL_USUARIO'}"
+							icon="fa fa-fw fa-search">
+						</p:commandButton>
+						<p:commandButton value="${titles['TTL_ROLES_CREAR']}"
+							process="@this" update="frmPrincipal:panelCrearRol"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							oncomplete="window.location.href='#frmPrincipal:nombreRolCrear'"
+							actionListener="#{gestionarRolBean.abrirVentanaCreacion()}"
+							rendered="#{crud.accion eq 'TTL_CREATE'}"
+							icon="fa fa-fw fa-plus-circle">
+						</p:commandButton>
+					</c:forEach>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+
+						<p:panel id="panelTableRol" widgetVar="panelTableRol"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable id="dataTableRol" lazy="true" var="dataRol" 
+								paginator="true" rows="#{paginatorSize}" reflow="true"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								rowsPerPageTemplate="#{paginatorsSize}"
+								value="#{gestionarRolBean.listaRol}">
+								<p:column headerText="#{titles.TTL_ROLES_COL1}" priority="2"
+									style="width:20em!important; padding: 2%!important;"
+									sortBy="#{dataRol.nombre}">
+									<h:outputText value="#{dataRol.nombre}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_ROLES_COL2}" priority="3"
+									style="width:25em!important; padding: 2%!important;"
+									sortBy="#{dataRol.descripcionRol}">
+									<h:outputText value="#{dataRol.descripcionRol}" />
+								</p:column>
+								<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+									priority="1"
+									style="opacity: 1!important; width:auto!important; text-align:center; padding: 2%!important;"
+									rendered="#{permisosUsuarioRol.size() > 0}">
+									<c:forEach items="#{permisosUsuarioRol}" var="crud"
+										varStatus="loop">
+										<c:choose>
+											<c:when test="#{crud.accion eq 'TTL_DELETE'}">
+												<p:commandButton value=" " icon="#{crud.icono}"
+													process="@this" styleClass="icon-btn"
+													onclick="PF('eliminarRol').show();"
+													title="#{titles[crud.accion].concat('')}"
+													rendered="#{(crud.accion ne 'TTL_CREATE' and crud.accion ne 'TTL_CONSULTAR_ROL_USUARIO' and !dataRol.flgRolBase) or crud.accion eq 'TTL_ASSOCIATE'}">
+													<f:setPropertyActionListener value="#{dataRol}"
+														target="#{gestionarRolBean.rolSeleccionado}" />
+												</p:commandButton>
+											</c:when>
+											<c:when test="#{crud.accion eq 'TTL_ROLES_JERARQUIA_A'}">
+												<p:commandButton value=" " icon="#{crud.icono}"
+													process="@this" styleClass="icon-btn"
+													action="#{gestionarRolBean.abrirAccion(dataRol.id, crud.pagina)}"
+													title="#{titles[crud.accion].concat('')}"
+													rendered="#{gestionarPermisoBean.tienePermisoModificarRol(dataRol.id)}" />
+											</c:when>
+											<c:when test="#{crud.accion eq 'TTL_PERMISOS_GESTIONAR'}">
+												<p:commandButton value=" " icon="#{crud.icono}"
+													process="@this" styleClass="icon-btn"
+													action="#{gestionarRolBean.abrirAccion(dataRol.id, crud.pagina)}"
+													title="#{titles[crud.accion].concat('')}"
+													rendered="#{gestionarPermisoBean.tienePermisoModificarRol(dataRol.id) and (dataRol.flgRolBase or dataRol.codRolPadre ne null)}" />
+											</c:when>
+											<c:otherwise>
+												<p:commandButton value=" " icon="#{crud.icono}"
+													process="@this" styleClass="icon-btn"
+													action="#{gestionarRolBean.abrirAccion(dataRol.id, crud.pagina)}"
+													title="#{titles[crud.accion].concat('')}"
+													rendered="#{gestionarPermisoBean.validarPermisoAsignarRol(dataRol.id) and crud.accion ne 'TTL_CREATE' and crud.accion ne 'TTL_CONSULTAR_ROL_USUARIO'}" />
+											</c:otherwise>
+										</c:choose>
+
+										<p:spacer width="2" />
+									</c:forEach>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-12" align="left">
+						<br />
+						<p:outputLabel
+							value="${titles['LBL_TRANSVERSAL_REPORTEADOR_TOTAL_REGISTROS']}" />
+						<h:outputText value="#{gestionarRolBean.listaRol.rowCount}" />
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<p:defaultCommand target="searchBtn" />
+		</h:panelGroup>
+
+		<!-- PANEL PARA LA CREACION DE ROLES -->
+
+		<p:outputPanel id="panelCrearRol"
+			style="background: transparent !important;">
+			<p:panel id="subPanelCrearRol" widgetVar="subPanelDetalleParametrica"
+				style="background: transparent !important;"
+				rendered="#{gestionarRolBean.habilitarFormularioCrear}">
+				<div class="row row-background-white" id="pruebaSi">
+					<br />
+					<div class="row">
+						<div class="col-md-12" style="text-align: center;">
+							<p:outputLabel value="${titles['LBL_ROLES_MSG_CREAR_ROL']}"
+								for="nombreRol" styleClass="advisor" />
+						</div>
+					</div>
+					<hr class="hr-style hr-style-two" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						<p:outputLabel value="${titles['LBL_ROLES_MSG_CREAR_ROL_TITLE']}"></p:outputLabel>
+					</span> <br /> <br />
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-1"></div>
+							<div class="col-sm-5">
+								<p:outputLabel value="${titles['LBL_ROLES_NOMBRE']}:"
+									for="nombreRolCrear"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="nombreRolCrear"
+									value="#{gestionarRolBean.rol.nombre}" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									class="form-control-acti-usua" autocomplete="off"
+									onkeypress="return anular(event)"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_ROLES_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									maxlength="50">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="nombreRolCrear" display="text" />
+							</div>
+							<div class="col-sm-5">
+								<p:outputLabel value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+									for="descripcionRol"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="descripcionRol"
+									value="#{gestionarRolBean.rol.descripcionRol}" required="false"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									onkeypress="return anular(event)"
+									class="form-control-acti-usua" autocomplete="off"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_DESCRIPCION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									maxlength="255">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="descripcionRol" display="text" />
+							</div>
+							<div class="col-sm-1"></div>
+						</div>
+						<br />
+					</div>
+					<br /> <br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['TTL_OK']}" type="submit"
+								process="panelCrearRol"
+								update="frmPrincipal:panelCrearRol frmPrincipal:panelTableRol"
+								actionListener="#{gestionarRolBean.persist}"
+								styleClass="btn btn-primary"
+								style="padding-left:16%!important;padding-right:16%!important; font-size:1.5em!important;">
+							</p:commandButton>
+						</div>
+						<div class="col-md-2" style="margin-bottom: 4%;">
+							<p:commandButton value="${titles['TTL_CANCEL']}"
+								resetValues="true" process="@this"
+								update="frmPrincipal:panelCrearRol"
+								actionListener="#{gestionarRolBean.ocultarPanelCrear()}"
+								styleClass="btn btn-default"
+								style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+
+		<!-- FIN PANEL PARA LA CREACION DE ROLES -->
+
+		<!-- ### INICIO ### MODAL PARA CONFIRMAR LA ELIMINACION DE ROLES  -->
+		<p:dialog header="• ${titles['TTL_ROLES_ELIMINAR']} •" widgetVar="eliminarRol"
+			id="eliminarRol" minHeight="200" modal="true" resizable="false"
+			closeOnEscape="false" responsive="true" draggable="false"
+			closable="false" appendTo="@(body)" width="550">
+			<p:panel id="panelConfirmacionEliminarRol"
+				style="background: transparent!important;">
+				<div class="col-md-12" align="center"
+					style="margin-top: 3%; margin-bottom: 5%;">
+					<p:outputLabel value="${messages['DLG_ELIMINAR_ROL']}"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+				</div>
+				<br /><br />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnEliminarRol" value="${titles['TTL_OK']}"
+							styleClass="btn btn-primary"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							process="@this" update="contains"
+							actionListener="#{gestionarRolBean.eliminarRol(gestionarRolBean.rolSeleccionado)}"
+							onclick="PF('eliminarRol').hide();" />
+						<p:message for="btnEliminarRol" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="@this" styleClass="btn btn-default"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							onclick="PF('eliminarRol').hide();" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+			</p:panel>
+		</p:dialog>
+		<!-- ### FIN ### MODAL PARA CONFIRMAR LA ELIMINACION DE ROLES  -->
+
+
+		<!-- ### INICIO ### MODAL PARA ASOCIAR USUARIOS A OTRO ROL -->
+
+		<p:dialog header="• Reasignar Rol •"
+			widgetVar="dialogReasignarRolUsuarios"
+			id="dialogReasignarRolUsuarios" minHeight="200" modal="true"
+			resizable="false" closeOnEscape="false" responsive="true"
+			draggable="false" closable="false" appendToBody="true" width="550">
+			<p:panel id="panelDialogReasignarRolUsuarios"
+				style="background: transparent!important;">
+				<div class="col-md-12" align="center"
+					style="margin-top: 3%; margin-bottom: 3%;">
+					<p:outputLabel
+						value="Para eliminar el rol debe asignar un nuevo rol a los usuarios que actualmente tienen ese rol asociado"
+						style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+						escape="false" />
+					<br />
+				</div>
+
+				<br />
+
+				<div class="row" align="center">
+					<p:outputLabel value="Nuevo rol que desea asignar"
+						styleClass="log-label form-label-formularios"
+						style="font-size: 1.2em !important;" />
+				</div>
+				<div class="row" align="center">
+					<h:selectOneMenu id="rolReasignar" converter="#{rolConverter}"
+						value="#{gestionarRolBean.rolReasignar}" var="t" filter="false"
+						filterMatchMode="contains" required="true"
+						requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+						title="${titles['TTL_SELECT']} ${titles['TLL_ROL']}"
+						styleClass="form-control-form-act-usua" style="width: 65%;">
+						<f:selectItem itemValue="#{null}"
+							itemLabel="${titles['TTL_SELECT']}" />
+						<f:selectItems value="#{gestionarRolBean.listaRoles}"
+							var="rolReasignar" itemLabel="#{rolReasignar.descripcionRol}"
+							itemValue="#{rolReasignar}" />
+					</h:selectOneMenu>
+				</div>
+
+				<br />
+				<br />
+
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnReasignarRolUsuarios"
+							value="${titles['TTL_OK']}" styleClass="btn btn-primary"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							process="@this frmPrincipal:rolReasignar" update="contains"
+							action="#{gestionarRolBean.reasignarRolUsuarios(gestionarRolBean.rolReasignar)}"
+							onclick="PF('dialogReasignarRolUsuarios').hide();" />
+						<p:message for="btnReasignarRolUsuarios" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="@this" styleClass="btn btn-default"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							onclick="PF('dialogReasignarRolUsuarios').hide();" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+			</p:panel>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

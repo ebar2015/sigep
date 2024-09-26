@@ -1,0 +1,2039 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{datosPersonalesBean.id}' />
+		<f:viewParam name="dialog" value='#{datosPersonalesBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{datosPersonalesBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{datosPersonalesBean.showDialog}' />
+	</f:metadata>
+	<style>
+.ui-message-defaul-nacionalidad .ui-messages-info-detail,
+	.ui-message-defaul-nacionalidad .ui-messages-info {
+	color: #b94a48 !important;
+	background-color: transparent !important;
+	border: none !important;
+	font-family: Arial, sans-serif !important;
+	height: 0px !important;
+	margin: 0 5px !important;
+	padding: 5px 5px !important;
+	font-size: 1em !important;
+}
+
+.media-mark {
+	width: 53%;
+}
+
+.stl-tipo-discap {
+	width: 49%;
+}
+
+.stl-margin {
+	margin-left: -2.6%;
+	width: 59.5%;
+}
+
+.ui-dialog.modal-pabe {
+	top: 15vh;
+}
+</style>
+<script type="text/javascript">
+ //<![CDATA[
+ function remove() {
+  if (typeof window.CSSMediaRule !== "function") return false; //Your browser doesn't support media query feature
+  var s = document.styleSheets,
+  r, i, j, k;
+  if (!s) return; //no style sheets found
+  // walk throuth css sheets
+  for (i = 0; i < s.length; i++) {
+    // get all rules
+    r = s[i].cssRules;
+    if (!r) continue;
+    for (j = 0; j < r.length; j++) {
+      //If there's a rule for media query
+      if (r[j] instanceof CSSMediaRule && r[j].media.mediaText == "only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)") {
+        for (k = 0; k < r[j].cssRules.length; k++) {
+          // remove all rules of it,
+          // comment this line and resize the "result" panel to see the difference
+          r[j].deleteRule(r[j].cssRules[k]);
+        }
+      }
+    }
+  }
+}
+ $(window).on('load', function () {
+   remove();
+  });
+ //]]>
+</script>
+	<p:tabView id="tabView" style="background-color: transparent;"
+		       activeIndex="#{datosPersonalesBean.changedTab}" 
+		       cache="false"
+		       onTabShow="callRemoteMethod();">
+		
+		<p:ajax event="tabChange" 
+		        listener="#{datosPersonalesBean.onTabChange}"
+		        oncomplete="setTimeout(function() { $('#messages').html(''); }, 3000);"	
+		        update="tabView"/>
+
+		<p:tab title="${titles['TTL_DATOS_BASICOS']}" id="idTabDatosBasicos">
+			<p:panel id="formDatosPersonales">
+				<div class="row row-background-white">
+						<br /> <br />
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style"> ${titles['TTL_DATOS_BASICOS']} </span> <br />
+						<div class="row" align="right">
+							<div class="col-md-12">
+								<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+							</div>
+						</div>
+						<p:panel id="pdpDatosBasicosNombreCompleto" >
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-sm-4">
+										<p:outputLabel
+											value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}:"
+											for="primerNombre"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="primerNombre"
+											value="#{datosPersonalesBean.persona.primerNombre}"
+											required="true"
+											title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											class="form-control-acti-usua"
+											onchange="datosModificados(1);"
+											disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">
+										</p:inputText>
+										<p:message for="primerNombre" display="text" />
+									</div>
+									<div class="col-sm-4">
+										<p:outputLabel
+											value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}:"
+											for="segundoNombre"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="segundoNombre"
+											value="#{datosPersonalesBean.persona.segundoNombre}"
+											title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}"
+											class="form-control-acti-usua"
+											onchange="datosModificados(1);"
+											disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">	
+										</p:inputText>
+										<p:message for="segundoNombre" display="text" />
+									</div>
+									<div class="col-sm-4">
+										<p:outputLabel
+											value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}:"
+											for="primerApellido"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="primerApellido"
+											value="#{datosPersonalesBean.persona.primerApellido}"
+											title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}"
+											required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											class="form-control-acti-usua"
+											onchange="datosModificados(1);"
+											disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">
+										</p:inputText>
+										<p:message for="primerApellido" display="text" />
+									</div>
+								</div>
+							</div>
+							<br />
+						</p:panel>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-4">
+									<p:panel id="pdpDatosBasicosApel1">
+										<p:outputLabel
+											value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}:"
+											for="segundoApellido"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="segundoApellido"
+											value="#{datosPersonalesBean.persona.segundoApellido}"
+											title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}"
+											class="form-control-acti-usua"
+											onchange="datosModificados(1);"
+											disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">
+										</p:inputText>
+										<p:message for="segundoApellido" display="text" />
+									</p:panel>
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['TTL_TIPO_IDENTIFICACION']}:"
+										for="tipoDocumento"
+										styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="tipoDocumento"
+										value="#{datosPersonalesBean.persona.codTipoIdentificacion}"
+										required="true"
+										title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_IDENTIFICACION']}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua" 
+										onchange="datosModificados(1);"
+										disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+											itemValue="#{null}" itemDisabled="true" />
+										<f:selectItems value="#{webUtils.tiposDeIdentificacion}" />
+									</h:selectOneMenu>
+									<p:message for="tipoDocumento" display="text" />
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['TTL_NICK_NAME']}:" for="cedula"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="cedula"
+										value="#{datosPersonalesBean.persona.numeroIdentificacion}"
+										required="true"
+										title="${titles['TTL_INGRESE']} ${titles['TTL_NICK_NAME']}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										class="form-control-acti-usua"
+										onchange="datosModificados(1);"
+										disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">
+									</p:inputText>
+									<p:message for="cedula" display="text" />
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-4 media-txt">
+									<p:outputLabel value="${titles['LBL_FECHA_NACIMIENTO']}"
+										for="fechaNacimiento"
+										styleClass="log-label form-label-formularios" />
+									<p:calendar mask="true" yearRange="#{rangoAnios}"
+										id="fechaNacimiento"
+										placeholder="${titles['LBL_FORMATO_FECHA']}"
+										maxdate="#{fechaSistema}" navigator="true"
+										value="#{datosPersonalesBean.persona.fechaNacimiento}"
+										pattern="#{fechaFormato}" required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_NACIMIENTO']}"
+										locale="#{lenguajeBean.localeCode}"
+										onselect="datosModificados(1);"
+										disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}">
+										<f:attribute name="maxDate" value="#{fechaSistema}" />
+										<f:validator validatorId="edadMinDateValidator" />
+									</p:calendar>
+									<p:message for="fechaNacimiento" display="text" />
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_MAIL']}:" for="email"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="email"
+										value="#{datosPersonalesBean.persona.correoElectronico}"
+										required="true"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_MAIL']}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										class="form-control-acti-usua"
+										onchange="datosModificados(1);"
+										disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<f:validator validatorId="emailValidator" />
+									</p:inputText>
+									<p:message for="email" display="text" />
+								</div>
+								<div class="col-sm-4 media-txt-3">
+									<p:outputLabel value="${titles['TTL_TRANSVERSAL_TIPO_GENERO']}:"
+										for="genero" styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="genero"
+										value="#{datosPersonalesBean.persona.codGenero}"
+										required="true"
+										title="${titles['TTL_SELECT']} ${titles['TTL_TRANSVERSAL_TIPO_GENERO']}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										disabled="#{!datosPersonalesBean.lblModificarDatosPersonales}"
+										>
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+											itemValue="#{null}" itemDisabled="true" />
+										<f:selectItems value="#{webUtils.genero}" />
+										<p:ajax
+											listener="#{datosPersonalesBean.mostratPanelDatosLibretaMilitar(true)}"
+											process="@this" 
+											oncomplete="datosModificados(1);"/>
+									</h:selectOneMenu>
+									<p:message for="genero" display="text" />
+								</div>
+							</div>
+						</div>
+						<br />
+						
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-4">
+									<p:outputLabel value="${titles['LBL_CLASE_LIBRETA_MILITAR']}:"
+										for="claseLibretaMilitar"
+										styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="claseLibretaMilitar"
+										value="#{datosPersonalesBean.persona.claseLibretaMilitar}"
+										onchange="datosModificados(1);"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.claseLibreta_mil}" />
+									</h:selectOneMenu>
+									<p:message for="claseLibretaMilitar"
+										id="msgclaseLibretaMilitar" display="text" />
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel
+										value="${titles['LBL_NUMERO_LIBRETA_MILITAR']}:"
+										for="numeroLibretaMilitar"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="numeroLibretaMilitar" 
+										value="#{datosPersonalesBean.persona.numeroLibretaMilitar}"
+										class="form-control-acti-usua" maxlength="20"
+										autocomplete="false" 
+										onkeypress="return numbervalida(event)"
+										onchange="datosModificados(1);">
+										<f:validator validatorId="numberValidator" />
+									</p:inputText>
+									<p:message for="numeroLibretaMilitar" display="text" />
+								</div>
+								<div class="col-sm-4">
+									<p:outputLabel
+										value="${titles['LBL_DISTRITO_LIBRETA_MILITAR']}:"
+										for="distritoMilitar"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="distritoMilitar"
+										value="#{datosPersonalesBean.persona.distritoMilitar}"
+										onkeypress="return sololetras(event);" maxlength="2"
+										class="form-control-acti-usua" 
+										autocomplete="false"
+										onchange="datosModificados(1);">
+									</p:inputText>
+									<p:message for="distritoMilitar" display="text" />
+								</div>
+							</div>
+						</div>
+						<br />
+						<hr class="hr-style" />
+						
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<p:outputLabel for="documentoIdentificacionPDF"
+										value="${titles['LBL_DOCUMENTO_IDENTIFICACION']}:"
+										styleClass="log-label form-label-formularios" />
+								</div>
+								<div class="col-md-5" style="padding-left: 10% !important;">
+									<p:fileUpload id="documentoIdentificacionPDF"
+										disabled="#{datosPersonalesBean.persona.flgDocumentoIdentificacionValidado}"
+										value="#{datosPersonalesBean.cargarDodumento.fileName}"
+										label="${titles['LBL_SUBIR']}"
+										update="labelDocumentoIdentificacionPDF"
+										fileUploadListener="#{datosPersonalesBean.documentoUpload}"
+										mode="advanced" auto="true" required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+										allowTypes="/(\.|\/)(pdf)$/"
+										sizeLimit="#{templateHojaDeVidaBean.tamPdfCedula}"
+										invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+									<p:outputLabel
+										value="#{datosPersonalesBean.nombreArchivoDocumento}"
+										id="labelDocumentoIdentificacionPDF" />
+									<p:message for="documentoIdentificacionPDF" display="text" />
+	
+								</div>
+								<div class="col-md-1 vista-media"
+									style="padding-top: 1% !important;">
+									<p:commandButton
+										title="${titles['BTN_VER']} ${titles['LBL_DOCUMENTO_IDENTIFICACION']}"
+										id="idBtnVerIdentificacionDatosPersonales" icon="icon-view"
+										styleClass="icon-btn" process="@this"
+										update="frmPrincipal:tabHojaDeVida:panelDiaVisualizar"
+										actionListener="#{datosPersonalesBean.visualizarArchivoDatosPersonales('1')}"
+										onclick="$('#documentosAdjuntos').modal('show')"/>
+								</div>
+								<div class="col-md-3 check-media">
+									<p:outputLabel value="• ${titles['LBL_DOCUMENTO_VERIFICADO']}"
+										for="documentoIdentificacionValidado"
+										styleClass="log-label form-label-formularios" />
+									<p:spacer width="8" />
+									<p:selectBooleanCheckbox id="documentoIdentificacionValidado"
+										value="#{datosPersonalesBean.persona.flgDocumentoIdentificacionValidado}"
+										disabled="#{!datosPersonalesBean.flgValidadoDocumento or datosPersonalesBean.lbISGestionarSoloConsultaHV}" />
+								</div>
+							</div>
+							
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<p:outputLabel for="libretaMilitarPDF" id="labelLibreta"
+										value="${titles['LBL_LIBRETA_MILITAR']}:"
+										styleClass="log-label form-label-formularios" />
+								</div>
+								<div class="col-md-5" style="padding-left: 10% !important;">
+									<p:fileUpload id="libretaMilitarPDF"
+										disabled="#{datosPersonalesBean.persona.flgLibretaMilitarValidada}"
+										value="#{datosPersonalesBean.cargarlibretaMilitar.fileName}"
+										label="${titles['LBL_SUBIR']}"
+										update="labelLibretaMilitarPDF"
+										fileUploadListener="#{datosPersonalesBean.libretaMilitarUpload}"
+										mode="advanced" auto="true" 
+										invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+										allowTypes="/(\.|\/)(pdf)$/"
+										sizeLimit="#{templateHojaDeVidaBean.tamPdfLibretaMilitar}"
+										invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+									<p:outputLabel
+										value="#{datosPersonalesBean.nombreArchivoLibreta}"
+										id="labelLibretaMilitarPDF" />
+									<p:message for="libretaMilitarPDF" display="text" />
+								</div>
+								<div class="col-md-1 vista-media"
+									 style="padding-top: 1% !important;">
+									<p:commandButton title="${titles['LBL_VER_ADJUNTO_LIBRETA']}"
+										id="idBtnVerLibretaMilitar" icon="icon-view"
+										styleClass="icon-btn" process="@this"
+										update="frmPrincipal:tabHojaDeVida:panelDiaVisualizar"
+										actionListener="#{datosPersonalesBean.visualizarArchivoDatosPersonales('2')}"
+										onclick="$('#documentosAdjuntos').modal('show')"/>
+								</div>
+								<div class="col-md-3">
+									<p:outputLabel value="• ${titles['LBL_DOCUMENTO_VERIFICADO']}"
+										for="LibretaMilitarValidada"
+										styleClass="log-label form-label-formularios" />
+									<p:spacer width="8" />
+									<p:selectBooleanCheckbox id="LibretaMilitarValidada"
+										value="#{datosPersonalesBean.persona.flgLibretaMilitarValidada}"
+										disabled="#{!datosPersonalesBean.flgValidadoLibreta}" />
+								</div>
+							</div>
+								
+							
+							
+							<p:panel id="idPanelConsultaDatosBasicosView" rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+								<div class="row">
+									<div class="col-md-12" align="center">
+										<div class="col-md-4"></div>
+										<div class="col-md-2" style="margin-bottom: 4%;">
+											<p:panel id="pdpDatosBasicos1"
+												style="padding: 0%;">
+												<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+													id="idBtGuardarDatosBasicos"
+													process="formDatosPersonales"
+													update="formDatosPersonales tabView frmPrincipal:tabHojaDeVida:dialogDatosPersonales frmPrincipal:tabHojaDeVida
+													        frmPrincipal:informacionPersonalUsuario"
+													actionListener="#{datosPersonalesBean.confirmarDatosGuardar(1)}"
+													styleClass="btn btn-primary"
+													style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;"
+													oncomplete="datosModificados(0);">
+												</p:commandButton>
+											</p:panel>
+										</div>
+										<div class="col-md-2" style="margin-bottom: 4%;">
+											<p:commandButton value="${titles['TTL_CANCEL']}"
+												styleClass="btn btn-primary"
+												id="cancelarDatosPersonales"
+												style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+												process="@this"
+												update="frmPrincipal:tabHojaDeVida:tabView frmPrincipal:tabHojaDeVida"
+												actionListener="#{datosPersonalesBean.confirmarCancelar()}">
+											</p:commandButton>
+										</div>
+										<div class="col-md-4"></div>
+									</div>
+								</div>
+							</p:panel>
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<p:outputLabel value="${titles['TTL_EXPUESTA_POLITICAMENTE']}"
+										for="expuestoPoliticamente"
+										styleClass="log-label form-label-formularios"
+										style="color: #255377!important;font-size: 1.5em!important; font-weight: 600 !important;" />
+								</div>
+								<div class="col-lg-12" align="center">
+									<div class="col-md-12">
+										<p:selectOneRadio id="expuestoPoliticamente" title="dsdsd"
+											value="#{datosPersonalesBean.persona.expuestoPoliticamente}"
+											disabled="#{datosPersonalesBean.persona.marcacionPepVinc ==1 ? true : false}">
+											<f:selectItem itemLabel="${titles['LBL_SI']}" itemValue="true"
+												style="background: white!important;" />
+											<f:selectItem itemLabel="${titles['LBL_NO']}"
+												itemValue="false" style="background: white!important;" />
+										</p:selectOneRadio>
+										<p:message for="expuestoPoliticamente" display="text" />
+									</div>
+									<div class="col-md-12" style="text-align: center">
+										<a href="javascript:void(0);"
+											onclick="$('#dlgDetallePep').modal('show')"
+											style="text-decoration: underline; color: #255377; font-size: 1.5em !important; font-weight: 600;">
+											${titles['LBL_VER_DECRETO']} </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+		</p:tab>
+		<p:tab title="${titles['TTL_DATOS_DEMOGRAFICOS']}">
+				<p:panel id="formDatosDemograficos">
+				<div class="row row-background-white">
+					<br /> <br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">
+						${titles['TTL_DATOS_DEMOGRAFICOS']}</span> <br />
+					<div class="row" align="right">
+						<div class="col-md-12">
+							<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-6">
+								<h:outputLabel value="* ${titles['TTL_NACIONALIDAD']}:"
+									for="nacionalidadPerfil"
+									styleClass="log-label form-label-formularios" />
+								<p:selectCheckboxMenu id="nacionalidadPerfil"
+									title="${titles['TTL_SELECT']} ${titles['TTL_NACIONALIDAD']}"
+									value="#{datosPersonalesBean.nacionalidad}"
+									label="#{titles['TTL_SELECT']}" 
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									multiple="true" filter="true" 
+									filterMatchMode="startsWith"
+									converter="paisConverter"
+									styleClass="form-control-nacionalidad"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}"	>
+									<f:selectItems value="#{pais}" var="tipoPais"
+										itemLabel="#{tipoPais.nombrePais}" itemValue="#{tipoPais}" />
+								</p:selectCheckboxMenu>
+								<p:message for="nacionalidadPerfil" display="text" />
+							</div>
+							<div class="col-sm-6">
+								<p:outputLabel value="${titles['LBL_ESTADO_CIVIL']}:"
+									for="estadoCivil" styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="estadoCivil"
+									value="#{datosPersonalesBean.persona.codEstadoCivil}"
+									title="${titles['TTL_SELECT']} ${titles['LBL_ESTADO_CIVIL']}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}"	>
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="true" />
+									<f:selectItems value="#{webUtils.estadoCivil}" />
+									
+								</h:selectOneMenu>
+								<p:message for="estadoCivil" display="text" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-sm-6">
+								<p:outputLabel value="${titles['TTL_PERTENENCIA_ETNICA']}: "
+									for="poblacionEtnica"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="poblacionEtnica"
+									title="${titles['TTL_SELECT']} ${titles['TTL_PERTENENCIA_ETNICA']}"
+									value="#{datosPersonalesBean.persona.codPertenenciaEtnica}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}"	>
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="true" />
+									<f:selectItems value="#{webUtils.poblacionEtnica}" />
+									
+								</h:selectOneMenu>
+								<p:message for="poblacionEtnica" display="text" />
+							</div>
+							<div class="col-sm-6">
+								<p:outputLabel value="${titles['LBL_PAIS_NACIMIENTO']}:"
+									for="paisNacimiento"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="paisNacimiento"
+									title="${titles['TTL_SELECT']} ${titles['LBL_PAIS_NACIMIENTO']}"
+									value="#{datosPersonalesBean.persona.codPaisNacimiento}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}"	>
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="true" />
+									<f:selectItems value="#{webUtils.pais}" />
+									<p:ajax
+										listener="#{datosPersonalesBean.mostratPanelDatosPorPaisNacionalidad(true)}"
+										process="@this" update="panelPaisNacionalidad" 
+										oncomplete="datosModificados(1);"/>
+								
+								</h:selectOneMenu>
+								<p:message for="paisNacimiento" display="text" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-lg-12">
+							<p:outputPanel id="panelPaisNacionalidad">
+								<p:panel>
+									<div class="col-md-6">
+										<p:outputLabel
+											value="${titles['LBL_DEPARTAMENTO_NACIMIENTO']}:"
+											for="departamentoNacimiento"
+											styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="departamentoNacimiento"
+											value="#{datosPersonalesBean.persona.codDepartamentoNacimiento}"
+											disabled="#{!datosPersonalesBean.mostratDatosPorPaisNacionalidad or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+											required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" itemDisabled="true" />
+											<f:selectItems
+												value="#{webUtils.getDeptos(datosPersonalesBean.persona.codPaisNacimiento)}" />
+											<p:ajax event="change" process="@this"
+												    update="panelPaisNacionalidad"
+												    oncomplete="datosModificados(1);" />												
+										</h:selectOneMenu>
+										<p:message for="departamentoNacimiento" display="text" />
+									</div>
+									<div class="col-md-6">
+										<p:outputLabel value="${titles['LBL_MUNICIPIO_NACIMIENTO']}:"
+											for="municipioNacimiento"
+											styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="municipioNacimiento"
+											value="#{datosPersonalesBean.persona.codMunicipioNacimiento}"
+											disabled="#{!datosPersonalesBean.mostratDatosPorPaisNacionalidad or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+											required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua"
+											onchange="datosModificados(1);">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" itemDisabled="true" />
+											<f:selectItems
+												value="#{webUtils.getMunicipios(datosPersonalesBean.persona.codDepartamentoNacimiento)}" />
+											
+										</h:selectOneMenu>
+										<p:message for="municipioNacimiento" display="text" />
+									</div>
+								</p:panel>
+							</p:outputPanel>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-lg-12" >
+							<div class="col-sm-6 ">
+								<p:outputLabel value="${titles['LBL_DISCAPACIDAD']}"
+									for="discapacidad"
+									styleClass="log-label form-label-formularios" />
+								<p:selectBooleanCheckbox id="discapacidad"
+									title="${titles['TTL_SELECT']} ${titles['LBL_DISCAPACIDAD']}"
+									value="#{datosPersonalesBean.datosAdicionales.flgDiscapacidad}"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<p:ajax
+										listener="#{datosPersonalesBean.mostratPanelTipoDiscapacidad()}"
+										process="@this"
+										update="panelTipoDiscapacidad, panelDocumentoDiscapacidad"
+										oncomplete="datosModificados(1);"/>
+								</p:selectBooleanCheckbox>
+							</div>
+							<div class="col-sm-6" >
+								<p:outputPanel id="panelTipoDiscapacidad">
+									<p:panel rendered="#{datosPersonalesBean.datosAdicionales.flgDiscapacidad}">	
+										<p:outputLabel value="${titles['LBL_TIPO_DISCAPACIDAD']}"
+											for="tipoDiscapacidad"
+											styleClass="log-label form-label-formularios"/>
+											<p:selectOneMenu id="tipoDiscapacidad"
+												title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_DISCAPACIDAD']}"
+												value="#{datosPersonalesBean.datosAdicionales.codTipoDiscapacidad}"
+												disabled="#{!datosPersonalesBean.datosAdicionales.flgDiscapacidad or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+												required="true"
+												filter="true" filterMatchMode ="custom" filterFunction="contains"
+												requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+												styleClass="form-control-form-act-usua"
+												onchange="datosModificados(1);">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+												<f:selectItems value="#{webUtils.tipoDiscapacidad}" />
+											</p:selectOneMenu>
+											<p:message for="tipoDiscapacidad" display="text" />
+										
+									</p:panel>
+								</p:outputPanel>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="col-md-12">
+						<p:outputPanel id="panelDocumentoDiscapacidad">
+							<p:panel rendered="#{datosPersonalesBean.datosAdicionales.flgDiscapacidad}">
+								<div class="col-md-3">
+									<p:outputLabel for="documentoDiscapacidad"
+										id="labelDocumentoDiscapacidad"
+										value="${titles['LBL_DOCUMENTO_DISCAPACIDAD']}:"
+										styleClass="log-label form-label-formularios" />
+								</div>
+								<div class="col-md-5" style="padding-left: 10% !important;">
+									<p:fileUpload id="documentoDiscapacidad"
+										disabled="#{datosPersonalesBean.persona.flgDiscapacidadValidada}"
+										value="#{datosPersonalesBean.cargarDocumentoDiscapacidad.fileName}"
+										label="${titles['LBL_SUBIR']}"
+										update="labelNombreDocumentoDiscapacidad"
+										fileUploadListener="#{datosPersonalesBean.uploadDocumentoDiscapacidad}"
+										mode="advanced" auto="true"
+										invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+										allowTypes="/(\.|\/)(pdf)$/"
+										sizeLimit="#{templateHojaDeVidaBean.tamPdfDocumentoDiscapacidad}"
+										invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+									<p:outputLabel
+										value="#{datosPersonalesBean.nombreArchivoDiscapacidad}"
+										id="labelNombreDocumentoDiscapacidad" />
+									<p:message for="labelNombreDocumentoDiscapacidad" display="text" />
+								</div>
+								<div class="col-md-1 vista-media"
+									style="padding-top: 1% !important;">
+									<p:commandButton title="${titles['LBL_VER_ADJUNTO_DISCAPACIDAD']}"
+										id="idBtnVerDocumentoDiscapacidad" icon="icon-view"
+										styleClass="icon-btn" process="@this"
+										update="frmPrincipal:tabHojaDeVida:panelDiaVisualizar"
+										actionListener="#{datosPersonalesBean.visualizarArchivoDatosPersonales('3')}"
+										onclick="$('#documentosAdjuntos').modal('show')" />
+								</div>
+								<div class="col-md-3">
+									<p:outputLabel value="• ${titles['LBL_DOCUMENTO_VERIFICADO']}"
+										for="documentoDiscapacidadValidada"
+										styleClass="log-label form-label-formularios" />
+									<p:spacer width="8" />
+									<p:selectBooleanCheckbox id="documentoDiscapacidadValidada"
+										value="#{datosPersonalesBean.persona.flgDiscapacidadValidada}"
+										disabled="#{!datosPersonalesBean.flgValidadoLibreta}" />
+								</div>
+							</p:panel>
+						</p:outputPanel>
+					</div>
+					<br />
+					<p:panel id="idPanelConsultaDatosDemograficosView" rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						<div class="row">
+							<div class="col-lg-12" align="center">
+								<div class="col-md-4"></div>
+								<div class="col-md-2" style="margin-bottom: 4%;">
+									<p:panel id="pdpDatosDemogra1" style="padding: 0%;">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+											process="formDatosDemograficos"
+											update="formDatosDemograficos tabView frmPrincipal:tabHojaDeVida:dialogDatosPersonales frmPrincipal:tabHojaDeVida
+											        frmPrincipal:informacionPersonalUsuario"
+											actionListener="#{datosPersonalesBean.confirmarDatosGuardar(2)}"
+											styleClass="btn btn-primary"
+											style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</p:panel>
+								</div>
+								<div class="col-md-2" style="margin-bottom: 4%;">
+									<p:commandButton value="${titles['TTL_CANCEL']}" id="idBTCancelarDatosDemograficos"
+										styleClass="btn btn-primary"
+										style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+										process="@this"
+										update="frmPrincipal:tabHojaDeVida:tabView frmPrincipal:tabHojaDeVida"
+										actionListener="#{datosPersonalesBean.confirmarCancelar()}">
+										<p:ajax event="click"
+											listener="#{datosPersonalesBean.setEditado(false)}" />
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</p:panel>
+				</div>
+			</p:panel>
+		</p:tab>
+		<p:tab title="${titles['TTL_DATOS_CONTACTO']}">
+			<p:panel id="formDatoContacto">
+				<div class="row row-background-white">
+					<br /> <br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style"> ${titles['TTL_DATOS_CONTACTO']} </span> <br />
+					<div class="row" align="right">
+						<div class="col-lg-12">
+							<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_PAIS_RESIDENCIA']}:"
+									for="pais" styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="pais"
+									title="${titles['TTL_SELECT']} ${titles['LBL_PAIS_RESIDENCIA']}"
+									value="#{datosPersonalesBean.datosContacto.codPaisResidencia}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="true" />
+									<f:selectItems value="#{webUtils.pais}" />
+									<p:ajax
+										listener="#{datosPersonalesBean.mostratPanelDatosPorPaisResidencia(true)}"
+										process="@this"
+										update="panelPaisResidencia
+										        telefonoResidenciaIndicativo
+										        telefonoOficinaIndicativo
+										        frmPrincipal:tabHojaDeVida:tabView:indicativoTelOficina"
+										oncomplete="datosModificados(1);actualizarIndicativoOficina();" />
+									
+								</h:selectOneMenu>
+								<p:message for="pais" display="text" />
+							</div>
+							<p:outputPanel id="panelPaisResidencia">
+								<div class="col-md-4">
+									<p:panel>
+										<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+											for="departamento"
+											styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="departamento"
+											title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}"
+											value="#{datosPersonalesBean.datosContacto.codDepartamentoResidencia}"
+											required="true"
+											disabled="#{!datosPersonalesBean.mostratDatosPorPaisResidencia or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" itemDisabled="true" />
+											<f:selectItems
+												value="#{webUtils.getDeptos(datosPersonalesBean.datosContacto.codPaisResidencia)}" />
+											<p:ajax
+												listener="#{datosPersonalesBean.agregarIndicativoDepartamento(true)}"
+												process="@this"
+												update="municipio telefonoOficinaIndicativo telefonoResidenciaIndicativo"
+												oncomplete="datosModificados(1);" />
+											
+										</h:selectOneMenu>
+										<p:message for="departamento" display="text" />
+									</p:panel>
+								</div>
+								<div class="col-md-4">
+									<p:panel>
+										<p:outputLabel value="${titles['LBL_MUNICIPIO']}:"
+											for="municipio" styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="municipio"
+											title="${titles['TTL_SELECT']} ${titles['LBL_MUNICIPIO']}"
+											value="#{datosPersonalesBean.datosContacto.codMunicipioResidencia}"
+											required="true"
+											disabled="#{!datosPersonalesBean.mostratDatosPorPaisResidencia or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" itemDisabled="true" />
+											<f:selectItems
+												value="#{webUtils.getMunicipios(datosPersonalesBean.datosContacto.codDepartamentoResidencia)}" />
+											<p:ajax oncomplete="datosModificados(0);" />	
+												
+										</h:selectOneMenu>
+										<p:message for="municipio" display="text" />
+									</p:panel>
+								</div>
+							</p:outputPanel>
+						</div>
+					</div>
+					<BR />
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_TIPO_ZONA']}:"
+									for="codTipoZona" styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="codTipoZona"
+									title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_ZONA']}"
+									value="#{datosPersonalesBean.datosContacto.codTipoZona}"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+									>
+									<p:ajax event="change" listener="#{datosPersonalesBean.cambiarEstadoTextoBoton()}" update=" @widgetVar(itDireccionEntidad1) @widgetVar(itDireccionEntidad2) btnDirDet"/>									
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="true" />
+									<f:selectItems value="#{webUtils.tipoZona}" />
+									
+								</h:selectOneMenu>
+
+								<p:message for="codTipoZona" display="text" />
+							</div>
+							<div class="col-md-5">
+								<p:outputLabel
+									value="${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']}:"
+									styleClass="log-label form-label-formularios" />
+								<div class="ui-inputgroup">
+								<p:panel widgetVar="itDireccionEntidad1" style="border: none">
+		                          <h:inputText  id="iTDireccionUrbana"
+		                          		rendered="#{!datosPersonalesBean.estadoBoton}"  
+										onkeypress="return noConsecutivos(event, this.value)"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_DIRECCION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+										value="#{datosPersonalesBean.mostrarDireccionGenerada()}"
+										disabled="#{datosPersonalesBean.estadoText or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+										class="form-control-acti-usua" style="width: 72% !important;">
+									</h:inputText>
+									<p:commandButton id="btnDirDet" value="${titles['TTL_EDITAR']}"
+										rendered="#{!datosPersonalesBean.estadoBoton}"
+										disabled="#{datosPersonalesBean.estadoBoton or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+										style="width: 20% !important; color: #c8d1d8; border-radius:0px 3px 3px 0px!important; background: #0a375b!important; "
+										actionListener="#{datosPersonalesBean.mostrarPanelEditarDireccion(true)}"
+										process="@this" update="editarDireccion"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabView:tipovia'"
+										onclick="window.location.href='#frmPrincipal:tabHojaDeVida:tabView:tipovia'"
+										>
+									</p:commandButton>
+		                    </p:panel>
+		                    <p:panel widgetVar="itDireccionEntidad2"
+							         style="border: none">
+		                    		 <h:inputText rendered="#{datosPersonalesBean.estadoBoton}" 
+										title="${titles['TTL_INGRESE']} ${titles['LBL_DIRECCION_FISICA']} ${titles['TTL_TIPO_ALFANUMERICO']} RURAL"
+										value="#{datosPersonalesBean.editarDireccion.complemento}"
+										class="form-control-acti-usua"
+										style="width: 72% !important;border-radius:3px 0px 0px 3px!important;"
+										maxlength="500" >
+									</h:inputText>
+									<p:commandButton id="btnDirDetd" value="${titles['TTL_EDITAR']}"
+										rendered="#{datosPersonalesBean.estadoBoton}" 
+										disabled="#{datosPersonalesBean.estadoBoton or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+										style="width: 20% !important; color: #c8d1d8; border-radius:0px 3px 3px 0px!important; background: #0a375b!important; "
+										actionListener="#{datosPersonalesBean.mostrarPanelEditarDireccion(true)}"
+										process="@this" update="editarDireccion"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabView:tipovia'"
+										onclick="window.location.href='#frmPrincipal:tabHojaDeVida:tabView:tipovia'"
+										>
+									</p:commandButton>
+		                    </p:panel>
+								
+									<br />
+									<h:outputText value="${messages['DLG_VALOR_REQUERIDO']}"
+										for="iTDireccionUrbana"
+										rendered="#{datosPersonalesBean.flgDireccionRequerida}"
+										style='color:red' />
+									<p:message class="error" for="iTDireccionUrbana" display="text" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-sm-12" style="padding: 0px !important">
+										<p:outputLabel value="${titles['LBL_INDICATIVO']}"
+											for="telefonoResidenciaIndicativo" style="width: 30%;"
+											styleClass="log-label form-label-formularios" />
+										<p:outputLabel
+											value="${titles['LBL_TRANSVERSAL_PERSONAS_TELEFONO']}:"
+											for="telefonoResidencia" style="width:70%"
+											styleClass="log-label form-label-formularios" />
+									</div>
+								</div>
+								<div class="row">
+									<p:panel id="panelBanderaTelefonoResidencia"
+										style="padding: 0px!important;" styleClass="col-sm-12">
+										<div style="padding-right: 0px; width: 30%; float: left;">
+											<p:panel id="telefonoResidenciaIndicativo"
+												class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+												style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+												<img src="..#{datosPersonalesBean.banderaPais}" height="13"
+													width="18" alt="Bandera" title="Bandera" id="imgBanderaPaisResidencia"/>
+												<h:outputLabel id="olIndicativoResidencia"
+													value="#{datosPersonalesBean.datosContacto.indicativoString}"
+													styleClass="label-indicativo" />
+											</p:panel>
+										</div>
+										<div style="width: 70%; float: right;">
+											<p:inputText id="telefonoResidencia"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_TELEFONO']} ${titles['TTL_TIPO_NUMERICO']} "
+												value="#{datosPersonalesBean.datosContacto.telefonoResidencia}"
+												class="form-control-acti-usua" maxlength="20"
+												style="border-radius:0px 3px 3px 0px!important;"
+												autocomplete="false" 
+												onkeypress="return numbervalida(event)"
+												onchange="datosModificados(1);"
+												disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+												<f:attribute value="7" name="minLength" />
+												<f:attribute value="20" name="maxLength" />
+												<f:validator validatorId="numberValidator" />
+											
+											</p:inputText>
+											<p:message for="telefonoResidencia" display="text" />
+										</div>
+									</p:panel>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-sm-12" style="padding: 0px !important">
+										<p:outputLabel value="${titles['LBL_TELEFONO_CELULAR']}:"
+											for="telefonoCelular" style="width: 70%;"
+											styleClass="log-label form-label-formularios" />
+									</div>
+								</div>
+								<div class="row">
+									<p:panel id="panelBanderaCelularIndicativo"
+										style="padding: 0px!important;" styleClass="col-sm-12">
+										<div style="width: 100%;">
+											<p:inputText id="telefonoCelular"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_CELULAR']} ${titles['TTL_TIPO_NUMERICO']}"
+												value="#{datosPersonalesBean.datosContacto.numCelular}"
+												class="form-control-acti-usua" maxlength="20"
+												onkeypress="return numbervalida(event)"
+												style="border-radius:0px 3px 3px 0px!important;"
+												onchange="datosModificados(1);"
+												disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+												<f:attribute value="7" name="minLength" />
+												<f:attribute value="20" name="maxLength" />
+												<f:validator validatorId="numberValidator" />
+											
+											</p:inputText>
+											<p:message for="telefonoCelular" display="text" />
+										</div>
+									</p:panel>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-sm-12" style="padding: 0px !important">
+										<p:outputLabel value="${titles['LBL_INDICATIVO']}"
+											for="telefonoOficinaIndicativo" style="width:30%;"
+											styleClass="log-label form-label-formularios" />
+										<p:outputLabel value="${titles['LBL_TELEFONO_OFICINA']}:"
+											for="telefonoOficina" style="width:50%; margin-left: 5%;"
+											styleClass="log-label form-label-formularios" />
+										<p:outputLabel value="${titles['LBL_EXTENSION']}"
+											for="telefonoOficinaExtension" style="width:20%;margin-left: -8%;"
+											styleClass="log-label form-label-formularios" />
+									</div>
+								</div>
+								<div class="row">
+									
+									
+									<p:panel id="panelBanderaTelefonoOficinaIndicativo"
+										     style="padding: 0px!important;" styleClass="col-sm-12">
+											<div style="width: 10%; float: left">
+												<p:panel id="telefonoOficinaIndicativo"
+													class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+													style="border-radius:3px 0px 0px 3px!important;">
+													<img src="..#{datosPersonalesBean.banderaPais}"
+														width="18" alt="Bandera" title="Bandera" id="imgBanderaPaisOficina"  />
+														
+												</p:panel>
+												<p:message for="telefonoOficinaIndicativo" display="text" />
+											</div>
+											
+											
+											<div style="width: 25%; float: left;">
+												<p:inputNumber id="indicativoTelOficina"
+													title="${titles['TTL_INGRESE']} ${titles['LBL_INDICATIVO']} ${titles['TTL_TIPO_NUMERICO']}"
+													decimalPlaces="0"
+													thousandSeparator=""
+													maxlength="5"
+													maxValue="99999"
+													value="#{datosPersonalesBean.datosContacto.indicativoString}"
+													disabled="true"
+													symbol="+">
+												</p:inputNumber>
+											</div>	
+																	
+										
+											<div style="width: 40%; float: left;">
+											
+												<p:inputText id="telefonoOficina"
+													title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_OFICINA']} ${titles['TTL_TIPO_NUMERICO']}"
+													value="#{datosPersonalesBean.datosContacto.numTelefonoOficina}"
+													class="form-control-acti-usua" maxlength="#{datosPersonalesBean.maxNumOfF}"
+													required="#{datosPersonalesBean.requiredExt}"
+													requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+													onkeypress="return numbervalida(event)"
+													style="border-radius: 0px!important;"
+													onchange="datosModificados(1);"
+													disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+													<f:attribute value="#{datosPersonalesBean.minNumOfF}" name="minLength" />
+													<f:attribute value="#{datosPersonalesBean.maxNumOfF}" name="maxLength" />
+													<f:validator validatorId="numberValidator" />
+												</p:inputText>
+												<p:message for="telefonoOficina" display="text" />
+												
+											</div>
+											<div style="width: 25%; float: right">
+												<p:inputText id="telefonoOficinaExtension"
+													title="${titles['TTL_INGRESE']} ${titles['LBL_EXTENSION']} ${titles['TTL_TIPO_NUMERICO']}"
+													value="#{datosPersonalesBean.datosContacto.extencionTelefonoOficina}"
+													class="form-control-acti-usua" maxlength="#{datosPersonalesBean.maxExtF}"
+													onkeypress="return numbervalida(event)"
+													converterMessage="${messages['DLG_CAMPO_NUMBER_INVALID']}"
+													style="border-radius:0px 3px 3px 0px!important;"
+													disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+													<f:attribute value="#{datosPersonalesBean.maxExtF}" name="maxLength" />
+													<f:validator validatorId="numberValidator" />
+													<p:ajax event="change"
+														listener="#{datosPersonalesBean.validRequiredExt}"
+														process="@this" />
+												</p:inputText>
+												<p:message for="telefonoOficinaExtension" display="text" />
+											</div>
+										
+									</p:panel>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_MAIL']}:"
+									for="correoElectronicoPersonal"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="correoElectronicoPersonal"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_MAIL']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									value="#{datosPersonalesBean.persona.correoElectronico}"
+									required="true" maxlength="100"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									class="form-control-acti-usua emailPersonalUsuario"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<f:validator validatorId="emailValidator" />
+								</p:inputText>
+								<p:message for="correoElectronicoPersonal" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_EMAIL_OFICINA']}:"
+									for="correoElectronicoOficina"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="correoElectronicoOficina" maxlength="100"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_EMAIL_OFICINA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									value="#{datosPersonalesBean.persona.correoAlternativo}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									class="form-control-acti-usua"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<f:validator validatorId="emailValidator" />
+								
+								</p:inputText>
+								<p:message for="correoElectronicoOficina" display="text" />
+							</div>
+						</div>
+					</div>
+					<br /> <br />
+					<p:panel id="idPanelConsultaDatosContactoView" rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						<div class="row">
+							<div class="col-lg-12" align="center">
+								<div class="col-md-4"></div>
+								<div class="col-md-2" style="margin-bottom: 4%;">
+									<p:panel id="pdpDatosContac1" style="padding: 0%;">
+										<p:commandButton 
+										    value="${titles['TTL_TO_CONTINUE']}"
+										    id="idBtGuardarDatosContacto"
+											process="formDatoContacto"
+											update="formDatoContacto email frmPrincipal:tabHojaDeVida:dialogDatosPersonales frmPrincipal:tabHojaDeVida
+											        frmPrincipal:informacionPersonalUsuario"
+											actionListener="#{datosPersonalesBean.confirmarDatosGuardar(3)}"
+											styleClass="btn btn-primary"
+											style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</p:panel>
+								</div>
+								<div class="col-md-2" style="margin-bottom: 8%;">
+									<p:commandButton value="${titles['TTL_CANCEL']}" 
+									    id="idBtCancelarDatosContacto"
+										styleClass="btn btn-default"
+										style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+										process="@this"
+										update="frmPrincipal:tabHojaDeVida:tabView email frmPrincipal:tabHojaDeVida"
+										actionListener="#{datosPersonalesBean.confirmarCancelar()}">
+										<p:ajax event="click"
+											listener="#{datosPersonalesBean.setEditado(false)}" />
+									</p:commandButton>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+						</div>
+					</p:panel>
+					<p:outputPanel id="editarDireccion">
+						<p:panel rendered="#{datosPersonalesBean.mostratEditarDireccion}">
+							<hr class="hr-style hr-style-two" />
+							<span class="span-style">
+								${titles['TTL_EDITAR_DIRECCION']} </span>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-sm-12">
+										<p:outputLabel styleClass="log-label form-label-formularios"
+											value="${titles['LBL_VIA_PRINCIPAL']}" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4 col-lg-3">
+										<p:outputLabel for="tipovia" value="${titles['TTL_VIA']}"
+											styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="tipovia"
+											title="${titles['TTL_SELECT']} ${titles['TTL_VIA']}"
+											value="#{datosPersonalesBean.editarDireccion.tipoVia}"
+											converter="tipoViaConverter" filterMatchMode="contains"
+											filter="true" styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" />
+											<f:selectItems value="#{tipoVia}" var="tipovia"
+												itemLabel="#{tipovia.sigla}" itemValue="#{tipovia}" />
+											<p:ajax listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this"
+												update="direccionGenerada frmPrincipal:tabHojaDeVida" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-4 col-lg-3">
+										<p:outputLabel for="numero" value="${titles['TTL_NUMERO']}"
+											styleClass="log-label form-label-formularios"
+											style="width:100% !important;" />
+										<p:inputText id="numero"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_NUMERO']} ${titles['TTL_TIPO_NUMERICO']}"
+											value="#{datosPersonalesBean.editarDireccion.numero}"
+											maxlength="3" autocomplete="false"
+											onkeypress="return numbervalida(event)"
+											class="form-control-acti-usua" style="width:30%!important;">
+											<p:ajax event="change"
+												listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this"
+												update="direccionGenerada frmPrincipal:tabHojaDeVida" />
+										</p:inputText>
+										<h:selectOneMenu id="primerLetra"
+											title="${titles['TTL_SELECT']} ${titles['TTL_LETRA']}"
+											value="#{datosPersonalesBean.editarDireccion.primerLetra}"
+											filterMatchMode="contains" filter="true"
+											converter="tipoLetraConverter"
+											styleClass="form-control-form-act-usua"
+											style="width:70%!important;">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" />
+											<f:selectItems value="#{tipoLetra}" var="letravia"
+												itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+											<p:ajax listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this"
+												update="direccionGenerada frmPrincipal:tabHojaDeVida" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-4 col-lg-1">
+										<label style="color: transparent; width: 100%;"
+											class="log-label form-label">.</label>
+										<p:selectBooleanCheckbox
+											title="${titles['TTL_SELECT']} ${titles['LBL_BIS']}"
+											value="#{datosPersonalesBean.editarDireccion.bis}">
+											<p:ajax event="change"
+												listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this"
+												update="direccionGenerada frmPrincipal:tabHojaDeVida" />
+										</p:selectBooleanCheckbox>
+										<p:spacer width="5" />
+										<p:outputLabel id="bis" value="${titles['LBL_BIS']}"
+											styleClass="log-label form-label-formularios" />
+									</div>
+									<div class="col-md-4 col-lg-2" style="margin-bottom: 3%;">
+										<label style="color: transparent; width: 100%;"
+											class="log-label form-label">.</label>
+										<h:selectOneMenu id="segundaLetra"
+											title="${titles['TTL_SELECT']} ${titles['TTL_LETRA']}"
+											value="#{datosPersonalesBean.editarDireccion.segundaLetra}"
+											filterMatchMode="contains" filter="true"
+											converter="tipoLetraConverter"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" />
+											<f:selectItems value="#{tipoLetra}" var="letravia"
+												itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+											<p:ajax listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this"
+												update="direccionGenerada frmPrincipal:tabHojaDeVida" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-4 col-lg-3">
+										<label style="color: transparent; width: 100%;"
+											class="log-label form-label">.</label>
+										<h:selectOneMenu id="orientacion"
+											title="${titles['TTL_SELECT']} ${titles['TTL_CARDINALIDAD']}"
+											value="#{datosPersonalesBean.editarDireccion.orientacion}"
+											filterMatchMode="contains" filter="true"
+											converter="tipoOrientacionConverter"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" />
+											<f:selectItems value="#{tipoOrientacion}"
+												var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+												itemValue="#{tipoorientacion}" />
+											<p:ajax listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this" update="direccionGenerada" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-sm-12">
+										<p:outputLabel styleClass="log-label form-label-formularios"
+											value="${titles['LBL_VIA_SECUNDARIA']}" style="font-weight: 600!important;" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4 col-lg-2" style="margin-bottom: 3%;">
+										<p:outputLabel value="${titles['TTL_NUMERO']}"
+											for="segundoNumero"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="segundoNumero"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_NUMERO']} ${titles['TTL_TIPO_NUMERICO']}"
+											value="#{datosPersonalesBean.editarDireccion.segundoNumero}"
+											maxlength="3" autocomplete="false"
+											onkeypress="return numbervalida(event)"
+											class="form-control-acti-usua">
+											<p:ajax event="change"
+												listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this"
+												update="direccionGenerada frmPrincipal:tabHojaDeVida" />
+										</p:inputText>
+									</div>
+									<div class="col-md-4 col-lg-2" style="margin-bottom: 3%;">
+										<label style="color: transparent; width: 100%;"
+											class="log-label form-label">.</label>
+										<h:selectOneMenu id="tercerLetra"
+											title="${titles['TTL_SELECT']} ${titles['TTL_LETRA']}"
+											value="#{datosPersonalesBean.editarDireccion.tercerLetra}"
+											filterMatchMode="contains" filter="true"
+											converter="tipoLetraConverter"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" />
+											<f:selectItems value="#{tipoLetra}" var="letravia"
+												itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+											<p:ajax listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this" update="direccionGenerada" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-4 col-lg-2" style="margin-bottom: 3%;">
+										<label style="color: transparent; width: 100%;"
+											class="log-label form-label">.</label>
+										<p:inputText id="tercerNumero" maxlength="3"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_NUMERO']}"
+											value="#{datosPersonalesBean.editarDireccion.tercerNumero}"
+											class="form-control-acti-usua" autocomplete="false"
+											onkeypress="return numbervalida(event)">
+											<p:ajax event="change"
+												listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this" update="direccionGenerada " />
+										</p:inputText>
+									</div>
+									<div class="col-md-4 col-lg-2" style="margin-bottom: 5%;">
+										<label style="color: transparent; width: 100%;"
+											class="log-label form-label">.</label>
+										<h:selectOneMenu id="segundaOrientacion"
+											title="${titles['TTL_SELECT']} ${titles['TTL_CARDINALIDAD']}"
+											value="#{datosPersonalesBean.editarDireccion.segundaOrientacion}"
+											filterMatchMode="contains" filter="true"
+											converter="tipoOrientacionConverter"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+												itemValue="#{null}" />
+											<f:selectItems value="#{tipoOrientacion}"
+												var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+												itemValue="#{tipoorientacion}" />
+											<p:ajax listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this" update="direccionGenerada" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-4 col-lg-4">
+										<p:outputLabel value="${titles['TTL_COMPLEMENTO']}"
+											for="complemento"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="complemento" maxlength="100"
+											title="${titles['TTL_INGRESAR']} ${titles['TTL_COMPLEMENTO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+											value="#{datosPersonalesBean.editarDireccion.complemento}"
+											class="form-control-acti-usua" autocomplete="false">
+											<p:ajax event="change"
+												listener="#{datosPersonalesBean.generarDireccion()}"
+												process="@this" update="direccionGenerada" />
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-sm-6">
+										<p:outputLabel value="${titles['TTL_DIRECCION_GENERADA']}"
+											for="direccionGenerada"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="direccionGenerada"
+											title="${titles['TTL_DIRECCION_GENERADA']}"
+											value="#{datosPersonalesBean.editarDireccion.direccionGenerada}"
+											class="form-control-acti-usua" readonly="true">
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<div class="col-md-4"></div>
+									<div class="col-md-2" style="margin-bottom: 4%;">
+										<p:commandButton value="${titles['TTL_OK']}"
+											styleClass="btn btn-primary"
+											style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+											process="@this" update="editarDireccion iTDireccionUrbana"
+											actionListener="#{datosPersonalesBean.agergarDireccion()}"
+											oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabView:telefonoResidenciaIndicativo'" />
+									</div>
+									<div class="col-md-2" style="margin-bottom: 4%;">
+										<p:commandButton value="${titles['TTL_CANCEL']}"
+											styleClass="btn btn-primary"
+											style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+											actionListener="#{datosPersonalesBean.mostrarPanelEditarDireccion(false)}"
+											process="@this" update="editarDireccion"
+											oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:tabView:telefonoResidenciaIndicativo'" />
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+							</div>
+						</p:panel>
+					</p:outputPanel>
+				</div>
+			</p:panel>
+		</p:tab>
+		<p:tab title="${titles['TTL_DATOS_ADICIONALES']}" rendered ="#{datosPersonalesBean.blnMostrarTabDatosAdicionales}">
+			<p:panel id="formDatoAdicional">
+				<div class="row row-background-white">
+					<br /> <br />
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style"> ${titles['TTL_DATOS_ADICIONALES']}
+					</span> <br />
+					<div class="row" align="right">
+						<div class="col-lg-12">
+							<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+						</div>
+					</div>
+					<br />
+					
+					
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<div class="col-md-4">
+								<p:outputLabel
+									value="${titles['TTL_HOMBRE_MUJER_CABEZA_FAMILIA']}"
+									for="cabezaHogar"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="cabezaHogar"
+									title="${titles['TTL_SELECT']} ${titles['TTL_HOMBRE_MUJER_CABEZA_FAMILIA']}"
+									value="#{datosPersonalesBean.datosAdicionales.codCabezaHogar}"
+									class="form-control-form-act-usua"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.cabezaFamilia}" />
+								</h:selectOneMenu>
+							</div>
+							
+							<div class="col-md-4">
+								<p:outputLabel value="${titles['LBL_VICTIMA_DESPLAZAMIENTO']}:"
+									for="somVictimaDesplazamientodatoAd"
+									styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="somVictimaDesplazamientodatoAd"
+									title="#{titles.TTL_SELECT} #{titles.LBL_VICTIMA_DESPLAZAMIENTO}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									value="#{datosPersonalesBean.datosAdicionales.codVictimaDesplazamiento}"
+									required="true" class="form-control-form-act-usua"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.victimaDesplazamiento}" />
+								</h:selectOneMenu>
+								<p:message for="somVictimaDesplazamientodatoAd" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:panel id="idPanelOrientacionSexual" rendered="#{datosPersonalesBean.flgOcultaOrientacionSexual}">
+									<p:outputLabel for="somorientacionSexualAd"
+										value="${titles['LBL_USTED_ES']}:"
+										styleClass="log-label form-label-formularios"/>
+									<h:selectOneMenu id="somorientacionSexualAd"
+										title="#{titles.TTL_SELECT} #{titles.TTL_ORIENTACION_SEXUAL}"
+										value="#{datosPersonalesBean.datosAdicionales.codOrientacionSexual}"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										class="form-control-form-act-usua"
+										style="display: grid"
+										disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.orientacionSexual}" />
+										<p:ajax listener="#{datosPersonalesBean.mostrarOtraOrientacion}"
+											    process="@this" oncomplete="datosModificados(1);" update="panelOtraOrientacionSexual"/>
+									</h:selectOneMenu>
+									<p:message for="somorientacionSexualAd" display="text" />
+								</p:panel>
+							</div>
+						</div>
+					</div>
+					<br />
+					
+					<div class="row">
+						<div class="col-md-12" align="center">		
+							<p:panel id="panelOtraOrientacionSexual">
+								<div class="col-md-6" >
+									<p:outputLabel for="itOtraOrientacionSexual"
+										value="${titles['TTL_OTRA_ORIENTACION_SEXUAL']}:"
+										styleClass="log-label form-label-formularios" 
+										rendered="#{datosPersonalesBean.flgOtraOrientacion}"/>
+									<h:inputText id="itOtraOrientacionSexual"
+										title="#{titles.TTL_SELECT} #{titles.TTL_OTRA_ORIENTACION_SEXUAL}"
+										required="true"
+										requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										value="#{datosPersonalesBean.datosAdicionales.otraOrientacionSexual}"
+										onchange="datosModificados(1);" 
+										rendered="#{datosPersonalesBean.flgOtraOrientacion}"
+										style="width:50%!important; height: 30%!important; margin-left: 0.5%!important; display: grid"
+										class="form-control-acti-usua"
+										disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									</h:inputText>
+									<p:message for="itOtraOrientacionSexual" display="text" />								
+								</div>
+							</p:panel>								
+						</div>
+					</div>	
+					<br />
+					<br />				
+					<div class="row">
+						<div class="col-md-12" align="center" style="padding-left: 65.3px">
+							<div class="col-md-2"></div>
+							<div class="col-md-4 media-pre-pension">
+								<p:outputLabel value="${titles['LBL_PRE_PENSIONADO']}"
+									for="prePensionado"
+									styleClass="log-label form-label-formularios col-md-10" />
+								<p:selectBooleanCheckbox id="prePensionado"
+									title="${titles['TTL_SELECT']} ${titles['LBL_PRE_PENSIONADO']}"
+									value="#{datosPersonalesBean.datosAdicionales.flgPrepensionado}"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+								</p:selectBooleanCheckbox>
+							</div>
+							
+							<div class="col-md-4" style="width: 25.7% !important;">
+								<div class="input-group col-md-12">
+									<p:outputLabel value="${titles['LBL_VICTIMA_CONFLICTO']}"
+										for="victimaConflicto"
+										styleClass="log-label form-label-formularios col-md-10" />
+									<div class="col-md-2">
+										<p:selectBooleanCheckbox id="victimaConflicto"
+											title="${titles['TTL_SELECT']} ${titles['LBL_VICTIMA_CONFLICTO']}"
+											value="#{datosPersonalesBean.datosAdicionales.flgVictimaConflicto}"
+											onchange="datosModificados(1);"
+											disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										</p:selectBooleanCheckbox>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2"></div>					
+						</div>
+					</div>
+					<br /> <br />
+					
+					<p:panel id="idPanelRedesSociales" rendered="#{datosPersonalesBean.blnMostrarRedesSociales}">
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style"> ${titles['TTL_REDES_SOCIALES']} </span> <br />
+						<br />
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<p:graphicImage dir="resources" height="32" width="32"
+									name="images/logos/facebook.svg"
+									title="${titles['TTL_FACEBOOK']}" alt="Facebook" />
+								<p:inputText id="facebook"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_REDES_SOCIALES']} ${titles['TTL_FACEBOOK']}"
+									value="#{datosPersonalesBean.datosAdicionales.urlFacebook}"
+									class="form-control-acti-usua" maxlength="200"
+									style="width:65%!important; height: 30%!important; margin-left: 0.5%!important;"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+								
+								</p:inputText>
+								<br /> <br />
+								<p:graphicImage dir="resources" height="32" width="32"
+									name="images/logos/twitter.svg" title="${titles['TTL_TWITTER']}"
+									alt="Twitter" />
+								<p:inputText id="twitter"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_REDES_SOCIALES']} ${titles['TTL_TWITTER']}"
+									value="#{datosPersonalesBean.datosAdicionales.urlTwitter}"
+									class="form-control-acti-usua" maxlength="200"
+									style="width:65%!important; height: 30%!important; margin-left: 0.5%!important;"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+								
+								</p:inputText>
+								<br /> <br />
+								<p:graphicImage dir="resources" height="32" width="32"
+									name="images/logos/linkedin.svg"
+									title="${titles['TTL_LINKEIN']}" alt="LinkedIn" />
+								<p:inputText id="linkedin"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_REDES_SOCIALES']} ${titles['TTL_LINKEIN']}"
+									value="#{datosPersonalesBean.datosAdicionales.urlLinkedin}"
+									class="form-control-acti-usua" maxlength="200"
+									style="width:65%!important; height: 30%!important; margin-left: 0.5%!important;"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									
+								</p:inputText>
+								<br /> <br />
+								<p:graphicImage dir="resources" height="32" width="32"
+									name="images/logos/instagram.svg"
+									title="${titles['TTL_INSTAGRAM']}" alt="Instagram" />
+								<p:inputText id="instagram"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_REDES_SOCIALES']} ${titles['TTL_INSTAGRAM']}"
+									value="#{datosPersonalesBean.datosAdicionales.urlInstagram}"
+									class="form-control-acti-usua" maxlength="200"
+									style="width:65%!important; height: 30%!important; margin-left: 0.5%!important;"
+									onchange="datosModificados(1);"
+									disabled="#{datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+								
+								</p:inputText>
+							</div>
+						</div>
+					</p:panel>
+					<br />
+					<p:panel id="idPanelConsultaDatosAdicionalesView" rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<div class="col-md-4"></div>
+								<div class="col-md-2" style="margin-bottom: 4%;">
+									<p:panel id="pdpDatosAdicional1" style="padding: 0%;">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+										    id="idBtGuardarDatosAdicionales"
+											process="formDatoAdicional" 
+											update="formDatoAdicional tabView frmPrincipal:tabHojaDeVida:dialogDatosPersonales frmPrincipal:tabHojaDeVida
+											        frmPrincipal:informacionPersonalUsuario"
+											actionListener="#{datosPersonalesBean.confirmarDatosGuardar(4)}"
+											styleClass="btn btn-primary"
+											style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+									</p:panel>
+								</div>
+								<div class="col-md-2" style="margin-bottom: 4%;">
+									<p:commandButton value="${titles['TTL_CANCEL']}" id ="idBtCancelarDatosAdicionales"
+										styleClass="btn btn-default"
+										style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+										process="@this"
+										update="frmPrincipal:tabHojaDeVida:tabView frmPrincipal:tabHojaDeVida"
+										actionListener="#{datosPersonalesBean.confirmarCancelar()}">
+										<p:ajax event="click"
+											listener="#{datosPersonalesBean.setEditado(false)}" />
+									</p:commandButton>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						</div>
+					</p:panel>
+				</div>
+			</p:panel>
+		</p:tab>
+	</p:tabView>
+
+	<p:dialog header="• Confirmar Actualización •"
+		id="dialogDatosPersonales" minHeight="300"
+		widgetVar="dialogDatosPersonales" modal="true" resizable="false"
+		closeOnEscape="false" draggable="false" closable="false"
+		responsive="true">
+		<p:panel id="panelDatosPersonalesConfirmacion"
+			style="background: transparent !important;">
+			<div class="row" align="center">
+				<div class="col-md-12" style="margin-top: 3%; margin-bottom: 3%;">
+					<p:outputLabel for="dpJustificacionModificacion"
+						value="Justificación de la actualización de datos:"
+						styleClass="log-label form-label-formularios" />
+					<p:inputTextarea rows="4" cols="25"
+						id="dpJustificacionModificacion"
+						value="#{datosPersonalesBean.modificacionHojaVida.justificacionModificacion}"
+						required="true"
+						requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+						styleClass="form-control-acti-usua form-control"
+						style="resize: none;overflow-x: hidden;word-wrap: break-word!important;" />
+					<p:message for="dpJustificacionModificacion" display="text" />
+				</div>
+			</div>
+			<hr class="hr-style-modales" />
+			<div class="row" align="center">
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<p:commandButton id="btnConfirmarDatosPersonales"
+						value="${titles['TTL_SAVE']}"
+						actionListener="#{datosPersonalesBean.guardarConfirmacionDatos}"
+						process="panelDatosPersonalesConfirmacion"
+						update="panelDatosPersonalesConfirmacion"
+						styleClass="btn btn-primary" />
+				</div>
+				<div class="col-md-4">
+					<p:commandButton id="btnCancelarDatosPersonales"
+						value="${titles['TTL_CANCEL']}"
+						actionListener="#{datosPersonalesBean.abrirCancelarJustificacion}"
+						process="@this"
+						update="panelDatosPersonalesConfirmacion, frmPrincipal:tabHojaDeVida:tabView"
+						styleClass="btn btn-default" />
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+			<br />
+		</p:panel>
+	</p:dialog>
+
+
+	<!-- MODAL DE CONFIRMACIÓN DE CANCELAR -->
+	<p:dialog id="ConfirmarCancelar" minHeight="600"
+		widgetVar="ConfirmarCancelar" modal="true" resizable="false"
+		closeOnEscape="false" draggable="false" closable="false"
+		responsive="true">
+		<p:panel id="panelConfirmacionCancelar"
+			style="background: transparent;">
+			<div class="col-md-12" align="center">
+				<p:outputLabel value="${messages['MSG_PREGUNTA_CANCELAR']}"
+					style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+					escape="false" />
+			</div>
+			<hr
+				style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+			<div class="row" align="center">
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<p:commandButton id="btnCancelar" value="${titles['TTL_YES']}"
+						styleClass="btn btn-primary"
+						style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+						actionListener="#{datosPersonalesBean.cancelarConfirmacionDatos}"
+						process="@this"
+						update="panelDatosPersonalesConfirmacion, frmPrincipal:tabHojaDeVida:tabView" />
+					<p:message for="btnCancelar" display="text" />
+				</div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_NO']}" process="@this"
+						styleClass="btn btn-default"
+						style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+						actionListener="#{datosPersonalesBean.cancelarCancelarJustificacion}" />
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</p:panel>
+	</p:dialog>
+
+
+	<!-- MODAL DE CONFIRMACIÓN DE CANCELAR -->
+	<p:dialog id="ConfirmarCancelar2" minHeight="600"
+		widgetVar="ConfirmarCancelar2" modal="true" resizable="false"
+		closeOnEscape="false" draggable="false" closable="false"
+		responsive="true">
+		<p:panel id="panelConfirmacionCancelar2"
+			style="background: transparent;">
+			<div class="col-md-12" align="center">
+				<p:outputLabel value="${messages['MSG_PREGUNTA_CANCELAR']}"
+					style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+					escape="false" />
+			</div>
+			<hr
+				style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+			<div class="row" align="center">
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_YES']}"
+						styleClass="btn btn-primary" process="@this"
+						style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+						actionListener="#{datosPersonalesBean.cancelar()}"
+						update="frmPrincipal:tabHojaDeVida:tabView frmPrincipal:tabHojaDeVida">
+
+					</p:commandButton>
+				</div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_NO']}" process="@this"
+						styleClass="btn btn-default"
+						style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+						actionListener="#{datosPersonalesBean.cancelarCancelar()}"
+						update="tabView frmPrincipal:tabHojaDeVida">
+
+					</p:commandButton>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</p:panel>
+	</p:dialog>
+
+
+	<!-- Modal Detalle PEP -->
+	<div id="dlgDetallePep" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="width: 60%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<button type="button" class="close" data-dismiss="modal"
+						style="font-size: 20px; color: #000; background: transparent; width: 1.5em; margin-top: 0px;">
+						<span class="fa fa-times"></span>
+					</button>
+					<h4 class="modal-title" style="font-size: 2em !important;">•
+						Detalle PEP •</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12"
+							style="color: #255279; margin-top: 1%; margin-bottom: 1%; font-size: 1.3em !important;">
+							<div align="justify">Según el Decreto 1674 de 2016, es
+								Persona Expuesta Políticamente aquella que ostenta u ostentará,
+								después de su vinculación, uno de los siguientes cargos:</div>
+							<br />
+							<div align="justify">
+								<b style="color: #2B88B4;">1.</b> Presidente la República,
+								Vicepresidente la República, altos consejeros, director del
+								Departamento Administrativo de la Presidencia la República,
+								ministros y viceministros.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">2.</b> Secretarios Generales,
+								Tesoreros, Directores Financieros de los Ministerios, los
+								Departamentos Administrativos y las Superintendencias.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">3.</b> Presidentes, Directores,
+								Tesoreros, Directores Financieros de (i) los Establecimientos
+								Públicos, (ii) Unidades Administrativas Especiales, (íii) las
+								Empresas Públicas de Servicios Públicos Domiciliarios, (iv) las
+								Empresas Sociales del (v) las Empresas Industriales y
+								Comerciales del y (vi) las Sociedades de Economía Mixta.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">4.</b> Superintendentes y
+								Superintendentes Delegados.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">5.</b> Generales de las Fuerzas
+								Militares y de la Policía Nacional, e Inspectores de la Policía
+								Nacional.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">6.</b> Gobernadores, Alcaldes,
+								Diputados, Concejales, Tesoreros, Directores Financieros y
+								Secretarios Generales i) gobernaciones, ií) alcaldías, iíi)
+								concejos municipales y distritales y iv) asambleas
+								departamentales.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">7.</b> Senadores, Representantes a la
+								Cámara, secretarios de las comisiones constitucionales
+								permanentes del Congreso de la República y Directores
+								Administrativos del Senado y de la Cámara de Representantes.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">8.</b> Gerentes y Codirectores del
+								Banco la República.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">9.</b> Directores de las
+								Corporaciones Autónomas Regionales,
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">10.</b> Comisionados Nacionales del
+								Servicio Civil, Comisionados de la Autoridad Nacional de
+								Televisión, la Comisión de Regulación de Energía y de la
+								Comisión de Regulación de Agua Potable y Saneamiento Básico y la
+								Comisión de Regulación de Comunicaciones.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">11,</b> Magistrados, Magistrados
+								Auxiliares y Consejeros de Tribunales y Altas Cortes, jueces de
+								la república, Fiscal General de la Nación, Vice Fiscal General
+								de la Nación, Director de Fiscalías Nacionales, Director
+								Nacional de Seccionales y Seguridad Ciudadana.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">12.</b> Contralor General de la
+								República, Vicecontralor, Contralores Delegados, Contralores
+								territoriales, Contador, Procurador General de la Nación,
+								Viceprocurador General la Nación, Procuradores Delegados,
+								Defensor del Pueblo, Vice Defensor del Pueblo, Defensores
+								Delegados y Auditor General de la República.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">13.</b> Consejeros del Consejo
+								Nacional Electoral, Registrador Nacional del Estado Civil y
+								Registradores Delegados.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">14.</b> Representantes legales,
+								presidentes, directores y tesoreros de partidos y movimientos
+								políticos, y otras formas de asociación política reconocidas por
+								la ley.
+							</div>
+							<div align="justify">
+								<b style="color: #2B88B4;">15.</b> Los directores y tesoreros de
+								patrimonios autónomos o fideicomisos que administren recursos
+								públicos.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal para ver los archivos adjuntos-->
+	<div id="documentosAdjuntos" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 60%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+				</div>
+
+				<div class="modal-body" align="center">
+					<p:panel id="panelDiaVisualizar"
+						style="background: transparent!important;">
+						<c:if test="#{datosPersonalesBean.rutaArchivo==null}">
+							<h:outputLabel value="${titles['LBL_SIN_SOPORTE']}" class="form-label-formularios" />
+						</c:if>
+						<c:if test="#{datosPersonalesBean.rutaArchivo!=null}">
+							<iframe src ="#{datosPersonalesBean.rutaArchivo}" width='600' height='400'></iframe> 						 
+						</c:if>
+					</p:panel>
+				</div>
+
+				<div class="modal-footer">
+					<p:commandButton value="#{titles.TTL_CLOSE}"
+						styleClass="btn btn-default" process="@this"
+						style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+						onclick="$('#documentosAdjuntos').modal('hide')" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="dlgEditarCorreoPersonal" class="modal fade" role="dialog"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="#{messages.MSG_CORREO_EDITADO}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="#{titles.TTL_YES}"
+									id="btnConfirmarEditarCorreo" styleClass="btn btn-primary"
+									immediate="true"
+									update="tabView:formDatoContacto tabView:email tabView frmPrincipal:tabHojaDeVida"
+									actionListener="#{datosPersonalesBean.persistDatoContacto()}"
+									onclick="$('#dlgEditarCorreoPersonal').modal('hide');"
+									oncomplete="$('.labelEmailPersonal').html($('.emailPersonalUsuario').val());"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+							</div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="#{titles.TTL_NO}"
+									styleClass="btn btn-default" type="button"
+									onclick="$('#dlgEditarCorreoPersonal').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	 	$(window).on('load', function() {
+	 		if(#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}){
+	 			$('#dlgDetallePep').modal({backdrop: 'static', keyboard: false});
+	 		}
+	 	});
+	</script>
+
+	<script> 		
+		function openFileUpload(valor) {
+			document.getElementById(valor.id + "_input").click();
+		}
+
+		function addPadding() {
+			var id = document.getElementById("child-tab-data-basic").parentElement.id;
+			document.getElementById(id).className += " padding-none";
+		}
+
+		addPadding();
+
+		$(".readonly").on('keydown paste', function(e){
+	        e.preventDefault();
+	    });
+	</script>
+	
+	<script type="text/javascript">
+		function activarAlertaDistrito(){
+			var object = document.getElementById("frmPrincipal:tabHojaDeVida:tabView:distritoMilitar");
+			var isValidForm = false;
+			if(object!=null){
+				isValidForm = object.checkValidity();
+			}
+			if(isValidForm){
+				if(document.getElementById("frmPrincipal:tabHojaDeVida:tabView:distritoMilitar").value == ""){
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:distritoMilitar").nextSibling.innerHTML='<span class="ui-message-error-detail">Se requiere un valor</span>';
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:distritoMilitar").parentNode.firstChild.classList.add("ui-state-error");
+				}
+				else{
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:distritoMilitar").nextSibling.innerHTML='';
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:distritoMilitar").parentNode.firstChild.classList.remove("ui-state-error");
+				}
+				if(document.getElementById("frmPrincipal:tabHojaDeVida:tabView:numeroLibretaMilitar").value == ""){
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:numeroLibretaMilitar").nextSibling.innerHTML='<span class="ui-message-error-detail">Se requiere un valor</span>';
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:numeroLibretaMilitar").parentNode.firstChild.classList.add("ui-state-error");
+				}
+				else{
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:numeroLibretaMilitar").nextSibling.innerHTML = '';
+					document.getElementById("frmPrincipal:tabHojaDeVida:tabView:numeroLibretaMilitar").parentNode.firstChild.classList.remove("ui-state-error");
+				}
+			}
+		}
+		
+	</script>
+	<script type="text/javascript">
+				function sololetras(e) {
+					var key =e.keyCode || e.which;
+					var teclado =String.fromCharCode(key).toLowerCase();
+					var letras ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz0123456789";
+					var especiales ="8-37-38-46-164";
+					var teclado_especial=false;
+					for(var i in especiales){
+						if(key == especiales[i]){
+							teclado_especial=true;
+							break;
+						}
+					}
+					if(letras.indexOf(teclado) ==-1){
+						if(!teclado_especial){
+						  return false;
+						 }
+					}
+				}
+		</script>
+		
+		<script type="text/javascript">
+			function datosModificadoshv(modificado) {
+				var obj = document.getElementById("frmPrincipal:modificadoHV");
+				obj.value=modificado;
+			}
+		</script>	
+		
+		<script type="text/javascript">
+			function actualizarIndicativoOficina(modificado) {
+				var obj = document.getElementById("frmPrincipal:tabHojaDeVida:tabView:indicativoTelOficina_input");
+				var indRes = document.getElementById("frmPrincipal:tabHojaDeVida:tabView:olIndicativoResidencia");
+				obj.value=indRes.innerHTML;
+			}
+		</script>				
+
+</ui:composition>

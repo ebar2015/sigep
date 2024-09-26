@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<p:importConstants type="co.gov.dafp.sigep2.util.xml.elemento.TipoDato"
+	var="PFTipoDato" />
+<p:importConstants
+	type="co.gov.dafp.sigep2.util.xml.reporte.config.FormatoReporte"
+	var="PFFormatoReporte" />
+<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid"
+	styleClass="ui-panelgrid-blank">
+	<p:dataTable
+		currentPageReportTemplate="{currentPage} #{'/'} {totalPages}"
+		id="resultadosDetalle" reflow="true" lazy="true"
+		draggableColumns="true"
+		resizableColumns="#{detalleReporteBeanS.resultados.rowCount gt 0}"
+		paginator="#{detalleReporteBeanS.resultados.rowCount gt 0}"
+		rowKey="#{item.id}" value="#{detalleReporteBeanS.resultados}"
+		rows="#{paginatorSize}"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="#{paginatorsSize}" var="registros"
+		emptyMessage="${messages['DLG_SIN_REGISTROS']}" scrollable="true"
+		scrollWidth="95%" sortMode="multiple">
+		<p:columns var="column" value="#{detalleReporteBeanS.columns}"
+			width="200"
+			style="#{(column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value() or column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value() or column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()) ? 'text-align:right;width:1px;white-space:nowrap;' : ((column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() or column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()) ? 'text-align:center;width:1px;white-space:nowrap;' : 'text-align:left;width:1px;white-space:nowrap;')}"
+			exportable="#{column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() and column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()}"
+			sortable="true"
+			sortBy="#{[registros.item.get(column.index).dateValue]}">
+			<f:facet name="header">
+				<h:outputText value="#{column.header}" />
+			</f:facet>
+			<h:outputText value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_ANIO.value()}">
+				<f:convertDateTime pattern="#{anioFormato}" />
+			</h:outputText>
+			<h:outputText value="#{registros.item.get(column.index).periodValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_MONTH.value()}" />
+			<h:outputText value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER.value()}" />
+			<h:outputText value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER.value()}" />
+			<h:outputText value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERIOD.value()}">
+				<f:convertDateTime pattern="#{periodoFormato}" />
+			</h:outputText>
+			<h:outputText value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE.value()}">
+				<f:convertDateTime pattern="#{fechaFormato}" />
+			</h:outputText>
+			<h:outputText value="#{registros.item.get(column.index).dateValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE.value()}">
+				<f:convertDateTime pattern="#{fechaHoraFormato}" />
+			</h:outputText>
+			<h:outputText value="#{registros.item.get(column.index).stringValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DATE_STRING.value()}" />
+			<h:outputText
+				value="#{registros.item.get(column.index).currencyValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL.value()}">
+				<f:convertNumber pattern="#{monedaFormato}" />
+			</h:outputText>
+			<h:outputText
+				value="#{registros.item.get(column.index).percentValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_PERCENT.value()}">
+				<f:convertNumber pattern="#{porcentajeFormato}" />
+			</h:outputText>
+			<h:outputText value="#{registros.item.get(column.index).longValue}"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_INTEGER.value()}">
+				<f:convertNumber pattern="#{enteroFormato}" />
+			</h:outputText>
+			<h:outputText value="#{registros.item.get(column.index).stringValue}"
+				escape="false"
+				rendered="#{column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_STRING.value()}" />
+			<p:link id="linkToolTip" href="#" value="#{column.headerAlias}"
+				rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()}" />
+			<p:tooltip id="toolTip"
+				rendered="#{!empty registros.item.get(column.index).stringValue and column.type eq PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()}"
+				for="linkToolTip" escape="false"
+				value="#{reporteBeanS.getExecQuery(registros.item.get(column.index).stringValue)}"
+				showEffect="clip" hideEffect="clip" position="left" />
+		</p:columns>
+		<p:columnGroup type="footer"
+			rendered="#{detalleReporteBeanS.resultados.rowCount ge 1 and fn:length(detalleReporteBeanS.totales) ge 1 and !empty detalleReporteBeanS.totales.get(0).valorFormateado}">
+			<p:row rendered="#{fn:length(detalleReporteBeanS.totales) > 0}">
+				<p:columns var="column" value="#{detalleReporteBeanS.columns}"
+					style="text-align:right"
+					footerText="#{(fn:length(detalleReporteBeanS.totales) ge (column.index + 1)) ? detalleReporteBeanS.totales.get(column.index).valorFormateado : ''}"
+					exportable="#{column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_LINK.value() and column.type ne PFTipoDato.TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP.value()}">
+				</p:columns>
+			</p:row>
+			<p:row>
+				<p:column style="text-align:right"
+					footerText="${titles['LBL_TRANSVERSAL_REPORTEADOR_TOTAL_REGISTROS']}" />
+				<p:column style="text-align:left"
+					footerText="#{detalleReporteBeanS.resultados.rowCount}" />
+				<p:column colspan="#{fn:length(detalleReporteBeanS.columns) - 2}"
+					footerText="" />
+			</p:row>
+		</p:columnGroup>
+	</p:dataTable>
+</p:panelGrid>
+</html>

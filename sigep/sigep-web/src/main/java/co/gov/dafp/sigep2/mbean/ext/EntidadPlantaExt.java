@@ -1,0 +1,228 @@
+/**
+ * 
+ */
+package co.gov.dafp.sigep2.mbean.ext;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import co.gov.dafp.sigep2.entities.EntidadPlanta;
+
+/**
+ * @author joseviscaya
+ *
+ */
+public class EntidadPlantaExt extends EntidadPlanta implements Serializable {
+
+	private static final long serialVersionUID = 3489147546314479051L;
+	
+	private String nombreNorma;
+	private String nombreClasificacionPlanta;
+	private String nombreClasePlanta;
+	private String nombreNaturalezaEmpleo;
+	private String nombreTipoNorma;
+	private String objetoNorma;
+	private String justificcionConsecutivo;
+	private Long codTipoNorma;
+	private Long codTipoPlanta;
+	private Date fechaNorma;
+	private int limitInit;
+    private int limitEnd;
+    private Long annoNorma;
+    private String numeroNorma;
+    
+	
+    
+    /**
+	 * @return el annoNorma
+	 */
+	public Long getAnnoNorma() {
+		return annoNorma;
+	}
+
+	/**
+	 * @param annoNorma el annoNorma a establecer
+	 */
+	public void setAnnoNorma(Long annoNorma) {
+		this.annoNorma = annoNorma;
+	}
+    
+	
+    
+    /**
+	 * @return el justificcionConsecutivo
+	 */
+	public String getJustificcionConsecutivo() {
+		return justificcionConsecutivo;
+	}
+
+	/**
+	 * @param justificcionConsecutivo el justificcionConsecutivo a establecer
+	 */
+	public void setJustificcionConsecutivo(String justificcionConsecutivo) {
+		this.justificcionConsecutivo = justificcionConsecutivo;
+	}
+
+	/**
+	 * @return the nombreNorma
+	 */
+	public String getNombreNorma() {
+		return nombreNorma;
+	}
+
+	/**
+	 * @param nombreNorma the nombreNorma to set
+	 */
+	public void setNombreNorma(String nombreNorma) {
+		this.nombreNorma = nombreNorma;
+	}
+
+	/**
+	 * @return the nombreClasificacionPlanta
+	 */
+	public String getNombreClasificacionPlanta() {
+		return nombreClasificacionPlanta;
+	}
+
+	/**
+	 * @param nombreClasificacionPlanta the nombreClasificacionPlanta to set
+	 */
+	public void setNombreClasificacionPlanta(String nombreClasificacionPlanta) {
+		this.nombreClasificacionPlanta = nombreClasificacionPlanta;
+	}
+
+	/**
+	 * @return the nombreClasePlanta
+	 */
+	public String getNombreClasePlanta() {
+		return nombreClasePlanta;
+	}
+
+	/**
+	 * @param nombreClasePlanta the nombreClasePlanta to set
+	 */
+	public void setNombreClasePlanta(String nombreClasePlanta) {
+		this.nombreClasePlanta = nombreClasePlanta;
+	}
+
+	/**
+	 * @return the nombreNaturalezaEmpleo
+	 */
+	public String getNombreNaturalezaEmpleo() {
+		return nombreNaturalezaEmpleo;
+	}
+
+	/**
+	 * @param nombreNaturalezaEmpleo the nombreNaturalezaEmpleo to set
+	 */
+	public void setNombreNaturalezaEmpleo(String nombreNaturalezaEmpleo) {
+		this.nombreNaturalezaEmpleo = nombreNaturalezaEmpleo;
+	}
+
+    /**
+	 * @return the nombreTipoNorma
+	 */
+	public String getNombreTipoNorma() {
+		return nombreTipoNorma;
+	}
+
+	/**
+	 * @param nombreTipoNorma the nombreTipoNorma to set
+	 */
+	public void setNombreTipoNorma(String nombreTipoNorma) {
+		this.nombreTipoNorma = nombreTipoNorma;
+	}
+
+	/**
+	 * @return the codTipoNorma
+	 */
+	public Long getCodTipoNorma() {
+		return codTipoNorma;
+	}
+
+	/**
+	 * @param codTipoNorma the codTipoNorma to set
+	 */
+	public void setCodTipoNorma(Long codTipoNorma) {
+		this.codTipoNorma = codTipoNorma;
+	}
+
+	/**
+	 * @return the fechaNorma
+	 */
+	public Date getFechaNorma() {
+		return fechaNorma;
+	}
+
+	/**
+	 * @param fechaNorma the fechaNorma to set
+	 */
+	public void setFechaNorma(Date fechaNorma) {
+		this.fechaNorma = fechaNorma;
+	}
+	
+
+	/**
+	 * @return the codTipoPlanta
+	 */
+	public Long getCodTipoPlanta() {
+		return codTipoPlanta;
+	}
+
+	/**
+	 * @param codTipoPlanta the codTipoPlanta to set
+	 */
+	public void setCodTipoPlanta(Long codTipoPlanta) {
+		this.codTipoPlanta = codTipoPlanta;
+	}
+	
+	/**
+	 * @return the objetoNorma
+	 */
+	public String getObjetoNorma() {
+		return objetoNorma;
+	}
+
+	/**
+	 * @param objetoNorma the objetoNorma to set
+	 */
+	public void setObjetoNorma(String objetoNorma) {
+		this.objetoNorma = objetoNorma;
+	}
+
+	/**
+	 * @return the limitInit
+	 */
+	public int getLimitInit() {
+		return limitInit;
+	}
+
+	/**
+	 * @param limitInit the limitInit to set
+	 */
+	public void setLimitInit(int limitInit) {
+		this.limitInit = limitInit;
+	}
+
+	/**
+	 * @return the limitEnd
+	 */
+	public int getLimitEnd() {
+		return limitEnd;
+	}
+
+	/**
+	 * @param limitEnd the limitEnd to set
+	 */
+	public void setLimitEnd(int limitEnd) {
+		this.limitEnd = limitEnd;
+	}
+
+	public String getNumeroNorma() {
+		return numeroNorma;
+	}
+
+	public void setNumeroNorma(String numeroNorma) {
+		this.numeroNorma = numeroNorma;
+	}
+}

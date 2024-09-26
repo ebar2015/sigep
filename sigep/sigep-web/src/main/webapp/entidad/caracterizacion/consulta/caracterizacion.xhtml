@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_ORDEN}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.entidadN.codOrden}"
+                              converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>            
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_SECTOR_ADMINISTRATIVO}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.entidadN.codSectorAdministrativo}"
+                              converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_SUBORDEN}"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <h:outputText value="#{consultaEntidadBean.entidadN.codSuborden}"
+                              converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_ADSCRITA_VINCULADA}"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <h:outputText value="#{consultaEntidadBean.obtenerAdscrita()}"
+                             
+                              styleClass="output-consulta"/>
+            </div>            
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:spacer/> 
+            </div>
+            <div class="col-md-6">
+                <p:panel widgetVar="wvPnNombreAdscrita"
+                         visible="#{consultaEntidadBean.adscrito}"
+                         style="border: none">
+                    <p:outputLabel value="#{titles.LBL_NOMBRE_ENTIDAD_ADSCRITA}"
+                                   styleClass="log-label form-label-formularios"/>
+                    <br/>
+                    <h:outputText value="#{consultaEntidadBean.entidadAdscritaSeleccionada.nombreEntidad}"
+                                  styleClass="output-consulta"/>
+                </p:panel>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_CATEGORIA}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.entidadN.codCategoria}"
+                              converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.TTL_TIPO_ENTIDAD}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.entidadN.codTipoEntidad}"
+                              converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>            
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_CATEGORIA_DNP}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.codigoDNP}"
+                              converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_ENTIDAD_POSCONFLICTO}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.entidadN.entidadPostconfilcto}"
+                			  converter="parametricaBgDecimalConverter"
+                              styleClass="output-consulta"/>
+            </div>            
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.LBL_PERSONERIA_JURIDICA}"
+                               styleClass="log-label form-label-formularios" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.getSINO(consultaEntidadBean.entidadN.getPersoneriaJuridica())}"
+                              styleClass="output-consulta"/>
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel for="somPatrimonioPropio"
+                               value="#{titles.LBL_PATRIMONIO_PROPIO}:"
+                               styleClass="log-label form-label-formularios" />
+                   <br/>
+                 <h:outputText id="somPatrimonioPropio"
+                                value="#{consultaEntidadBean.entidadN.patrimonioPropio}"
+                                styleClass="output-consulta"/>
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel for="smmSistemaSCarrera"
+                               value="#{titles.LBL_SISTEMA_S_CARRERA}:"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <h:outputText id="smmSistemaSCarrera" value="#{consultaEntidadBean.getNombresParametros(consultaEntidadBean.codigosSistemaCarreraSeleccionados)}"
+                              styleClass="output-consulta"/>
+            </div>  
+            <div class="col-md-6">
+              <p:outputLabel for="smAutonomia"
+                               value="#{titles.LBL_AUTONOMIA}:"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+		        <h:outputText id="smAutonomia" value="#{consultaEntidadBean.getNombresParametros(consultaEntidadBean.autonomia)}"
+                              styleClass="output-consulta"/>
+            </div>            
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel for="smmRegimenSalarial"
+                               value="#{titles.LBL_REGIMEN_SALARIAL}"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <h:outputText id="smmRegimenSalarial" value="#{consultaEntidadBean.getNombresParametros(consultaEntidadBean.codigosEscalaSalarialSeleccionados)}"
+                              styleClass="output-consulta"/>
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel for="smmNaturalezaEmpleo"
+                               value="#{titles.LBL_NATURAEZA_S_DE_EMPLEOS}"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <h:outputText id="smmNaturalezaEmpleo" value="#{consultaEntidadBean.getNombresParametros(consultaEntidadBean.codigosNaturalezaEmpleoSeleccionados)}"
+                              styleClass="output-consulta"/>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.TTL_ESTADO_ENTIDAD}"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.getTextoParametrica(consultaEntidadBean.entidadN.codEstadoEntidad)}"
+                              styleClass="log-label form-label-formularios" />
+            </div>
+            <div class="col-md-6">
+                <p:outputLabel value="#{titles.TTL_ESTADO_GESTION_ENTIDAD}"
+                               styleClass="log-label form-label-formularios form-label-formularios-completo" />
+                <br/>
+                <h:outputText value="#{consultaEntidadBean.getTextoParametrica(consultaEntidadBean.entidadN.codSubestadoEntidad)}"
+                              styleClass="log-label form-label-formularios" />
+
+            </div>
+        </div>
+    </div>
+</html>
+

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<br />
+	
+	<script>
+        function redireccionamiento() {
+           window.location.assign("gestionarEntidad.xhtml")
+          }
+    </script>
+    
+    
+		<style>
+		@media only screen and (-webkit-min-device-pixel-ratio: 1) and (max-device-width: 1024px) and (min-device-width: 768px){
+		    .media-terminar{
+              width: 13.3em!important;
+             }
+             
+              .media-deshacer{
+			padding-right: 11%!important;
+		    padding-left: 10%!important;
+		}
+    
+         }
+         
+         @media only screen and (min-device-width: 768px) and (max-device-width:	1024px) and (-webkit-min-device-pixel-ratio: 1) {
+          .media-terminar{
+              width: 13.3em!important;
+             }
+             
+              .media-deshacer{
+			padding-right: 11%!important;
+		    padding-left: 10%!important;
+		}
+    
+         }
+         
+         @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2) {
+         
+          .media-terminar{
+              width: 13.3em!important;
+             }
+             
+              .media-deshacer{
+			padding-right: 11%!important;
+		    padding-left: 10%!important;
+		}
+    
+         
+         }
+         
+         
+
+		</style>
+	<p:outputPanel id="panelBotones" >
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-4 botones_entidad entidadgnr-1">
+				<p:commandButton id="btnAsignarPolitica"
+					widgetVar="wvBtAsignarPolitica"
+					process="@this @widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito)"
+					styleClass="btn btn-primary"
+					style="width: 12.3em!important; font-size: 1.5em;"
+					value="${titles.LBL_GUARDAR_CAMBIOS}"
+					actionListener="#{ambitoAplicacionPoliticasBean.validarSeleccion()}"
+					update ="@widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito) desHacer"/>
+			</div>
+			<div class="col-md-4 botones_entidad entidadgnr-2">
+				<p:commandButton styleClass="btn btn-secondary media-terminar"
+								 style="width: 12.3em!important; font-size: 1.5em;"
+				                 id="terminar"
+								 value="${titles.LBL_ENTIDAD_TERMINAR}"
+								 process="@this"
+								 onclick="redireccionamiento();"/>
+				<p:tooltip for="terminar"
+				           value="${titles.TTL_ENTIDAD_TERMINAR}"
+					       position="top"/>
+			</div>
+			<div class="col-md-4 botones_entidad">
+		  
+				<p:commandButton styleClass="btn btn-default media-deshacer" id="desHacer" 
+					widgetVar="wvBtDeshacerCambios"
+					title="${titles.TTL_ENTIDAD_TIPDESHACER}"
+					style="width: 12.3em!important; font-size: 1.5em;"
+					disabled="#{not ambitoAplicacionPoliticasBean.blnDeshacerCambios}"
+					value="${titles.LBL_ENTIDAD_DESHACER_CAMBIOS}" process="@this"
+					update="@widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito) panelBotones"
+					actionListener="#{ambitoAplicacionPoliticasBean.deshacerGuardado()}" />
+				<p:tooltip id="toolTipFade" for="desHacer"
+					value="${titles.TTL_ENTIDAD_TIPDESHACER}" position="top" />
+			</div>
+		</div>
+	</div>
+	</p:outputPanel>
+</html>
+

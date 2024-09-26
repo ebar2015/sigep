@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <p:tabView widgetVar="wvTvCrearEntidad"
+               dynamic="true"
+               onTabChange="PF('dlgCargaEntidad').show()"
+               onTabShow="PF('dlgCargaEntidad').hide()"
+               id="tabViewCrearEntidad"
+               activeIndex="#{creacionEntidadBean.tabIndex}"
+               tabindex="#{creacionEntidadBean.tabIndex}"
+               style="background-color: transparent;">
+        
+        <p:tab
+            id="tabDatosBasicos"
+            disabled="#{!creacionEntidadBean.disponibleDatosBasicos}"
+            title="#{titles.TTL_DATOS_BASICOS}">
+            <ui:include src="#{srcDatosBasicos}">
+                <ui:param name="botonguardardatosbasicos" value="#{botonguardardatosbasicos}"/>
+                <ui:param name="regresarAction" value="#{regresarAction}"/>
+                <ui:param name="esGuardado" value="#{esGuardado}"/>
+            </ui:include>
+        </p:tab>
+        
+        <p:tab
+            id="tabDatosCaracterizacion"
+            title="#{titles.TTL_CARACTERIZACION}"
+            disabled="#{creacionEntidadBean.tabCaracterizacion}">
+            <p:panel style="border: none" widgetVar="wvPnCaracterizacion">
+                <ui:include src="#{srcCaracterizacion}">
+                	<ui:param name="esGuardado" value="#{esGuardado}"/>
+                </ui:include>
+            </p:panel>
+        </p:tab>
+        
+        <p:tab id="tabAmbitosApp"
+               title="#{titles.LBL_AMBITO_APLICACION}"
+               disabled="#{!creacionEntidadBean.disponibleAmbitoAplicacion}">
+            <ui:include src="#{srcAmbitoAplicacion}"/>
+        </p:tab>
+    </p:tabView>
+</html>
+

@@ -1,0 +1,453 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:h="http://java.sun.com/jsf/html" 
+                xmlns:p="http://primefaces.org/ui">
+	<h:form id="formularioAcreenciasObligaciones">
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="#{titles.LBL_DATOS_DEUDAS}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				<div class="col-md-12" style="text-align: right;">
+					<div style="padding-right: 1%; display: inline-block">
+						<p:commandButton value="#{titles.LBL_ADD_NEW}" 
+						actionListener="#{bienesRentasBean.crearAcreencia()}" process="@this" 
+						update="tabViewBienesRentas:formularioAcreenciasObligaciones"
+						disabled="#{bienesRentasBean.sinAcreencias}" 
+						onclick="window.location.href='#tabViewBienesRentas:formularioAcreenciasObligaciones:panelFormAcreencia_content'"
+							styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle" />
+					</div>
+					<div class="col-md-8" align="right">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12" descr="aligVal3">
+						<p:dataTable
+							id="tablaAcreencias"
+							var="dataAcreOblig"
+							value="#{bienesRentasBean.listaAcreObligaciones}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							paginator="true"
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+							emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+							<p:column
+								headerText="#{titles.LBL_ENTIDADP}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataAcreOblig.entidadPersona}">
+								<p:outputLabel value="#{dataAcreOblig.entidadPersona}" />
+							</p:column>
+							<p:column
+								headerText="#{titles.LBL_CONCEPTO}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataAcreOblig.conceptoAcreencia}">
+								<h:outputText value="#{dataAcreOblig.conceptoAcreencia}" />
+							</p:column>
+							<p:column
+								headerText="#{titles.LBL_PARAMETRICA_VALOR}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataAcreOblig.saldo}">
+								<p:outputLabel value="#{dataAcreOblig.saldo}">
+									<f:convertNumber
+										currencySymbol="$"
+										type="currency"
+										locale="es_CO"
+										groupingUsed="true" />
+								</p:outputLabel>
+							</p:column>
+							<p:column
+								headerText="#{titles.LBL_TABLA_ACCIONES}"
+								style="word-wrap: break-word!important; text-align:center!important;">
+								<p:commandButton
+									title="#{titles.TTL_EDIT}"
+									icon="icon-edit"
+									process="@this"
+									update="tabViewBienesRentas:formularioAcreenciasObligaciones"
+									action="#{bienesRentasBean.mostrarDialogoEditarAcreenciasObligaciones()}"
+									styleClass="icon-btn"
+									oncomplete="window.location.href='#tabViewBienesRentas:formularioAcreenciasObligaciones:panelFormAcreencia_content'">
+									<f:setPropertyActionListener
+										value="#{dataAcreOblig}"
+										target="#{bienesRentasBean.acreenciaOblicacion}" />
+								</p:commandButton>
+								<p:commandButton
+									title="#{titles.TTL_DELETE}"
+									icon="icon-delete"
+									process="@this"
+									update="tabViewBienesRentas:formularioAcreenciasObligaciones"
+									action="#{bienesRentasBean.mostrarDialogoEliminarAcreenciasObligaciones()}"
+									styleClass="icon-btn">
+									<f:setPropertyActionListener
+										value="#{dataAcreOblig}"
+										target="#{bienesRentasBean.acreenciaOblicacion}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-lg-12" align="center">
+					<div class="col-md-12">
+						<h:outputText styleClass="log-label form-label-formularios" value="#{titles.LBL_NO_AO}&#160;" />
+						<p:selectBooleanCheckbox id="chkSinAcreencias" value="#{bienesRentasBean.sinAcreencias}">
+						<p:ajax listener="#{bienesRentasBean.guardarSinAcreencias}" process="@this" update="tabViewBienesRentas:formularioAcreenciasObligaciones" />
+					</p:selectBooleanCheckbox>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%; margin-left: 5px; margin-rigth: 5px;">
+					<p:commandButton disabled="#{bienesRentasBean.btnSaveAcreenciaDeshabilitado}"
+						title="#{bienesRentasBean.btnSaveAcreenciaMensaje}"
+						value="#{titles.LBL_SAVE_CONT}"
+						styleClass="btn btn-primary"
+						process="@this"
+						style="font-size:1.5em!important; padding-top:0!important;"
+						actionListener="#{bienesRentasBean.guardarContinuarAcreenciasObligaciones}" />
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;  margin-left: 5px; margin-rigth: 5px;">
+					<p:commandButton
+						value="#{titles.TTL_CANCEL}"
+						type="button"
+						onclick="mostrarDialogCancelarAO();"
+						styleClass="btn btn-default"
+						style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>			
+		</div>
+		<br />
+		<br />
+		<div id="divFormObligaciones" class="row">
+			<p:panel id="panelFormAcreencia" visible="#{bienesRentasBean.lbMostrarFormulario}" >
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">#{titles.LBL_NEW_AO}</span>
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<p:outputLabel for="txtEntidadP" styleClass="log-label form-label-formularios display-block" value="#{titles.LBL_ENTIDADP}:">
+						</p:outputLabel>
+						<p:inputText id="txtEntidadP" required="true" maxlength="250" title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDADP']} ${titles['TTL_TIPO_ALFANUMERICO']}" value="#{bienesRentasBean.acreenciaOblicacion.entidadPersona}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" styleClass="form-control-acti-usua form-control">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="txtEntidadP" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="txtConcepto" styleClass="log-label form-label-formularios display-block" value="#{titles.LBL_CONCEPTO}:">
+						</p:outputLabel>
+						<p:inputText id="txtConcepto" required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" maxlength="255" title="${titles['TTL_INGRESE']} ${titles['LBL_CONCEPTO']} ${titles['TTL_TIPO_ALFANUMERICO']}" value="#{bienesRentasBean.acreenciaOblicacion.conceptoAcreencia}" styleClass="form-control-acti-usua form-control">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="txtConcepto" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel
+							for="txtSaldoAO"
+							styleClass="log-label form-label-formularios display-block"
+							value="#{titles.LBL_SALDO}:">
+						</p:outputLabel>
+								<p:inputNumber
+								id="txtSaldoAO"
+								required="true"
+								converterMessage="El valor debe ser numérico y la parte decimal separada por punto"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								validatorMessage="Debe ingresar un valor entre 0.1 y 9999999999999999"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR444']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{bienesRentasBean.acreenciaOblicacion.saldo}"
+								onkeyup="return validateKey(event);"
+								onkeydown="return validateKey(event);"
+								onkeypress="return validateKey(event);"		
+								symbol="$ "
+								decimalSeparator=","
+								thousandSeparator="."
+								decimalPlaces="2"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}">
+								<f:validateDoubleRange minimum="0.1" maximum="9999999999999999" />
+							</p:inputNumber>						
+						<p:message
+							for="txtSaldoAO"
+							display="text" />
+					</div>
+				<br />
+				
+				
+				</div>
+					<br />	
+						<br />					
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton
+							value="${titles['TTL_BR_BTN_ADICIONAR']}"
+							styleClass="btn btn-primary"
+							actionListener="#{bienesRentasBean.guardarAcreenciaObligacion}"
+							process="formularioAcreenciasObligaciones"
+							update="panelFormAcreencia tablaAcreencias"
+							style="font-size:1.5em!important; padding-top:0!important;"/>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this"
+							update="panelFormAcreencia"
+							actionListener="#{bienesRentasBean.limpiarAcreenciaObligacion()}"
+							title="#{bienesRentasBean.strToolTipBtnLimpiar}"  >
+							<p:resetInput
+										target="panelFormAcreencia" />									
+						</p:commandButton>	
+					</div>					
+					<div class="col-md-3"></div>
+				</div>				
+			</p:panel>
+			<br />
+		</div>
+	</h:form>
+	<div class="modal fade" id="dialogRespuAcreencias" role="dialog" data-backdrop="static"  data-keyboard="false" >
+		<div class="modal-dialog modal-dialog-2" style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${titles['TTL_BR_BORRAR_TODO']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton id="btnDeshabiTablaAcreencia" value="${titles['TTL_OK']}" process="@this" styleClass="btn btn-primary" update="tabViewBienesRentas:formularioAcreenciasObligaciones" actionListener="#{bienesRentasBean.limpiarFormAcreencias()}" onclick="$('#dialogRespuAcreencias').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_CANCEL']}" process="@this" styleClass="btn btn-default" actionListener="#{bienesRentasBean.cancelarEliminacionTablaAcreencias()}" update="tabViewBienesRentas:formularioAcreenciasObligaciones" onclick="$('#dialogRespuAcreencias').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="dialogEditarAcreenciasObligaciones" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="#{messages.MSG_MODIFICAR_REGISTRO}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="${titles['TTL_YES']}" update="tabViewBienesRentas:formularioAcreenciasObligaciones:panelFormAcreencia" process="@this" actionListener="#{bienesRentasBean.editarAcreencia()}" styleClass="btn btn-primary" 
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" onclick="$('#dialogEditarAcreenciasObligaciones').modal('hide');" >
+								</p:commandButton>
+							</div>
+							<div class="col-md-3" align="center">
+								<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" onclick="$('#dialogEditarAcreenciasObligaciones').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="dialogConfirmacionEditadoAcreenciasObligaciones" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="#{messages.MSG_EDICION_CORRECTA}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4"></div>
+							<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="CONTINUAR" type="button" onclick="$('#dialogConfirmacionEditadoAcreenciasObligaciones').modal('hide');" styleClass="btn btn-primary"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="dialogEliminarAcreenciasObligaciones" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${messages['BR_INTERROGA_ELIMINACION']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="${titles['TTL_YES']}" update="tabViewBienesRentas:formularioAcreenciasObligaciones" actionListener="#{bienesRentasBean.eliminarAcreenciasObligaciones}"
+									styleClass="btn btn-primary" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3" align="center">
+								<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" type="button" onclick="$('#dialogEliminarAcreenciasObligaciones').modal('hide');" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="dialogConfirmacionEliminadoAcreenciasObligaciones" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<h5>
+								<p:outputLabel value="${messages['MSG_PROCESO_ELIMINADO']}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4"></div>
+							<div class="col-md-4" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="${titles['TTL_TO_CONTINUE']}" type="button" onclick="$('#dialogConfirmacionEliminadoAcreenciasObligaciones').modal('hide');" styleClass="btn btn-primary" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dialogCancelarAcreenciaObligacion"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_DIALOGO_CANCELAR']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									styleClass="btn btn-primary"
+									actionListener="#{bienesRentasBean.cancelarAcreenciasObligaciones}"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogCancelarAcreenciaObligacion').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		function verFormularioEditar() {
+			$("#divFormObligaciones").attr("style", "display:block");
+			$('#dialogEditarAcreenciasObligaciones').modal('hide');
+		}
+		function mostrarDialogCancelarAO(){			
+			$('#dialogCancelarAcreenciaObligacion').modal({
+				backdrop : 'static',
+				keyboard : false
+			});
+		}
+	</script>
+	<script type="text/javascript">
+				function sololetras(e) {
+					var key =e.keyCode || e.which;
+					var teclado =String.fromCharCode(key).toLowerCase();
+					var letras ="0123456789";
+					var especiales ="8-37-38-46-164";
+					var teclado_especial=false;
+					for(var i in especiales){
+						if(key == especiales[i]){
+							teclado_especial=true;
+							break;
+						}
+					}
+					if(letras.indexOf(teclado) ==-1){
+						if(!teclado_especial){
+						  return false;
+						 }
+					}
+				}
+		</script>
+</ui:composition>

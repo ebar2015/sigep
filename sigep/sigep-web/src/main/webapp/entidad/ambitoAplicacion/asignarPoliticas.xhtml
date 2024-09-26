@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+	 <div class="row row-background-white">
+	  <br /> <br />
+	  <div class="row">
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarPolitica"
+					value="${titles['LBL_ENTIDAD_ASIGNAR_NUEVA_POLITICA']}"
+					icon="fa fa-fw fa-plus-circle" process="@this @widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito)"
+					actionListener="#{ambitoAplicacionPoliticasBean.asignarNuevaPolitica()}"
+					update ="@widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito) desHacer"
+					styleClass="btn btn-transparent">
+				</p:commandButton>
+			</div>
+		</div>
+	</div>
+	<p:outputPanel id="panelTablaNuevaPolitica">
+	<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable  id="dtPoliticaPublica" value="#{ambitoAplicacionPoliticasBean.politicasList}"
+				rowIndexVar="rowIndex"  widgetVar="wvDtPoliticasAmbito"
+				reflow="true"  paginator="true"
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				var="pltc" rowKey="#{pltc.codTablaParametrica}"
+				selection="#{ambitoAplicacionPoliticasBean.politicasSeleccionadas}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				<p:column headerText="${titles.TTL_SELECCIONAR_POLITICA}" selectionMode="multiple" style="width:16px;text-align:center"/>
+				<p:column headerText="${titles.LBL_ENTIDAD_POLITICA}"
+					sortBy="#{pltc.valorParametro}" filterBy="#{pltc.valorParametro}"  filterMatchMode="contains">
+					<h:outputText value="#{pltc.valorParametro}"/>
+				</p:column>
+				<p:column headerText="${titles.LBL_TABLA_ACCION}" style ="text-align: center;">
+					<p:commandButton title="${titles.BTN_TABLA_VER}" icon="icon-view" styleClass="icon-btn"
+						process="@this" update="@form" oncomplete="PF('wdgtDetallePolitica').show()">
+						<f:setPropertyActionListener target="#{ambitoAplicacionPoliticasBean.politicaDetalle}" value="#{pltc}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		<br /><br />
+	</div>
+</p:outputPanel>
+</div>
+<br />
+<br />	
+</html> 

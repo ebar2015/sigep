@@ -1,0 +1,340 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<div id="dlgEliminarNomenclatura" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title" style="font-size: 2em !important;">•#{titles.TTL_ENTIDADES_NOMENCLATURA_ELIMINAR} •</h4>
+				</div>
+				<div class="modal-body">
+					<p:panel id="panelComfirmacionEliminacionNomenclatura"
+						style="background: transparent;">
+						<div class="col-md-12" align="center"
+							style="margin-top: 2%; margin-bottom: 3%;">
+							<p:outputLabel
+								value="${messages['MSG_PREGUNTA_ELIMINAR_REGISTRO']}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnEliminarNomenclatura"
+									value="${titles['TTL_OK']}" styleClass="btn btn-primary"
+									style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									update ="dtNomenclaturas formCrearNomenclatura:dtDenominacionesNomenclatura dlgNomenclaturaPlantaPersonal"
+									actionListener="#{gestionarNomenclaturaEscalaBean.eliminarNomenclatura()}"
+									onclick="$('#dlgEliminarNomenclatura').modal('hide')" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+									styleClass="btn btn-default"
+									style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									onclick="$('#dlgEliminarNomenclatura').modal('hide')" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p:dialog widgetVar="wdgtDetallePlantasAsociadasNomenclatura" width="680px"
+		id="dlgNomenclaturaPlantaPersonal" modal="true" draggable="false" closable="false" height="auto"
+		resizable="false" responsive="true" >
+		<br />
+			<div class="modal-header" align="center">
+				<h4 class="modal-title">• #{titles.TTL_ENTIDADES_NOMENCLATURA_ELIMINAR} •</h4>
+			</div>
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="${messages['MSG_ENTIDAD_NOMENCLATURA_INFO_PLANTA_PERSONAL']}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+		<br />
+		<div class="row">
+			<div class="col-md-12" align="center">
+			<p:outputPanel id="panelNomenclaturaPlantaPersonal">
+				<p:scrollPanel style="width: 100%" id="panelScrollPlantaPersonal">
+					<p:dataTable id="dtTablaNomenclaturaPlantaPersonal"
+						value="#{gestionarNomenclaturaEscalaBean.listaPlantas}"
+						var="descripcionPlantaPersonal"
+						rowKey="#{descripcionPlantaPersonal.codEntidadPlanta}" paginator="true"
+						rows="#{paginatorSize}" style="width: 600px"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_CODIGO}">
+							<h:outputText value="#{descripcionPlantaPersonal.codEntidadPlanta}" />
+						</p:column>
+	
+						<p:column headerText="${titles.LBL_CLASE_PLANTA}">
+							<h:outputText value="#{descripcionPlantaPersonal.nombreClasePlanta}" />
+						</p:column>
+	
+						<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_NOMBRE}">
+							<h:outputText value="#{descripcionPlantaPersonal.nombrePlanta}" />
+						</p:column>
+						<p:column headerText="${titles.LBL_CLASIFICACION_PLANTA}">
+							<h:outputText value="#{descripcionPlantaPersonal.nombreClasificacionPlanta}" />
+						</p:column>
+						<p:column headerText="${titles.LBL_TIPO_DE_NORMA}">
+							<h:outputText value="#{descripcionPlantaPersonal.nombreTipoNorma}" />
+						</p:column>
+					</p:dataTable>
+				</p:scrollPanel>
+				</p:outputPanel>
+			</div>
+		</div>
+		<br />
+	
+		<div class="row" align="center">
+			<div class="col-md-12" align="center">
+				<p:commandButton value="${titles['TTL_OK']}" process="@this"
+					styleClass="btn btn-primary"
+					onclick="PF('wdgtDetallePlantasAsociadasNomenclatura').hide()"
+					style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	<div id="dlgEliminarDenominacion" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title" style="font-size: 2em !important;">•#{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ELIMINAR} •</h4>
+				</div>
+				<div class="modal-body">
+					<p:panel id="panelComfirmacionEliminacionDenominacion"
+						style="background: transparent;">
+						<div class="col-md-12" align="center"
+							style="margin-top: 2%; margin-bottom: 3%;">
+							<p:outputLabel
+								value="${messages['MSG_PREGUNTA_ELIMINAR_REGISTRO']}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnEliminarDenominacion"
+									value="${titles['TTL_OK']}" styleClass="btn btn-primary"
+									style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									update ="formCrearNomenclatura:dtDenominacionesNomenclatura dlgVinculacionesAsociadas dlgPlantaAsociadaDenominacion"
+									actionListener="#{gestionarNomenclaturaEscalaBean.eliminarDenominacion()}"
+									onclick="$('#dlgEliminarDenominacion').modal('hide')" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+									styleClass="btn btn-default"
+									style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									onclick="$('#dlgEliminarDenominacion').modal('hide')" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p:dialog widgetVar="wdgtDetalleVinculacionAsociadasDenominacion" width="680px"
+		id="dlgVinculacionesAsociadas" modal="true" draggable="false" closable="false" height="auto"
+		resizable="false" responsive="true" header="• #{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ELIMINAR} •">
+		<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="${messages['MSG_ENTIDAD_NOMENCLATURA_INFO_PLANTA_PERSONAL']}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+		<br />
+		<div class="row">
+			<div class="col-md-12" align="center">
+			<p:outputPanel id="panelVinculacionDenominacion">
+				<p:scrollPanel style="width: 100%" id="panelScrollVinculacionDenominacion">
+					<p:dataTable id="dtTablaVinculacionesDenominacion"
+						value="#{gestionarNomenclaturaEscalaBean.lstVinculacionDenominacion}"
+						var="descripcionDenominacion"
+						rowKey="#{descripcionDenominacion.codVinculacion}" paginator="true"
+						rows="#{paginatorSize}" style="width: 600px"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_CODIGO}">
+							<h:outputText value="#{descripcionDenominacion.primerNombre}" />
+						</p:column>
+						<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_CODIGO}">
+							<h:outputText value="#{descripcionDenominacion.primerApellido}" />
+						</p:column>
+					</p:dataTable>
+				</p:scrollPanel>
+				</p:outputPanel>
+			</div>
+		</div>
+		<br />
+	
+		<div class="row" align="center">
+			<div class="col-md-12" align="center">
+				<p:commandButton value="${titles['TTL_OK']}" process="@this"
+					styleClass="btn btn-primary"
+					onclick="PF('wdgtDetalleVinculacionAsociadasDenominacion').hide()"
+					style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	<p:dialog widgetVar="wdgtDetallePlantasAsociadasDenominacion" width="680px"
+		id="dlgPlantaAsociadaDenominacion" modal="true" draggable="false" closable="false" height="auto"
+		resizable="false" responsive="true" header="• #{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ELIMINAR} •">
+		<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="${messages['MSG_ENTIDAD_NOMENCLATURA_DENOMINACION_INFO_PLANTA_PERSONAL']}" styleClass="advisor" />
+				</div>
+			</div>
+			<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+		<br />
+		<div class="row">
+			<div class="col-md-12" align="center">
+			<p:outputPanel id="panelPlantaDenominacion">
+				<p:scrollPanel style="width: 100%" id="panelScrollPlantaDenominacion">
+					<p:dataTable id="dtTablaPlantaDenominacion"
+						value="#{gestionarNomenclaturaEscalaBean.lstPlantaDetalleDenominacion}"
+						var="descripcionPlantaDenominacion"
+						rowKey="#{descripcionPlantaDenominacion.codEntidadPlantaDetalle}" paginator="true"
+						rows="#{paginatorSize}" style="width: 600px"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_NOMBRE}">
+							<h:outputText value="#{descripcionPlantaDenominacion.nombrePlanta}" />
+						</p:column>
+						<p:column headerText="Personas Vinculadas">
+							<h:outputText value="#{descripcionPlantaDenominacion.nombrePersona}" />
+						</p:column>
+					</p:dataTable>
+				</p:scrollPanel>
+				</p:outputPanel>
+			</div>
+		</div>
+		<br />
+	
+		<div class="row" align="center">
+			<div class="col-md-12" align="center">
+				<p:commandButton value="${titles['TTL_OK']}" process="@this"
+					styleClass="btn btn-primary"
+					onclick="PF('wdgtDetallePlantasAsociadasDenominacion').hide()"
+					style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	<!-- Dialogo de confirmacion check de personalizar Nomenclatura General  -->
+	<p:dialog widgetVar="wdgtDetallePlantasAsociadasPersonalizacion"
+			width="680px" id="dlgPlantaAsociadaPersonalizacion" modal="true"
+			draggable="false" closable="false" height="auto" resizable="false"
+			responsive="true"
+			header="• #{titles.LBL_ENTIDAD_PERSONALIZAR_DENOMINACION} •">
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="${messages['MSG_ENTIDAD_NOMENCLATURA_DENOMINACION_PERSONALIZACION']}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<hr
+				style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+			<br />
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputPanel id="panelPlantaDenominacionPersonalizar">
+						<p:scrollPanel style="width: 100%"
+							id="panelScrollPlantaDenominacionPersonalizar">
+							<p:dataTable id="dtTablaPlantaDenominacionPersonalizar"
+								value="#{gestionarNomenclaturaEscalaBean.lstPlantaDetalleDenominacion}"
+								var="descripcionPlantaDenominacion"
+								rowKey="#{descripcionPlantaDenominacion.codEntidadPlantaDetalle}"
+								paginator="true" rows="#{paginatorSize}" style="width: 600px"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+								<p:column headerText="${titles.LBL_ENTIDAD_PLANTA_NOMBRE}">
+									<h:outputText
+										value="#{descripcionPlantaDenominacion.nombrePlanta}" />
+								</p:column>
+								<p:column headerText="Persona vinculada">
+									<h:outputText
+										value="#{descripcionPlantaDenominacion.nombrePersona}" />
+								</p:column>
+							</p:dataTable>
+						</p:scrollPanel>
+					</p:outputPanel>
+				</div>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles['TTL_OK']}" process="@this"
+						styleClass="btn btn-primary"
+						onclick="PF('wdgtDetallePlantasAsociadasPersonalizacion').hide()"
+						style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+				</div>
+			</div>
+		</p:dialog>
+
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+		widgetVar="dlgConfirmarIncrementoSalarial"
+		id="dlgConfirmarIncrementoSalarial" minHeight="300" modal="true"
+		resizable="false" closeOnEscape="false" responsive="true"
+		draggable="false" closable="false" appendTo="@(body)">
+		<br />
+		<div class="row" style="text-align: justify; padding: 0% 3%;"
+			align="center">
+			<center>
+				<h5>#{messages.MSG_ENTIDAD_NOMENCLATURA_INCREMENTO_MENSAJE}</h5>
+			</center>
+		</div>
+		<br />
+		<div class="row" align="center">
+			<div class="col-md-3"></div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+					actionListener="#{gestionarNomenclaturaEscalaBean.realizarIncrementoEscalaSalarial()}"
+					onclick="PF('dlgConfirmarIncrementoSalarial').hide();"
+					update="formCrearNomenclatura:dtDenominacionesNomenclatura" />
+			</div>
+			<div class="col-md-3" style="margin-bottom: 2%;">
+				<p:commandButton value="#{titles.TTL_CANCEL}" process="@this"
+					styleClass="btn btn-default"
+					onclick="PF('dlgConfirmarIncrementoSalarial').hide();"
+					style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+				</p:commandButton>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+		<br />
+	</p:dialog>
+
+</ui:composition>

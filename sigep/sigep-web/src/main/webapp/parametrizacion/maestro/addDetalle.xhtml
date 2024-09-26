@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/dialogTemplate.xhtml">
+	<ui:param name="pageTitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_ADMINISTRAR_MAESTRO_AGREGAR_DETALLE']}" />
+
+	<ui:define name="main">
+		<h:panelGroup id="agregarDetalleDialog">
+			<p:panelGrid columns="6"
+				columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1"
+				layout="grid" styleClass="ui-panelgrid-blank">
+				<p:outputLabel for="nombreRegistro"
+					value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_NOMBRE_REGISTRO']}" />
+				<p:inputText id="nombreRegistro"
+					placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_NOMBRE_REGISTRO']}"
+					value="#{administrarMaestroBean.detalleMaestroVOSeleccionado.registro}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="nombreRegistro" display="icon" />
+				
+				<p:outputLabel for="aliasRegistro"
+					value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO']}" />
+				<p:inputText id="aliasRegistro"
+					placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO']}"
+					value="#{administrarMaestroBean.detalleMaestroVOSeleccionado.aliasRegistro}">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="aliasRegistro" display="icon" />
+				
+				<p:outputLabel for="aliasRegistro2"
+					value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO']}" />
+				<p:inputText id="aliasRegistro2"
+					placeholder="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ALIAS_REGISTRO']}"
+					value="#{administrarMaestroBean.detalleMaestroVOSeleccionado.aliasRegistro2}">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="aliasRegistro2" display="icon" />
+				
+				<p:outputLabel for="estadoRegistro"
+					value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ESTADO_REGISTRO']}" />
+				<p:selectBooleanCheckbox id="estadoRegistro"
+					title="${titles['LBL_TRANSVERSAL_ADMINISTRAR_MAESTRO_ESTADO_REGISTRO']}"
+					value="#{administrarMaestroBean.detalleMaestroVOSeleccionado.estado}"
+					required="true"
+					requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+					<p:clientValidator />
+				</p:selectBooleanCheckbox>
+				<p:message for="estadoRegistro" display="icon" />
+			</p:panelGrid>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton icon="ui-icon-plus" title="${titles['TTL_OK']}"
+			value="${titles['TTL_OK']}" process="@this agregarDetalleDialog"
+			update="agregarDetalleDialog"
+			actionListener="#{administrarMaestroBean.seleccionarDetalleVODialogo}" />
+	</ui:define>
+</ui:composition>

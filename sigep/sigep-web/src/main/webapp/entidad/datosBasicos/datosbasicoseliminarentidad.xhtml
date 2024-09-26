@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<div class="row row-background-white" style="padding-top: 4%;">
+		<h:form id="data">
+			<p:growl id="growl" showDetail="true" />
+			<hr class="hr-style hr-style-two" style="width: 94% !important;" />
+			<span class="span-style"> #{titles.TTL_INFORMACION_BASICA_ENTIDAD}</span>
+			<br /> <br />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_CODIGO_SIGEP}" class="advisor" />
+						<br />
+						<h:outputText value="#{eliminarEntidadBean.entidadN.codigoSigep}" class="label-dark" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_DENOMINACION_ENTIDAD}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.entidadN.nombreEntidad}" class="label-dark" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_NIT}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.entidadN.nit}" class="label-dark" />
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_CODIGO_DANE}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.entidadN.codigoDane}" class="label-dark" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_CODIGO_CUIN}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.entidadN.codigoCuin}" class="label-dark" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_ESTADO}" class="advisor" />
+						<br />
+						<p:selectOneMenu value="#{creacionEntidadBean.entidadN.codEstadoEntidad}" disabled="true">
+							<f:selectItem itemValue="#{null}" itemLabel="#{titles.TTL_SELECT}" />
+							<f:selectItems value="#{webUtils.getParametricaPorIdPadre(1479)}" />
+						</p:selectOneMenu>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_FECHA_CREACION_ENTIDAD}" class="advisor" 
+										style="text-align: left !important;"/><br />
+						<h:outputText value="#{creacionEntidadBean.entidadN.audFechaActualizacion}" class="label-dark">
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm aa" />
+						</h:outputText>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_USUARIO_CREACION_ENTIDAD}" class="advisor" /><br />
+						<h:outputText value="#{eliminarEntidadBean.nombreUsuario}" class="label-dark"/>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_TIPO_NORMA}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.tipoNorma.codTipoNorma}"
+						 class="label-dark" converter="parametricaBgDecimalConverter"/>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12">		
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_FECHA_NORMA}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.tipoNorma.fechaNorma}" class="label-dark">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-5" />
+						</h:outputText>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.TTL_NUMERO_NORMA}" class="advisor" />
+						<br />
+						<h:outputText value="#{creacionEntidadBean.tipoNorma.numeroNorma}" class="label-dark"/>
+					</div>
+					<div class="col-md-4">
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<div>
+						<p:commandButton value="#{titles.LBL_ELIMINAR}" process="@this" 
+							styleClass="btn btn-primary" 
+							onclick="$('#eliminarEntidad').modal('show')">
+						</p:commandButton>
+					</div>
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+	                    <p:commandButton value="${titles.TTL_CANCEL}" 
+	                    	styleClass="btn btn-default" process="@this" 
+	                    	action="#{EliminarEntidadBean[regresarAction]}"/>  
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</h:form>
+	</div>
+	<p:dialog widgetVar="confirmDlg2" id="confirm2" modal="true" header="${titles.TTL_ELIMINAR_ENTIDAD}" 
+			draggable="false" closable="false" resizable="false">
+		<h:form id="confirma">
+			<div class="col-md-12" align="center" style="margin-top: 3%; margin-bottom: 3%;">
+				<p:outputLabel value="${messages.MSG_ELIMINAR_ENTIDAD_CON_VINCULACIONES}"/>
+			</div>
+			<div class="row" align="center">
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_OK']}" actionListener="#{eliminarEntidadBean.btEliminarEntidadListener(1)}" 
+						process="@form" styleClass="btn btn-primary" update="data"
+						onclick="PF('loadingDialog').show()" oncomplete="PF('confirmDlg2').hide();PF('loadingDialog').hide()" 
+						style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+				</div>
+				<div class="col-md-4">
+					<p:commandButton value="${titles['TTL_CANCEL']}" onclick="PF('confirmDlg2').hide()" 
+					process="@this" styleClass="btn btn-default" 
+					style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</h:form>
+	</p:dialog>
+	<p:dialog widgetVar="loadingDialog" modal="true" draggable="false" closable="false" resizable="false" 
+			showHeader="false" style="width:auto;height:auto">
+		<p:graphicImage dir="resources" name="/images/loading.gif" rendered="#{progressBarView.progress eq 0}" 
+			height="45" width="70" alt="${messages['DLG_PROCESANDO']}" title="${messages['MSG_PROCESANDO']}" />
+	</p:dialog>
+	<div id="eliminarEntidad" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<p:panel id="panelConfirmacionEliminarEntidad">
+						<div class="col-md-12" align="center"
+							style="margin-top: 3%; margin-bottom: 3%;">
+							<p:outputLabel value="¿Señor usuario está seguro que desea eliminar la entidad #{eliminarEntidadBean.entidadN.nombreEntidad} con Código SIGEP #{eliminarEntidadBean.entidadN.codigoSigep}?"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;" escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnEliminarEntidad" value="${titles['TTL_OK']}" styleClass="btn btn-primary"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;" 
+									process="@this" update="data"
+									actionListener="#{eliminarEntidadBean.btEliminarEntidadListener(0)}"
+									onclick="$('#eliminarEntidad').modal('hide');PF('loadingDialog').show()" oncomplete="PF('loadingDialog').hide()"
+								/>
+								<p:message for="btnEliminarEntidad" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_CANCEL']}" process="@this" update="data" styleClass="btn btn-default"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;" 
+									onclick="$('#eliminarEntidad').modal('hide')"/>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<br />
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="es" lang="es" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/template/basicTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TTL_GESTIONAR_S_ADMINISTRATIVA}" />
+
+	<ui:define name="content">
+
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2>
+					<p:outputLabel value="#{titles.TTL_GESTIONAR_S_ADMINISTRATIVA}"
+						styleClass="page-subtitle" />
+				</h2>
+			</div>
+		</div>
+		<h:form id="formGenerarXls">
+			<div class="row row-background-white"
+				style="margin-left: 0px; padding-top: 2em;">
+				<div class="col-md-12" style="text-align: right !important;">
+					<div id="btnDivNuevaSituacion">
+						<p:commandButton value="#{titles.TTL_NUEVA_SITUACION}"
+							icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+							actionListener="#{gestionarSituacionesParticularesBean.activarFormulario()}"
+							update="formularioGestionarSituaciones formDetalle"
+							disabled="#{gestionarSituacionesParticularesBean.flgisRolSoloConsulta}"
+							onclick="window.location.href='#formularioGestionarSituaciones:panelFormSituaciones'"
+							oncomplete="window.location.href='#formularioGestionarSituaciones:panelFormSituaciones'"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p:dataTable id="tablaSituacionesParticulares"
+							var="dataSituaciones"
+							value="#{gestionarSituacionesParticularesBean.listaSituaciones}"
+							paginator="true" rows="5" reflow="true"
+							rowsPerPageTemplate="5,10,15"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							emptyMessage="#{messages.MSG_TABLAS_SIN_REGISTROS}">
+							<p:column
+								headerText="#{titles.TTL_SITUACIONES_ADMINISTRATIVAS_PARTICULARES}"
+								style="word-wrap: break-word!important;text-align: center!important;">
+								<p:outputLabel value="#{dataSituaciones.nombreSituacion}" />
+							</p:column>
+							<p:column headerText="#{titles.LBL_PARAMETRICA_DESCRIPCION}"
+								style="word-wrap: break-word!important;text-align: center!important;">
+								<p:outputLabel value="#{dataSituaciones.descripcion}" />
+							</p:column>
+							<p:column headerText="#{titles.LBL_ACCIONES}" exportable="false"
+								style="word-wrap: break-word!important;text-align: center!important;">
+								<p:commandButton title="#{titles.TTL_CONSULT}" icon="icon-view"
+									styleClass="icon-btn"
+									update="formularioGestionarSituaciones formDetalle"
+									actionListener="#{gestionarSituacionesParticularesBean.mostrarDetalle(dataSituaciones)}"
+									oncomplete="window.location.href='#formularioGestionarSituaciones:panelFormSituaciones'">
+								</p:commandButton>
+								<p:commandButton title="#{titles.TTL_EDIT}"
+									actionListener="#{gestionarSituacionesParticularesBean.activarFormularioEditar()}"
+										update="formularioGestionarSituaciones formDetalle"
+									icon="icon-edit" styleClass="icon-btn"
+									disabled="#{gestionarSituacionesParticularesBean.flgisRolSoloConsulta}"
+									oncomplete="window.location.href='#formularioGestionarSituaciones:panelFormSituaciones'">
+									<f:setPropertyActionListener value="#{dataSituaciones}"
+										target="#{gestionarSituacionesParticularesBean.nuevaSituacionParticular}" />
+								</p:commandButton>
+								<p:commandButton title="#{titles.TTL_DELETE}"
+									actionListener="#{gestionarSituacionesParticularesBean.mostrarDialogoEliminar()}"
+									update="formularioGestionarSituaciones formDetalle"
+									icon="icon-delete" styleClass="icon-btn"
+									disabled="#{gestionarSituacionesParticularesBean.flgisRolSoloConsulta}">
+									<f:setPropertyActionListener value="#{dataSituaciones}"
+										target="#{gestionarSituacionesParticularesBean.nuevaSituacionParticular}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" >
+									<p:outputPanel id="panelExportar"
+										rendered="#{gestionarSituacionesParticularesBean.boolVerBotonExportar}">
+										<h:commandLink value="#{titles.TTL_EXPORTAR_A_EXCEL}" immediate="true"
+											styleClass="btn btn-primary" update="formGenerarXls"
+											style="padding-left:4%!important;padding-right:4%!important;font-size:1.5em!important; padding-top:6px!important; height: 32px!important">
+											<p:dataExporter type="xls" target="tablaSituacionesParticulares"
+												fileName="SituacionesParticulares"
+												postProcessor="#{gestionarSituacionesParticularesBean.postProcessXLS}" />
+										</h:commandLink>
+									</p:outputPanel>
+								</div>
+						
+								<div class="col-md-5"></div>
+								<div class="col-md-2">
+									<p:commandButton value="#{titles.TTL_SALIR}"
+										styleClass="btn btn-default"
+										actionListener="#{gestionarSituacionesParticularesBean.mostrarDialogoCancelar()}"
+										update="formularioGestionarSituaciones" immediate="true"
+										resetValues="true"
+										style="width: 13.3em!important; height: 2.6em!important;">
+									</p:commandButton>
+								</div>
+								
+							</div>
+					</div>
+					</div>
+				</div>
+				<br />
+			</div>
+			<br />
+			
+		</h:form>
+		<br />
+		<div id="divFormGestionarSituaciones">
+			<h:form id="formularioGestionarSituaciones">
+				<p:outputPanel id="panelFormSituaciones"
+					rendered="#{gestionarSituacionesParticularesBean.boolHabilitadoFormulario}">
+					<div class="row row-background-white">
+						<br /> <br />
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style">#{gestionarSituacionesParticularesBean.strTituloFormulario}</span>
+						<div class="row" align="right">
+							<div class="col-md-12">
+								<label class="form-label-formularios">#{titles.TTL_REQUIRED}</label>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<p:outputLabel for="txtNombreSituacion"
+										styleClass="log-label form-label-formularios display-block"
+										value="#{titles.TTL_NOMBRE_SITUACION_PARTICULAR}:" />
+									<p:inputText id="txtNombreSituacion" required="true"
+										maxlength="254"
+										value="#{gestionarSituacionesParticularesBean.nuevaSituacionParticular.nombreSituacion}"
+										requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+										disabled="#{!gestionarSituacionesParticularesBean.boolVerBotonesForm}"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NOMBRE_SITUACION_PARTICULAR} #{titles.TTL_TIPO_ALFANUMERICO}"
+										styleClass="form-control-acti-usua form-control">
+										<f:validator validatorId="maxByteLengthValidator" />
+									</p:inputText>
+									<p:message for="txtNombreSituacion" display="text" />
+								</div>
+								<div class="col-md-4">
+									<p:outputLabel for="txtDescripcionSituacion"
+										styleClass="log-label form-label-formularios display-block"
+										value="#{titles.TTL_DESCRIPCION_SITUACION_PARTICULAR}:" />
+									<p:inputText id="txtDescripcionSituacion" required="true"
+										maxlength="254"
+										disabled="#{!gestionarSituacionesParticularesBean.boolVerBotonesForm}"
+										requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_DESCRIPCION_SITUACION_PARTICULAR} #{titles.TTL_TIPO_ALFANUMERICO}"
+										value="#{gestionarSituacionesParticularesBean.nuevaSituacionParticular.descripcion}"
+										styleClass="form-control-acti-usua form-control">
+										<f:validator validatorId="maxByteLengthValidator" />
+									</p:inputText>
+									<p:message for="txtDescripcionSituacion" display="text" />
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						</div>
+						<br />
+						<br />
+						<div class="row" align="center">
+							<div class="col-md-12">
+								<div class="col-md-3" style="margin-right: 4.3em;"></div>
+								<p:outputPanel id="panelBotones"
+									rendered="#{gestionarSituacionesParticularesBean.boolVerBotonesForm}">
+									<div class="col-md-3" style="margin-right: -7.7em;">
+										<p:commandButton
+										    id="guardarSituacion"
+											actionListener="#{gestionarSituacionesParticularesBean.persist()}"
+											process="formularioGestionarSituaciones"
+											styleClass="btn btn-primary"
+											update="formGenerarXls formularioGestionarSituaciones"
+											value="#{titles.TTL_SAVE}"
+											oncomplete="window.location.href='#formGenerarXls'"
+											style="font-size: 1.5em!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3">
+										<p:commandButton value="#{titles.TTL_CANCEL}" styleClass="btn btn-default"
+											actionListener="#{gestionarSituacionesParticularesBean.limpiarFormulario()}"
+											update="formularioGestionarSituaciones" immediate="true"
+											resetValues="true"
+											oncomplete="window.location.href='#formGenerarXls'"
+											style="font-size: 1.5em!important;">
+										</p:commandButton>
+									</div>
+								</p:outputPanel>
+								<div class="col-md-2"></div>
+							</div>
+						</div>
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</div>
+		<h:form id="formDetalle">
+			<p:outputPanel id="panelDetalle"
+				rendered="#{gestionarSituacionesParticularesBean.boolHabilitadoDetalle}">
+				<div class="row row-background-white"
+					style="margin-left: 0px; padding-top: 2em;">
+					<div class="row">
+						<div class="col-md-12">
+							<p:dataTable id="tablaDetalleSituaciones"
+								var="dataSituacionAsignada" paginator="true" rows="5"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								reflow="true" rowsPerPageTemplate="5,10,15" rowIndexVar="index"
+								value="#{gestionarSituacionesParticularesBean.listaSituacionAsignada}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								emptyMessage="#{messages.MSG_TABLAS_SIN_REGISTROS}">
+								<p:column headerText="#{titles.TTL_ASIGNADA_SITUACION}"
+									style="word-wrap: break-word!important;text-align: center!important;">
+									<p:outputLabel value="#{dataSituacionAsignada.estadoAsignacion}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_CANTIDAD_SITUACION}"
+									style="word-wrap: break-word!important;text-align: center!important;">
+									<p:outputLabel value="#{dataSituacionAsignada.numAsignadas}" />
+								</p:column>
+							</p:dataTable>
+							<br />
+							<div class="col-md-12">
+								<div class="col-md-5"></div>
+								<div class="col-md-2" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_CANCEL}"
+										styleClass="btn btn-default"
+										update="formularioGestionarSituaciones formDetalle"
+										oncomplete="window.location.href='#formGenerarXls'"
+										actionListener="#{gestionarSituacionesParticularesBean.cancel()}"
+										style="padding-left:13%!important;padding-right:13%!important;font-size:1.5em!important;padding-top:0!important;"/>
+								</div>
+							<div class="col-md-5"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+		</h:form>
+		<div id="dlgCancelarRegistro" class="modal fade" role="dialog"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-dialog-2"
+				style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel value="#{messages.MSG_DESCARTAR_CAMBIOS}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-3"></div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="#{titles.TTL_YES}"
+									styleClass="btn btn-primary"
+									actionListener="#{gestionarSituacionesParticularesBean.cancelarGestionSituaciones()}"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+							</div>
+							<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+								<p:commandButton value="#{titles.TTL_NO}" type="button"
+									onclick="$('#dlgCancelarRegistro').modal('hide');"
+									styleClass="btn btn-default"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="dlgEditarSituacion" class="modal fade" role="dialog"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-dialog-2"
+				style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel value="#{messages.MSG_CONF_EDITAR_REG}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_YES}"
+										styleClass="btn btn-primary"
+										actionListener="#{gestionarSituacionesParticularesBean.activarFormularioEditar()}"
+										update="formularioGestionarSituaciones"
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_NO}"
+										styleClass="btn btn-default" type="button"
+										onclick="$('#dlgEditarSituacion').modal('hide');"
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="dlgEliminarSituacion" class="modal fade" role="dialog"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-dialog-2"
+				style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel
+										value="#{messages.MSG_PREGUNTA_ELIMINAR_REGISTRO}"
+										style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3"></div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_YES}"
+										styleClass="btn btn-primary"
+										actionListener="#{gestionarSituacionesParticularesBean.delete()}"
+										update="formularioGestionarSituaciones formGenerarXls"
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_NO}"
+										styleClass="btn btn-default" type="button"
+										onclick="$('#dlgEliminarSituacion').modal('hide');"
+										style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+            function mostrarDialogCancelar() {
+                $('#dlgEditarSituacion').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            }
+        </script>
+	</ui:define>
+</ui:composition>
+</html>

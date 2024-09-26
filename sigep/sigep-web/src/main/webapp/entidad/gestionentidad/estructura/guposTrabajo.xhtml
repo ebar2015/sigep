@@ -1,0 +1,767 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<style>
+		div.col-md-4:hover div[id*="wvMapaGrup"]{
+			height: 200px!important;
+		}
+	</style>
+	
+	<h:form id ="frmPrincipalGrupo">
+				<p:panel id="pnlFormGrupos" visible="#{gruposTrabajoBean.estadoCreGru}" style="margin: 0px 20px 0px 20px;">
+					<div class="row" style="margin-top: 30px!important" >
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style">${titles['LBL_GRUPOS']}</span>
+					</div>
+					<div class="row" style="margin-top: 20px!important;">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}:" styleClass="log-label form-label-formularios display-block" />
+							<p:outputLabel value="#{gruposTrabajoBean.entidadProceso.nombreEntidad}" styleClass="log-label form-label-formularios display-block" style="color: #4f4f4f!important;" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NIT']}:" styleClass="log-label form-label-formularios display-block" />
+							<p:outputLabel value="#{gruposTrabajoBean.entidadProceso.nit}" styleClass="log-label form-label-formularios display-block" style="color: #4f4f4f!important;" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CODIGO_DANE']}:" styleClass="log-label form-label-formularios display-block"  />
+							<p:outputLabel value="#{gruposTrabajoBean.entidadProceso.codigoDane}" styleClass="log-label form-label-formularios display-block" style="color: #4f4f4f!important;" />
+						</div>
+					</div>
+					
+					<div class="row" style="margin-top: 30px!important; margin-bottom: 20px!important">
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style">${titles['LBL_BUSQUEDA']}</span>
+					</div>
+					<div class="row" style="margin-top: 20px!important;">
+						<div class="col-md-4">
+						</div>
+						<div class="col-md-4 text-center">
+							<p:outputLabel for="txtFilNomGrupo" value="Nombre del grupo" styleClass="log-label form-label-formularios display-block" />
+							<p:inputText id="txtFilNomGrupo" value="#{gruposTrabajoBean.grupoFiltro.nombreGrupoDependencia}">
+								<p:ajax process="@this" event="blur">
+								</p:ajax>
+							</p:inputText>
+							<p:message for="txtFilNomGrupo" display="text" />
+						</div>
+						<div class="col-md-4">
+						</div>
+					</div>
+					<div class="row" style="margin-top: 10px!important">
+						<div class="col-md-12 text-center">
+							<p:commandButton value="${titles['TTL_SEARCH']}" styleClass="btn btn-primary" actionListener="#{gruposTrabajoBean.buscarGruposPorNombre()}" process="@this" update="tablaGrupos">
+							</p:commandButton>								
+						</div>
+					</div>
+					<div class="row" style="margin-top: 30px!important; margin-bottom: 20px!important">
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style">${titles['LBL_GRUPOS_TRABAJO']}</span>
+					</div>
+					<div class="row" style="margin-top: 20px!important;">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_NORMA']}" styleClass="log-label form-label-formularios display-block"></p:outputLabel>
+							<h:selectOneMenu id="selectCodTipoNorma" value="#{gruposTrabajoBean.normaFiltro.codTipoNorma}" styleClass="form-control-form-act-usua" title="Tipo de la norma" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(1038)}" />
+								<p:ajax event="change" process="@this" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="fechaNorma" value="${titles['LBL_FECHA_NORMA']}" styleClass="log-label form-label-formularios display-block" />
+							<p:calendar id="fechaNorma" placeholder="${titles['LBL_FORMATO_FECHA']}" value="#{gruposTrabajoBean.normaFiltro.fechaNorma}"
+								pattern="#{fechaFormato}" locale="#{lenguajeBean.localeCode}" yearRange="#{rangoAnios}" navigator="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								<p:ajax event="dateSelect" process="@this" />
+							</p:calendar>
+							<p:message for="fechaNorma" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="selectNumeroNorma" value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" styleClass="log-label form-label-formularios display-block" />
+							<p:autoComplete id="selectNumeroNorma" converter="normaBdConverter" value="#{gruposTrabajoBean.normaFiltro}"
+                                    var="normSelect" completeMethod="#{gruposTrabajoBean.acNombreNormaListener}" minQueryLength="1" valueChangeListener="#{gruposTrabajoBean.acNombreNormaSelectListener}" dropdown="true"
+                                    itemLabel="#{normSelect.numeroNorma}" itemValue="#{normSelect}" maxResults="20">
+                       	    		<p:ajax process="@this" update="@this" event="itemSelect" />
+                        	</p:autoComplete>
+							<p:message for="selectNumeroNorma" display="text" />
+						</div>
+					</div>
+					<div class="row" style="margin-top: 20px!important;">
+						<div class="col-md-12" >
+							<p:outputLabel for="areaJusti" value="${titles['LBL_CT_JUSTIFICACION']}" styleClass="log-label form-label-formularios display-block" />
+							<p:inputTextarea id="areaJusti" value="#{gruposTrabajoBean.justificacion}"></p:inputTextarea>
+							<p:message for="areaJusti" display="text" />
+						</div>
+					</div>
+					
+					<div class="row" style="margin-bottom: 30px!important; margin-top: 20px!important">
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style">${titles['LBL_GRUPOS']}</span>
+					</div>
+					<div class="row">
+						<div class="col-md-12 text-right" >
+							 <p:commandButton style="padding-right: 0px!important" styleClass="btn btn-transparent" value="#{titles.TTL_BR_BTN_ADICIONAR}" process="@this" update="tablaGrupos" oncomplete="resaltarCelda();" actionListener="#{gruposTrabajoBean.adicionarGrupo()}" icon="fa fa-fw fa-plus-circle"/> 
+						</div>
+					</div>
+					
+					<div class="row">
+						<p:dataTable id="tablaGrupos" editMode="cell" var="grupo" value="#{gruposTrabajoBean.gruposSeleccionados}" editable="true" widgetVar="tablaGrupos" emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}" 
+							rowKeyVar="rowNumber" paginator="true" reflow="true" rowsPerPageTemplate="#{paginatorsSize}" rows="#{paginatorSize}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+							style="margin-bottom: 20px!important" >			
+							<p:ajax event="cellEdit" listener="#{gruposTrabajoBean.celdaEditada}" update="tablaGrupos" />
+							
+									               		
+							<p:column headerText="#{titles.TTL_DEPENDENCIA}" style="word-wrap: break-word!important;text-align:center!important" >
+								<p:cellEditor>
+					               	<f:facet name="output">
+					               		<h:outputText value="#{gruposTrabajoBean.obtenerNombreDependencia(grupo.codDependenciaEntidad)}" /> 					               		
+					               	</f:facet>
+					               	
+					               	<f:facet name="input">
+					                   <h:selectOneMenu value="#{grupo.codDependenciaEntidad}" style="max-height: 28px!important; font-size: 11px!important;" styleClass="form-control-form-act-usua" onblur="restaurarCeldas(this);">
+					                       	<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+					                       	<f:selectItems value="#{webUtils.getDependenciaEntidadFilter(gruposTrabajoBean.entidadProceso.codEntidad)}" 
+					                       	var="man"  />
+					                   		<p:ajax event="change" update="tablaGrupos" process="@this" >
+					                   		</p:ajax>
+					                   </h:selectOneMenu>
+					               	</f:facet>
+				           		</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{titles.LBL_GRUPOS}" style="word-wrap: break-word!important;text-align:center!important">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{grupo.nombreGrupoDependencia}" />
+									</f:facet>
+			               			<f:facet name="input">
+			               				<p:inputText value="#{grupo.nombreGrupoDependencia}" styleClass="form-control-acti-usua form-control" style="width:100%" onblur="restaurarCeldas(this);">
+			               					<p:ajax event="change" update="tablaGrupos" global="false" listener="#{gruposTrabajoBean.verificarDuplicidadNombre(grupo)}">
+			               					</p:ajax>
+			               				</p:inputText>
+			               			</f:facet>
+		               			</p:cellEditor>
+		               		</p:column>
+		               		<p:column headerText="#{titles.LBL_GRUPOS_PERTENECE}" style="word-wrap: break-word!important;text-align:center!important">
+								<p:cellEditor>
+					               	<f:facet name="output">
+					               		<h:outputText value="#{gruposTrabajoBean.obtenerNombreGrupo(grupo.codPredecesor)}" />
+					               	</f:facet>
+					               	<f:facet name="input">
+					                   <h:selectOneMenu value="#{grupo.codPredecesor}" style="max-height: 28px!important; font-size: 11px!important;" styleClass="form-control-form-act-usua" onblur="restaurarCeldas(this);" >
+					                       	<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+					                       	<f:selectItems value="#{gruposTrabajoBean.listaGrupos}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+					                   		<p:ajax event="change" update="tablaGrupos " process="@this" >
+					                   		</p:ajax>
+					                   </h:selectOneMenu>
+					               	</f:facet>
+				           		</p:cellEditor>
+							</p:column>
+							
+							<p:column headerText="#{titles.LBL_REGIONAL_SECCIONAL}" style="word-wrap: break-word!important; text-align:center!important">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{grupo.flgRegionalSeccionalZonal == 1 ? titles.TTL_YES: titles.TTL_NO}" />
+									</f:facet>
+			               			<f:facet name="input">
+			               				<h:selectOneMenu  value="#{grupo.flgRegionalSeccionalZonal}" 
+			               				                  style="max-height: 28px!important; font-size: 11px!important;" 
+			               				                  styleClass="form-control-form-act-usua">
+			               					<f:selectItem itemLabel="No" itemValue="0" />
+			               					<f:selectItem itemLabel="Sí" itemValue="1" />
+			               					<p:ajax process="@this" event="change" update="tabViewEstructuraGrupo:panelGrupoTrabajo" listener="#{gruposTrabajoBean.configurarGrupoEspecial(grupo)}" />			               					
+			               				</h:selectOneMenu>
+			               			</f:facet>
+		               			</p:cellEditor>
+		               		</p:column>	               		
+		               		
+		               		<p:column style="word-wrap: break-word!important;text-align:center!important">
+		               			 <f:facet name="header">
+						            <h:outputText value="#{titles.LBL_OTROS}"/>
+						        </f:facet>
+								<p:cellEditor>
+									<f:facet name="output">
+					               		<h:outputText value="#{grupo.flgOtros == 1 ? titles.TTL_YES: titles.TTL_NO}" />
+					               	</f:facet>
+			               			<f:facet name="input">
+			               				<h:selectOneMenu value="#{grupo.flgOtros}" 
+			               				                 style="max-height: 28px!important; font-size: 11px!important;" 
+			               				                 styleClass="form-control-form-act-usua">
+			               					<f:selectItem itemLabel="No" itemValue="0" />
+			               					<f:selectItem itemLabel="Sí" itemValue="1" />
+			               					 
+		               						<p:ajax event="change" update="tabViewEstructuraGrupo:panelGrupoTrabajo" listener="#{gruposTrabajoBean.configurarGrupoOtro(grupo)}" />	                                       	               					
+			               				</h:selectOneMenu>
+			               			</f:facet>
+		               			</p:cellEditor>
+		               		</p:column>
+		               		
+							<p:column headerText="#{titles.LBL_ACCIONES}" style="word-wrap: break-word!important;text-align:center!important" exportable="false">
+								<p:commandButton icon="icon-edit" type="button" styleClass="icon-btn" onclick="editarCeldas(this);"/>
+								<p:commandButton actionListener="#{gruposTrabajoBean.eliminarGrupoTrabajo(grupo)}" process="@this" icon="icon-delete" styleClass="icon-btn"/>
+							</p:column>
+						</p:dataTable>
+					</div>
+					<div style="display: none!important; ">
+						<p:dataTable visible="false" id="tablaGruposImpresion"  var="grupo" value="#{gruposTrabajoBean.gruposSeleccionados}"  
+							widgetVar="tablaGruposImpresion" emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+							
+							<f:facet name="header" align="center">
+								<h:outputText value="Lista de Grupos de Trabajo" />
+							</f:facet>
+							
+							<p:columnGroup type="header">
+					            <p:row>
+									<p:column colspan="1" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="Nombre de la entidad" />
+					                <p:column colspan="2" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="#{gruposTrabajoBean.entidadProceso.nombreEntidad}" />
+					            </p:row>
+					            <p:row>
+					            	<p:column colspan="1" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="Nit" />
+					                <p:column colspan="2" style="padding-top:3px!important;; padding-bottom: 3px!important;" headerText="#{gruposTrabajoBean.entidadProceso.nit}" />
+					            </p:row>
+					            <p:row>
+					            	<p:column colspan="1" style="padding-top:2px!important;; padding-bottom: 2px!important;" headerText="Codigo DANE" />
+					                <p:column colspan="2" style="padding-top:2px!important;; padding-bottom: 2px!important;" headerText="#{gruposTrabajoBean.entidadProceso.codigoDane}" />      
+					            </p:row>
+					        </p:columnGroup>
+								
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Dependencia" />
+								</f:facet>
+								<h:outputText value="#{gruposTrabajoBean.obtenerNombreDependencia(grupo.codDependenciaEntidad)}" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Grupo" />
+								</f:facet>
+								<h:outputText value="#{grupo.nombreGrupoDependencia}" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Grupo al que pertenece" />
+								</f:facet>
+								<h:outputText value="#{gruposTrabajoBean.obtenerNombreGrupo(grupo.codPredecesor)}" />
+							</p:column>		
+							
+		               		<p:column>
+								<f:facet name="header">
+									<h:outputText value="Regional seccional" />
+								</f:facet>
+								<h:outputText value="#{grupo.flgRegionalSeccionalZonal == 1 ? titles.TTL_YES: titles.TTL_NO}" />
+							</p:column>	
+		               		
+		               		<p:column>
+								<f:facet name="header">
+									<h:outputText value="Otros" />
+								</f:facet>
+								<h:outputText value="#{grupo.flgOtros == 1 ? titles.TTL_YES: titles.TTL_NO}" />
+							</p:column>	
+		               		
+						</p:dataTable>
+					</div>
+					<div class="row">
+					   	<div class="col-md-12 text-center" style="margin-left: -2.7em;">
+					   	<div class="col-md-3">
+					   		<p:commandButton value="${titles['LBL_ACTUALIZAR_GRUPO']}" styleClass="btn btn-primary btn-blue" style="margin-right: 5px!important; width: 14.3em!important;" action="#{gruposTrabajoBean.actualizarGrupos()}" process="@this pnlFormGrupos" update="pnlFormGrupos">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_ENTIDAD_PLANTA_GUARDADO_PARCIAL']}" styleClass="btn btn-secondary btn-blue" style ="margin-right: 5px!important; width: 14.3em!important;" action="#{gruposTrabajoBean.guardadoParcial()}" process="@this pnlFormGrupos" update="pnlFormGrupos">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['TTL_EXPORTAR']}" update="tablaGrupos" process="@this" styleClass="btn btn-third btn-blue" style ="margin-right: 5px!important; width: 14.3em!important;" onclick="PF('dlgGruposTrabajoExportar').show();">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+
+							
+							<p:commandButton value="${titles['TTL_ORGANIGRAMA']}" id="idBtOrganigramaGrupos" 
+								styleClass="btn btn-primary" style="width: 14.3em!important;" process="@this pnlFormGrupos"  
+								update="panelOrganigramaGrupos" action="#{gruposTrabajoBean.verOrganigrama()}" >
+							</p:commandButton>							
+							
+						</div>
+						</div>
+					</div>
+					<div class="row" align="center" style="margin-top: 20px!important;">
+						<div class="col-md-12" style="margin-bottom: 2%;" >
+						<div class="col-md-2"></div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['LBL_IMPRIMIR_ORGANIGRAMA']}" style="margin-right: 5px!important; width: 14.3em!important;" styleClass="btn btn-primary">
+								<p:printer target="organigramaGruposTrabajo"  />
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['LBL_IMPRIMIR_GRUPOS']}" style="margin-right: 5px!important; width: 14.3em!important;" styleClass="btn btn-secondary">
+								<p:printer target="tablaGruposImpresion" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-3">
+							<p:commandButton value="${titles['LBL_REGRESAR']}" id="idBtRegresarGruposTrabajo" styleClass="btn btn-default" style="margin-right: 5px!important; width: 14.3em!important;" type="button"
+								onclick="location.href='../../gestionarEntidad.xhtml'" >
+							</p:commandButton>
+						</div>
+						</div>
+					</div>	
+		  			<p:panel id="panelOrganigramaGrupos">
+		  			
+	  			<div class="row" id="extension" style="margin-top: 20px!important;" >
+					<div class="col-md-12">
+								<p:scrollPanel  mode="native">
+									<script src="https://www.gstatic.com/charts/loader.js"></script>
+									<pe:gChart value="#{gruposTrabajoBean.standardModel}" 
+									id="organigramaGruposTrabajo" 
+									rendered="#{gruposTrabajoBean.lbverOrganigrama}"/>
+								</p:scrollPanel>
+							</div>
+						</div>
+					</p:panel>								
+
+									
+		<div id="dlgEliminarGrupo" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<h5>
+									<p:outputLabel value="#{messages.MSG_PREGUNTA_ELIMINAR_REGISTRO}" style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+								</h5>
+							</div>
+						</div>
+						<hr class="hr-style-modales" />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_YES}" styleClass="btn btn-primary" 
+									actionListener="#{gruposTrabajoBean.eliminarGrupoTrabajoConfirmar()}" 
+									update="tablaGrupos" process="@this"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+									<p:commandButton value="#{titles.TTL_NO}" styleClass="btn btn-default" type="button" onclick="$('#dlgEliminarGrupo').modal('hide');" style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;" />
+								</div>
+								<div class="col-md-3">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+			<p:dialog header="• Exportar •" widgetVar="dlgGruposTrabajoExportar" id="dlgGruposTrabajoExportar"  minHeight="300" modal="true" resizable="false" closeOnEscape="false" responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<div class="row" align="center">
+					<div class="col-md-12" style="margin-bottom: 2%;">
+						<div class="col-md-3" style="margin-bottom: 2%;"/>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<h:commandLink id="btnVinExportarGruposTrabajoPdf" ajax="false"  
+								onclick="PF('dlgGruposTrabajoExportar').hide();"
+								action="#{gruposTrabajoBean.imprimirGruposTrabajoPdf()}">
+							    <p:graphicImage name="images/pdf-export.png" width="25"/>
+							</h:commandLink>	
+							<p:tooltip id="toolpd" for="btnVinExportarGruposTrabajoPdf" value="PDF" position="top"/>
+						</div>
+						
+						<div class="col-md-3" style="margin-bottom: 2%;">
+							<h:commandLink id="btnVinExportarGruposTrabajoExcel" 
+								ajax="false" onclick="PF('dlgGruposTrabajoExportar').hide();">
+								<p:graphicImage name="images/icon_excel.png" width="25"/>
+								<pe:exporter type="xlsx" target="tablaGruposImpresion" fileName="GruposTrabajo"
+							  		cellFontSize="12" cellFontStyle="NORMAL"  facetFontSize="12" facetFontStyle="BOLD"/>  
+							</h:commandLink>	
+							<p:tooltip id="toolE" for="btnVinExportarGruposTrabajoExcel" value="Excel" position="top"/>
+						</div>
+						<div class="col-md-3" style="margin-bottom: 2%;"/>
+					</div>
+					<div class="col-md-12" style="margin-bottom: 2%;">
+					    <p:commandButton id="btnVinExportarGruposTrabajoSalir" value="Salir" process="@this" styleClass="btn btn-primary" onclick="PF('dlgGruposTrabajoExportar').hide();" >
+		   		    	</p:commandButton>
+					</div>
+				</div>												
+			</p:dialog>							
+	</p:panel>
+	
+	<!-- ********************************************************************************************************************************************************************************************** -->
+		<br />
+		<br />
+		<br />
+		<br />
+		<!-- ***************************************************************************************************************************** -->
+		<!-- ********************************************************************************************************************** -->
+		
+		</h:form>
+		
+		<h:form id="frmEditar">
+		 
+			<script type="text/javascript">
+				function geocodeGrupos() {
+			    	var direccion = document.getElementById("tabViewEstructuraGrupo:frmPrincipal:txtDireccion").value;
+			       	PF('wvMapaGrup').geocode(direccion);
+			    }
+			</script>
+			
+			<p:panel id="pnlDatosDependenciaEsp" visible="#{gruposTrabajoBean.estadoPnlDepEspecial}">
+			
+				<div class="row" style="margin-top: 30px!important" >
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">Grupo regional seccional</span>
+				</div>
+				
+				
+				<div class="row" style="margin-top: 20px!important;">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_CORREO']}" styleClass="log-label form-label-formularios"/>
+						<p:inputText id="txtEmail" value="#{gruposTrabajoBean.grupoEnGestion.email}" class="form-control-acti-usua" />
+						<p:message for="txtEmail" display="text" />		
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_PAGINA']}" styleClass="log-label form-label-formularios"/>
+						<p:inputText id="txtPagWeb" value="#{gruposTrabajoBean.grupoEnGestion.paginaWeb}" class="form-control-acti-usua" />
+						<p:message for="txtPagWeb" display="text" />	
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="#{titles.LBL_UBICACION_GEORREFERENCIAL}" styleClass="log-label form-label-formularios" />
+		                <p:gmap center="#{gruposTrabajoBean.centroMapa}" zoom="15" type="ROADMAP" widgetVar="wvMapaGrup" id="wvMapaGrup"
+		                        model="#{gruposTrabajoBean.modeloMapa}" style="width:100%; height:30px;" title="${titles['TTL_INGRESE']} ${titles['LBL_CODIGO_POSTAL']} ${titles['TTL_TIPO_NUMERICO']}">
+		               		<p:ajax event="geocode" update="@this" listener="#{gruposTrabajoBean.geolocalizacionListener}" />
+		                </p:gmap>
+					</div>
+				</div>
+					
+					
+				<div class="row" style="margin-top: 8px!important;">
+					<!-- comentado --> 
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_DEPARTAMENTO']}" styleClass="log-label form-label-formularios"/>
+						<h:selectOneMenu id="sltDepto" value="#{gruposTrabajoBean.grupoEnGestion.codDepartamento}" styleClass="form-control-form-act-usua" >
+							<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getDeptos(gruposTrabajoBean.entidadProceso.codPais == null ? 169 : gruposTrabajoBean.entidadProceso.codPais)}" />
+								<p:ajax event="change" process="@this" update="sltMunpio panelBan panelBanfax" listener="#{gruposTrabajoBean.agregarIndicativoDepartamento()}">
+								</p:ajax> 
+						</h:selectOneMenu>
+						<p:message for="sltDepto" display="text" >
+						</p:message>
+					</div>
+					 
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_MUNICIPIO']}" styleClass="log-label form-label-formularios"/>
+						<h:selectOneMenu id="sltMunpio" value="#{gruposTrabajoBean.grupoEnGestion.codMunicipio}" styleClass="form-control-form-act-usua" >
+							<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getMunicipios(gruposTrabajoBean.grupoEnGestion.codDepartamento)}" />
+								<p:ajax event="change" process="@this" listener="#{gruposTrabajoBean.geolocalizarDireccion}" >
+								</p:ajax> 
+						</h:selectOneMenu>
+					 	<p:message for="sltMunpio" display="text" />
+					</div>
+					
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_DIRECCION_FISICA']}" styleClass="log-label form-label-formularios"/>
+						<p:inputText id="txtDir" readonly="true" style="max-width: 80%!important; display: inline-block!important;" value="#{gruposTrabajoBean.grupoEnGestion.direccion}" class="form-control-acti-usua" />
+						<p:commandButton value="${titles['TTL_EDIT']}" onclick="$('#dialogDirGrupo').modal('show');" style="max-width: 18%!important; display: inline-block!important;" update="pnlEditarDir" process="@this" actionListener="#{gruposTrabajoBean.setEstadoPanelDireccion(true)}" >
+						</p:commandButton>
+						<p:message for="txtDir" display="text" />		
+					</div>
+					 
+				</div>
+				
+				
+				<div class="row" style="margin-top: 8px!important;">
+					<!-- comentado -->
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_INDICATIVO']}:" style="width:30%;" styleClass="log-label form-label-formularios" />
+						<p:outputLabel value="${titles['LBL_TELEFONO_CELULAR']}" for="txtCel" style="width:70%;" styleClass="log-label form-label-formularios" />
+							<p:panel id="panelBan" style="padding: 0px!important;" styleClass="col-sm-12">
+								<div style="padding-right: 0px; width: 30%; float: left;">
+									<p:panel id="indicaTel" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua" style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+										<img src="../../..#{gruposTrabajoBean.banderaPais}" height="13" width="18" alt="" title="Bandera del país" />
+										<h:outputLabel value="+#{gruposTrabajoBean.grupoEnGestion.indicativo}" styleClass="label-indicativo" />
+									</p:panel>
+								</div>
+								<div style="width: 70%; float: right;">
+									<p:inputText id="txtCel" required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_CELULAR']} ${titles['TTL_TIPO_ALFANUMERICO']}" value="#{gruposTrabajoBean.grupoEnGestion.telefono}" 
+									class="form-control-acti-usua"  autocomplete="false" maxlength="#{maxNumeros.maxNumCelular}" onkeypress="return numbervalida(event)" style="border-radius:0px 3px 3px 0px!important;">
+										<f:attribute value="#{maxNumeros.minNumCelular}" name="minLength" />
+										<f:attribute value="#{maxNumeros.maxNumCelular}" name="maxLength" />
+										<f:validator validatorId="numberValidator" />
+									</p:inputText>
+									<p:message for="txtCel" display="text" />
+								</div>
+							</p:panel>
+					</div>
+					 
+					<div class="col-md-4" >
+						
+						<p:outputLabel value="${titles['LBL_INDICATIVO']}:" style="width:30%;" styleClass="log-label form-label-formularios" />
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_FAX']}" for="txtFax" style="width:70%;" styleClass="log-label form-label-formularios" />
+						
+						<p:panel id="panelBanfax" style="padding: 0px!important;" styleClass="col-sm-12">
+							
+							<div style="padding-right: 0px; width: 30%; float: left;">
+								<p:panel id="indiFax" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua" style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+									<img src="../../..#{gruposTrabajoBean.banderaPais}" height="13" width="18" alt="" title="Bandera del país" />
+									<h:outputLabel value="+#{gruposTrabajoBean.grupoEnGestion.indicativo}" styleClass="label-indicativo" />
+								</p:panel>
+							</div>
+							<div style="width: 70%; float: right;">
+								<p:inputText id="txtFax" required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" title="${titles['TTL_INGRESE']} ${titles['LBL_TELEFONO_CELULAR']} ${titles['TTL_TIPO_ALFANUMERICO']}" value="#{gruposTrabajoBean.grupoEnGestion.fax}" 
+								class="form-control-acti-usua"  autocomplete="false" maxlength="#{maxNumeros.maxNumCelular}" onkeypress="return numbervalida(event)" style="border-radius:0px 3px 3px 0px!important;">
+									<f:attribute value="#{maxNumeros.minNumCelular}" name="minLength" />
+									<f:attribute value="#{maxNumeros.maxNumCelular}" name="maxLength" />
+									<f:validator validatorId="numberValidator" />
+								</p:inputText>
+								<p:message for="txtFax" display="text" />
+							</div>
+						</p:panel>	
+						
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_SIGLA']}" styleClass="log-label form-label-formularios"/>
+						<p:inputText id="txtSigla" value="#{gruposTrabajoBean.grupoEnGestion.sigla}" class="form-control-acti-usua" />
+						<p:message for="txtSigla" display="text" />		
+					</div>
+				</div>
+				 
+				
+				<div class="row" style="margin-top: 8px!important;">
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_CODIGO_DANE']}" styleClass="log-label form-label-formularios"/>
+						<p:inputText id="txtCodigoDane" value="#{gruposTrabajoBean.grupoEnGestion.codDane}" class="form-control-acti-usua" />
+						<p:message for="txtCodigoDane" display="text" />	
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_POLITICAS_ASOCIADAS']}" styleClass="log-label form-label-formularios"/>
+						<h:selectOneMenu id="sltPoliticasAso" styleClass="form-control-form-act-usua" >
+							<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getListasParametricas(2208)}" />
+							<p:ajax event="change" process="@this"/> 
+						</h:selectOneMenu>
+						<p:message for="sltPoliticasAso" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['TTL_ESTRUCTURA_DEPENDENCIA_TIPO_DEPENDENCIA']}" styleClass="log-label form-label-formularios"/>
+						<h:selectOneMenu id="sltTipoDepen" value="#{gruposTrabajoBean.grupoEnGestion.codTipDependenciaEspecial}" styleClass="form-control-form-act-usua" >
+							<f:selectItem itemLabel="Seleccionar" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getListasParametricas(2208)}" />
+							<p:ajax event="change" process="@this"/> 
+						</h:selectOneMenu>
+						<p:message for="sltTipoDepen" display="text" />
+					</div>
+				</div>
+				
+				
+				<div class="row" style="margin-top: 15px!important;">
+					<div class="col-md-4 text-center" >
+					</div>
+					<div class="col-md-4 text-center">
+						<p:commandButton value="Guardar" styleClass="btn btn-primary" update="tabViewEstructuraGrupo:frmPrincipalGrupo tabViewEstructuraGrupo:frmEditar" 
+						                 process="@this" actionListener="#{gruposTrabajoBean.cambiarEstadoVentanas(true)}" />
+						<p:commandButton value="Cancelar" styleClass="btn btn-default" update="tabViewEstructuraGrupo:frmPrincipalGrupo tabViewEstructuraGrupo:frmEditar" 
+						                 process="@this" actionListener="#{gruposTrabajoBean.cambiarEstadoVentanas(true)}" />
+					</div>
+					<div class="col-md-4 text-center" >
+					</div>
+				</div>
+		
+			</p:panel>
+			
+			
+		<div class="modal fade" id="dialogDirGrupo" role="dialog" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-2" style="top: 10%; width: 74%;">
+					<div class="modal-content">
+						
+						<div class="modal-body">
+							
+							<div class="row">
+							
+								<p:panel visible="#{gruposTrabajoBean.estadoPanelDireccion}" id="pnlEditarDir" >
+									
+									<br /><br />
+									<hr class="hr-style hr-style-two" />
+									<span class="span-style"> ${titles['TTL_EDITAR_DIRECCION']}
+									</span>
+									<br />
+									<br />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-sm-12">
+												<p:outputLabel styleClass="log-label form-label-formularios" value="Vía Principal" />
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-sm-3">
+												<p:outputLabel for="tipov" value="${titles['TTL_VIA']}" styleClass="log-label form-label-formularios" />
+												<h:selectOneMenu id="tipov" title="#{titles.TTL_SELECT} #{titles.TTL_VIA}" value="#{gruposTrabajoBean.edicionDireccion.tipoVia}" converter="tipoViaConverter" filterMatchMode="contains" filter="true" styleClass="form-control-form-act-usua">
+													<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+													<f:selectItems value="#{tipoVia}" var="tipovia" itemLabel="#{tipovia.sigla}" itemValue="#{tipovia}" />
+													<p:ajax listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</h:selectOneMenu>
+											</div>
+											<div class="col-sm-3">
+												<p:outputLabel for="num" value="${titles['TTL_NUMERO']}" styleClass="log-label form-label-formularios" style="width:100% !important;" />
+												<p:inputText id="num" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}" value="#{gruposTrabajoBean.edicionDireccion.numero}" maxlength="3" onkeypress="return numbervalida(event)" class="form-control-acti-usua" autocomplete="false" style="width:30%!important;">
+												<p:ajax event="change" listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+											</p:inputText>
+											<h:selectOneMenu id="primeLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{gruposTrabajoBean.edicionDireccion.primerLetra}" filterMatchMode="contains" filter="true" converter="tipoLetraConverter" styleClass="form-control-form-act-usua" style="width:70%!important;">
+												<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+												<p:ajax listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+											</h:selectOneMenu>
+											</div>
+											<div class="col-sm-1">
+												<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+												<p:selectBooleanCheckbox value="#{gruposTrabajoBean.edicionDireccion.bis}">
+													<p:ajax event="change" listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</p:selectBooleanCheckbox>
+												<p:spacer width="5" />
+												<p:outputLabel id="bis" value="${titles['LBL_BIS']}" title="#{titles.TTL_SELECT} #{titles.LBL_BIS}" styleClass="log-label form-label-formularios" />
+											</div>
+											<div class="col-sm-2">
+												<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+												<h:selectOneMenu id="seguLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{gruposTrabajoBean.edicionDireccion.segundaLetra}" filterMatchMode="contains" filter="true"
+													converter="tipoLetraConverter" styleClass="form-control-form-act-usua">
+													<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+													<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+													<p:ajax listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</h:selectOneMenu>
+											</div>
+											<div class="col-sm-3">
+												<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+												<h:selectOneMenu id="orienta" title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}" value="#{gruposTrabajoBean.edicionDireccion.orientacion}" filterMatchMode="contains" filter="true" converter="tipoOrientacionConverter"  styleClass="form-control-form-act-usua">
+													<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+													<f:selectItems value="#{tipoOrientacion}" var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}" itemValue="#{tipoorientacion}" />
+													<p:ajax listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</h:selectOneMenu>
+											</div>
+										</div>
+									</div>
+									<br />
+									<br />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-sm-12">
+												<p:outputLabel styleClass="log-label form-label-formularios" value="Vía Secundaria" style="font-weight: 600!important;" />
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-sm-2">
+												<p:outputLabel value="${titles['TTL_NUMERO']}" for="segunNumero" styleClass="log-label form-label-formularios" />
+												<p:inputText id="segunNumero" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}" value="#{gruposTrabajoBean.edicionDireccion.segundoNumero}" maxlength="3" onkeypress="return numbervalida(event)" class="form-control-acti-usua" autocomplete="false">
+													<p:ajax event="change" listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</p:inputText>
+											</div>
+											<div class="col-sm-2">
+												<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+												<h:selectOneMenu id="terLetra" title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}" value="#{gruposTrabajoBean.edicionDireccion.tercerLetra}" filterMatchMode="contains" filter="true" converter="tipoLetraConverter" styleClass="form-control-form-act-usua">
+													<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" />
+													<f:selectItems value="#{tipoLetra}" var="letravia" itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+													<p:ajax listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</h:selectOneMenu>
+											</div>
+											<div class="col-sm-2">
+												<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+												<p:inputText id="terNumero" maxlength="3" title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERICO}" value="#{gruposTrabajoBean.edicionDireccion.tercerNumero}" >
+													<p:ajax event="change" listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" class="form-control-acti-usua" autocomplete="false" onkeypress="return numbervalida(event)" />
+												</p:inputText>
+											</div>
+											<div class="col-sm-2">
+												<label style="color: transparent; width: 100%;" class="log-label form-label">.</label>
+												<h:selectOneMenu id="segundaOrient"  styleClass="form-control-form-act-usua"
+													title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}" value="#{gruposTrabajoBean.edicionDireccion.segundaOrientacion}" filterMatchMode="contains" filter="true" >
+													<f:selectItem itemLabel="#{titles['TTL_SELECT']}" itemValue="#{null}" converter="tipoOrientacionConverter" styleClass="form-control-form-act-usua" />
+													<f:selectItems value="#{tipoOrientacion}" var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}" itemValue="#{tipoorientacion}" />
+													<p:ajax listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</h:selectOneMenu>
+											</div>
+											<div class="col-sm-4">
+												<p:outputLabel value="${titles['TTL_COMPLEMENTO']}" for="comple" styleClass="log-label form-label-formularios" />
+												<p:inputText id="comple" title="#{titles.TTL_INGRESE} #{titles.TTL_COMPLEMENTO} #{titles['TTL_TIPO_ALFANUMERICO']} " value="#{gruposTrabajoBean.edicionDireccion.complemento}" class="form-control-acti-usua" 
+													autocomplete="false" maxlength="100">
+													<p:ajax event="change" listener="#{gruposTrabajoBean.generarDireccion()}" process="@this" update="direccionGen" />
+												</p:inputText>
+											</div>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-md-6">
+												<p:outputLabel value="${titles['TTL_DIRECCION_GENERADA']}" for="direccionGen" styleClass="log-label form-label-formularios" />
+												<p:inputText id="direccionGen" title="#{titles.TTL_DIRECCION_GENERADA}" value="#{gruposTrabajoBean.edicionDireccion.direccionGenerada}" class="form-control-acti-usua" readonly="true" />
+											</div>
+										</div>
+									</div>
+									<br />
+									<br />
+									<!-- 						Boton de la direccion  -->
+									<div class="row" align="center">
+										<div class="col-md-4"></div>
+										<div class="col-md-2" style="margin-bottom: 2%;">
+											<p:commandButton value="${titles['TTL_OK']}" onclick="$('#dialogDirGrupo').modal('hide');" styleClass="btn btn-primary btn-update-disable" style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;" process="@this" update="tabViewEstructuraGrupo:frmPrincipalGrupo:tablaGrupos pnlEditarDir txtDir" actionListener="#{gruposTrabajoBean.agergarDireccion()}"  />
+										</div>
+										<div class="col-md-2" style="margin-bottom: 2%;">
+											<p:commandButton value="${titles['TTL_CANCEL']}" onclick="$('#dialogDirGrupo').modal('hide');" styleClass="btn btn-default btn-update-disable" style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;" actionListener="#{gruposTrabajoBean.mostrarPanelEditarDireccion(false)}"  />
+										</div>
+										<div class="col-md-4"></div>
+									</div>
+								</p:panel>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		</h:form>
+		<script type="text/javascript">
+			function resaltarCelda(){
+				var v = document.getElementById("tabViewEstructuraGrupo:frmPrincipalGrupo:tablaGrupos");
+				v = v.getElementsByTagName("table");
+				v = (((v[0].childNodes)[1].childNodes)[0].childNodes);
+				v[0].classList.add("ui-state-highlight");
+				v[0].classList.add("ui-cell-editing");
+				v = ((v[0].childNodes)[1].childNodes)
+				v[1].setAttribute("style", "display: block");
+				v[0].setAttribute("style", "display: none");
+				v = v[1].childNodes[0];
+				v.classList.add("ui-state-hover");
+				v.classList.add("ui-state-focus");
+			}
+			
+			function restaurarCeldas(celda){
+				removerEdiciones();
+			}
+			
+			function removerEdiciones(){
+				$('tr').removeClass("ui-state-highlight");
+				$('tr').removeClass("ui-cell-editing");
+				$('td').removeClass("ui-state-highlight");
+				$('td').removeClass("ui-cell-editing");
+				$('input').removeClass("ui-state-hover");
+				$('input').removeClass("ui-state-focus");
+				$('.ui-cell-editor-input').css("display" , "none");
+				$('.ui-cell-editor-output').css("display" , "block");
+				$('.ui-cell-editor-output').removeClass("ui-state-highlight");
+			}
+				
+			function editarCeldas(celda){
+				removerEdiciones();
+				var v = celda.parentNode.parentNode;
+				v = v.childNodes;
+				v[0].classList.add("ui-state-highlight");
+				v[0].classList.add("ui-cell-editing");
+				v = ((v[0].childNodes)[1].childNodes)
+				v[1].setAttribute("style", "display: block");
+				v[0].setAttribute("style", "display: none");
+				v = v[1].childNodes[0];
+				v.classList.add("ui-state-hover");
+				v.classList.add("ui-state-focus");
+			}
+		</script>
+		
+	</ui:composition>

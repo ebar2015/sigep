@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pageTitle" value="Tabla paramétrica" />
+	<ui:param name="pageSubtitle" value="Listado de tablas paramétricas" />
+
+	<ui:define name="main">
+		<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+			layout="grid" styleClass="ui-panelgrid-blank">
+
+			<p:column>
+				<p:commandButton value="Desactivar" icon="ui ui-icon-check"
+					actionListener="#{desactivarUsuarioMasivoBean.persist}" />
+			</p:column>
+		</p:panelGrid>
+		<p:messages id="messages" showDetail="true" autoUpdate="true"
+			closable="false" />
+		<p:panel>
+			<p:dataTable var="datos" value="#{parametricaBean}">
+				<p:column headerText="Nombre parametro">
+					<h:outputText value="#{datos.no}" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

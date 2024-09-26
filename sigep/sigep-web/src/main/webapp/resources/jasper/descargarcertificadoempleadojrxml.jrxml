@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="descargarcertificadoempleadojrxml" pageWidth="595" pageHeight="750" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="64485ef0-050e-4fa3-9526-fd2effa2cc2a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="Style1" backcolor="#F3F3F3" pattern=""/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="urlLogo" class="java.lang.String"/>
+	<field name="urlBackground" class="java.lang.String"/>
+	<field name="urlFooter" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="contenido" class="java.lang.String"/>
+	<title>
+		<band height="146" splitType="Stretch">
+			<frame>
+				<reportElement x="11" y="10" width="180" height="80" uuid="301a34b9-60fa-46db-977b-d0c5afafc6ec"/>
+				<image scaleImage="RealSize" hAlign="Center" vAlign="Middle" isUsingCache="false">
+					<reportElement x="0" y="0" width="180" height="80" uuid="da869ab3-7c90-4d09-bfca-40bdeca85e72"/>
+					<imageExpression><![CDATA[$F{urlLogo}]]></imageExpression>
+				</image>
+			</frame>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Opaque" x="11" y="100" width="448" height="35" forecolor="#FFFFFF" backcolor="#E79B39" uuid="7d9880e8-5df2-4911-abbe-56cd79ea6fbd"/>
+				<box topPadding="0" leftPadding="10" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="27" isBold="true"/>
+					<paragraph lineSpacingSize="0.0" leftIndent="5" tabStopWidth="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="138">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="10" y="10" width="510" height="50" uuid="47a5e01e-4650-4b39-a7c8-9eb1f56ab5b2"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contenido}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="112">
+			<image>
+				<reportElement x="221" y="1" width="299" height="74" uuid="74c39c6a-2a72-4bdf-9aa0-cf8ce81ce754"/>
+				<imageExpression><![CDATA[$F{urlFooter}]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+</jasperReport>

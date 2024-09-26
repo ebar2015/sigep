@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/basicTemplate.xhtml">
+	
+	<f:metadata>
+		<f:viewParam name="id" value="#{consultarVinculacionBean.id}" />
+		<f:viewParam name="dialog" value="#{consultarVinculacionBean.dialog}" />
+		<f:event listener="#{consultarVinculacionBean.retrieve}" type="preRenderView" />
+	</f:metadata>
+	
+	<ui:param name="pageTitle" value="${titles['TTL_HOJA_VIDA2']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_VINCULACION_DESVINCULACION']}" />
+	
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• ${titles['TTL_CONSULTA_VINCULAR_DESVINCULAR']} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white" id="child-tab-data-basic">
+			<br />
+			<div class="col-md-12" align="center">
+					<p:outputLabel value="${titles['LBL_INFO_ULTIMA_VINCULACION']}" styleClass="advisor" />
+			</div>
+			<br /> <br />
+			<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+				${titles['TTL_DATOS_BASICOS_IDENTI']} </span> <br /> <br />
+			<div class="col-md-3" align="center">
+				<div class="col-md-12">
+					<h:graphicImage url="#{consultarVinculacionBean.persona.imagenUsuario}" 
+						height="150" width="150" style="border-radius:75px; margin-bottom:3%;"/>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<h4 class="h4-perfil h4-perfil-media">
+					<p:outputLabel class="title-datos-basicos" value="#{consultarVinculacionBean.persona.nombreUsuario}" />
+				</h4>
+				<br />
+				<div class="col-md-12"
+					style="margin-left: -1%; border-top: 1px solid #B3B3B3 !important;">
+					<br />
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['TTL_TIPO_IDENTIFICACION']}&#58;&#160;"
+							styleClass="log-label form-label" style="color: #263948!important; font-weight:600!important;">
+						</p:outputLabel>
+						<p:outputLabel value=" #{consultarVinculacionBean.persona.nombreTipoDocuento}"
+							styleClass="log-label form-label" style="text-transform: capitalize!important; ">
+						</p:outputLabel>
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['TTL_NICK_NAME']}&#58;&#160;"
+							styleClass="log-label form-label" style="color: #263948!important; font-weight:600;">
+						</p:outputLabel>
+						<p:outputLabel value="#{consultarVinculacionBean.persona.numeroIdentificacion}" 
+						styleClass="log-label form-label"/>
+					</div>
+				</div>
+					<div class="col-md-12" style="margin-left: -1%;">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['LBL_FECHA_NACIMIENTO']}&#58;&#160;"
+								styleClass="log-label form-label"
+								style="color: #263948!important; font-weight:600!important;;">
+							</p:outputLabel>
+							<p:outputLabel
+								value="#{consultarVinculacionBean.persona.fechaNacimientoString}"
+								styleClass="log-label form-label">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_USUARIO_CORREO_ELECTRONICO']}&#58;&#160;"
+								styleClass="log-label form-label" style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel value="#{consultarVinculacionBean.persona.correoElectronico}"
+								styleClass="log-label form-label labelEmailPersonal" style="text-transform: lowercase!important;">
+							</p:outputLabel>
+						</div>
+					</div>
+					<br /> <br />
+					<div class="col-md-12"
+						style="margin-left: -1%; border-bottom: 1px solid #B3B3B3 !important;">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['TTL_TRANSVERSAL_TIPO_GENERO']}&#58;&#160;"
+								styleClass="log-label form-label" style="color: #263948!important; font-weight:600;">
+							</p:outputLabel>
+							<p:outputLabel value="#{consultarVinculacionBean.persona.nombreGenero}"
+								styleClass="log-label form-label" style="text-transform: capitalize!important;">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+		</div>
+		<br /><br />
+		<ui:include src="consultaCargoVinculacion.xhtml" />
+	</ui:define>
+</ui:composition>	

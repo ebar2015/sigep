@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<br />
+ 	<f:view encoding="${configurationView['CNS_ENCODING']}" locale="#{lenguajeBean.locale}">
+		<div class="col-md-12">
+			<div class="col-md-4 inf-decl-media">
+				<img src="../resources/images/registrar.png"
+				    title="${titles['TTL_BIENES_RENTAS_TIPO_DECLARACION']}"
+					style="vertical-align: bottom" />
+				<p:outputLabel value="#{titles.TTL_BIENES_RENTAS_TIPO_DECLARACION}: #{null}"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px;"
+					styleClass="log-label form-label" />
+				<p:outputLabel value="#{null}"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px; display: inline!important;"
+					styleClass="log-label form-label" />
+				<p:outputLabel value="#{bienesRentasBean.nombreTipoDeclaracionAct}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px;"
+					styleClass="log-label form-label" />
+			</div>
+			<div class="col-md-4 inf-decl-media">
+				<img src="../resources/images/calendar-2.png"
+				    title="${titles['TTL_BIENES_RENTAS_PERIODO']}"
+					style="vertical-align: bottom" />
+				<p:outputLabel value="#{titles.TTL_BIENES_RENTAS_PERIODO}&#58;&#160;"
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px;"
+					styleClass="log-label form-label" />
+				<p:outputLabel
+					value="Entre: #{bienesRentasBean.fechaInicioDeclaracion} y #{null}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px;"
+					styleClass="log-label form-label" >
+				</p:outputLabel>
+				<p:outputLabel
+					value=""
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px; width: 5px;"
+					styleClass="log-label form-label" >
+				</p:outputLabel>
+				<p:outputLabel
+					value="#{bienesRentasBean.fechaFinDeclaracion}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px;"
+					styleClass="log-label form-label" >
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+				</p:outputLabel>
+			</div>
+			<div class="col-md-4 inf-decl-media">
+				<img src="../resources/images/factory.png"
+					style="vertical-align: bottom"
+					title="${titles['TTL_BIENES_RENTAS_ENTIDAD_RECEPTORA']}&#58;&#160;"/>
+				<p:outputLabel value="${titles['TTL_BIENES_RENTAS_ENTIDAD_RECEPTORA']}&#58;&#160; "
+					style="color: #00527e!important; font-weight: 500; margin-bottom: 0px; margin-left: 5px;"
+					styleClass="log-label form-label" />
+				<p:outputLabel
+					value="#{bienesRentasBean.declaracionRenta.entidadReceptora}"
+					style="color: #999999!important; font-weight: 500; margin-bottom: 0px; text-overflow: ellipsis!important; word-break: normal; display: inline!important;"
+					styleClass="log-label form-label" />
+			</div>
+		</div>
+	</f:view>
+	<hr class="hr-style" />
+</ui:composition>

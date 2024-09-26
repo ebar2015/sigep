@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.gov.dafp.sigep2.interfaces.PermisoRolAccionMapper">
+	<resultMap id="BaseResultMap" type="co.gov.dafp.sigep2.bean.PermisoRolAccion">
+		<id column="COD_PERMISO_ROL_ACCIONES" jdbcType="NUMERIC"
+			property="codPermisoRolAcciones" />
+		<result column="COD_PERMISO_ROL" jdbcType="NUMERIC" property="codPermisoRol" />
+		<result column="COD_RECURSO_ACCION" jdbcType="NUMERIC"
+			property="codRecursoAccion" />
+		<result column="FLG_ACTIVO" jdbcType="BOOLEAN" property="flgActivo" />
+		<result column="AUD_FECHA_ACTUALIZACION" jdbcType="TIMESTAMP"
+			property="audFechaActualizacion" />
+		<result column="AUD_COD_USUARIO" jdbcType="NUMERIC" property="audCodUsuario" />
+		<result column="AUD_COD_ROL" jdbcType="NUMERIC" property="audCodRol" />
+		<result column="AUD_ACCION" jdbcType="NUMERIC" property="audAccion" />
+	</resultMap>
+
+	<sql id="Base_Select">
+		COD_PERMISO_ROL_ACCIONES, COD_PERMISO_ROL,
+		COD_RECURSO_ACCION,
+		FLG_ACTIVO,
+		AUD_FECHA_ACTUALIZACION,
+		AUD_COD_USUARIO,
+		AUD_COD_ROL,
+		AUD_ACCION
+	</sql>
+
+	<select id="selectPermisosRolAccion" parameterType="map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Select" />
+		from SIGEP2.PERMISO_ROL_ACCION
+		where
+		1 = 1
+		<if test="permisoRolAccion.codPermisoRolAcciones != null">
+			AND COD_PERMISO_ROL_ACCIONES =
+			#{permisoRolAccion.codPermisoRolAcciones, jdbcType=NUMERIC}
+		</if>
+		<if test="permisoRolAccion.flgActivo != null">
+			AND FLG_ACTIVO =
+			#{permisoRolAccion.flgActivo,
+			jdbcType=NUMERIC}
+		</if>
+		<if test="permisoRolAccion.codRecursoAccion != null">
+			AND COD_RECURSO_ACCION =
+			#{permisoRolAccion.codRecursoAccion,
+			jdbcType=NUMERIC}
+		</if>
+		<if test="permisoRolAccion.codPermisoRol != null">
+			AND COD_PERMISO_ROL =
+			#{permisoRolAccion.codPermisoRol,
+			jdbcType=BOOLEAN}
+		</if>
+	</select>
+
+	<select id="selectByPermisoRol" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Select" />
+		from SIGEP2.PERMISO_ROL_ACCION
+		where
+		COD_PERMISO_ROL =
+		#{permisoRolAccion.codPermisoRol,
+		jdbcType=NUMERIC}
+	</select>
+
+	<select id="deleteByPermisoRol" parameterType="map">
+		delete
+		from
+		SIGEP2.PERMISO_ROL_ACCION
+		where
+		COD_PERMISO_ROL =
+		#{permisoRolAccion.codPermisoRol,
+		jdbcType=NUMERIC}
+	</select>
+
+	<select id="selectPermisoRolAccion" parameterType="map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Select" />
+		from SIGEP2.PERMISO_ROL_ACCION
+		where
+		COD_PERMISO_ROL_ACCIONES =
+		#{permisoRolAccion.codPermisoRolAcciones, jdbcType=NUMERIC}
+	</select>
+
+	<insert id="asignarPermiso" parameterType="map">
+		insert into SIGEP2.PERMISO_ROL_ACCION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="permisoRolAccion.codRecursoAccion != null">
+				COD_RECURSO_ACCION,
+			</if>
+			<if test="permisoRolAccion.codPermisoRol != null">
+				COD_PERMISO_ROL,
+			</if>
+			<if test="permisoRolAccion.flgActivo != null">
+				FLG_ACTIVO,
+			</if>
+			<if test="permisoRolAccion.audFechaActualizacion != null">
+				AUD_FECHA_ACTUALIZACION,
+			</if>
+			<if test="permisoRolAccion.audCodUsuario != null">
+				AUD_COD_USUARIO,
+			</if>
+			<if test="permisoRolAccion.audCodRol != null">
+				AUD_COD_ROL,
+			</if>
+			<if test="permisoRolAccion.audAccion != null">
+				AUD_ACCION,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="permisoRolAccion.codRecursoAccion != null">
+				#{permisoRolAccion.codRecursoAccion,jdbcType=NUMERIC},
+			</if>
+			<if test="permisoRolAccion.codPermisoRol != null">
+				#{permisoRolAccion.codPermisoRol,jdbcType=NUMERIC},
+			</if>
+			<if test="permisoRolAccion.accion != null">
+				#{permisoRolAccion.accion,jdbcType=VARCHAR},
+			</if>
+			<if test="permisoRolAccion.controlHtml != null">
+				#{permisoRolAccion.controlHtml,jdbcType=VARCHAR},
+			</if>
+			<if test="permisoRolAccion.flgActivo != null">
+				#{permisoRolAccion.flgActivo,jdbcType=NUMERIC},
+			</if>
+			<if test="permisoRolAccion.audFechaActualizacion != null">
+				#{permisoRolAccion.audFechaActualizacion,jdbcType=TIMESTAMP},
+			</if>
+			<if test="permisoRolAccion.audCodUsuario != null">
+				#{permisoRolAccion.audCodUsuario,jdbcType=NUMERIC},
+			</if>
+			<if test="permisoRolAccion.audCodRol != null">
+				#{permisoRolAccion.audCodRol,jdbcType=NUMERIC},
+			</if>
+			<if test="permisoRolAccion.audAccion != null">
+				#{permisoRolAccion.audAccion,jdbcType=NUMERIC},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="reasignarPermiso" parameterType="map">
+		update SIGEP2.PERMISO_ROL_ACCION
+		set
+		<if test="permisoRolAccion.audFechaActualizacion != null">
+			AUD_FECHA_ACTUALIZACION =
+			#{permisoRolAccion.audFechaActualizacion,jdbcType=TIMESTAMP},
+		</if>
+		<if test="permisoRolAccion.audCodUsuario != null">
+			AUD_COD_USUARIO =
+			#{permisoRolAccion.audCodUsuario,jdbcType=NUMERIC},
+		</if>
+		<if test="permisoRolAccion.audCodRol != null">
+			AUD_COD_ROL =
+			#{permisoRolAccion.audCodRol,jdbcType=NUMERIC},
+		</if>
+		<if test="permisoRolAccion.audAccion != null">
+			AUD_ACCION =
+			#{permisoRolAccion.audAccion,jdbcType=NUMERIC},
+		</if>
+		flg_activo = 1
+		where COD_PERMISO_ROL_ACCIONES =
+		#{permisoRolAccion.codPermisoRolAcciones,jdbcType=NUMERIC}
+	</update>
+
+	<update id="revocarPermiso" parameterType="map">
+		update SIGEP2.PERMISO_ROL_ACCION
+		set
+		<if test="permisoRolAccion.audFechaActualizacion != null">
+			AUD_FECHA_ACTUALIZACION =
+			#{permisoRolAccion.audFechaActualizacion,jdbcType=TIMESTAMP},
+		</if>
+		<if test="permisoRolAccion.audCodUsuario != null">
+			AUD_COD_USUARIO =
+			#{permisoRolAccion.audCodUsuario,jdbcType=NUMERIC},
+		</if>
+		<if test="permisoRolAccion.audCodRol != null">
+			AUD_COD_ROL =
+			#{permisoRolAccion.audCodRol,jdbcType=NUMERIC},
+		</if>
+		<if test="permisoRolAccion.audAccion != null">
+			AUD_ACCION =
+			#{permisoRolAccion.audAccion,jdbcType=NUMERIC},
+		</if>
+		flg_activo = 0
+		where COD_PERMISO_ROL_ACCIONES =
+		#{permisoRolAccion.codPermisoRolAcciones,jdbcType=NUMERIC}
+	</update>
+</mapper>

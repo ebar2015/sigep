@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<environments default="development">
+		<environment id="development">
+			<!-- conexion a Datasource Server -->
+			<transactionManager type="MANAGED"/>
+			<dataSource type="JNDI">
+			<property name="data_source" value="java:/SIGEP2DS"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="co/gov/dafp/sigep2/mapper/CifrasEmpleoPublicoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ArchivoCargueLogMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/AuditoriaConfiguracionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/AuditoriaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CargoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ContratoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/DatoAdicionalMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/DatoContactoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/DepartamentoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/DependenciaEntidadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EducacionFormalMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EntidadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EntidadPlantaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EntidadSistemaRegimenMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EvaluacionDesempenoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ExperienciaDocenteMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ExperienciaProfesionalMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/FormacionTrabajoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/FestivoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/HojaVidaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/InstitucionEducativaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/IdiomaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/IdiomaPersonaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/IngresosDeclaracionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/LogroRecursoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/MunicipioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/HistoricoModificacionHojaVidaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ModificacionContratoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/NacionalidadPerfilMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/OtroConocimientoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PaisMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ParametricaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ParticipacionInstitucionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ParticipacionProyectoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PermisoRolAccionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PermisoRolMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PersonaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PersonaMigMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PersonaParentescoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PreguntaOpinionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ProgramaAcademicoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PublicacionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ReconocimientoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/RecursoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ResultadoPreguntaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/RolMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/TablasAudMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/TokenMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/UsuarioEntidadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/UsuarioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/UsuarioRolEntidadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/AcreenciaObligacionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ActividadPrivadaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/BienesPatrimonioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CuentasDeclaracionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/DeclaracionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/OtrosIngresosDeclaracionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ParticipacionJuntaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ParticipacionSociedadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EnfermedadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/SituacionAdministrativaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/SituacionAdminVinculacionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ModificacionSituacionAdministrativaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmActivarUsuariosMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/ProcesosCargaMasivaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/SequenciasSigepMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvInformacionBasicaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmConfiguracionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmCrearUsuariosMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvEducacionDesaHumanoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvEducacionFormalMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/VinculacionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/NormaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/VAccionAuditoriaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/VRecursoActivoPerfilUsuarioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/RecursoAccionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EntidadPlantaDetalleMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EntidadCargoMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EntidadHistoricoEstadosMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/HistoricoSituacionAdminVinculacionMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvEvaluacionDesempenoMapper.xml" />
+		
+		<mapper resource="co/gov/dafp/sigep2/mapper/PepCuestionarioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PepPreguntasCuestionarioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PepPreguntasCuestionarioDetalleMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PepRespuestaCuestionarioMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PepRespuestaCuestionarioDetalleMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/PepRespuestasPreguntaCuestionarioMapper.xml" />
+		
+		<mapper resource="co/gov/dafp/sigep2/mapper/AsignacionSalarialMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvEducacionIdiomasMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvEducacionOtrosMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvExperienciaLaboralMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmHvExperienciaLaboralDocenMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmSituacionesAdministrativasMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmContratosMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/NomenclaturaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/NomenclaturaEntidadMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/EscalaSalarialMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/IncrementoSalarialMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmVinculacionesMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/GrupoDependenciaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CmRolesMapper.xml" />
+        <mapper resource="co/gov/dafp/sigep2/mapper/PoliticaPublicaMapper.xml" />
+        <mapper resource="co/gov/dafp/sigep2/mapper/EntidadPoliticaPublicaMapper.xml" />  
+        <mapper resource="co/gov/dafp/sigep2/mapper/DatoContactoBrMapper.xml" />  
+        <mapper resource="co/gov/dafp/sigep2/mapper/CmCrearEntidadMapper.xml" />  
+        <mapper resource="co/gov/dafp/sigep2/mapper/CmCrearNomenclaturaSalarialMapper.xml" />  
+        <mapper resource="co/gov/dafp/sigep2/mapper/EntidadFusionMapper.xml" />
+        <mapper resource="co/gov/dafp/sigep2/mapper/EstructuraMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/EntidadSituacionAdministrativaMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/NomenclaturaDenominacionMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/DenominacionMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/PlantaPersonaUtlUanMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/EntidadEscisionMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/AutonomiaMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/CmCrearEstructuraMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/CmCrearGrupoMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/CmCrearPlantaMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/UsuarioRolDependenciaMapper.xml" />   
+        <mapper resource="co/gov/dafp/sigep2/mapper/UsuarioSessionMapper.xml" />
+        <mapper resource="co/gov/dafp/sigep2/mapper/DocumentosAdicionalesHvMapper.xml" />     
+        <mapper resource="co/gov/dafp/sigep2/mapper/RangoEdadMapper.xml" />     
+        <mapper resource="co/gov/dafp/sigep2/mapper/PortalSigepMapper.xml" />     
+		<mapper resource="co/gov/dafp/sigep2/mapper/CargoHojaVidaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/DependenciaHojaVidaMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/HistoricoEntidadesDeclaracionMapper.xml" />
+		
+		<mapper resource="co/gov/dafp/sigep2/mapper/CalidadDeDatosMapper.xml" />
+		<mapper resource="co/gov/dafp/sigep2/mapper/CifrasConciliacionMapper.xml" />
+		
+		
+		<mapper resource="co/gov/dafp/sigep2/mapper/CalidadDeDatosNotificacionMapper.xml" />
+		
+	</mappers>
+</configuration>

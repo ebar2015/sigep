@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/template/basicTemplate.xhtml">
+    <script type="text/javascript">
+        function mayus(e) {
+            e.value = e.value.toUpperCase();
+        }
+    </script>
+  
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TTL_CONSULTAR_DETALLE_ENTIDAD}" />
+	
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <h2>
+                    <p:outputLabel value="#{titles.TTL_CONSULTAR_DETALLE_ENTIDAD}"
+                                   styleClass="page-subtitle" />
+                </h2>
+            </div>
+        </div>
+        <ui:include src="pestanasDatosEntidad.xhtml">
+            <ui:param name="srcDatosBasicos"
+                      value="datosBasicos/datosBasicosConsulta.xhtml"/>
+            <ui:param name="srcCaracterizacion"
+                      value="caracterizacion/consulta/datosCaracterizacion.xhtml"/>
+            <ui:param name="srcAmbitoAplicacion"
+                      value="ambitoAplicacion/consulta/gestionAmbitoPoliticas.xhtml"/>
+            <ui:param name="creacionEntidadBean"
+                      value="#{consultaEntidadBean}"/>
+        </ui:include>
+        <h:form>
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<div class="col-md-4" style="padding-top: 2em;">
+						<p:commandButton value="#{titles.TTL_EXPORTAR_EXCEL_2}"
+							styleClass="btn btn-primary" ajax="false"
+							style="width: 12.3em!important"
+							actionListener="#{consultaEntidadBean.llenarMapaValores('XLSX')}">
+							<p:fileDownload value="#{consultaEntidadBean.downloadXLSX}" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="padding-top: 2em;">
+						<p:commandButton value="#{titles.TTL_EXPORTAR_PDF}"
+							styleClass="btn btn-secondary" ajax="false"
+							style="width: 12.3em!important"
+							actionListener="#{consultaEntidadBean.llenarMapaValores('PDF')}">
+							<p:fileDownload value="#{consultaEntidadBean.downloadPDF}" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="padding-top: 2em;">
+						<p:commandButton value="#{titles.BTN_VOLVER}"
+							styleClass="btn btn-default" style="width: 12.3em!important"
+							process="@this" action="#{consultaEntidadBean.btRegresarAction}" />
+					</div>
+				</div>
+			</div>
+		</h:form>
+       
+        <p:dialog widgetVar="dlgCargaEntidad" modal="true" draggable="false"
+                  closable="false" resizable="false" showHeader="false"
+                  style="width:auto;height:auto">
+            <img src="../resources/images/loading.gif" alt=""
+                 height="45" width="70"/>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

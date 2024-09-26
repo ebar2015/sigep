@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<classPathEntry
+		location="/Users/joseviscaya/ada/drivers/ojdbc8.jar" />
+	<context id="development">
+		<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@ODAX7-MASTER-SCAN:1521/BI"
+			userId="SIGEP2" password="NPgKB50JKE8YQhohMqDN</" />
+		<javaModelGenerator targetPackage="co.gov.dafp.sigep2.bean" targetProject="SigepRestESB" />
+		<sqlMapGenerator targetPackage="co.gov.dafp.sigep2.mapper" targetProject="SigepRestESB" />
+		<javaClientGenerator targetPackage="co.gov.dafp.sigep2.interfaces" targetProject="SigepRestESB" type="XMLMAPPER" />
+		<!-- TABLAS SIGEP2 -->
+<!-- 			<table tableName="USUARIO" /> -->
+<!-- 			<table tableName="PERSONA" /> -->
+<!-- 			<table tableName="PERMISO_ROL" /> -->
+<!-- 			<table tableName="PERMISO_ROL_ACCION" /> -->
+<!-- 			<table tableName="USUARIO_ENTIDAD" /> -->
+<!-- 			<table tableName="USUARIO_ROL_ENTIDAD" /> -->
+<!-- 			<table tableName="VINCULACION" /> -->
+<!-- 			<table tableName="ROL" /> -->
+<!-- 			<table tableName="ARCHIVO_CARGUE" /> -->
+<!-- 			<table tableName="ARCHIVO_CARGUE_LOG" /> -->
+<!-- 			<table tableName="AUDITORIA" /> -->
+<!-- 			<table tableName="AUDITORIA_CONFIGURACION" /> -->
+<!-- 			<table tableName="CARGO" /> -->
+<!-- 			<table tableName="CONTRATO" /> -->
+<!-- 			<table tableName="DATO_ADICIONAL" /> -->
+<!-- 			<table tableName="DATO_CONTACTO" /> -->
+<!-- 			<table tableName="DEPARTAMENTO" /> -->
+<!-- 			<table tableName="DEPENDENCIA_ENTIDAD" /> -->
+<!-- 			<table tableName="EDUCACION_FORMAL" /> -->
+<!-- 			<table tableName="ENTIDAD" /> -->
+<!-- 			<table tableName="EVALUACION_DESEMPENO" /> -->
+<!-- 			<table tableName="EXPERIENCIA_DOCENTE" /> -->
+<!-- 			<table tableName="EXPERIENCIA_PROFESIONAL" /> -->
+<!-- 			<table tableName="FORMACION_TRABAJO" /> -->
+<!-- 			<table tableName="HOJA_VIDA" /> -->
+<!-- 			<table tableName="INSTITUCION_EDUCATIVA" /> -->
+<!-- 			<table tableName="IDIOMA" /> -->
+<!-- 			<table tableName="IDIOMA_PERSONA" /> -->
+<!-- 			<table tableName="LOGRO_RECURSO" /> -->
+<!-- 			<table tableName="MUNICIPIO" /> -->
+<!-- 			<table tableName="MODIFICACION_HOJA_VIDA" /> -->
+<!-- 			<table tableName="NACIONALIDAD_PERFIL" /> -->
+<!-- 			<table tableName="OTRO_CONOCIMIENTO" /> -->
+<!-- 			<table tableName="PAIS" /> -->
+<!-- 			<table tableName="PARAMETRICA" /> -->
+<!-- 			<table tableName="PARTICIPACION_INSTITUCION" /> -->
+<!-- 			<table tableName="PARTICIPACION_PROYECTO" /> -->
+<!-- 			<table tableName="PERSONA_MIG" /> -->
+<!-- 			<table tableName="PREGUNTA_OPINION" /> -->
+<!-- 			<table tableName="PROGRAMA_ACADEMICO" /> -->
+<!-- 			<table tableName="PUBLICACION" /> -->
+<!-- 			<table tableName="RECONOCIMIENTO" /> -->
+<!-- 			<table tableName="RECURSO" /> -->
+<!-- 			<table tableName="RESULTADO_PREGUNTA" /> -->
+<!-- 			<table tableName="TABLAS_AUD" /> -->
+<!-- 			<table tableName="TOKEN" /> -->
+
+<!-- 			<table tableName="ACREENCIA_OBLIGACION" /> -->
+<!-- 		    <table tableName="ACTIVIDAD_PRIVADA" /> -->
+<!-- 		    <table tableName="BIENES_PATRIMONIO" /> -->
+<!-- 		    <table tableName="CUENTAS_DECLARACION" /> -->
+<!-- 			<table tableName="DECLARACION" /> -->
+<!-- 			<table tableName="OTROS_INGRESOS_DECLARACION" /> -->
+<!-- 			<table tableName="PARTICIPACION_JUNTA" /> -->
+<!-- 			<table tableName="PARTICIPACION_SOCIEDAD" /> -->
+<!-- 			<table tableName="PERSONA_PARENTESCO" /> -->
+<!-- 			<table tableName="INGRESOS_DECLARACION" /> -->
+<!-- 			<table tableName="MODIFICACION_CONTRATO" /> -->
+<!-- 			<table tableName="ENTIDAD_PLANTA" /> -->
+<!-- 			<table tableName="HISTORICO_MODIFICACION_HOJA_VIDA" /> -->
+<!-- 			<table tableName="SEQUENCIAS_SIGEP" /> -->
+<!-- 			<table tableName="CM_CREAR_USUARIOS" /> -->
+<!-- 			<table tableName="CM_HV_EDUCACION_FORMAL" /> -->
+<!-- 			<table tableName="CM_HV_EDUCACION_DESA_HUMANO" /> -->
+
+<!-- 			<table tableName="ENTIDAD_ESCISION" /> -->
+<!-- 			<table tableName="ENTIDAD_HISTORICO_ESTADOS" /> -->
+
+<!-- 		    <table tableName="ENFERMEDAD" /> -->
+<!-- 		    <table tableName="ENTIDAD_SITUACION_ADMINISTRATIVA" /> -->
+<!-- 		    <table tableName="SITUACION_ADMINISTRATIVA" /> -->
+<!-- 		    <table tableName="SITUACION_ADMIN_VINCULACION" /> -->
+<!-- 		    <table tableName="NORMA" /> -->
+<!-- 		    <table tableName="PROCESOS_CARGA_MASIVA" /> -->
+<!-- 		    <table tableName="CM_ACTIVAR_USUARIOS" /> -->
+<!-- 		    <table tableName="CM_HV_INFORMACION_BASICA" /> -->
+<!-- 		    <table tableName="CM_CONFIGURACION" /> -->
+<!-- 		    <table tableName="ENTIDAD_SISTEMA_REGIMEN" /> -->
+<!-- 		    <table tableName="ENTIDAD_PLANTA_PERSONAL" /> -->
+<!-- 		    <table tableName="ENTIDAD_PLANTA_DETALLE" /> -->
+<!-- 		    <table tableName="ENTIDAD_CARGO" /> -->
+<!-- 		    <table tableName="HISTORICO_SITUACION_ADMIN_VINCULACION" /> -->
+<!-- 		    <table tableName="CM_HV_EVALUACION_DESEMPENO" /> -->
+
+<!-- 			<table tableName="PEP_RESPUESTA_CUESTIONARIO_DETALLE" /> -->
+<!-- 			<table tableName="PEP_RESPUESTAS_PREGUNTA_CUESTIONARIO" /> -->
+<!-- 			<table tableName="PEP_RESPUESTA_CUESTIONARIO" /> -->
+<!-- 			<table tableName="PEP_PREGUNTAS_CUESTIONARIO_DETALLE" /> -->
+<!-- 			<table tableName="PEP_PREGUNTAS_CUESTIONARIO" /> -->
+<!-- 			<table tableName="PEP_CUESTIONARIO" />  -->
+
+<!-- 			<table tableName="CM_HV_EDUCACION_OTROS" /> -->
+<!-- 			<table tableName="CM_HV_EDUCACION_IDIOMAS" /> -->
+<!-- 			<table tableName="CM_HV_EXPERIENCIA_LABORAL" /> -->
+<!-- 			<table tableName="CM_HV_EXPERIENCIA_LABORAL_DOCEN" /> -->
+<!-- 			<table tableName="CM_SITUACIONES_ADMINISTRATIVAS" /> -->
+<!-- 			<table tableName="CM_VINCULACIONES" /> -->
+<!-- 			<table tableName="GRUPO_DEPENDENCIA" /> -->
+
+<!-- 			<table tableName="NOMENCLATURA" /> -->
+<!-- 			    <table tableName="NOMENCLATURA_DENOMINACION" /> -->
+<!-- 			    <table tableName="DENOMINACION" /> -->
+<!-- 			<table tableName="NOMENCLATURA_ENTIDAD" /> -->
+<!-- 			<table tableName="ASIGNACION_SALARIAL" /> -->
+<!-- 			<table tableName="INCREMENTO_SALARIAL" /> -->
+
+<!-- 			<table tableName="CM_HV_INFORMACION_BASICA " /> -->
+<!-- 			<table tableName="CM_CONTRATOS" /> -->
+<!-- 			<table tableName="CM_ROLES" /> -->
+<!-- 			<table tableName="CM_CREAR_NOMENCLATURA_SALARIAL" /> -->
+<!-- 			<table tableName="CM_CREAR_ESTRUCTURA" /> -->
+<!--		  <table tableName="DOCUMENTOS_ADICIONALES_HV" />-->
+<!--  		<table tableName="dependencia_hoja_vida" />-->
+
+<table tableName="CIFRAS_CONCILIACION" />
+
+
+
+ 
+
+
+		<!-- VISTAS SIGEP2 -->
+
+		<!-- <table tableName="V_ACCION_AUDITORIA" /> -->
+		<!-- <table tableName="V_RECURSO_ACTIVO_PERFIL_USUARIO" /> -->
+	</context>
+</generatorConfiguration>

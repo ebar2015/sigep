@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<div class="row row-background-white" id="child-tab-data-basic">
+		<br /> <br />
+		<hr class="hr-style hr-style-two" />
+		<span
+			style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+			${titles['TTL_DATOS_BASICOS_IDENTI']} 
+		</span> <br /> <br />
+		<div class="col-md-3" align="center">
+			<div class="col-md-12">
+				<h:graphicImage url="#{tarjetaPersonaBean.persona.imagenUsuario}"
+					height="150" width="150"
+					style="border-radius:75px; margin-bottom:3%;">
+				</h:graphicImage>
+			</div>
+			
+		</div>
+		<div class="col-md-9">
+			<h4 style="color: #24547A; margin-top: 0%; margin-left: 1.5%; font-size: 2.5em; margin-bottom: -1%; text-transform: capitalize;">
+			
+				<p:outputLabel class="title-datos-basicos" value="#{tarjetaPersonaBean.nombreUsuario}" />
+			</h4>
+			<br />
+			<div class="col-md-12" style="margin-left: -1%; border-top: 1px solid #B3B3B3 !important; padding-left: 1px!important;">
+				<br />
+				<div class="col-md-6">
+					<p:outputLabel
+						value="${titles['TTL_TIPO_IDENTIFICACION']}&#58;&#160;"
+						styleClass="log-label form-label"
+						style="color: #263948!important; font-weight:600;">
+					</p:outputLabel>
+					<p:outputLabel
+						value=" #{tarjetaPersonaBean.nombreTipoDocumento}"
+						styleClass="log-label form-label"
+						style="text-transform: capitalize!important;">
+					</p:outputLabel>
+				</div>
+				<div class="col-md-6">
+					<p:outputLabel value="${titles['TTL_NICK_NAME']}&#58;&#160;"
+						styleClass="log-label form-label"
+						style="color: #263948!important; font-weight:600;">
+					</p:outputLabel>
+					<p:outputLabel
+						value="#{tarjetaPersonaBean.persona.numeroIdentificacion}"
+						styleClass="log-label form-label">
+					</p:outputLabel>
+				</div>
+			</div>
+			<div class="col-md-12" style="margin-left: -1%; padding-left: 1px!important;">
+				<div class="col-md-6">
+					<p:outputLabel value="${titles['LBL_FECHA_NACIMIENTO']}&#58;&#160;"
+						styleClass="log-label form-label"
+						style="color: #263948!important; font-weight:600;">
+					</p:outputLabel>
+					<p:outputLabel
+						value="#{tarjetaPersonaBean.persona.fechaNacimientoString}"
+						styleClass="log-label form-label">
+					</p:outputLabel>
+				</div>
+				<div class="col-md-6">
+					<p:outputLabel value="${titles['LBL_MAIL']}: "
+						styleClass="log-label form-label"
+						style="color: #263948!important; font-weight:600;">
+					</p:outputLabel>
+					<p:outputLabel
+						value="#{tarjetaPersonaBean.correoElectronico}"
+						styleClass="log-label form-label labelEmailPersonal"
+						style="text-transform: lowercase!important;">
+					</p:outputLabel>
+				</div>
+			</div>
+			<div class="col-md-12"
+				style="margin-left: -1%; border-bottom: 1px solid #B3B3B3 !important;padding-left: 1px!important;">
+				<div class="col-md-6">
+					<p:outputLabel
+						value="${titles['TTL_TRANSVERSAL_TIPO_GENERO']}&#58;&#160;"
+						styleClass="log-label form-label"
+						style="color: #263948!important; font-weight:600;">
+					</p:outputLabel>
+					<p:outputLabel value="#{tarjetaPersonaBean.nombreGenero}"
+						styleClass="log-label form-label"
+						style="text-transform: capitalize!important;">
+					</p:outputLabel>
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

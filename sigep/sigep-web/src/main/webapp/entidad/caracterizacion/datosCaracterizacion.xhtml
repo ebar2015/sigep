@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <style>
+        tr {
+            background: transparent !important;
+        }
+        .ui-fluid .ui-selectonemenu {
+            height: 35px !important;
+            padding-top: 0px !important;
+        }
+    </style>
+
+    <h:form id="formularioCaracterizacion">
+
+        <p:panel id="pnCaracterizacion"
+                 style="border: none"
+                 widgetVar="wvPnCaracterizacion">
+            <div class="row row-background-white" style="padding-top: 2em;">
+                <br />            
+           
+                <ui:include src="caracterizacion.xhtml"/>
+                <br /><br />
+
+                <ui:include src="registro.xhtml"/>
+                <br /><br />
+
+                <ui:include src="datosDemograficos.xhtml"/>
+
+                <div class="row" align="center">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-2" style="margin-bottom: 3%;">
+                        <p:commandButton process="@widgetVar(wvPnCaracterizacion)"
+                                         update="@form"
+                                         onstart="PF('dlgCargaEntidad').show()"
+                                         oncomplete="PF('dlgCargaEntidad').hide()"
+                                         onsuccess="PF('dlgCargaEntidad').hide()"
+                                         onerror="PF('dlgCargaEntidad').hide()"
+                                         actionListener="#{creacionEntidadBean.btGuardarCaracterizacionListener()}"
+                                         value="#{titles.TTL_SAVE}"
+                                         styleClass="btn btn-primary"
+                                         style="padding-left:23%!important;padding-right:23%!important;font-size:1.5em!important;padding-top:0!important;">
+                        </p:commandButton>
+                    </div>
+                    <div class="col-md-2" style="margin-bottom: 3%;">
+                        <p:commandButton value="${titles.TTL_CANCEL}"
+                            styleClass="btn btn-default"
+                            style="padding-left:23%!important;padding-right:23%!important;font-size:1.5em!important;padding-top:0!important;"
+                            process="@this"
+                            onclick="PF('wdvCancelarCaract').show()"/>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>            
+        </p:panel>
+        <div class="row">
+            <div class="col-md-12">
+                <p:overlayPanel id="opEditarDireccion"
+                                dismissable="false"
+                                for="btEditarDireccion"
+                                widgetVar="wvOpEditarDireccion"
+                                style="width:100%">
+                </p:overlayPanel>
+            </div>
+        </div>
+        <p:blockUI widgetVar="wvBuiEditar"
+                   block="@widgetVar(wvPnCaracterizacion)"/>
+                   
+	</h:form>
+	
+		<p:dialog widgetVar="wdvCancelarCaract" width="480px" height="140px"
+			style="background:#f0f0f0 !important;" id="dialogCancelarCarac" modal="true"
+			draggable="false" closable="false" resizable="false"
+			showHeader="false">
+			<br />
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12" align="center">
+					<p:outputLabel style="font-size:15px;color:#235379;" value="#{messages.MSG_ENTIDAD_CARACTERIZACION_CANCELAR}"/>
+					<br /> <br />
+					<p:commandButton id="btnAceptarCancelacion" value="${titles.LBL_SI}"
+						process="@this" styleClass="btn btn-primary"
+						onclick="PF('wdvCancelarCaract').hide()"
+						update="tabViewCrearEntidad"
+						resetValues="true"
+                        actionListener="#{creacionEntidadBean.iraTab(0)}" 
+						style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;">
+						  <p:resetInput target="formularioCaracterizacion:pnCaracterizacion" />
+					</p:commandButton>
+
+					<p:commandButton value="${titles.LBL_NO}" onclick="PF('wdvCancelarCaract').hide()"
+						process="@this"
+						styleClass="btn btn-default"
+						style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+				</div>
+			</div>
+		</p:dialog>
+
+</ui:composition>

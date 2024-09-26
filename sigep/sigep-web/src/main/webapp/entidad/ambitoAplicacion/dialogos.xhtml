@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <p:dialog widgetVar="confirmDlg" width="480px" height="140px"  style="background:#f0f0f0 !important;" id="confirm1" modal="true" draggable="false"
+              closable="false" resizable="false" showHeader="false">   
+        <br /> <br />
+        <div class="row" align="center">
+            <div  class="col-md-12" align="center"> 
+                <p:outputLabel style="font-size:15px;color:#235379;" value="#{messages.MSG_ENTIDAD_CONFIRMACION_POLI}"> </p:outputLabel> 
+                <br /> <br />   
+                <p:commandButton id="btnAceptarAsignacion"
+                    value="${titles.TTL_OK}" 
+                    process="@this"       
+                    styleClass="btn btn-primary"
+                    oncomplete="PF('confirmDlg').hide()"
+                    update="panelBotones @widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito)"
+                  	actionListener="#{ambitoAplicacionPoliticasBean.btDialogoConfirmaAsignacionListener}"
+                    style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+
+                <p:commandButton 
+                    value="${titles['TTL_CANCEL']}" 
+                    onclick="PF('confirmDlg').hide()" 
+                    process="@this"
+                    update ="@widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito)"
+                    styleClass="btn btn-default"
+                    actionListener="#{ambitoAplicacionPoliticasBean.cancelarAsinacionPoliticas()}"
+                    style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+            </div> 
+        </div>
+    </p:dialog>   
+
+
+    <p:dialog widgetVar="dlgExisteAsociacion" width="480px" height="180px"  
+              style="background:#f0f0f0 !important;" 
+              id="confirm2" modal="true" draggable="false"
+              closable="false" resizable="false" showHeader="false">   
+        <br /> <br />
+        <div class="row" align="center">
+            <div  class="col-md-12" align="center"> 
+                <p:outputLabel style="font-size:15px;color:#235379;" value="#{messages.MSG_ENTIDAD_ADVERTENCIA_ASOC_POLI} "/>
+                <br /> <br />   
+                <p:commandButton 
+                    value="${titles['TTL_TO_CONTINUE']}" 
+                    process="@this"
+                    update="@widgetVar(wvDtEntidadesAmbito) @widgetVar(wvDtPoliticasAmbito) @this panelBotones"
+                    actionListener="#{ambitoAplicacionPoliticasBean.btConfirmarAsociacionesListener()}"
+                    styleClass="btn btn-primary"
+                    oncomplete="PF('dlgExisteAsociacion').hide()"
+                    style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+
+                <p:commandButton 
+                    value="${titles['TTL_CANCEL']}" 
+                    onclick="PF('dlgExisteAsociacion').hide()" 
+                    type="button"
+                    styleClass="btn btn-default"
+                    style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+            </div> 
+        </div>
+        <br /> <br />
+    </p:dialog>   
+
+
+    <p:dialog widgetVar="confirmDlg3" width="580px" height="140px"  style="background:#f0f0f0 !important;" id="confirm3" modal="true" draggable="false" 
+              closable="false" resizable="false" showHeader="false">   
+        <br /> <br />
+        <div class="row" align="center" >     
+            <div  class="col-md-12" align="center"> 
+                <p:outputLabel style="font-size:15px;color:#235379;" value="La política seleccionada se asignó exitosamente a las entidades"> </p:outputLabel>                
+                <br /> <br />
+                <p:commandButton 
+                    value="${titles['TTL_OK']}" 
+                    process="@this"          
+                    styleClass="btn btn-primary"
+                    oncomplete="PF('confirmDlg3').hide()"
+                    onclick="PF('verDetallePolitica').show()"
+                    style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+            </div>
+        </div>
+        <br /> <br /><br /> 
+	</p:dialog>
+		
+	<p:dialog widgetVar="wdgtDetallePolitica" width="680px"
+		id="detallePolitica" modal="true" draggable="false" closable="false" height="268"
+		resizable="false" responsive="true" header="• #{titles.LBL_ENTIDAD_DETALLE_POLITICA} •" >
+		<br />
+		<div class="row">
+		<br />
+			<div class="col-md-12" align="center">
+				<p:scrollPanel style="width: 100%"
+					id="panelScrollDescripcionPolitica">
+					<p:dataTable
+						value="#{ambitoAplicacionPoliticasBean.politicaDetalle}"
+						var="descripcionPolitica"
+						rowKey="#{descripcionPolitica.codTablaParametrica}" paginator="true"
+						rows="#{paginatorSize}"  style="width: 600px"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+	
+						<p:column headerText="${titles.TTL_NOMBRE_POLITICA}">
+							<h:outputText value="#{descripcionPolitica.codTablaParametrica}" converter="parametricaBgDecimalConverter"/>
+						</p:column>
+	
+						<p:column headerText="${titles.TTL_DESCRIPCION_POLITICA}">
+							<h:outputText value="#{descripcionPolitica.descripcion}" />
+						</p:column>
+					</p:dataTable>
+				</p:scrollPanel>
+			</div>
+		</div>
+		<br />
+	
+		<div class="row" align="center">
+			<div class="col-md-12" align="center">
+				<p:commandButton value="${titles.TTL_OK}" process="@this"
+					styleClass="btn btn-primary"
+					onclick="PF('wdgtDetallePolitica').hide()"
+					style="margin-top: 1.3em" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	<p:dialog widgetVar="wdgtNuevaPolitica" width="680px" height="243.8px"
+		id="asignarNuevaPol" modal="true" draggable="false" closable="false"
+		resizable="false" header="• #{titles.LBL_ENTIDAD_ASIGNAR_POLITICA} •">
+		
+		<br />
+		<p:outputPanel id="panelNuevaPolitica">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p:outputLabel for="crearNombrePolitica"
+							value="${titles['TTL_NOMBRE_POLITICA']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="crearNombrePolitica" autocomplete="false"
+							title="${titles['TTL_INGRESE']} ${titles['TTL_NOMBRE_POLITICA']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							class="form-control-acti-usua"
+							maxlength="200"
+							value="#{ambitoAplicacionPoliticasBean.nuevaPolitica.nombre}">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="crearNombrePolitica" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel for="crearDescripcionPolitica"
+							value="${titles['TTL_DESCRIPCION_POLITICA']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="crearDescripcionPolitica" autocomplete="false"
+							title="${titles['TTL_INGRESE']} ${titles['TTL_DESCRIPCION_POLITICA']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							class="form-control-acti-usua" maxlength="200"
+							value="#{ambitoAplicacionPoliticasBean.nuevaPolitica.descripcion}">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+						<p:message for="crearDescripcionPolitica" display="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel for="crearTipoPolitica"
+								value="${titles['LBL_ENTIDAD_TIPO_POLITICA']}:"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="crearTipoPolitica"
+								title="${titles['TTL_SELECT']} ${titles['LBL_ENTIDAD_TIPO_POLITICA']}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								value="#{ambitoAplicacionPoliticasBean.nuevaPolitica.codTipoPolitica}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" itemDisabled="true" />
+								<f:selectItems value="#{webUtils.tipoPoliticaPublica}" />
+							</h:selectOneMenu>
+							<p:message for="crearTipoPolitica" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:"
+								for="activoCrearPolitica"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox id="activoCrearPolitica" value="true" disabled="true"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br /><br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3">
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							styleClass="btn btn-primary"
+							update="panelNuevaPolitica panelTablaNuevaPolitica @form"
+							process="panelNuevaPolitica @this"
+							actionListener="#{ambitoAplicacionPoliticasBean.guardarNuevaPoliticaPublica}"
+							style="width: 10.3em!important;margin-left: -0.7em;"/>
+					</div>
+					<div class="col-md-3">
+					<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+						styleClass="btn btn-default"
+						update="panelNuevaPolitica"
+						resetValues="true"
+						actionListener="#{ambitoAplicacionPoliticasBean.cancelarNuevaPolitica}"
+						onclick="PF('wdgtNuevaPolitica').hide()"
+						style="width: 10.3em!important;"/>
+					</div>
+				</div>
+			</div>
+		</p:outputPanel>
+	</p:dialog>
+	
+	<p:dialog widgetVar="verDetalleEntidad"
+	 	id="detalleEntidad"
+	 	modal="true" width="750" 
+	 	position="center" height="auto"
+	 	draggable="false" responsive="true"
+	 	closable="true" resizable="false" header="• #{titles.LBL_ENTIDAD_POLITICA_ENTIDAD} •">   
+		<br />
+		<p:outputPanel id="panelNomenclaturaBase">
+			<p:scrollPanel mode="native" style="width:650px;height:450px">
+	
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:dataTable var="detallePoliticasEntidad"
+							value="#{ambitoAplicacionPoliticasBean.politicasEntidad}"
+							paginator="true" rows="#{paginatorSize}"  lazy="true"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+							<p:column headerText="${titles.TTL_NOMBRE_POLITICA}">
+								<h:outputText value="#{detallePoliticasEntidad.nombrePolitica}" />
+							</p:column>
+	
+							<p:column headerText="${titles.TTL_DESCRIPCION_POLITICA}">
+								<h:outputText
+									value="#{detallePoliticasEntidad.descripcionPolitica}" />
+							</p:column>
+						</p:dataTable>
+						<br />
+					</div>
+				</div>
+				<div class="row" align="center">
+					<div class="col-md-12" align="center">
+						<p:commandButton value="${titles.TTL_OK}" process="@this"
+							onclick="PF('verDetalleEntidad').hide()"
+							styleClass="btn btn-primary"
+							style="padding-left:8%!important;padding-right:8%!important;font-size:1.5em!important;padding-top:0!important;" />
+					</div>
+				</div>
+				<br /><br /><br />
+			</p:scrollPanel>
+		</p:outputPanel>
+</p:dialog>
+</html>
+

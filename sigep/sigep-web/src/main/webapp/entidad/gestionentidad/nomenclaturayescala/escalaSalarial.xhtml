@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="es" lang="es" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+	
+	
+		<h:form id="formularioEscalaSalarial">
+			<p:panel id="panelFiltrosEscala" visible="#{nomenclaturaSalarialBean.visibilidadFormEscala}" rendered="true" >
+					<div style="display: none!important;" >
+						<div class="row" style="margin-top: 20px!important" >
+							<div class="col-md-4">
+								<p:outputLabel for="SelecDepto"
+								               styleClass="log-label form-label-formularios"
+								               value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_DEPARTAMENTO']}" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel for="SelectMun"
+								               styleClass="log-label form-label-formularios"
+								               value="${titles['LBL_MUNICIPIO']}" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel for="selecRama"
+								               styleClass="log-label form-label-formularios"
+								               value="${titles['TTL_RAMA_ORGANIZACION_ENTE']}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<h:selectOneMenu id="SelecDepto"
+								                 requerid="true"
+								                 title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_DEPARTAMENTO']}"
+								                 value="#{nomenclaturaSalarialBean.codDepto}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getDeptos(169)}" />
+								</h:selectOneMenu>
+								<p:message for="SelecDepto" display="text" />
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu id="SelectMun" requerid="true" title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_MUNICIPIO']}" value="#{nomenclaturaSalarialBean.codMun}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getMunicipios(nomenclaturaSalarialBean.codDepto)}" />
+								</h:selectOneMenu>
+								<p:message for="SelectMun" display="text" />
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu id="selecRama" requerid="false" title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_RAMA_ORGANIZACION']}" value="#{nomenclaturaSalarialBean.codRama}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1370)}" />
+								</h:selectOneMenu>
+								<p:message for="selecRama" display="text" />
+							</div>
+						</div>
+						<div class="row" style="margin-top: 20px!important">
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="Orden:" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="Nomenclatura:" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="Sistema carrera:" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_ORDEN']}" value="#{nomenclaturaSalarialBean.codOrden}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1362)}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_NOMENCLATURA']}" value="#{nomenclaturaSalarialBean.codNomenclatura}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{nomenclaturaSalariaBean.listadoNomenclaturas}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALAIRAL_SISTEMA_CARRERA']}" value="#{nomenclaturaSalarialBean.codSistemaCarrera}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1455)}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row" style="margin-top: 20px!important">
+							<div class="col-md-6">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="Naturaleza juridica:" />
+							</div>
+							<div class="col-md-6">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="Nombre de la entidad:" />
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 30px!important;">
+							<div class="col-md-6">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_NATURALEZA_JURIDICA']}" value="#{nomenclaturaSalarialBean.codNaturaleza}" styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1365)}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-6">
+								<p:inputText title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_NOMBRE_ENTIDAD']}" value="#{nomenclaturaSalarialBean.nombreEntidad}" >
+								</p:inputText>
+							</div>
+						</div>
+						</div>
+				  <br /> <br /> 
+				<div class="row">
+					<div class="col-md-12">
+						<div id="btnNuevaEscalaSalarial" style="display: inline-block!important; margin-bottom: 10px !important">
+							<p:commandButton value="Agregar Escala salarial"
+							  icon="fa fa-fw fa-plus-circle"
+							  styleClass="btn btn-transparent"
+							  actionListener="#{nomenclaturaSalarialBean.activarCreacionEscala()}"
+							  process="@this" update="formularioEscalaSalarial"/>
+						</div>
+						<div id="btnIncrementarEscala" style="margin-bottom: 10px !important; display: inline-block!important; padding-rigth: 5px!important;">
+							<p:commandButton value="Incrementar escala salarial"
+							  icon="fa fa-fw fa-plus-circle"
+							  styleClass="btn btn-transparent"
+							  actionListener="#{nomenclaturaSalarialBean.activarIncrementoEscala()}"
+							  process="@this" update="formularioEscalaSalarial"/>
+						</div>
+					</div>
+				</div>
+                   
+					<div class="row">
+						<p:dataTable id="tablaEscalas" var="dataAsignaciones" paginator="true" widgetVar="wvDttablaEscala" 
+									 rows="#{paginatorSize}" reflow="true" rowsPerPageTemplate="#{paginatorsSize}"
+						             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+						             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						             value="#{nomenclaturaSalarialBean.listaAsignaciones}" emptyMessage="#{messages.MSG_TABLAS_SIN_REGISTROS}" rowKey="#{dataAsignaciones.codAsignacionSalarial}" rowSelectMode="checkbox">>
+						        <p:column selectionMode="single" style="width:50px!important;text-align:center"/>
+								<p:column headerText="Nivel jerárquico" style="word-wrap: break-word!important;text-align: center!important;">
+									<h:outputText value="#{dataAsignaciones.nombreNivelJerarquico}" />
+								</p:column>
+								<p:column headerText="Grado" style="word-wrap: break-word!important;text-align: center!important;">
+									<h:outputText value="#{dataAsignaciones.nombreGrado}" />
+								</p:column>
+								<p:column headerText="Asignación salarial" style="word-wrap: break-word!important;text-align: center!important;">
+									<h:outputText value="#{dataAsignaciones.asignacionBasica}">
+										<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="Valor de la asignación" style="word-wrap: break-word!important;text-align: center!important;">
+									<h:outputText value="#{dataAsignaciones.valorAsignacion}">
+										<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" />
+									</h:outputText>
+								</p:column>
+								<p:column visible="false" headerText="Acciones" style="word-wrap: break-word!important;text-align: center!important;">
+									<p:commandButton value="Editar" actionListener="#{nomenclaturaSalarialBean.activarEdicionEscalaSalarial(dataAsignaciones)}">
+									</p:commandButton>
+								</p:column>
+					</p:dataTable>
+					</div>
+			</p:panel>
+		
+		
+			<p:panel id="panelCreacionEscala" visible="#{nomenclaturaSalarialBean.formEscalaCreacion}">
+				<div class="row" style="margin-top: 20px!important">
+						<div class="col-md-4">
+							<p:outputLabel styleClass="log-label form-label-formularios" value="Nivel jerárquico" for="nivelJer"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel styleClass="log-label form-label-formularios" value="Grado:"  for="grado"/>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel styleClass="log-label form-label-formularios" value="Asignación  Básica:" for="asignacionBasica"/>
+						</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<h:selectOneMenu id="nivelJer" title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}"
+							value="#{nomenclaturaSalarialBean.asignacionSeleccionada.codNivelJerarquico}" styleClass="form-control-form-act-usua"
+							 requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getListasParametricas(497)}" />
+						</h:selectOneMenu>
+						<p:message for="nivelJer" display="text" />
+					</div>
+					<div class="col-md-4">
+						<h:selectOneMenu id="grado" title="${titles['TTL_SELECT']} ${titles['LBL_GRADO']}"
+							value="#{nomenclaturaSalarialBean.asignacionSeleccionada.codGrado}" styleClass="form-control-form-act-usua"
+							 requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getListasParametricas(607)}" />
+						</h:selectOneMenu>
+						<p:message for="grado" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:inputNumber id= "asignacionBasica" title="${titles['TTL_INGRESE']} ${titles['TTL_ESCALA_SALARIAL_ASIGNACION_BASICA']}"
+							value="#{nomenclaturaSalarialBean.asignacionSeleccionada.asignacionBasica}" 
+							 requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							emptyValue="sign"
+							symbol="$"  decimalSeparator=","
+		                    thousandSeparator="."
+		                    validatorMessage="${titles['LBL_FORMAT_INVALID']}"
+		                    decimalPlaces="2" >
+		                    <p:keyFilter mask="num"></p:keyFilter>
+							<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+						</p:inputNumber>
+						<p:message for="asignacionBasica" display="text" />
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px!important">
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_ESCALA_SALARIAL_OTRAS_ASIGNACIONES']}:" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_VALOR_ASIGNACION']}:" for="valAsig" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Porcentaje de asignación:" for="porcen"/>
+					</div>
+				</div>
+				<div class="row">
+				<div class="col-md-4">
+						<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ESCALA_SALARIAL_OTRAS_ASIGNACIONES']}" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.asignacionSeleccionada.otrasAsignaciones}" >
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItem itemLabel="Gastos de Representación" itemValue="607" />
+						</h:selectOneMenu>
+					</div>
+					<div class="col-md-4">
+						<p:inputNumber id="valAsig"  value="#{nomenclaturaSalarialBean.asignacionSeleccionada.valorAsignacion}"
+							emptyValue="sign" title="${titles['TTL_INGRESE']} ${titles['TTL_ESCALA_SALARIAL_ASIGNACION_BASICA']}"
+							symbol="$"  decimalSeparator=","
+		                    thousandSeparator="."
+		                    decimalPlaces="2"
+		                    validatorMessage="${titles['LBL_FORMAT_INVALID']}">
+		                    <p:keyFilter mask="num"></p:keyFilter>
+							<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+						</p:inputNumber>
+						<p:message for="valAsig" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:inputNumber id="porcen" title="${titles['TTL_INGRESE']} Porcentaje de asignación"
+							 value="#{nomenclaturaSalarialBean.asignacionSeleccionada.porcentajeAsignacion}"
+							 symbol="%" symbolPosition="s" emptyValue="sign">
+						</p:inputNumber>
+						<p:message for="porcen" display="text" />
+					</div>
+				</div>
+				
+				<div class="row" style="margin-top: 20px!important">
+					<div class="col-md-12 text-center">
+						<p:commandButton value="Guardar" styleClass="btn btn-primary" actionListener="#{nomenclaturaSalarialBean.crearEscala()}"
+							proccess="tabViewNomenclaturaEscala"
+							update="tabViewNomenclaturaEscala" > 
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+	
+		
+			<p:panel visible="#{nomenclaturaSalarialBean.formIncrementarEscala}" >
+				<div class="row" style="margin-top: 20px!important">
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Incrementar escala salarial" />
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px!important">
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Tipo de la norma:" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Fecha de la norma:" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Número de la norma:" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<h:selectOneMenu id="txtTipoNorma" title="${titles['TTL_SELECT']} ${titles['TTL_INCREMENTO_SALARIAL_TIPO_DE_NORMA']}" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.codTipoNorma}" >
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getParametricaPorIdPadre(1038)}" />
+							<p:ajax event="change" process="@this" update="txtNumeroNorma txtTipoNorma">
+							</p:ajax>
+						</h:selectOneMenu>
+					</div>
+					<div class="col-md-4">
+						<p:calendar id="txtFechaNorma" navigator="true" mask="true" yearRange="#{rangoAnios}" value="#{nomenclaturaSalarialBean.fechaNorma}" mode="popup"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" converterMessage="#{messages.DLG_FORMATO_INVALIDO}" locale="#{lenguajeBean.localeCode}" effect="slideDown"
+							pattern="#{fechaFormato}">
+							<p:ajax event="dateSelect" process="@this" update="txtNumeroNorma txtTipoNorma">
+							</p:ajax>
+						</p:calendar>
+					</div>
+					<div class="col-md-4">
+						<h:selectOneMenu id="txtNumeroNorma" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.incrementoSeleccionado.codNorma}" >
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{nomenclaturaSalarialBean.obtenerNumerosNorma(nomenclaturaSalarialBean.codTipoNorma, nomenclaturaSalarialBean.fechaNorma)}" >
+								</f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px!important">
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Justificación:" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_INCREMENTO_SALARIAL_VALOR']}"></p:outputLabel>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="log-label form-label-formularios" value="Valor porcentual:" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<p:inputText title="${titles['TTL_SELECT']} ${titles['TTL_INCREMENTO_SALARIAL_JUSTIFICACION']}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" maxlength="250" styleClass="form-control-acti-usua form-control" value="#{nomenclaturaSalarialBean.incrementoSeleccionado.justificacion}">
+							<f:validator validatorId="maxByteLengthValidator" />
+						</p:inputText>
+					</div>
+					<div class="col-md-4">
+						<p:inputText id="txtIncreValor" title="${titles['TTL_SELECT']} ${titles['TTL_INCREMENTO_SALARIAL_VALOR']}" styleClass="form-control-acti-usua form-control" value="#{nomenclaturaSalarialBean.incrementoSeleccionado.valor}" >
+						</p:inputText>
+						<p:message for="txtIncreValor" display="text" />
+					</div>
+					<div class="col-md-4">
+						<p:selectOneRadio title="${titles['TTL_SELECT']} ${titles['TTL_INCREMENTO_SALARIAL_TIPO_INCREMENTO']}" value="#{nomenclaturaSalarialBean.incrementoSeleccionado.esincrementoPorcentual}" >
+							<f:selectItem itemLabel="Porcentual" itemValue="1" />
+							<f:selectItem itemLabel="Valor" itemValue="0" />
+						</p:selectOneRadio>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px!important; margin-bottom: 20px;">
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-2">
+						<p:commandButton styleClass="btn btn-primary" value="Calcular" actionListener="#{nomenclaturaSalarialBean.guardarIncrementoEscala()}" proccess="formularioEscalaSalarial" update="formularioEscalaSalarial" > 
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton styleClass="btn btn-primary" value="Guardar">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton styleClass="btn btn-primary" value="Exportar">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+						<p:commandButton styleClass="btn btn-default" value="Cancelar">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2">
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+
+</ui:composition>
+</html>

@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:form id="formCrearDenominacion"> 
+	<p:dialog widgetVar="wdgtNuevaDenominacion" width="680px" height="360px"
+		id="dlgNuevaDenominacion" modal="true" draggable="false" closable="false"
+		resizable="false" showHeader="false">
+		<br />
+		<div class="modal-header" align="center">
+			<h4 class="modal-title">• #{titles.TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_NUEVO} •</h4>
+		</div>
+		<br />
+		<p:outputPanel id="panelNuevaDenominacion">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p:outputLabel for="txtNivelJerarquico"
+							value="${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu id="txtNivelJerarquico"
+							title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}"
+							required="true"
+							filter="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua"
+							disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarDenominacion}"
+							value="#{gestionarNomenclaturaEscalaBean.denominacion.codNivelJerarquico}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getNivelJerarquico()}" />
+						</p:selectOneMenu>
+						<p:message for="txtNivelJerarquico" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel for="txtDenominacionEmpleo"
+							value="${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:selectOneMenu id="txtDenominacionEmpleo" autocomplete="false"
+							title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}"
+							filter="true"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-form-act-usua"
+							disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarDenominacion}"
+							value="#{gestionarNomenclaturaEscalaBean.denominacion.codDenominacion}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{gestionarNomenclaturaEscalaBean.getListaDenominaciones()}" />
+							<p:ajax event="change" update="txtGradoEmpleo"/>
+						</p:selectOneMenu>
+						<p:message for="txtDenominacionEmpleo" display="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_NOMENCLATURA_CODIGO_DENOMINACION']}:"
+								for="txtCodigoDenominacion"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="txtCodigoDenominacion" autocomplete="false"
+								title="${titles['TTL_SELECT']} ${titles['LBL_NOMENCLATURA_CODIGO_DENOMINACION']}"
+								required="true"
+								filter="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarDenominacion}"
+								value="#{gestionarNomenclaturaEscalaBean.denominacion.codCodigo}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getLstCodigoDenominacion()}" />
+							</p:selectOneMenu>							
+							<p:message for="txtCodigoDenominacion" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel for="txtGradoEmpleo"
+									value="${titles['LBL_CT_GRADO_EMPLEO']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:selectOneMenu id="txtGradoEmpleo"
+									title="${titles['TTL_SELECT']} ${titles['LBL_CT_GRADO_EMPLEO']}"
+									filter="true"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									styleClass="form-control-form-act-usua"
+									disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarDenominacion}"
+									value="#{gestionarNomenclaturaEscalaBean.denominacion.codGrado}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{gestionarNomenclaturaEscalaBean.getGradosClasificacionOrganica()}" />
+								</p:selectOneMenu>
+								<p:message for="txtGradoEmpleo" display="text" />
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel value="#{titles.LBL_NOMENCLATURA_ASIGNACION}:"
+								for="txtAsigSalarial" styleClass="log-label form-label-formularios" />
+							<p:inputNumber id="txtAsigSalarial"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_NOMENCLATURA_ASIGNACION']} ${titles['TTL_TIPO_NUMERICO']}. ${titles['LBL_DATOS_OIR2']}"
+								value="#{gestionarNomenclaturaEscalaBean.denominacion.asignacionSalarial}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarDenominacion}"
+								emptyValue="sign" symbol="$" decimalSeparator=","
+								thousandSeparator="."
+								validatorMessage="${titles['LBL_FORMAT_INVALID']}"
+								decimalPlaces="2">
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+							</p:inputNumber>
+							<p:message for="txtAsigSalarial" display="text" />
+						</div>
+						<div class="col-md-6"/>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles['TTL_ADD']}"
+						styleClass="btn btn-primary"
+						update="panelNuevaDenominacion formCrearNomenclatura:dtDenominacionesNomenclatura"
+						process="panelNuevaDenominacion"
+						disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarDenominacion}"
+						actionListener="#{gestionarNomenclaturaEscalaBean.guardarDenominacionesArreglo()}"
+						style = "padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;"
+						onstart="PF('dlgCargaNomenclatura').show()"
+                        oncomplete="PF('dlgCargaNomenclatura').hide()"
+                        onsuccess="PF('dlgCargaNomenclatura').hide()" />
+	
+					<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+						styleClass="btn btn-default"
+						update="panelNuevaDenominacion"
+						actionListener="#{gestionarNomenclaturaEscalaBean.cancelarDenominacion()}"
+						onclick="PF('wdgtNuevaDenominacion').hide()"
+						onstart="PF('dlgCargaNomenclatura').show()"
+		                oncomplete="PF('dlgCargaNomenclatura').hide()"
+		                onsuccess="PF('dlgCargaNomenclatura').hide()" 
+						style = "padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;"/>
+				</div>
+			</div>
+			<br />	<br />	<br />
+		</p:outputPanel>
+		
+	</p:dialog>
+
+	<p:dialog widgetVar="dlgDetalleOtraAsignacionSalarial" width="680px"
+		height="350px" id="dlgDetalleOtraAsignacionSalarial" modal="true"
+		draggable="false" resizable="false" showHeader="false"
+		closable="false">
+		<br />
+		<div class="modal-header" align="center">
+			<h4 class="modal-title">•
+				#{titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES} •</h4>
+		</div>
+		<br />
+		<p:outputPanel id="panelDetalleOtraAsignacion">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p:outputLabel for="txtOtraAsignacionSalarial"
+							value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_ASIGNACION']}:"
+							styleClass="log-label form-label-formularios" />
+						<h:selectOneMenu id="txtOtraAsignacionSalarial"
+							title="${titles['TTL_SELECT']} ${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_ASIGNACION']}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-acti-usua"
+							value="#{gestionarNomenclaturaEscalaBean.asignacionSalarialProcesar.otrasAsignaciones}"
+							disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarOtraAsignacion}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getTipoIngreso()}" />
+						</h:selectOneMenu>
+						<p:message for="txtOtraAsignacionSalarial" display="text" />
+					</div>
+					<br /> <br />
+					<div class="col-md-6">
+						<p:selectOneRadio id="oneRadioOpcionesIncremento"
+							disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarOtraAsignacion}"
+							value="#{gestionarNomenclaturaEscalaBean.strOpcionOtraAsignacion}">
+							<f:selectItem itemLabel="%" itemValue="0" />
+							<f:selectItem itemLabel="Valor" itemValue="1" />
+							<p:ajax event="change"
+								listener="#{gestionarNomenclaturaEscalaBean.handleOpcionOtraAsignacion}" />
+						</p:selectOneRadio>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p:outputLabel
+							value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_VALOR']}:"
+							styleClass="log-label form-label-formularios"
+							for="numberValorOtraAsignacion" />
+						<p:inputNumber id="numberValorOtraAsignacion"
+							disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarOtraAsignacion}"
+							decimalSeparator="," thousandSeparator="." decimalPlaces="2"
+							title="${titles['TTL_INGRESE']} ${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_VALOR']}  
+									   ${titles['TTL_TIPO_NUMERICO']}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+							value="#{gestionarNomenclaturaEscalaBean.lngValorOtraAsignacion}"
+							converter="javax.faces.BigDecimal"
+							converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+							<p:keyFilter mask="num"></p:keyFilter>
+							<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+						</p:inputNumber>
+						<p:message for="numberValorOtraAsignacion" display="text" />
+					</div>
+					<div class="col-md-6">
+						<br /> <br />
+						<p:commandButton id="btnCalcularOtraAsignacion"
+							value="#{titles.TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_CALCULAR}"
+							styleClass="btn btn-primary"
+							process="panelDetalleOtraAsignacion"
+							actionListener="#{gestionarNomenclaturaEscalaBean.calcularOtraAsignacionSalarial()}"
+							update="numberValorTotalOtraAsignacion"
+							disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarOtraAsignacion}">
+						</p:commandButton>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p:outputLabel
+							value="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_TOTAL']}:"
+							styleClass="log-label form-label-formularios"
+							for="numberValorTotalOtraAsignacion" />
+						<p:inputNumber id="numberValorTotalOtraAsignacion"
+							decimalSeparator="," thousandSeparator="." decimalPlaces="2"
+							title="${titles['TTL_INGRESE']} ${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES_TOTAL']}  
+									                 		${titles['TTL_TIPO_NUMERICO']}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+							value="#{gestionarNomenclaturaEscalaBean.asignacionSalarialProcesar.valorAsignacion}"
+							converter="javax.faces.BigDecimal"
+							converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}"
+							disabled="true">
+							<p:keyFilter mask="num"></p:keyFilter>
+							<f:validateDoubleRange minimum="1" maximum="999999999999999" />
+						</p:inputNumber>
+						<p:message for="numberValorTotalOtraAsignacion" display="text" />
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:commandButton value="${titles['TTL_SAVE']}"
+						styleClass="btn btn-primary"
+						style="padding-left: 2.5%!important; padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;"
+						process="panelDetalleOtraAsignacion"
+						actionListener="#{gestionarNomenclaturaEscalaBean.agregarOtraAsignacionLista()}"
+						update="formCrearNomenclatura panelDetalleOtraAsignacion"
+						disabled= "#{gestionarNomenclaturaEscalaBean.blnAccionConsultarOtraAsignacion}" />
+					<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+						actionListener="#{gestionarNomenclaturaEscalaBean.cancelarCreacionOtraAsignacion()}"
+						update="dlgDetalleOtraAsignacionSalarial"
+						styleClass="btn btn-default" resetValues="true"
+						style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+				</div>
+			</div>
+			<br />
+		</p:outputPanel>
+	</p:dialog>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,584 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core_1_1"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:rich="http://richfaces.org/rich">
+	<h:form
+		id="frmCuentasAhorros"
+		rendered="true">
+		<div
+			class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div class="row">
+				<div
+					class="col-md-12"
+					style="text-align: center;">
+					<p:outputLabel
+						value="#{titles.TTL_TITULO_CUENTAS_CORRIENTES}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12" style="text-align: right;">
+						<div style="padding-right: 1%; display: inline-block">
+							<p:commandButton
+								title="#{titles.LBL_ADD_NEW}"
+								styleClass="btn btn-transparent"
+							    icon="fa fa-fw fa-plus-circle"
+								id="txtAgreNuevo"
+								disabled="#{bienesRentasBean.sinCuentas}"
+								process="@this"
+								value="#{titles.LBL_ADD_NEW}"
+								update="frmCuentasAhorros"
+								actionListener="#{bienesRentasBean.agregarNuevaCuenta()}"
+								oncomplete="window.location.href='#tabViewBienesRentas:frmCuentasAhorros:frmRegistroCuenta'"
+								onclick="window.location.href='#registroCuenta';"
+								 />
+						</div>
+					</div>
+					<div
+						class="col-md-6"
+						align="right">
+						
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12" descr="aligVal5">
+						<p:dataTable
+							id="cuentasTable"
+							var="cuenta"
+							value="#{bienesRentasBean.cuentas}"
+                           	currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_ENTIDAD_FINANCIERA']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{cuenta.entidad}">
+								<h:outputText value="#{cuenta.entidad}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_TIPO_CUENTA']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{cuenta.codTipoCuenta}">
+								<h:outputText value="#{bienesRentasBean.obtenerNombreParametrica(cuenta.codTipoCuenta)}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_NUMBER_ACCOUNT']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{cuenta.numeroCuenta}">
+								<h:outputText value="#{cuenta.numeroCuenta}" />
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_SEDE_CUENTA']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{cuenta.sedeCuenta}">
+								<h:outputText value="#{cuenta.sedeCuenta}"/>
+							</p:column>
+							<p:column
+								headerText="${titles['TTL_BIENES_RENTAS_SALDO']}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{cuenta.saldo}">
+								<h:outputText value="#{cuenta.saldo}">
+								<f:convertNumber
+									currencySymbol="$"
+									type="currency"
+									locale="es_CO"
+									groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+							<p:column
+								headerText="${titles['LBL_ACCIONES']}"
+								style="word-wrap: break-word!important; text-align:center!important;">
+								<!-- 
+								<p:commandButton
+									id="btnVerCuenta"
+									title="#{titles.TTL_BR_VISUALIZAR}"
+									icon="icon-view"
+									process="@this"
+									styleClass="icon-btn"
+									actionListener="#{bienesRentasBean.verCuenta(cuenta)}" 
+									/>	
+								 -->							
+								<p:commandButton
+									id="btnActua"
+									title="#{titles.TTL_EDIT}"
+									icon="icon-edit"
+									process="@this"
+									styleClass="icon-btn"
+									onclick="$('#dlgMod').modal('show')"
+									actionListener="#{bienesRentasBean.confirmarEditarCuenta(cuenta)}" 
+									/>
+								<p:commandButton
+									id="btnElimin"
+									title="#{titles.TTL_DELETE}"
+									icon="icon-delete"
+									process="@this"
+									styleClass="icon-btn"
+									onclick="$('#dlgElimin').modal('show')"
+									actionListener="#{bienesRentasBean.confirmarEliminadoCuenta(cuenta)}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<div
+				class="row"
+				align="center">
+				<div
+					class="col-md-12"
+					style="margin-top: 1.5%;">
+					<h:outputText
+						styleClass="log-label form-label-formularios"
+						value="#{titles.TTL_BIENES_RENTAS_NO_TENGO_CUENTAS}"
+						style="color: #00537B" />
+					<p:spacer width="5" />
+					<p:selectBooleanCheckbox
+						id="chkSinCuentas"
+						value="#{bienesRentasBean.sinCuentas}">
+						<p:ajax listener="#{bienesRentasBean.guardarSinCuentas}" update="tabViewBienesRentas:frmCuentasAhorros" />
+					</p:selectBooleanCheckbox>
+				</div>
+			</div>
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton disabled="#{bienesRentasBean.btnGuardarCuentasDeshabilitado}"
+						title="#{bienesRentasBean.btnGuardarCuentasMensaje}"
+						id="btnContinuar"
+						process="@this"
+						update="tabViewBienesRentas"
+						actionListener="#{bienesRentasBean.guardadoParcialCuentas()}"
+						styleClass="btn btn-primary"
+						style="font-size:1.5em!important; padding-top:0!important;"
+						value="#{titles.TTL_BIENES_RENTAS_GUARDAR_CONTINUAR}" />
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton
+						type="button"
+						styleClass="btn btn-default"
+						style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+						id="btnCan"
+						value="#{titles.TTL_CANCEL}"
+						process="frmBienesPatrimoniales"
+						onclick="$('#dlgCancelar').modal('show')" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<div id="registroCuenta"></div>
+		<p:panel
+			id="frmRegistroCuenta"
+			visible="#{bienesRentasBean.lbMostrarFormulario}">
+			<div
+				class="row row-background-white"
+				style="margin-left: 0px !important;">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_BIENES_RENTAS_CUENTAS_FORM']}</span> <br /> <br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_BR_CUENTAS_ENTIDAD_FINANCIERA']}: "
+								for="txtEntiFina"
+								styleClass="log-label form-label-formularios display-block" />
+							<p:inputText
+								id="txtEntiFina"
+								required="true"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_BR_CUENTAS_ENTIDAD_FINANCIERA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{bienesRentasBean.cuentaSeleccionada.entidad}"
+								maxlength="50"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message
+								for="txtEntiFina"
+								display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_BR_CUENTAS_TIPO']}"
+								for="cmbTipoCuenta"
+								styleClass="display-block log-label form-label-formularios" />
+							<p:selectOneMenu
+								id="cmbTipoCuenta"
+								required="true"
+								filter="true" filterMatchMode ="contains"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_BR_CUENTAS_TIPO']}"
+								value="#{bienesRentasBean.cuentaSeleccionada.codTipoCuenta}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}">
+								<f:selectItem
+									itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tipoCuenta}" />
+							</p:selectOneMenu>
+							<p:message
+								for="cmbTipoCuenta"
+								display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_BR_CUENTAS_NUMERO']}:"
+								for="txtNumCuenta"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText
+								id="txtNumCuenta"
+								required="true"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_BR_CUENTAS_NUMERO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{bienesRentasBean.cuentaSeleccionada.numeroCuenta}"
+								maxlength="30"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message
+								for="txtNumCuenta"
+								display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_BR_CUENTAS_SEDE']}"
+								for="txtSedeCue"
+								styleClass="log-label form-label-formularios display-block" />
+							<p:inputText
+								id="txtSedeCue"
+								required="true"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_BR_CUENTAS_SEDE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{bienesRentasBean.cuentaSeleccionada.sedeCuenta}"
+								maxlength="50"
+								styleClass="form-control-acti-usua form-control"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message
+								for="txtSedeCue"
+								display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_BR_CUENTAS_SALDO']}:"
+								for="txtNumCuentaSaldo"
+								styleClass="log-label form-label-formularios display-block" />
+														
+								<p:inputNumber
+								id="txtNumCuentaSaldo"
+								required="true"
+								converterMessage="El valor debe ser numérico y la parte decimal separada por punto"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								validatorMessage="Debe ingresar un valor entre 0.1 y 9999999999999999"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_VALOR444']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{bienesRentasBean.cuentaSeleccionada.saldo}"
+								onkeyup="return validateKey(event);"
+								onkeydown="return validateKey(event);"
+								onkeypress="return validateKey(event);"		
+								symbol="$ "
+								decimalSeparator=","
+								thousandSeparator="."
+								decimalPlaces="2"
+								disabled="#{!bienesRentasBean.lbEditarFormulario}">
+								<f:validateDoubleRange minimum="0.1" maximum="9999999999999999" />
+							</p:inputNumber>
+							<p:keyFilter for="txtNumCuentaSaldo" mask="num"/>								
+								
+								
+								<p:message
+								for="txtNumCuentaSaldo"
+								display="text" />
+						</div>
+					</div>
+				</div>
+				<br /> <br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton
+							value="${titles['TTL_BR_BTN_ADICIONAR']}"
+							styleClass="btn btn-primary"
+							style="font-size:1.5em!important; padding-top:0!important;"
+							process="frmRegistroCuenta"
+							update="frmCuentasAhorros"
+							actionListener="#{bienesRentasBean.guardarCuenta()}" 
+							disabled="#{!bienesRentasBean.lbEditarFormulario}"/>
+					</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this"
+							update="frmCuentasAhorros"
+							actionListener="#{bienesRentasBean.limpiarCuentas()}"  
+							title="#{bienesRentasBean.strToolTipBtnLimpiar}"
+							disabled="#{!bienesRentasBean.lbEditarFormulario}">
+							<p:resetInput
+										target="tabViewBienesRentas:frmCuentasAhorros:frmRegistroCuenta" />								
+ 					    </p:commandButton>
+					</div>						
+					<div class="col-md-3"></div>
+				</div>
+			</div>
+		</p:panel>
+		<br />
+	</h:form>
+	<div
+		class="modal fade"
+		id="dialogRespuCuentas"
+		role="dialog" 
+		data-backdrop="static" 
+		data-keyboard="false" >
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel 
+									value="${titles['TTL_BR_BORRAR_TODO']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnDeshabiTablaCuentas"
+								value="${titles['TTL_OK']}"
+								process="@this"
+								styleClass="btn btn-primary"
+								update="tabViewBienesRentas:frmCuentasAhorros"
+								actionListener="#{bienesRentasBean.limpiarFormCuentas()}"
+								onclick="$('#dialogRespuCuentas').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_CANCEL']}"
+								process="@this"
+								styleClass="btn btn-default"
+								actionListener="#{bienesRentasBean.cancelarEliminacionTablaCuentas()}"
+								update="tabViewBienesRentas:frmCuentasAhorros"
+								onclick="$('#dialogRespuCuentas').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dlgInformation"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12 text-center dlg-men-info">
+							<p:messages
+								id="messages"
+								showDetail="true">
+							</p:messages>
+						</div>
+						<div class="col-md-12 text-center">
+							<p:commandButton
+								type="button"
+								value="Continuar"
+								styleClass="btn btn-default"
+								onclick="$('#dlgInformation').modal('hide')" />
+						</div>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dlgMod"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['MSG_CONF_EDITAR_REG']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnEd"
+								update="frmCuentasAhorros"
+								value="Si"
+								actionListener="#{bienesRentasBean.actualizarCuenta()}"
+								process="@this"
+								styleClass="btn btn-primary"
+								
+								onclick="$('#dlgMod').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="No"
+								styleClass="btn btn-default"
+								onclick="$('#dlgMod').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dlgElimin"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${titles['LBL_BR_ELIMINA_CUENTA']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnEl"
+								value="${titles['TTL_YES']}"
+								process="@this"
+								update="frmCuentasAhorros"
+								styleClass="btn btn-primary"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+								actionListener="#{bienesRentasBean.eliminarCuenta()}"
+								onclick="$('#dlgElimin').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_NO']}"
+								styleClass="btn btn-default"
+								style="padding-left:45%!important; padding-right:45%!important; ont-size:1.5em!important; padding-top:0!important;"
+								onclick="$('#dlgElimin').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal cancelar -->
+	<div
+		class="modal fade"
+		id="dlgCancelar"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_DIALOGO_CANCELAR']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								type="button"
+								value="${titles['TTL_YES']}"
+								
+								process="@this"
+								styleClass="btn btn-primary"
+								onclick="location.href='../index.xhtml';" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_NO']}"
+								styleClass="btn btn-default"
+								onclick="$('#dlgCancelar').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

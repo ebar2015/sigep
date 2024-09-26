@@ -1,0 +1,290 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_PAIS']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_PAIS} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="nombrePais" maxlength="255"
+						placeholder=" ${titles['LBL_PARAMETRICA_PAIS_NOMBRE']}"
+						title="${titles['TTL_INGRESE']} ${titles['LBL_PAIS']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						completeMethod="#{paisBean.listarPaisesFiltro}"
+						value="#{paisBean.strBusquedaPais}">
+						<p:ajax event="itemSelect" listener="#{paisBean.filtrarPais()}"
+							update ="dataTablePais"/>
+					</p:autoComplete>
+					<p:message for="nombrePais" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonSearchPais" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{paisBean.filtrarPais()}"
+						process="@this nombrePais"
+						update ="dataTablePais"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_PAIS}</span> <br /> <br />
+
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearPais" process="@this"
+					update="panelPais" actionListener="#{paisBean.crearPais()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelPais';"/>
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTablePais" paginator="true"
+					reflow="true" rowIndexVar="rowIndex"
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+				 	value="#{paisBean.lstPaises}"
+					var="dataPais"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					<p:column headerText="${titles['LBL_PARAMETRICA_PAIS_NOMBRE']}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataPais.nombrePais}"
+						filterBy="#{dataPais.nombrePais}"  filterMatchMode="contains">
+						<h:outputText value="#{dataPais.nombrePais}" />
+					</p:column>
+					<p:column headerText="#{titles.TTL_SIGLA}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataPais.sigla}"
+						filterBy="#{dataPais.sigla}"  filterMatchMode="contains">
+						<h:outputText value="#{dataPais.sigla}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_INDICATIVO} #{titles.LBL_PAIS}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataPais.indicativoPais}"
+						filterBy="#{dataPais.indicativoPais}"  filterMatchMode="contains">
+						<h:outputText value="#{dataPais.indicativoPais}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_PARAMETRICA_PAIS_URL_BANDERA}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataPais.banderaUrl}"
+						filterBy="#{dataPais.banderaUrl}"  filterMatchMode="contains">
+						<h:outputText value="#{dataPais.banderaUrl}" />
+					</p:column>
+					<p:column headerText="#{titles.LBL_PARAMETRICA_PAIS_GENTILICIO}"
+						style="word-wrap: break-word!important;"
+						sortBy="#{dataPais.gentilicio}"
+						filterBy="#{dataPais.gentilicio}"  filterMatchMode="contains">
+						<h:outputText value="#{dataPais.gentilicio}" />
+					</p:column>
+					<p:column headerText="#{titles.TTL_ACTIVO}"
+						style="word-wrap: break-word!important;text-align: center!important;"
+						sortBy="#{dataPais.flgActivo}">
+						<p:selectBooleanCheckbox
+							value="#{dataPais.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarPais" title="${titles['TTL_EDIT']}"
+							icon="icon-edit" styleClass="icon-btn btn-view-data"
+							process="@this" update="frmPrincipal:panelPais"
+							immediate="true"
+							actionListener="#{paisBean.modificarPais(dataPais)}"
+                    		oncomplete="window.location.href='#frmPrincipal:panelPais';">
+						</p:commandButton>
+						<p:commandButton id="btnVerPais"
+							actionListener="#{paisBean.consultarPais(dataPais)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view" styleClass="icon-btn"
+							process="@this" update="frmPrincipal:panelPais"
+                    		oncomplete="window.location.href='#frmPrincipal:panelPais';">
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+							rendered="false"
+							id="btnAdmonEliminarNomenclatura" styleClass="icon-btn" process="@this"
+							actionListener="#{paisBean.eliminarPais()}" update="frmPrincipal:dlgConfirmarPais">
+							<f:setPropertyActionListener value="#{dataPais}"
+								target="#{paisBean.infoPais}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelPais">
+			<p:spacer height="2" />
+			<p:panel id="subpanelPais" widgetVar="subPanelPais"
+				rendered="#{paisBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<p:spacer height="3" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{paisBean.strAccionRealizada}</span>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_PAIS_NOMBRE}"
+								styleClass="log-label form-label-formularios"
+								for="txtNombrePais" />
+							<p:inputText id="txtNombrePais" required="true"
+								value="#{paisBean.infoPais.nombrePais}"
+								disabled="#{paisBean.blnConsultarPais}"
+								maxlength="50"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+								<f:validator validatorId="maxByteLengthValidator" />
+								<f:validator validatorId="textAlfanumericoTildeValidator" />
+							</p:inputText>
+							<p:message for="txtNombrePais" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.LBL_INDICATIVO} #{titles.LBL_PAIS}"
+								styleClass="log-label form-label-formularios"
+								for="txtIndicativoPais" />
+							<p:inputText id="txtIndicativoPais" required="true"
+								value="#{paisBean.infoPais.indicativoPais}"
+								disabled="#{paisBean.blnConsultarPais}"
+								onkeypress="return numbervalida(event)"
+								maxlength="8"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+								<f:validator validatorId="numberValidator" />
+							</p:inputText>
+							<p:message for="txtIndicativoPais" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.TTL_SIGLA}"
+								styleClass="log-label form-label-formularios" for="txtSigla" />
+							<p:inputText id="txtSigla" required="true" maxlength="3"
+								value="#{paisBean.infoPais.sigla}"
+								disabled="#{paisBean.blnConsultarPais}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}" />
+							<p:message for="txtSigla" display="text" />
+
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_PAIS_URL_BANDERA}"
+								styleClass="log-label form-label-formularios" for="txtBandera" />
+							<p:inputText id="txtBandera" 
+								value="#{paisBean.infoPais.banderaUrl}"
+								disabled="#{paisBean.blnConsultarPais}" maxlength="255">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtBandera" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_PAIS_GENTILICIO}"
+								styleClass="log-label form-label-formularios" for="txtBandera" />
+							<p:inputText id="txtGentilicio" 
+								value="#{paisBean.infoPais.gentilicio}"
+								disabled="#{paisBean.blnConsultarPais}"  maxlength="50">
+								<f:validator validatorId="maxByteLengthValidator" />
+								<f:validator validatorId="textAlfanumericoTildeValidator" />
+							</p:inputText>
+							<p:message for="txtGentilicio" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoPais"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true" id="activoPais"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{paisBean.blnConsultarPais}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{paisBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoPais" display="text" />
+						</div>
+					</div>
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							rendered="#{!paisBean.blnConsultarPais}"
+							styleClass="btn btn-primary"
+							disabled="#{paisBean.blnConsultarPais}" update="panelPais dataTablePais nombrePais"
+							actionListener="#{paisBean.guardarPais()}"
+							process="frmPrincipal:panelPais"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!paisBean.blnConsultarPais}"
+							styleClass="btn btn-default" update="dlgConfirmarPais"
+							actionListener="#{paisBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{paisBean.blnConsultarPais}"
+							styleClass="btn btn-primary" update="panelPais nombrePais"
+							actionListener="#{paisBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarPais" id="dlgConfirmarPais" minHeight="300"
+			modal="true" draggable="false" closable="false"
+			resizable="false" responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center>
+					<h5>#{paisBean.strMensaje}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary" update="panelPais dataTablePais"
+						actionListener="#{paisBean.procesarRespuestaConfirmacion}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlgConfirmarPais').hide();" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarPais').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+
+	<script type="text/javascript">
+		function mayus(e) {
+			e.value = e.value.toUpperCase();
+		}
+	</script>
+
+</ui:composition>

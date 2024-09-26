@@ -1,0 +1,1604 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:metadata>
+		<f:viewParam name="id" value="#{educacionFormalBean.id}" />
+		<f:viewParam name="dialog" value="#{educacionFormalBean.dialog}" />
+		<f:event type="preRenderView"
+			listener="#{educacionFormalBean.retrieve}" />
+	</f:metadata>
+	<p:panel id="panelGeneral" style="background: transparent !important;">
+		<p:tabView id="groupView" 
+		           style="background: transparent !important;"
+				   activeIndex="#{datosPersonalesBean.tabEducacion}" 
+				   cache="false"
+				   tabindex="#{datosPersonalesBean.tabEducacion}"
+				   onTabShow="callRemoteMethod();">
+			<p:ajax event="tabChange" 
+		        listener="#{datosPersonalesBean.onTabChange}"
+		        update="groupView"/>				    
+			<p:tab id="tabEdFormal" title="${titles['LBL_FORMACION_ACADEMICA']}"
+				disabled="#{datosPersonalesBean.editado and datosPersonalesBean.tabEducacion != 0}">
+				<p:panel id="panelEdFormal"
+					style="background: transparent !important;">
+					<div class="row-background-white row">
+						<br />
+						<div class="col-md-12" style="text-align: right;">
+							<div style="padding-right: 1%; display: inline-block">
+								<p:commandButton id="btnAgregarEducacionFormalHV"
+									update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida"
+									actionListener="#{educacionFormalBean.mostrarFormularioEducacionFormal}"
+									styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle"
+									value="${titles['LBL_ADD_NEW']}" process="@this"
+									title="${titles['TTL_ADD']} ${titles['TTL_AGREGAR_FORMACION_ACADEMICA']}"
+									immediate="true"
+									onclick="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal'"
+									oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal';
+									            datosModificados(1);"
+									rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<p:resetInput
+										target="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal" />
+								</p:commandButton>
+							</div>
+						</div>
+						<div class="col-md-12"
+							style="padding-left: 2% !important; padding-right: 2% !important;">
+							<p:dataTable id="dataTableEducacionFormal" paginator="true"
+								rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}" 
+								var="dataEd"
+								reflow="true"
+								value="#{educacionFormalBean.listaEducacionFormalPorPersona}"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+								
+								<p:column sortBy="#{dataEd.nombreInstitucionAcademica}">
+									<f:facet name="header"><h:outputText value="${titles['TTL_APROBAR_HV_EDU_COL1']}" /> </f:facet>
+									<h:outputText value="#{dataEd.nombreInstitucionAcademica != null ? dataEd.nombreInstitucionAcademica : 'SIN DATO' }" />
+								</p:column>
+								<c:set var="valorTituloTabla" value="#{dataEd.flgFinalizado ? (dataEd.nivelEducativo == 'EDUCACION MEDIA' ? 'BACHILLER' : dataEd.nivelEducativo ) : 'SIN DATO' }" />
+								
+								<p:column sortBy="#{dataEd.tituloObtenido}">
+									<f:facet name="header"><h:outputText value="${titles['TTL_APROBAR_HV_EDU_COL2']}" /> </f:facet>
+									<h:outputText value="#{dataEd.tituloObtenido !=null  ? dataEd.tituloObtenido : valorTituloTabla }" />
+								</p:column>
+								
+								<p:column sortBy="#{dataEd.nombrePais}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_PAIS']}" /></f:facet>
+									<h:outputText value="#{dataEd.nombrePais}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataEd.fechaFinalizacion}" style="word-wrap: break-word!important; text-align:center!important;">
+									<f:facet name="header"><h:outputText value="${titles['TTL_APROBAR_HV_EDU_COL7']}" /></f:facet>
+									<h:outputText value="#{dataEd.fechaFinalizacion}">
+										<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+									</h:outputText>
+								</p:column>
+								
+								<p:column sortBy="#{dataEd.fechaGrado}" style="word-wrap: break-word!important; text-align:center!important;">
+									<f:facet name="header"><h:outputText value="${titles['TTL_APROBAR_HV_EDU_COL8']}" /></f:facet>
+									<h:outputText value="#{dataEd.fechaGrado}">
+										<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+									</h:outputText>
+								</p:column>
+								
+								<p:column sortBy="#{dataEd.flgValidadoTarjetaProfesional}" style="text-align: center;">
+									<f:facet name="header"><h:outputText value="${titles['LBL_VERIFICADO_TP']}" /></f:facet>
+									<p:selectBooleanCheckbox value="#{dataEd.flgValidadoTarjetaProfesional}" disabled="true" />
+								</p:column>
+								
+								
+								<p:column sortBy="#{dataEd.flgValidadoRrhh}" style="text-align: center;">
+									<f:facet name="header"><h:outputText value="${titles['LBL_VERIFICADO_EF']}" /></f:facet>
+									<p:selectBooleanCheckbox value="#{dataEd.flgValidadoRrhh}" disabled="true" />
+								</p:column>
+													
+								<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+									style="opacity: 1!important; text-align:center!important;">
+									<p:commandButton id="btnVerFormacionAcademicaHV"
+										title="${titles['BTN_VER']}"
+										action="#{educacionFormalBean.verDetalleEducacionFormal(dataEd, true)}"
+										icon="icon-view" process="@this"
+										update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal'"
+										styleClass="icon-btn" />
+									<p:commandButton id="btnEditarFormacionAcademicaHV"
+										title="${titles['BTN_ACTUALIZAR']}"
+										disabled="#{dataEd.flgValidadoRrhh and !educacionFormalBean.flgValidRolPermission}"
+										action="#{educacionFormalBean.verDetalleEducacionFormal(dataEd, false)}"
+										icon="icon-edit" process="@this"
+										update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevaEdFormal';datosModificados(1);"
+										styleClass="icon-btn"
+										rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									</p:commandButton>
+									<p:commandButton id="btnEliminarFormacionAcademicaHV"
+										title="${titles['BTN_ELIMINAR']}" process="@this"
+										icon="icon-delete" disabled="#{dataEd.flgValidadoRrhh}"
+										onclick="$('#eliminarEducacionFormal').modal('show')"
+										styleClass="icon-btn"
+										rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<f:setPropertyActionListener value="#{dataEd}"
+											target="#{educacionFormalBean.educacionFormal}" />
+									</p:commandButton>
+									<c:set var="valorEduforPdf"
+										value="window.open('#{templateHojaDeVidaBean.get64(dataEd.urlTarjetaProfesional)}')" />
+									<c:set var="novalorEduforPdf"
+										value="$('#documentosAdjuntosEdFNoVisualizar').modal('show')" />
+									<p:commandButton
+										title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']} ${titles['LBL_TARJETA_PROFESIONAL']}"
+										icon="icon-open-folder" styleClass="icon-btn"
+										id="btnVerDocumentosFormacionAcademicaHV"
+										onclick="#{dataEd.urlTarjetaProfesional != null ? valorEduforPdf : novalorEduforPdf}" />
+									<c:set var="valorEduFormalforPdf"
+										value="window.open('#{templateHojaDeVidaBean.get64(dataEd.urlAnexo)}')" />
+									<p:commandButton
+										title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']} ${titles['LBL_ARCHIVO_EDUCACION_FORMAL']}"
+										icon="icon-open-folder" styleClass="icon-btn"
+										id="btnVerDocumentosEdFormalAcademicaHV"
+										onclick="#{dataEd.urlAnexo != null ? valorEduFormalforPdf : novalorEduforPdf}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<br /><br />
+					<h:panelGroup id="panelFormularioNuevaEdFormal">
+						<p:panel id="panelRenderFormEdFormal"
+							rendered="#{educacionFormalBean.habilitadoFormularioEducacion}">
+							<div class="row row-background-white">
+								<br />
+								<p:spacer height="2" />
+								<hr class="hr-style hr-style-two" />
+								<span
+									style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+									${titles['LBL_FORMACION_ACADEMICA2']} </span> <br /> <br />
+								<div class="row" align="right">
+									<div class="col-md-12">
+										<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+									</div>
+								</div>
+								<div class="row" id="fomulario_formulario">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="nvlEducativo"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_TABLA_NIVEL_EDUCATIVO']}:" />
+											<p:selectOneMenu id="nvlEducativo"
+												filter="true" filterMatchMode="contains"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												value="#{educacionFormalBean.educacionFormal.codNivelEducativo}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_TABLA_NIVEL_EDUCATIVO']}"
+												styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.nivelEducativo}" />
+												<p:ajax event="change" listener="#{educacionFormalBean.validarHabilitadoAreaYsemestre}"
+													update=" panelSemestresAprobados, nvlFormacion,
+															labelSemestresAprobados,panelProgramaAcademico, panelInstitucionEducativa,panelAreaConocimiento, panelTituloObtener" />
+											</p:selectOneMenu>
+											<p:message for="nvlEducativo" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="nvlFormacion"
+												styleClass="log-label form-label-formularios"
+												value="${titles['TTL_NIVEL_FORMACION']}:" />
+											<p:selectOneMenu id="nvlFormacion"
+												value="#{educacionFormalBean.educacionFormal.codNivelFormacion}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												filter="true" filterMatchMode="contains"
+												converterMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												title="${titles['TTL_SELECT']} ${titles['TTL_NIVEL_FORMACION']}"
+												styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems
+													value="#{webUtils.getParametricasByOrden(educacionFormalBean.educacionFormal.codNivelEducativo)}" />
+											</p:selectOneMenu>
+											<p:message for="nvlFormacion" display="text" />
+										</div>
+										<div class="col-md-4">
+											<p:outputPanel id="panelAreaConocimiento">
+												<p:panel id="subPanelAreaConocimientoLista" rendered="#{educacionFormalBean.flgNivelEducativo}">
+													<p:outputLabel for="areaConocimiento"
+														id="labelAreaConocimiento"
+														styleClass="log-label form-label-formularios"
+														value="${titles['LBL_AREA_CONOCIMIENTO']}:" />
+													<p:selectOneMenu id="areaConocimiento"
+														filter="true" filterMatchMode="contains"
+														disabled="#{!educacionFormalBean.flgNivelEducativo or educacionFormalBean.habilitadoCampo}"
+														required="#{educacionFormalBean.flgNivelEducativo}"
+														requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														converterMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														value="#{educacionFormalBean.educacionFormal.codAreaConocimiento}"
+														title="${titles['TTL_SELECT']} ${titles['LBL_AREA_CONOCIMIENTO']}"
+														styleClass="form-control-form-act-usua">
+														<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+														<f:selectItems value="#{webUtils.areaConocimiento}" />
+													</p:selectOneMenu>
+													<p:message for="areaConocimiento" display="text" />
+												</p:panel>
+												<p:panel id="subPanelAreaConocimientoAPlica" rendered="#{!educacionFormalBean.flgNivelEducativo}">
+													<p:outputLabel for="AreaConocimientoNoAplica" id="labelAreaConocimientoNoAplica"
+															styleClass="log-label form-label-formularios"
+															value="${titles['LBL_AREA_CONOCIMIENTO']}:" />
+													<p:inputText id="AreaConocimientoNoAplica"
+															value="#{educacionFormalBean.lblNoAplica}"
+															disabled="#{!educacionFormalBean.flgNivelEducativo}"
+															title="#{educacionFormalBean.lblNoAplica}" />
+												</p:panel>
+											</p:outputPanel>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="paisEdFormal"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_PAIS']}:" />
+											<p:selectOneMenu id="paisEdFormal"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												required="true"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												value="#{educacionFormalBean.educacionFormal.codPais}"
+												filter="true" filterMatchMode="contains"
+												title="${titles['TTL_SELECT']} ${titles['LBL_PAIS']}"
+												styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.pais}" />
+												<p:ajax listener="#{educacionFormalBean.validarCondicionesPais()}" 
+														update="educacionExterior, fechaValidacion,panelProgramaAcademico,panelTituloObtener, panelInstitucionEducativa" />
+											</p:selectOneMenu>
+											<p:message for="paisEdFormal" />
+										</div>
+										<div class="col-md-4">
+											<p:outputPanel id="panelInstitucionEducativa">
+												<p:panel id="subPanelInsitutucionEducativaLista" rendered="#{educacionFormalBean.flgNivelEducativo}">
+													<p:outputLabel for="institucionAcademica" id="labelIsnstitucion" 
+														styleClass="log-label form-label-formularios" value="${titles['LBL_INSTITUCION']}:" />
+													<p:autoComplete id="institucionAcademica"
+							                             value="#{educacionFormalBean.institucionEducativa}"
+							                             required="#{educacionFormalBean.flgNivelEducativo}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							                             disabled="#{educacionFormalBean.habilitadoCampo or !educacionFormalBean.flgNivelEducativo}"
+							                             converter="institucionEducativaEdFormalConverter"
+							                             var="institucionAcademicaSelect" dropdown="true" forceSelection="true"
+							                             process="@this" 
+							                             scrollable="true" scrollHeight="150" scrollwidth ="90"
+							                             itemLabel="#{institucionAcademicaSelect.nombreInstitucion}"  itemValue="#{institucionAcademicaSelect}"
+							                             completeMethod="#{educacionFormalBean.listarInsitucionEducativaFiltro}"
+							                             minQueryLength="3" maxResults="1000"
+							                             queryDelay="1000">
+							                             <p:ajax  event="itemSelect" process="institucionAcademica" update="programaAcademico" />
+								                     </p:autoComplete>
+													<p:message for="institucionAcademica" />
+												</p:panel>
+												<p:panel id="subPanelInstitucionNoAPlica" rendered="#{!educacionFormalBean.flgNivelEducativo}">
+													<p:outputLabel for="institucionNoAplica" id="labelInstitucionNoAplica"
+															styleClass="log-label form-label-formularios" value="${titles['LBL_INSTITUCION']}:" />
+													<p:inputText id="institucionNoAplica"
+															value="#{educacionFormalBean.lblNoAplica}"
+															disabled="#{!educacionFormalBean.flgNivelEducativo}"
+															title="#{educacionFormalBean.lblNoAplica}" />
+												</p:panel>
+											</p:outputPanel>
+										</div>
+										<div class="col-md-4">
+											<p:outputPanel id="panelProgramaAcademico">
+												<p:panel id="subPanelProgramaLista" rendered="#{!educacionFormalBean.blnDeshabilitarProgramaAcademico}">
+													<p:outputLabel for="programaAcademico"
+														id="labelProgramaAcademico"
+														styleClass="log-label form-label-formularios"
+														value="${titles['LBL_PROGRAMA_ACADEMICO']}:" />
+													<p:selectOneMenu id="programaAcademico" filter ="true"
+														value="#{educacionFormalBean.educacionFormal.codProgramaAcademico}"
+														disabled="#{educacionFormalBean.habilitadoCampo 
+																	or blnDeshabilitarProgramaAcademico}"
+														required="#{educacionFormalBean.flgNivelEducativo and !educacionFormalBean.blnPaisDiferenteColombia}"
+														requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														converterMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														title="${titles['TTL_SELECT']} ${titles['LBL_PROGRAMA_ACADEMICO']}"
+														styleClass="form-control-form-act-usua"
+														filterMatchMode="contains">
+														<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="" />
+														<f:selectItems
+															value="#{webUtils.getProgramaAcademicoWPrograma(educacionFormalBean.institucionEducativa.codInstitucionEducativa)}" />
+														<p:ajax event="change" process="programaAcademico"
+															update="tituloObtenido" />
+													</p:selectOneMenu>
+													<p:message for="programaAcademico" />
+												</p:panel>
+												<p:panel id="subPanelProgramaNoAPlica" rendered="#{educacionFormalBean.blnDeshabilitarProgramaAcademico}">
+													<p:outputLabel for="programaNoAplica" id="labelProgramaNoAplica"
+															styleClass="log-label form-label-formularios"
+															value="${titles['LBL_PROGRAMA_ACADEMICO']}:" />
+													<p:inputText id="programaNoAplica"
+															value="#{educacionFormalBean.lblNoAplica}"
+															disabled="#{educacionFormalBean.blnDeshabilitarProgramaAcademico}"
+															title="#{educacionFormalBean.lblNoAplica}" />
+												</p:panel>
+											</p:outputPanel>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputPanel id="panelTituloObtener">
+												<p:panel id="subPanelTituloObtenerLista" rendered="#{!educacionFormalBean.blnDeshabilitarTituloObtener}">
+													<p:outputLabel for="tituloObtenido"
+														styleClass="log-label form-label-formularios"
+														value="${titles['LBL_TITULO_OBTENIDO']}:" />
+													<p:selectOneMenu id="tituloObtenido" filter ="true"
+														value="#{educacionFormalBean.educacionFormal.codTituloObtenido}"
+														disabled="#{educacionFormalBean.habilitadoCampo}"
+														required="true"
+														requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														converterMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														title="${titles['TTL_SELECT']} ${titles['LBL_TITULO_OBTENIDO']}"
+														styleClass="form-control-form-act-usua"
+														filterMatchMode="contains">
+														<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="" />
+														<f:selectItems value="#{webUtils.getTituloAcademico(educacionFormalBean.educacionFormal.codProgramaAcademico)}" />
+													</p:selectOneMenu>
+													<p:message for="tituloObtenido" />
+												</p:panel>
+												<p:panel id="subPanelTituloObtenerOtrosValores" rendered="#{educacionFormalBean.blnDeshabilitarTituloObtener}">
+													<p:outputLabel for="tituloOtros" id="labelTituloOtros"
+															styleClass="log-label form-label-formularios"
+															value="${titles['LBL_TITULO_OBTENIDO']}:" />
+													<p:inputText id="tituloOtros" value="#{educacionFormalBean.strMensajeTituloObtenido}"
+															disabled="true" title="#{educacionFormalBean.lblNoAplica}" />
+												</p:panel>
+											</p:outputPanel>
+										</div>
+										<div class="col-md-4">
+										<p:outputPanel id="panelSemestresAprobados">
+												<p:panel id="subPanelSemestresLista" rendered="#{educacionFormalBean.flgNivelEducativo}">
+													<p:outputLabel for="semestresAprobados"
+														id="labelSemestresAprobados"
+														styleClass="log-label form-label-formularios"
+														value="${titles['LBL_SEMESTRES_APROBADOS']}:" />
+													<h:selectOneMenu id="semestresAprobados"
+														disabled="#{!educacionFormalBean.flgNivelEducativo or educacionFormalBean.habilitadoCampo}"
+														value="#{educacionFormalBean.educacionFormal.semestresAprobado}"
+														required="#{educacionFormalBean.flgNivelEducativo}"
+														requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+														title="${titles['TTL_SELECT']} ${titles['LBL_SEMESTRES_APROBADOS']}"
+														styleClass="form-control-form-act-usua">
+														<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+														<f:selectItem itemLabel="1" itemValue="1" />
+														<f:selectItem itemLabel="2" itemValue="2" />
+														<f:selectItem itemLabel="3" itemValue="3" />
+														<f:selectItem itemLabel="4" itemValue="4" />
+														<f:selectItem itemLabel="5" itemValue="5" />
+														<f:selectItem itemLabel="6" itemValue="6" />
+														<f:selectItem itemLabel="7" itemValue="7" />
+														<f:selectItem itemLabel="8" itemValue="8" />
+														<f:selectItem itemLabel="9" itemValue="9" />
+														<f:selectItem itemLabel="10" itemValue="10" />
+														<f:selectItem itemLabel="11" itemValue="11" />
+														<f:selectItem itemLabel="12" itemValue="12" />
+													</h:selectOneMenu>
+													<p:message for="semestresAprobados" display="text" />
+												</p:panel>
+												<p:panel id="subPanelSemestresOtrosValores" rendered="#{!educacionFormalBean.flgNivelEducativo}">
+													<p:outputLabel for="semestresOtros" id="labelSemestreOtros"
+															styleClass="log-label form-label-formularios"
+															value="${titles['LBL_SEMESTRES_APROBADOS']}:" />
+													<p:inputText id="semestresOtros" value="#{educacionFormalBean.lblNoAplica}"
+															disabled="#{!educacionFormalBean.flgNivelEducativo}"
+															title="#{educacionFormalBean.lblNoAplica}" />
+												</p:panel>
+											</p:outputPanel>		
+										</div>
+										<div class="col-md-4" align="center">
+											<p:outputLabel for="estadoEstudio"
+												title="${titles['TTL_SELECT']} ${titles['LBL_ESTADO_ESTUDIO']}"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_ESTADO_ESTUDIO']}:" />
+											<p:selectOneRadio id="estadoEstudio"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												value="#{educacionFormalBean.educacionFormal.flgFinalizado}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_ESTADO_ESTUDIO']}">
+												<f:selectItem itemLabel="${titles['TTL_IN_PROCESS']}" itemValue="false" />
+												<f:selectItem itemLabel="${titles['TTL_FINALIZED']}" itemValue="true" />
+												<p:ajax listener="#{educacionFormalBean.validarCondicionesEstadoEstudio()}"
+													update="fechaDeGrado,fechaTerminacionMaterias, chkConvalidado, 
+													fechaValidacion" />
+											</p:selectOneRadio>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="fechaTerminacionMaterias"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_FECHA_FIN_MATERIAS']}:" />
+											<p:calendar id="fechaTerminacionMaterias"
+												value="#{educacionFormalBean.educacionFormal.fechaFinalizacion}"
+												mask="true" yearRange="#{rangoAnios}"
+												placeholder="DD/MM/AAAA" maxdate="#{fechaSistema}"
+												disabled="#{!educacionFormalBean.educacionFormal.flgFinalizado or educacionFormalBean.habilitadoCampo}"
+												mode="popup" pattern="#{fechaFormato}" required="true"
+												effect="slideDown" navigator="true"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+												locale="#{lenguajeBean.localeCode}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_FIN_MATERIAS']}"
+												icon="fa fa-calendar">
+												<f:attribute name="maxDate" value="#{fechaSistema}" />
+												<f:validator validatorId="maxDateValidator" />
+												<p:ajax event="change" update="fechaDeGrado" process="@this" />
+												<p:ajax event="dateSelect" update="fechaDeGrado" process="@this" />
+											</p:calendar>
+											<p:message for="fechaTerminacionMaterias" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="fechaDeGrado"
+												styleClass="log-label form-label-formularios"
+												value="${titles['TTL_APROBAR_HV_EDU_COL8']}:" />
+											<p:calendar id="fechaDeGrado"
+												value="#{educacionFormalBean.educacionFormal.fechaGrado}"
+												mask="true" yearRange="#{rangoAnios}"
+												placeholder="DD/MM/AAAA" navigator="true"
+												disabled="#{!educacionFormalBean.educacionFormal.flgFinalizado or educacionFormalBean.habilitadoCampo}"
+												maxdate="#{fechaSistema}" mode="popup"
+												pattern="#{fechaFormato}" required="true" effect="slideDown"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+												locale="#{lenguajeBean.localeCode}"
+												title="${titles['TTL_INGRESE']} ${titles['TTL_APROBAR_HV_EDU_COL8']}"
+												icon="fa fa-calendar">
+												<f:attribute name="maxDate" value="#{fechaSistema}" />
+												<f:validator validatorId="maxDateValidator" />
+												<f:attribute name="startDate"
+													value="#{educacionFormalBean.educacionFormal.fechaFinalizacion}" />
+												<f:attribute name="startDateName"
+													value="${titles['LBL_FECHA_FIN_MATERIAS']}" />
+												<f:attribute name="endDateName"
+													value="${titles['TTL_APROBAR_HV_EDU_COL8']}" />
+												<f:validator validatorId="dateRangeValidator" />
+												<p:ajax event="change" update="fechaDeGrado" />
+											</p:calendar>
+											<p:message for="fechaDeGrado" />
+										</div>
+										<div class="col-md-4" align="center">
+											<p:outputLabel styleClass="log-label form-label-formularios"
+												value="${titles['LBL_ESTUDIO']}:" />
+											<br />
+											<p:outputLabel value="${titles['LBL_ESTUDIO_CONVALIDADO']}"
+												styleClass="log-label form-label-formularios" />
+											<p:spacer width="5" />
+											<p:selectBooleanCheckbox id="chkConvalidado"
+												title="${titles['TTL_SELECT']} ${titles['LBL_ESTUDIO_CONVALIDADO']}"
+												disabled="#{educacionFormalBean.habilitadoCampo
+															or (!educacionFormalBean.educacionFormal.flgFinalizado and educacionFormalBean.educacionFormal.flgEducacionExterior)}"
+												value="#{educacionFormalBean.educacionFormal.estudioConvalidado}">
+												<p:ajax process="@this" listener="#{educacionFormalBean.validarCondicionesEstudioConvalidado()}"
+														update="fechaValidacion, labelFechaValidacion" />
+											</p:selectBooleanCheckbox>
+											<p:spacer width="10" />
+											<p:outputLabel id="edExterior"
+												value="${titles['LBL_ESTUDIO_ENEXTERIOR']}"
+												styleClass="log-label form-label-formularios" />
+											<p:spacer width="5" />
+											<p:selectBooleanCheckbox id="educacionExterior"
+												disabled="#{educacionFormalBean.habilitadoCampo
+															or educacionFormalBean.blnDeshabilitarEstudioExterior}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_ESTUDIO_ENEXTERIOR']}"
+												value="#{educacionFormalBean.educacionFormal.flgEducacionExterior}">
+												<p:ajax process="@this" listener="#{educacionFormalBean.validarCondicionesEstudioExterior()}"
+													update="fechaValidacion, chkConvalidado" />
+											</p:selectBooleanCheckbox>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel id="labelFechaValidacion"
+												for="fechaValidacion"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_FECHA_CONVALIDACION']}:" />
+											<p:calendar id="fechaValidacion" mask="true"
+												yearRange="#{rangoAnios}" placeholder="DD/MM/AAAA"
+												maxdate="#{fechaSistema}" mode="popup" navigator="true"
+												disabled="#{educacionFormalBean.habilitadoCampo
+														  or (!educacionFormalBean.educacionFormal.flgFinalizado and educacionFormalBean.educacionFormal.flgEducacionExterior)
+														  or !educacionFormalBean.blnHabilitarFechaConvalidacion}"
+												pattern="#{fechaFormato}"
+												required="#{educacionFormalBean.educacionFormal.estudioConvalidado}"
+												effect="slideDown"
+												value="#{educacionFormalBean.educacionFormal.fechaConvalidacionEstudio}"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_CONVALIDACION']}"
+												locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar">
+												<f:attribute name="maxDate" value="#{fechaSistema}" />
+												<f:validator validatorId="maxDateValidator" />
+											</p:calendar>
+											<p:message for="fechaValidacion" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="tarjetaProfesional"
+												value="${titles['LBL_TARJETA_PROFESIONAL']}:"
+												styleClass="log-label form-label-formularios" />
+											<p:inputText id="tarjetaProfesional"
+												styleClass="form-control change-input-tarjeta"
+												maxlength="25" update="panelEducacionFormal"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_TARJETA_PROFESIONAL']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+												value="#{educacionFormalBean.educacionFormal.numTarjetaProfesional}">
+												<f:passThroughAttribute name="data-valid" value="false" />
+											</p:inputText>
+										</div>
+									</div>
+								</div>
+								<br /> <br />
+								<p:outputPanel id="panelTarjetaProfesionalPdf">
+									<p:panel rendered="#{educacionFormalBean.habilitadoArchivoSoporte or !educacionFormalBean.habilitadoCampo}">
+										<br />
+										<hr class="hr-style" />
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-3">
+													<p:outputLabel for="tarjetaProfesionalArchivo"
+														title="${titles['TTL_SELECT']} ${titles['LBL_TARJETA_PROFESIONAL']}"
+														styleClass="log-label form-label-formularios"
+														value="${titles['LBL_TARJETA_PROFESIONAL']}:" />
+												</div>
+												<div class="col-md-5 txt-ver-adjunto ">
+													<p:fileUpload id="tarjetaProfesionalArchivo"
+														label="${titles['LBL_SUBIR']}"
+														disabled="#{educacionFormalBean.educacionFormal.flgValidadoTarjetaProfesional}"
+														update="labelTarjetaProfesionalArchivo"
+														value="#{educacionFormalBean.archivoSoporte}"
+														fileUploadListener="#{educacionFormalBean.tarjetaProfesionalUpload}"
+														mode="advanced" auto="true" required="#{educacionFormalBean.lbUpload}"
+														requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+														invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+														allowTypes="/(\.|\/)(pdf)$/"
+														sizeLimit="#{templateHojaDeVidaBean.tamPdfEducacionTarjetaprofesional}"
+														invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+													<p:outputLabel
+														value="#{educacionFormalBean.nombreArchivoTarjetaprofesional}"
+														id="labelTarjetaProfesionalArchivo" />
+													<div id="uploadRequerido" style="color:#c42328; margin-top:-2.1em!important;display:none">#{messages.DLG_VALOR_REQUERIDO}</div>
+												</div>
+												<div class="col-md-1 btn-ver vista-media">
+													<p:commandButton
+														title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']} ${titles['LBL_TARJETA_PROFESIONAL']}"
+														id="idBtnVerEducacionFormalTarjetaProfesional"
+														icon="icon-view" styleClass="icon-btn" process="@this"
+														update="frmPrincipal:tabHojaDeVida:panelDiaVisualizarEdF"
+														actionListener="#{educacionFormalBean.visualizarArchivoEducacionFormal('1')}"
+														onclick="$('#documentosAdjuntosEdF').modal('show')" />
+												</div>
+												<div class="col-md-3">
+													<p:outputLabel
+														value="• ${titles['LBL_DOCUMENTOS_VERIFICADO']}"
+														for="tarjetaProfesionalValidada"
+														styleClass="log-label form-label-formularios" />
+													<p:spacer width="8" />
+													<p:selectBooleanCheckbox
+														value="#{educacionFormalBean.educacionFormal.flgValidadoTarjetaProfesional}"
+														id="tarjetaProfesionalValidada2"
+														disabled="#{!educacionFormalBean.flgValidadoAcademica}" />
+												</div>
+											</div>
+										</div>
+									</p:panel>
+								</p:outputPanel>
+								<p:outputPanel id="panelEducacionFormal">
+									<p:panel rendered="#{!educacionFormalBean.habilitadoCampo}">
+										<hr class="hr-style" />
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-3">
+													<p:outputLabel for="documentoFormacionAcademica"
+														styleClass="log-label form-label-formularios"
+														value="${titles['LBL_ARCHIVO_EDUCACION_FORMAL']}:" />
+												</div>
+												<div class="col-md-5" style="padding-left: 10% !important;">
+													<p:fileUpload id="documentoFormacionAcademica"
+														label="${titles['LBL_SUBIR']}"
+														disabled="#{educacionFormalBean.educacionFormal.flgValidadoRrhh}"
+														update="archivoEducacionFormal"
+														value="#{educacionFormalBean.archivoSoporte}"
+														fileUploadListener="#{educacionFormalBean.educacionFormalUpload}"
+														mode="advanced" auto="true"
+														invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+														allowTypes="/(\.|\/)(pdf)$/"
+														sizeLimit="#{templateHojaDeVidaBean.tamPdfEducacionEducacionFormal}"
+														invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+													<p:outputLabel
+														value="#{educacionFormalBean.nombreArchivoAcademica}"
+														id="archivoEducacionFormal" />
+													<p:message for="archivoEducacionFormal" display="text" />
+												</div>
+												<div class="col-md-1  vista-media btn-ver">
+													<p:commandButton
+														title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']} ${titles['LBL_ARCHIVO_EDUCACION_FORMAL']}"
+														id="idBtnVerEducacionFormalSoporte" icon="icon-view"
+														styleClass="icon-btn" process="@this"
+														update="frmPrincipal:tabHojaDeVida:panelDiaVisualizarEdF"
+														actionListener="#{educacionFormalBean.visualizarArchivoEducacionFormal('2')}"
+														onclick="$('#documentosAdjuntosEdF').modal('show')" />
+												</div>
+												<div class="col-md-3">
+													<p:outputLabel
+														value="• ${titles['LBL_DOCUMENTOS_VERIFICADO']}"
+														for="tarjetaProfesionalValidada"
+														styleClass="log-label form-label-formularios" />
+													<p:spacer width="8" />
+													<p:selectBooleanCheckbox
+														value="#{educacionFormalBean.educacionFormal.flgValidadoRrhh}"
+														id="tarjetaProfesionalValidada"
+														disabled="#{!educacionFormalBean.flgValidadoAcademica}" />
+												</div>
+											</div>
+										</div>
+									</p:panel>
+								</p:outputPanel>
+
+								<div class="row" align="center">
+									<div class="col-md-4"></div>
+									<div class="col-md-2" style="margin-bottom: 3%;">
+										<p:panel id="peEduForm0" 
+											style="padding: 0%;">
+											<p:commandButton value="${titles['TTL_SAVE']}"
+												id="btnGuardarFormacionAcademicaHV"
+												process="frmPrincipal:tabHojaDeVida:groupView"
+												update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida
+												        frmPrincipal:informacionPersonalUsuario tarjetaProfesionalArchivo"
+												actionListener="#{educacionFormalBean.guardarFormacionAcademica}"
+												disabled="#{educacionFormalBean.habilitadoCampo or datosPersonalesBean.lbISGestionarSoloConsultaHV}"
+												styleClass="btn btn-primary" title="${titles['TTL_SAVE']}"
+												style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important;">
+											</p:commandButton>
+										</p:panel>
+									</div>
+									<div class="col-md-2" style="margin-bottom: 3%;">
+										<p:commandButton value="#{titles.TTL_CANCEL}"
+											update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida"
+											process="@this"
+											actionListener="#{educacionFormalBean.limpiarForm}"
+											styleClass="btn btn-default" title="${titles['TTL_CANCEL']}"
+											style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important;"
+											oncomplete="datosModificados(0);">
+										</p:commandButton>
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+							</div>
+						</p:panel>
+					</h:panelGroup>
+				</p:panel>
+			</p:tab>
+			<p:tab id="tabOtroConocimiento"
+				title="${titles['LBL_EDUCACION_TRABAJO']}"
+				disabled="#{datosPersonalesBean.editado and datosPersonalesBean.tabEducacion != 1}">
+				<p:panel id="panelOtroConocimiento"
+					style="background: transparent !important;">
+					<div class="row-background-white row">
+						<br />
+						<div class="col-md-12" style="text-align: right;">
+							<div style="padding-right: 1%; display: inline-block">
+								<p:commandButton id="btnAgregarOtroConocimientoHV"
+									update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado"
+									actionListener="#{educacionFormalBean.mostrarFormularioOtroConocimiento}"
+									styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle"
+									value="${titles['LBL_ADD_NEW']}" process="@this"
+									immediate="true"
+									title="${titles['TTL_ADD']} ${titles['LBL_AGREGAR_OTRO_CONOCIMIENTO']}"
+									onclick="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado'"
+									oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado';
+									            oncomplete=datosModificados(1);"
+									rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<p:resetInput
+										target="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado" />
+								</p:commandButton>
+							</div>
+						</div>
+						<div class="col-md-12"
+							style="padding-left: 2% !important; padding-right: 2% !important;">
+							<p:dataTable id="dataTableDesarrolloHumano"  paginator="true" reflow="true"
+								rowIndexVar="rowIndex"
+								value="#{educacionFormalBean.listaOtroConocimientoPorPersona}"
+								var="dataCert"
+								rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+												
+								<p:column sortBy="#{dataCert.institucionFormacion}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_TABLA_INSTITUCION']}" /></f:facet>
+									<h:outputText value="#{dataCert.institucionFormacion}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataCert.nombreCurso}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_CURSO']}" /></f:facet>
+									<h:outputText value="#{dataCert.nombreCurso}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataCert.modalidadNombre}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_MODALIDAD']}" /></f:facet>
+									<h:outputText value="#{dataCert.modalidadNombre}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataCert.medioCapacitacionNombre}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_MEDIO_CAPACITACION']}" /></f:facet>
+									<h:outputText value="#{dataCert.medioCapacitacionNombre}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataCert.fechaFinalizacion}" style="word-wrap: break-word!important; text-align:center!important;">
+									<f:facet name="header"><h:outputText value="${titles['LBL_FECHA_TERMINACION']}" /></f:facet>
+									<h:outputText value="#{dataCert.fechaFinalizacion}">
+										<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+									style="opacity: 1!important; text-align:center!important;">
+									<p:commandButton id="btnVerOtroConocimientoHV"
+										title="${titles['BTN_VER']}"
+										action="#{educacionFormalBean.verDetalleOtroConocimiento(dataCert, true)}"
+										icon="icon-view" process="@this"
+										update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado'"
+										styleClass="icon-btn" />
+									<p:commandButton id="btnEditarOtroConocimientoHV"
+										title="${titles['BTN_ACTUALIZAR']}"
+										action="#{educacionFormalBean.verDetalleOtroConocimiento(dataCert, false)}"
+										icon="icon-edit" process="@this"
+										update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoCertificado';datosModificados(1);"
+										styleClass="icon-btn"
+										rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<p:ajax event="click"
+											listener="#{datosPersonalesBean.setEditado(false)}" />
+									</p:commandButton>
+									<p:commandButton id="btnEliminarOtroConocimientoHV"
+										title="${titles['BTN_ELIMINAR']}" process="@this"
+										icon="icon-delete"
+										onclick="$('#eliminarEducacionDesarrollo').modal('show')"
+										styleClass="icon-btn"
+										rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<f:setPropertyActionListener value="#{dataCert}"
+											target="#{educacionFormalBean.otroConocimiento}" />
+									</p:commandButton>
+									<c:set var="valorCertforPdf"
+										value="window.open('#{templateHojaDeVidaBean.get64(dataCert.urlDocumentoSoporte)}')" />
+									<c:set var="novalorCertforPdf"
+										value="$('#documentosAdjuntosEdFNoVisualizar').modal('show')" />
+									<p:commandButton id="btnVerDocumentosOtroConocimientoHV"
+										title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']}"
+										icon="icon-open-folder" styleClass="icon-btn"
+										onclick="#{dataCert.urlDocumentoSoporte != null ? valorCertforPdf : novalorCertforPdf}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<br />
+					<br />
+					<h:panelGroup id="panelFormularioNuevoCertificado">
+						<p:panel id="panelRenderFormCertificado"
+							rendered="#{educacionFormalBean.habilitadoFormularioCertificacion}">
+							<div class="row row-background-white">
+								<br />
+								<p:spacer height="2" />
+								<hr class="hr-style hr-style-two" />
+								<span
+									style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">${titles['LBL_EDUCACION_NO_FORMAL']}</span>
+								<br /> <br />
+								<div class="row" align="right">
+									<div class="col-md-12">
+										<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="fechaFinalizacionEduDesarrollo"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_FECHA_FINALIZACION']}:" />
+											<p:calendar id="fechaFinalizacionEduDesarrollo" mask="true"
+												yearRange="#{rangoAnios}" navigator="true"
+												placeholder="DD/MM/AAAA" maxdate="#{fechaSistema}"
+												value="#{educacionFormalBean.otroConocimiento.fechaFinalizacion}"
+												mode="popup"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												pattern="#{fechaFormato}" required="false"
+												effect="slideDown"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+												locale="#{lenguajeBean.localeCode}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_FINALIZACION']}"
+												icon="fa fa-calendar">
+												<f:attribute name="maxDate" value="#{fechaSistema}" />
+												<f:validator validatorId="maxDateValidator" />
+											</p:calendar>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="numHorasEstudio"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_NUMERO_TOTAL_HORAS']}:" />
+											<p:inputText id="numHorasEstudio" required="false"
+												maxlength="5"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												converter="javax.faces.Number"
+												converterMessage="Ingresar sólo números."
+												validatorMessage="Error en los datos, verifique."
+												value="#{educacionFormalBean.otroConocimiento.totHoras}"
+												styleClass="form-control"
+												onkeypress="return numbervalida(event)"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_NUMERO_TOTAL_HORAS']}"
+												style="width:70px!important;">
+											</p:inputText>
+											<p:message for="numHorasEstudio" display="text" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="paisOtroConocimiento"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_PAIS']}:" />
+											<p:selectOneMenu id="paisOtroConocimiento"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												filter="true" filterMatchMode="contains"
+												value="#{educacionFormalBean.otroConocimiento.codPais}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_PAIS']}"
+												styleClass="form-control-form-act-usua">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+													itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.pais}" />
+											</p:selectOneMenu>
+											<p:message for="paisOtroConocimiento" display="text" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="cursoEstudioDesarrollo"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_NO_FORMAL']}:" />
+											<p:inputText id="cursoEstudioDesarrollo"
+												styleClass="form-control"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												maxlength="200"
+												requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+												value="#{educacionFormalBean.otroConocimiento.nombreCurso}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_NO_FORMAL']}"
+												required="true">
+											</p:inputText>
+											<p:message for="cursoEstudioDesarrollo" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="institucionEstudio"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_TABLA_INSTITUCION']}:" />
+											<p:inputText id="institucionEstudio" maxlength="200"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												styleClass="form-control" required="true"
+												requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_INTITUCION']}"
+												value="#{educacionFormalBean.otroConocimiento.institucionFormacion}">
+											</p:inputText>
+											<p:message for="institucionEstudio" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="medioCapacitacion"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_MEDIO_CAPACITACION']}:" />
+											<p:selectOneMenu id="medioCapacitacion"
+												filter="true" filterMatchMode="contains"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												styleClass="form-control-form-act-usua"
+												title="${titles['TTL_SELECT']} ${titles['LBL_MEDIO_CAPACITACION']}"
+												value="#{educacionFormalBean.otroConocimiento.codMedioCapacitacion}">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+													itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.medioCApacitacion}" />
+											</p:selectOneMenu>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="modalidadEstudio"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_MODALIDAD']}:" />
+											<p:selectOneMenu id="modalidadEstudio"
+												value="#{educacionFormalBean.otroConocimiento.codModalidad}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_MODALIDAD']}"
+												styleClass="form-control-form-act-usua"
+												filter="true" filterMatchMode="contains">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.modalidadEstudio}" />
+											</p:selectOneMenu>
+											<p:message for="modalidadEstudio" display="text" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<p:panel rendered="#{!educacionFormalBean.habilitadoCampo}">
+									<br />
+									<hr class="hr-style" />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-md-3">
+												<p:outputLabel for="certificadoEstudioDesarrollo"
+													value="${titles['LBL_CERTIFICADOESTUDIO']}:"
+													styleClass="log-label form-label-formularios"
+													title="${titles['TTL_SELECT']} ${titles['LBL_CERTIFICADOESTUDIO']}" />
+											</div>
+											<div class="col-md-6">
+												<p:fileUpload id="certificadoEstudioDesarrollo"
+													value="#{educacionFormalBean.archivoSoporte}"
+													fileUploadListener="#{educacionFormalBean.certificadoOtroConocimientoUpload}"
+													multiple="false" auto="true"
+													fileLimitMessage="Solamente 1 archivo es permitido"
+													update="labelCertificadoDesarrollo"
+													label="${titles['LBL_SUBIR']}" dragDropSupport="false"
+													disabled="#{educacionFormalBean.habilitadoCampo}"
+													sizeLimit="#{templateHojaDeVidaBean.tamPdfEducacionEducacionDesarrolloHumano}"
+													invalidSizeMessage="El archivo cargado sobrepasa el tamaño espefificado."
+													invalidFileMessage="Tipo no permitido" mode="advanced"
+													showDetail="true" allowTypes="/(\.|\/)(pdf)$/" />
+												<p:outputLabel
+													value="#{educacionFormalBean.nombreArchivoHumano}"
+													id="labelCertificadoDesarrollo" />
+												<p:message for="labelCertificadoDesarrollo" display="text" />
+											</div>
+											<div class="col-md-3">
+												<p:commandButton
+													title="${titles['LBL_CERTIFICADOESTUDIO']} ${titles['LBL_CERTIFICADOESTUDIO']}"
+													id="idBtnVerOtrosConocimientos" icon="icon-view"
+													styleClass="icon-btn" process="@this"
+													update="frmPrincipal:tabHojaDeVida:panelDiaVisualizarEdF"
+													actionListener="#{educacionFormalBean.visualizarArchivoEducacionFormal('3')}"
+													onclick="$('#documentosAdjuntosEdF').modal('show')" />
+											</div>
+										</div>
+									</div>
+								</p:panel>
+								<div class="row" align="center">
+									<div class="col-md-4"></div>
+									<div class="col-md-2" style="margin-bottom: 3%;">
+										<p:panel id="peEduDessarro0" style="padding: 0%;">
+											<p:commandButton id="btnGuardarCertificadoHV"
+												value="${titles['TTL_SAVE']}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												actionListener="#{educacionFormalBean.guardarEducacionDesarrolloHumano}"
+												update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida
+												        frmPrincipal:informacionPersonalUsuario"
+												process="panelRenderFormCertificado"
+												title="${titles['TTL_SAVE']}" styleClass="btn btn-primary"
+												style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important;" />
+										</p:panel>
+									</div>
+									<div class="col-md-2" style="margin-bottom: 3%;">
+										<p:commandButton id="btnCancelarCertificado"
+											value="#{titles.TTL_CANCEL}"
+											update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida"
+											process="@this" resetValues="true"
+											actionListener="#{educacionFormalBean.limpiarForm}"
+											styleClass="btn btn-default" title="${titles['TTL_CANCEL']}"
+											style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important;"
+											oncomplete="datosModificados(0);">
+
+										</p:commandButton>
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+							</div>
+						</p:panel>
+					</h:panelGroup>
+				</p:panel>
+			</p:tab>
+			<p:tab id="tabIdiomas" title="${titles['LBL_IDIOMAS']}"
+				disabled="#{datosPersonalesBean.editado and datosPersonalesBean.tabEducacion != 2}">
+				<p:panel id="panelIdiomas"
+					style="background: transparent !important;">
+					<div class="row-background-white row">
+						<br />
+						<div class="col-md-12" style="text-align: right;">
+							<div style="padding-right: 1%; display: inline-block">
+								<p:commandButton id="btnAgregarIdiomaHV"
+									update="frmPrincipal:tabHojaDeVida:groupView"
+									actionListener="#{educacionFormalBean.mostrarFormularioIdiomas}"
+									styleClass="btn btn-transparent" icon="fa fa-fw fa-plus-circle"
+									value="${titles['LBL_ADD_NEW']}" process="@this"
+									immediate="true"
+									title="${titles['TTL_ADD']} ${titles['LBL_AGREGAR_IDIOMAS']}"
+									onclick="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma'"
+									oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma';
+									            oncomplete=datosModificados(1);"
+									rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+									<p:resetInput
+										target="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma" />
+								</p:commandButton>
+							</div>
+						</div>
+						<div class="col-md-12"
+							style="padding-left: 2% !important; padding-right: 2% !important;">
+							<p:dataTable id="dataTableIdiomas" paginator="true"
+								var="dataIdioma" reflow="true"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								value="#{educacionFormalBean.listaIdiomasPorPersona}">
+								
+								<p:column sortBy="#{dataIdioma.nombreIdioma}">
+									<f:facet name="header"><h:outputText value="${titles['TTL_LANGUANGE']}" /></f:facet>
+									<h:outputText value="#{dataIdioma.nombreIdioma}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataIdioma.nvlConversacion}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_CONVERSACION']}" /></f:facet>
+									<h:outputText value="#{dataIdioma.nvlConversacion}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataIdioma.nvlLectura}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_LECTURA']}" /></f:facet>
+									<h:outputText value="#{dataIdioma.nvlLectura}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataIdioma.nvlRedaccion}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_REDACCION']}" /></f:facet>
+									<h:outputText value="#{dataIdioma.nvlRedaccion}" />
+								</p:column>
+								
+								<p:column sortBy="#{dataIdioma.flgIdiomaNativo}">
+									<f:facet name="header"><h:outputText value="${titles['LBL_LENGUA_NATIVA']}" /></f:facet>
+									<p:selectBooleanCheckbox value="#{dataIdioma.flgIdiomaNativo}" disabled="true" />
+								</p:column>
+					
+								<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+									style="opacity: 1!important; text-align:center!important;">
+									<p:commandButton id="btnVerIdiomaHV"
+										title="${titles['BTN_VER']}"
+										action="#{educacionFormalBean.verDetalleIdioma(dataIdioma, true)}"
+										icon="icon-view" process="@this"
+										update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma'"
+										styleClass="icon-btn" />
+									<p:commandButton id="btnEditarIdiomaHV"
+										title="${titles['BTN_ACTUALIZAR']}"
+										action="#{educacionFormalBean.verDetalleIdioma(dataIdioma, false)}"
+										icon="icon-edit" process="@this"
+										update="frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma"
+										oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:groupView:panelFormularioNuevoIdioma';datosModificados(1);"
+										styleClass="icon-btn"
+										rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<p:ajax event="click"
+											listener="#{datosPersonalesBean.setEditado(false)}" />
+									</p:commandButton>
+									<p:commandButton id="btnEliminarIdiomaHV"
+										title="${titles['BTN_ELIMINAR']}" process="@this"
+										icon="icon-delete"
+										onclick="$('#eliminarIdiomaPersona').modal('show')"
+										styleClass="icon-btn"
+										rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+										<f:setPropertyActionListener value="#{dataIdioma}"
+											target="#{educacionFormalBean.idiomaPersona}" />
+									</p:commandButton>
+									<c:set var="valorIdiomforPdf"
+										value="window.open('#{templateHojaDeVidaBean.get64(dataIdioma.urlCertificacion)}')" />
+									<c:set var="novalorIdiomforPdf"
+										value="$('#documentosAdjuntosEdFNoVisualizar').modal('show')" />
+									<p:commandButton id="btnVerDocumentosIdiomaHV"
+										title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']}"
+										icon="icon-open-folder" styleClass="icon-btn"
+										onclick="#{dataIdioma.urlCertificacion != null ? valorIdiomforPdf : novalorIdiomforPdf}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<br />
+					<br />
+					<h:panelGroup id="panelFormularioNuevoIdioma">
+						<p:panel id="panelRenderFormIdioma"
+							rendered="#{educacionFormalBean.habilitadoFormularioIdiomas}">
+							<div class="row row-background-white">
+								<br />
+								<p:spacer height="2" />
+								<hr class="hr-style hr-style-two" />
+								<span
+									style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+									${titles['LBL_IDIOMA_DIFERENTE']} </span> <br /> <br />
+								<div class="row" align="right">
+									<div class="col-md-12">
+										<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="selectIdioma"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_IDIOMA']}:" />
+											<p:selectOneMenu id="selectIdioma"
+												value="#{educacionFormalBean.idiomaPersona.codIdioma}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_IDIOMA']}"
+												styleClass="form-control-form-act-usua"
+												filter="true" filterMatchMode="contains">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+													itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.idiomas}" />
+												<p:ajax event="change" update="mensajeValidacionIdioma" />
+											</p:selectOneMenu>
+											<p:message id="mensajeValidacionIdioma" for="selectIdioma" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="fechaCertificacionIdioma"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_FECHA_CERTIFICACION']}:" />
+											<p:calendar id="fechaCertificacionIdioma" mask="true"
+												yearRange="#{rangoAnios}" navigator="true"
+												placeholder="DD/MM/AAAA" maxdate="#{fechaSistema}"
+												value="#{educacionFormalBean.idiomaPersona.fechaCertificacion}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												mode="popup" pattern="#{fechaFormato}" required="false"
+												effect="slideDown"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+												locale="#{lenguajeBean.localeCode}"
+												title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_CERTIFICACION']}"
+												icon="fa fa-calendar">
+												<f:attribute name="maxDate" value="#{fechaSistema}" />
+												<f:validator validatorId="maxDateValidator" />
+											</p:calendar>
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="nvlConversacion"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_CONVERSACION']}:" />
+											<p:selectOneMenu id="nvlConversacion" 
+												value="#{educacionFormalBean.idiomaPersona.codNivelConversacion}"
+												required="true"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												styleClass="form-control-form-act-usua"
+												title="${titles['TTL_SELECT']} ${titles['LBL_CONVERSACION']}"
+												valueChangeListener="1"
+												filter="true" filterMatchMode="contains">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.nivelIdioma}" />
+											</p:selectOneMenu>
+											<p:message for="nvlConversacion" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4">
+											<p:outputLabel for="nvlLectura"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_LECTURA']}:" />
+											<p:selectOneMenu id="nvlLectura"
+												required="true"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												value="#{educacionFormalBean.idiomaPersona.codNivelLectura}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_LECTURA']}"
+												styleClass="form-control-form-act-usua"
+												filter="true" filterMatchMode="contains">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+												<f:selectItems value="#{webUtils.nivelIdioma}" />
+											</p:selectOneMenu>
+											<p:message for="nvlLectura" />
+										</div>
+										<div class="col-md-4">
+											<p:outputLabel for="nvlRedaccion"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_REDACCION']}:" />
+											<p:selectOneMenu id="nvlRedaccion"
+												required="true"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												value="#{educacionFormalBean.idiomaPersona.codNivelEscritura}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												title="${titles['TTL_SELECT']} ${titles['LBL_REDACCION']}"
+												styleClass="form-control-form-act-usua"
+												filter="true" filterMatchMode="contains">
+												<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="" />
+												<f:selectItems value="#{webUtils.nivelIdioma}" />
+											</p:selectOneMenu>
+											<p:message for="nvlRedaccion" />
+										</div>
+										<div class="col-md-4" align="center">
+											<p:outputLabel for="lenguaNativaRadio"
+												styleClass="log-label form-label-formularios"
+												value="${titles['LBL_LENGUA_NATIVA']}:"
+												title="${titles['TTL_SELECT']} ${titles['LBL_LENGUA_NATIVA']}" />
+											<p:selectOneRadio id="lenguaNativaRadio"
+												required="true"
+												requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												value="#{educacionFormalBean.idiomaPersona.flgIdiomaNativo}">
+												<f:selectItem itemLabel="${titles['LBL_SI']}"
+													itemValue="true" style="background: white!important;" />
+												<f:selectItem itemLabel="${titles['LBL_NO']}"
+													itemValue="false" style="background: white!important;" />
+											</p:selectOneRadio>
+										</div>
+									</div>
+								</div>
+								<br />
+								<p:panel rendered="#{!educacionFormalBean.habilitadoCampo}">
+
+									<br />
+									<hr class="hr-style" />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-md-3">
+												<p:outputLabel styleClass="log-label form-label-formularios"
+													value="${titles['LBL_CERTIFICADOESTUDIO']}:"
+													title="#{titles.TTL_INGRESE} #{titles.LBL_CERTIFICADOESTUDIO}" />
+											</div>
+											<div class="col-md-6">
+												<p:fileUpload id="certificadoIdioma" 
+													value="#{educacionFormalBean.archivoSoporte}"
+													fileUploadListener="#{educacionFormalBean.certificadoIdiomaUpload}"
+													update="labelCertificadoIdioma" multiple="fale" auto="true"
+													fileLimitMessage="Solamente 1 archivo es permitido"
+													label="${titles['LBL_SUBIR']}" dragDropSupport="false"
+													sizeLimit="#{templateHojaDeVidaBean.tamPdfEducacionEducacionidioma}"
+													disabled="#{educacionFormalBean.habilitadoCampo}"
+													invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" 
+													mode="advanced" showDetail="true"
+													invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+													allowTypes="/(\.|\/)(pdf)$/" />
+												<p:outputLabel
+													value="#{educacionFormalBean.nombreArchivoIdioma}"
+													id="labelCertificadoIdioma" />
+												<p:message for="labelCertificadoIdioma" display="text" />
+											</div>
+											<div class="col-md-3">
+												<p:commandButton
+													title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']}"
+													id="idBtnVerEdIdiomas" icon="icon-view"
+													styleClass="icon-btn" process="@this"
+													update="frmPrincipal:tabHojaDeVida:panelDiaVisualizarEdF"
+													actionListener="#{educacionFormalBean.visualizarArchivoEducacionFormal('4')}"
+													onclick="$('#documentosAdjuntosEdF').modal('show')" />
+											</div>
+										</div>
+									</div>
+								</p:panel>
+								<div class="row" align="center">
+									<div class="col-md-4"></div>
+									<div class="col-md-2" style="margin-bottom: 3%;">
+										<p:panel id="peCertIdioma0" style="padding: 0%;">
+											<p:commandButton id="btnGuardarIdiomaHV"
+												value="${titles['TTL_SAVE']}"
+												disabled="#{educacionFormalBean.habilitadoCampo}"
+												actionListener="#{educacionFormalBean.guardarNuevoIdioma}"
+												validateClient="true"
+												update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida 
+												        frmPrincipal:informacionPersonalUsuario"
+												process="panelFormularioNuevoIdioma"
+												styleClass="btn btn-primary" title="${titles['TTL_SAVE']}"
+												style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important;"
+												 >
+												
+											</p:commandButton>
+										</p:panel>
+
+									</div>
+									<div class="col-md-2" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_CANCEL']}"
+											update="frmPrincipal:tabHojaDeVida:groupView frmPrincipal:tabHojaDeVida"
+											process="@this" resetValues="true"
+											actionListener="#{educacionFormalBean.cancelarConfirmacionDatos}"
+											styleClass="btn btn-default" title="${titles['TTL_CANCEL']}"
+											style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important;"
+											oncomplete="datosModificados(0);">
+											
+										</p:commandButton>
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+							</div>
+						</p:panel>
+					</h:panelGroup>
+				</p:panel>
+			</p:tab>
+		</p:tabView>
+		<p:dialog header="• ${titles['LBL_CONFIRMAR_ACTUALIZACION']} •"
+			id="dialogEducacionPersona" minHeight="300"
+			widgetVar="dialogEducacionPersona" modal="true" resizable="false"
+			closeOnEscape="false" draggable="false" closable="false"
+			responsive="true">
+			<p:panel id="panelEducacionPersonaConfirmacion"
+				style="background: transparent !important;">
+				<div class="row" align="center">
+					<div class="col-md-12" style="margin-top: 3%; margin-bottom: 3%;">
+						<p:outputLabel for="diJustificacionModificacion"
+							value="${titles['LBL_JUSTIFICACION_ACTUALIZACION_DATOS']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputTextarea rows="4" cols="25"
+							id="diJustificacionModificacion"
+							value="#{educacionFormalBean.modificacionHojaVida.justificacionModificacion}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-acti-usua form-control"
+							style="resize: none;overflow-x: hidden;word-wrap: break-word!important;" />
+						<p:message for="diJustificacionModificacion" display="text" />
+					</div>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnConfirmarDatosEducacion"
+							value="${titles['TTL_SAVE']}"
+							actionListener="#{educacionFormalBean.guardarConfirmacionDatos}"
+							process="panelEducacionPersonaConfirmacion"
+							update="panelEducacionPersonaConfirmacion frmPrincipal:tabHojaDeVida:groupView"
+							oncomplete="datosModificados(0);"
+							styleClass="btn btn-primary" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton id="btnCancelarDatosEducacion"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{educacionFormalBean.cancelarConfirmacionDatos}"
+							process="@this"
+							update="panelEducacionPersonaConfirmacion frmPrincipal:tabHojaDeVida:groupView"
+							oncomplete="datosModificados(0);"
+							styleClass="btn btn-default">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+			</p:panel>
+		</p:dialog>
+		<div id="eliminarEducacionFormal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" align="center">
+						<h4 class="modal-title" style="font-size: 2em !important;">•
+							${titles['TTL_ELIMINARFORMACIONACADEMICA']} •</h4>
+					</div>
+					<div class="modal-body">
+						<div class="col-md-12" align="center"
+							style="margin-top: 3%; margin-bottom: 3%;">
+							<p:outputLabel
+								value="${titles['LBL_CONFIRMACION_ELIMINACION_EF']}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnConfirmarEliminacionEdFormal"
+									value="${titles['TTL_TO_CONTINUE']}"
+									styleClass="btn btn-primary"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									actionListener="#{educacionFormalBean.confirmarEliminarEdFormal}"
+									onclick="$('#eliminarEducacionFormal').modal('hide')"
+									update="frmPrincipal:tabHojaDeVida:groupView" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton id="btnCancelarEliminacionEdFormal"
+									value="${titles['TTL_CANCEL']}" styleClass="btn btn-default"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									actionListener="#{educacionFormalBean.cancelarEliminarEdFormal}"
+									onclick="$('#eliminarEducacionFormal').modal('hide')"
+									update="frmPrincipal:tabHojaDeVida:groupView" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="eliminarEducacionDesarrollo" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" align="center">
+						<h4 class="modal-title" style="font-size: 2em !important;">•
+							${titles['LBL_ELIMINAR_EDUCACION_TRABAJO']} •</h4>
+					</div>
+					<div class="modal-body">
+						<div class="col-md-12" align="center"
+							style="margin-top: 3%; margin-bottom: 3%;">
+							<p:outputLabel value="#{titles.LBL_CONFIRMACION_ELIMINACION_EH}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnConfirmarEliminarCertificado"
+									value="${titles['TTL_TO_CONTINUE']}"
+									styleClass="btn btn-primary"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									actionListener="#{educacionFormalBean.confirmarEliminarCertificado}"
+									onclick="$('#eliminarEducacionDesarrollo').modal('hide')"
+									update="frmPrincipal:tabHojaDeVida:groupView" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton id="btnCancelarEliminarCertificado"
+									value="${titles['TTL_CANCEL']}" styleClass="btn btn-default"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									actionListener="#{educacionFormalBean.cancelarEliminarCertificado}"
+									onclick="$('#eliminarEducacionDesarrollo').modal('hide')"
+									update="frmPrincipal:tabHojaDeVida:groupView" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="eliminarIdiomaPersona" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" align="center">
+						<h4 class="modal-title">• ${titles['TTL_ELIMINARIDIOMA']} •</h4>
+					</div>
+					<div class="modal-body">
+						<div class="col-md-12" align="center"
+							style="margin-top: 3%; margin-bottom: 3%;">
+							<p:outputLabel
+								value="${titles['LBL_CONFIRMACION_ELIMINAR_IDIOMA']}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnConfirmarEliminarIdioma"
+									value="${titles['TTL_TO_CONTINUE']}"
+									styleClass="btn btn-primary"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									actionListener="#{educacionFormalBean.confirmarEliminarIdioma}"
+									onclick="$('#eliminarIdiomaPersona').modal('hide')"
+									update="frmPrincipal:tabHojaDeVida:groupView" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton id="btnCancelarEliminarIdioma"
+									value="${titles['TTL_CANCEL']}" styleClass="btn btn-default"
+									style="padding-left:15%!important;padding-right:15%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this"
+									actionListener="#{educacionFormalBean.cancelarEliminarIdioma}"
+									onclick="$('#eliminarIdiomaPersona').modal('hide')"
+									update="frmPrincipal:tabHojaDeVida:groupView" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal para ver los archivos adjuntos-->
+		<div id="documentosAdjuntosEdF" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-dialog-2"
+				style="top: 25%; width: 60%;">
+				<div class="modal-content">
+					<div class="modal-header" align="center">
+						<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+					</div>
+
+					<div class="modal-body" align="center">
+						<p:panel id="panelDiaVisualizarEdF"
+							style="background: transparent!important;">
+							<c:if test="#{educacionFormalBean.rutaArchivo==null}">
+								<h:outputLabel value="${titles['LBL_SIN_SOPORTE']}"
+									class="form-label-formularios" />
+							</c:if>
+							<c:if test="#{educacionFormalBean.rutaArchivo!=null}">
+								<iframe src ="#{educacionFormalBean.rutaArchivo}" width='600' height='400'></iframe>
+							</c:if>
+						</p:panel>
+					</div>
+
+					<div class="modal-footer">
+						<p:commandButton value="${titles['TTL_CLOSE']}"
+							styleClass="btn btn-default" process="@this"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							onclick="$('#documentosAdjuntosEdF').modal('hide')" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal para ver los archivos adjuntos-->
+		<div id="documentosAdjuntosEdFNoVisualizar" class="modal fade"
+			role="dialog">
+			<div class="modal-dialog modal-dialog-2"
+				style="top: 25%; width: 60%;">
+				<div class="modal-content">
+					<div class="modal-header" align="center">
+						<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']}
+							•</h4>
+					</div>
+					<div class="modal-body">
+						<p:panel id="panelDiaVisualizarEdFNoVisualizar"
+							style="background: transparent!important;">
+							<h:outputLabel value="Sin soporte" class="form-label-formularios" />
+						</p:panel>
+					</div>
+
+					<div class="modal-footer">
+						<p:commandButton value="${titles['TTL_CLOSE']}"
+							styleClass="btn btn-default" process="@this"
+							style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+							onclick="$('#documentosAdjuntosEdFNoVisualizar').modal('hide')" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:panel>
+
+	<p:remoteCommand name="habilitarpanel" process="@this"
+		update="frmPrincipal:tabHojaDeVida:groupView:panelTarjetaProfesionalPdf frmPrincipal:tabHojaDeVida:groupView:panelEducacionFormal"
+		actionListener="#{educacionFormalBean.activarPanelArchivo}" />
+	<script type="text/javascript">
+		$(document).on( "keyup", ".change-input-tarjeta",function() {
+			 valid = $( this ).data('valid');
+			 if($( this ).val().length > 0){
+				 if(valid == false){
+					habilitarpanel([ { name : 'nameParam', value : true} ]);
+				 	$( this ).data('valid', true);
+				 }
+			 }else if($( this ).val().length == 0){
+				 if(valid == true){
+					 habilitarpanel([ { name : 'nameParam', value : false} ]);
+				 	$( this ).data('valid', false);
+				 }
+			 }
+		});
+	</script>
+	
+	<script type="text/javascript">
+			function uploadEmpy(index){
+				if(index == 1){
+					$("#uploadRequerido").attr("style", "color:#c42328; margin-top:-2.1em!important; display:block");
+				}else{
+					$("#uploadRequerido").attr("style", "display:none");
+				}
+			}
+			$(document).keypress(
+					  function(event){
+					    if (event.which == '13') {
+					      event.preventDefault();
+					    }
+					});
+   </script>
+</ui:composition>

@@ -1,0 +1,1719 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• ${titles['TTL_TAB_CT_CONSULTAR_CONTRATO']} •"
+						styleClass="page-subtitle"
+						style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+	
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" /> 
+	
+	<br /><br />	
+      
+	<p:panel id="idpnContratacionesTbConsultarContrato" style="background: transparent !important;">
+		<p:panel id="frmConsultarContrato" style="background: transparent !important;">
+      		<div class="row row-background-white">
+      			<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_CONTRATO']}
+				</span> <br /> <br />
+				
+      			<div class="row">
+      				<div class="col-md-12">
+      					<div class="col-sm-4">
+      						 <p:outputLabel value="${titles['BR_NUM_CONTRATO']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />						
+							 <p:outputLabel id="idCTNumeroContratoConsultarCo"
+								value="#{contratacionesBean.contrato.numeroContrato}"
+								class="form-control-acti-usua" disabled="true" styleClass="log-label form-label">
+							</p:outputLabel>
+      					</div>
+      					<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_DE_ENTIDAD_USUARIO']}&#58;&#160;" styleClass="log-label form-label-formularios" />
+							<p:outputLabel id="idCTNombreEntidadConsultarCo" value="#{contratacionesBean.strEntidadUsuario}"
+								class="form-control-acti-usua" disabled="true" styleClass="log-label form-label"/>
+						</div>
+						<div class="col-sm-4">	 
+							<p:outputLabel value="${titles['LBL_CT_AREA_ENTIDAD']}&#58;&#160;" styleClass="log-label form-label-formularios" />
+														<p:outputLabel id="idCTAreaEntidadConsultarCo" value="#{contratacionesBean.strAreaEntidad}"
+								class="form-control-acti-usua" disabled="true" styleClass="log-label form-label"/>									
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">	
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}&#58;&#160;" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="iDSOMDptosContratoConsultarCo"
+								value="#{contratacionesBean.contrato.codDepartamento}"
+								disabled="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-label"
+								style="opacity: 1!important;">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getDeptos(169)}" />
+							 </h:selectOneMenu>
+						</div>
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MUNICIPIO']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="idSOMMunicipioContratoConsultarCo"
+								value="#{contratacionesBean.contrato.codMunicipio}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="log-label form-label ui-outputlabel ui-widget" disabled="true"
+								style="opacity: 1!important;">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(contratacionesBean.contrato.codDepartamento)}" />
+								<p:ajax event="change"/>
+							</h:selectOneMenu>
+							
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_FIRMA']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel
+								value="#{contratacionesBean.contrato.fechaFirma}"
+								styleClass="log-label form-label">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_INICIO_CONTRATO']}&#58;&#160;" 
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel
+								value="#{contratacionesBean.contrato.fechaInicio}"
+								styleClass="log-label form-label">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}&#58;&#160;" 
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel
+								value="#{contratacionesBean.contrato.fechaFin}"
+								styleClass="log-label form-label">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_DURACION_CONTRATO_DIAS_COMP']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel id="idCTDuracionContratoDiasConsultarCo"
+								value="#{contratacionesBean.contrato.duracionContrato}"
+								class="log-label form-label" disabled="true" />
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_DURACION_CONTRATO_MESES_COMP']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel id="idCTDuracionContratoMesesConsultarCo"
+								value="#{contratacionesBean.contrato.duracionContratoMeses}"
+								class="log-label form-label" disabled="true" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-12">
+							<p:outputLabel value="${titles['LBL_CT_OBJETO_CONTRATO']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							 <p:outputLabel id="idCTObjetoContratoConsultarCo"
+								value="#{contratacionesBean.contrato.objetoContrato}"
+								styleClass="log-label form-label" style="word-wrap: break-word !important;text-align: justify;"
+								disabled="true" />
+						</div>
+					</div>   
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-12">
+							<p:outputLabel value="${titles['LBL_CT_ALCANCE_CONTRATO']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />	
+							 <p:outputLabel id="idCTAlcanceContratoConsultarCo"
+								value="#{contratacionesBean.contrato.alcanceContrato}"
+								styleClass="log-label form-label" style="word-wrap: break-word !important;text-align: justify;" 
+								disabled="true" /> 
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">   				
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_MONTO_CONTRATO']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel id="idCTMontoContratoConsultarCo"
+								value="#{contratacionesBean.contrato.monto}"
+								styleClass="log-label form-label" disabled="true">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:outputLabel>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_HONORARIOS']}&#58;&#160;" 
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel id="idCTHonorariosConsultarCo"
+								value="#{contratacionesBean.contrato.honorarios}"
+								styleClass="log-label form-label" disabled="true"
+								style="opacity: 1!important;">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:outputLabel>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_MONEDA_CONTRATO']}&#58;&#160;" 
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="iDSOMmONEDAMontoConsultarCo"
+								value="#{contratacionesBean.contrato.codMonedaMonto}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-label" disabled="true"
+								style="opacity: 1!important;">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getTipoMonedas()}" />
+							 </h:selectOneMenu>
+						</div>
+					</div>	
+				</div>
+				<br />
+				<div class="row">	
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_MONEDA_HONORARIOS']}&#58;&#160;" 
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="iDSOMmONEDAHonorarioConsultarCo"
+								value="#{contratacionesBean.contrato.codMonedaHonorario}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-label" disabled="true"
+								style="opacity: 1!important;">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getTipoMonedas()}" />
+							 </h:selectOneMenu>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_FUENTE_FINANCIACION']}&#58;&#160;" 
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="iDSOMFuenteFinanciacionConsultarCo"
+								value="#{contratacionesBean.contrato.codFuenteFinanciacion}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-label" disabled="true"
+								style="opacity: 1!important;">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getTipoFuentesFinanciacion()}" />
+							 </h:selectOneMenu>	 
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_ADMON_RECURSOS']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" />
+							<p:outputLabel id="idCTAdmonRecursosConsultarCo"
+								value="#{contratacionesBean.contrato.codAdministracionRecurso}"
+								styleClass="log-label form-label" disabled="true"
+								converter="parametricaBgDecimalConverter">
+								<p:keyFilter mask="num"></p:keyFilter>
+							</p:outputLabel> 
+						</div>							
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel value="${titles['LBL_CT_DERECHO_EXCLUSIVIDAD']}&#58;&#160;"
+								styleClass="log-label form-label-formularios" disabled="true" />    
+							<p:selectOneRadio id="idSORDerechoExclusividadConsultarCo" value="#{contratacionesBean.contrato.derechoExclusividad}"
+								disabled="true">
+					            <f:selectItem itemLabel="Sí" itemValue="1" />
+					            <f:selectItem itemLabel="No" itemValue="0" />
+					        </p:selectOneRadio>
+						</div>
+					</div>
+				</div>
+
+				<p:outputPanel id="idPanelSupervisorPersonaConsultarCo">
+					<div class="row">
+						<br />
+						<p:spacer height="2" />
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style"> ${titles['LBL_CT_SUPERVISOR_CONTRATO']} </span> <br /> <br />
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;"
+									for="idCTTipoDocSupervisorConsultarCo"
+									styleClass="log-label form-label-formularios" />
+								
+								<p:outputLabel id="idCTTipoDocSupervisorConsultarCo"
+									value="#{contratacionesBean.vinculacionSupervisor.nombreDocumento}"
+									class="log-label form-label" disabled="true">
+								</p:outputLabel>								
+								
+								
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['TTL_NUM_DOCUMENTO']}&#58;&#160;"
+									styleClass="log-label form-label-formularios" />
+								<p:outputLabel id="idCTNumDocSupervisorConsultarCo"
+									value="#{contratacionesBean.vinculacionSupervisor.numeroIdentificacion}"
+									class="log-label form-label" disabled="true">
+								</p:outputLabel>
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_CT_NOMBRE_SUPERVISOR']}&#58;&#160;"
+									styleClass="log-label form-label-formularios" />
+								<p:outputLabel id="idCTNombreSuperVisorConsultarCo" 
+									value="#{contratacionesBean.strNombreSupervisor}"
+									class="log-label form-label" disabled="true"/>
+							</div>
+						</div>
+					</div>								      				
+      			</p:outputPanel>
+
+				<p:outputPanel id="idPanelSupervisorVinculadoConsultarCo">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_CT_CODIGO_DENOMINACION']}&#58;&#160;"
+									styleClass="log-label form-label-formularios" />
+								<p:outputLabel id="idCTCodigoDenominacionConsultarCo"
+									value="#{contratacionesBean.vinculacionSupervisor.nombreCargo}"
+									class="log-label form-label" disabled="true"/> 
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_CT_GRADO_EMPLEO']}&#58;&#160;" 
+									styleClass="log-label form-label-formularios" />
+							 	<p:outputLabel id="idCTGradoEmpleoConsultarCo"
+									value="#{contratacionesBean.vinculacionSupervisor.codGrado}"
+									class="log-label form-label" disabled="true"/> 
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel value="${titles['LBL_CT_DEPENDENCIA']}&#58;&#160;"
+									for="primerNombre"
+									styleClass="log-label form-label-formularios" />
+								<p:outputLabel id="idCTDependenciaConsultarCo" 
+									value="#{contratacionesBean.vinculacionSupervisor.nombreDependencia}"
+									class="log-label form-label" disabled="true"/>
+							</div>
+						</div>
+					</div>
+					<br /><br />							      				
+     			</p:outputPanel>
+      			<br /><br />
+				<div class="colmd-12" align="center">
+   					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_IMPRIMIR_EXPORTAR']}" id="idBtImprimirConsultarCo" 
+                 			action="#{contratacionesBean.imprimir}"
+                 			update="fdataTableConsultarCoModificaciones" process="@this"
+                      		ajax="false" onclick="this.form.target='_blank'"
+                      		immediate="true" styleClass="btn btn-primary"
+                      		style="font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['BTN_CT_VOLVER']}" id="idBtRegresarConsultaContrato" 
+	                        styleClass="btn btn-default"
+	                        process="@this"
+	                        action="#{contratacionesBean.regresarBusqueda()}"
+	                 		update="frContrataciones:viewTabContrataciones"
+	                 		style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+      		</div>
+      		
+      		<br />
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" style="margin-left: 14%; width: 85.5%; margin-top: 1em;" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379;">
+				${titles['LBL_CT_MODIFICACIONES']}</span> <br /> <br />
+      		
+			<div class="col-md-12" style="padding-left: 0% !important; padding-right: 0% !important;">
+				<p:dataTable
+					id="dataTableConsultarCoModificaciones"
+					
+					paginator="true"
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+					reflow="true"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					
+					
+					var="dataTableConsultarCoModificaciones"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+					value="#{contratacionesBean.lstConsultarCoModificaciones}">
+					<p:column headerText="${titles['LBL_CT_MODIFICACION']}"
+						style="word-wrap: break-word !important;">
+						<h:selectOneMenu id="iDSOMTipoModListaAlcance" 
+							value="#{dataTableConsultarCoModificaciones.codTipoModificacionContrato}" 
+							disabled="true" styleClass="form-label" 
+							style="font-size: 1em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+							<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+						</h:selectOneMenu>
+					</p:column>
+					<p:column headerText="${titles['LBL_CT_FECHA']}"
+						style="word-wrap: break-word!important; text-align:center!important;">
+						<h:outputText value="#{dataTableConsultarCoModificaciones.audFechaActualizacion}">
+							<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+						</h:outputText>
+					</p:column>	
+						<p:column headerText="${titles['LBL_CT_JUSTIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableConsultarCoModificaciones.justificacionModificacion}"/>
+						</p:column>						
+					<p:column headerText="${titles['LBL_ACCIONES']}" 
+						style="opacity: 1!important; text-align:center!important;">
+						<p:commandButton title="Ver Detalle"
+							styleClass="icon-btn" icon="icon-view" 
+							process="@this"
+							actionListener="#{contratacionesBean.consultarReversarModificacion(dataTableConsultarCoModificaciones,'D')}"
+							update="frContrataciones:viewTabContrataciones:dlgConsultaReversaAdicion 
+							     	frContrataciones:viewTabContrataciones:dlgConsultaReversaProrroga
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaAlcance
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaSuspension
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaTerminacion
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaCesion
+							      	frContrataciones:viewTabContrataciones:dlgConsultaContrato
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaAdPrAl" />
+						<p:commandButton title="Reversar"
+							styleClass="icon-btn" icon="icon-back-arrow" 
+							process="@this"
+							actionListener="#{contratacionesBean.consultarReversarModificacion(dataTableConsultarCoModificaciones,'R')}"
+							update="frContrataciones:viewTabContrataciones:dlgConsultaReversaAdicion 
+									frContrataciones:viewTabContrataciones:dlgConsultaReversaProrroga
+							     	frContrataciones:viewTabContrataciones:dlgConsultaReversaAlcance
+							     	frContrataciones:viewTabContrataciones:dlgConsultaReversaSuspension
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaTerminacion
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaCesion
+							      	frContrataciones:viewTabContrataciones:dlgConsultaContrato
+							      	frContrataciones:viewTabContrataciones:dlgConsultaReversaAdPrAl" />
+					</p:column>
+				</p:dataTable>
+  			</div>
+   		
+      		<!-- Dialogo adición de Contrato -->
+      		<p:dialog header="• Adición •" widgetVar="dlgConsultaReversaAdicion" id="dlgConsultaReversaAdicion" 
+				modal="true" resizable="true" closeOnEscape="false" minHeight="300"
+	     		responsive="true" draggable="false" closable="false" appendTo="@(body)">
+	    		<br />
+				<div class="row">
+					<div class="col-md-12">
+					    <p:outputPanel id="idPanelConsultaReversa_01" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">#{contratacionesBean.strMsgReversaModificacionMsg}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					    <p:outputPanel id="idPanelConsultaReversa_010" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+				</div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NUEVO_MONTO_CONTRATO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTNuevoMontoAdicionConsRevAdicion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nuevoMontoContrato}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaAutorizacionModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_LOG_FECHA']} de la Adición&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsRevAdicion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_CONSULTAR']}: " 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversa"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento} #{null} #{contratacionesBean.usuarioConsultaReversa.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+	 						<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_CARGO']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="cargoAd"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word!important;"
+								value="#{contratacionesBean.obtenerNombreCargo()}" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div style="display: none;">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idTipoDocusuarioConsReversaAdicion"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_NOMBRE_USUARIO']}" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaAdicion"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						
+						<div class="col-md-12">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevAdicion"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word!important; max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+				
+				<br />
+				
+				<!-- Modificaciones posteriores -->
+				<p:panel id="idPanelModposteioresAd" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto">
+						<p:dataTable id="dataTableModPostAdicion"
+							paginator="true"
+							rows="4" reflow="true" 
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableModPostAdicion"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostAdicion.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label" 
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostAdicion.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel>
+				
+				<hr class="hr-style-modales" />
+
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaAdicion').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaAdicion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				
+				<br />
+		    </p:dialog>
+		    
+			<!-- Dialogo prorroga de Contrato -->
+			<p:dialog header="• ${titles['TTL_PRORROGA']} •" widgetVar="dlgConsultaReversaProrroga" id="dlgConsultaReversaProrroga" 
+				modal="true" resizable="false" closeOnEscape="false" minHeight="300"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)">
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+					    <p:outputPanel id="idPanelConsultaReversa_03" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CT_REVERSAR_CONTRATO']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel> 
+					    <p:outputPanel id="idPanelConsultaReversa_031" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+				</div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_FECHA_INI_PRORROGA']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaInicialConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaInicioModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_FECHA_FIN_PRORROGA']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaFinProrrogaConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaFinModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>				
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_LOG_FECHA']} de Prórroga&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsRevProrroga"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_PRORROGA_CONSULTAR']}: " 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversaProrroga"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento} #{null} #{contratacionesBean.usuarioConsultaReversa.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+	 						<p:outputLabel value="${titles['TTL_CONTRATOS_PRORROGA_CARGO']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="cargoPr"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word !important"
+								value="#{contratacionesBean.obtenerNombreCargo()}" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4" style="display:none;">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idTipoDocusuarioConsReversaProrroga"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_PRORROGA_NOMBRE_USUARIO']}" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaProrroga"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>							
+						
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-12">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevProrroga"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word !important; max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+						
+					</div>
+				</div>
+				
+				<br />
+				
+				<!-- Modificaciones posteriores Prorroga-->
+				<p:panel id="idPanelModposteioresProrroga" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto">
+						<p:dataTable id="dataTableModPostProrroga"
+							
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							
+							var="dataTableModPostProrroga"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostProrroga.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label" 
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostProrroga.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel>
+				
+				<hr class="hr-style-modales" />
+				
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaProrroga').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaProrroga').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+		    </p:dialog>	
+		    
+		    <!-- Dialogo alcance de Contrato -->
+			<p:dialog header="• ${titles['TTL_MODIFICACION_ALCANCE']} •" widgetVar="dlgConsultaReversaAlcance" id="dlgConsultaReversaAlcance" 
+				modal="true" resizable="false" closeOnEscape="false" minHeight="300"
+			 	responsive="true" draggable="false" closable="false" appendTo="@(body)">
+			 	<br />
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputPanel id="idPanelConsultaReversa_05" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CT_REVERSAR_CONTRATO']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					    <p:outputPanel id="idPanelConsultaReversa_056" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+			    </div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NUEVO_ALCANCE']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />	
+							<p:outputLabel id="idCTNuevoAlcanceContratoConsReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nuevoAlcanceContrato}"
+								class="log-label form-label-contratos_2" disabled="true" />
+							<p:message for="idCTNuevoAlcanceContrato" display="text" />
+						</div>
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_NUEVO_ALCANCE']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAlcanceConsReversarAlcance"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaAutorizacionModificacion}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_REG_NUEVO_ALCANCE']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsRevAlcance"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+					</div>				
+				</div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+						<div class="col-md-8">
+							<p:outputLabel value="${titles['TTL_USUARIO_REGISTRO']}" styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversaAlcance"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento} #{contratacionesBean.personaUsuarioConsultaContrato.numeroIdentificacion}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4" style="display: none;">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idTipoDocusuarioConsReversaAlcance"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_NOMBRE_USUARIO']}: " 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaAlcance"
+								value="#{contratacionesBean.consultarPersona(contratacionesBean.usuarioConsultaReversa.codPersona)}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>							
+					</div>						
+			    </div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+				    	<div class="col-md-12">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevAlcance"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word!important; max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>
+			    </div>
+			    
+			    <br />
+				
+				<!-- Modificaciones posteriores Cesion-->
+				<p:panel id="idPanelModposteioresAlcance" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto">
+						<p:dataTable id="dataTableModPostAlcance"
+							paginator="true"
+							rows="4" reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableModPostAlcance"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostAlcance.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label" 
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostAlcance.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel>			    
+			    
+				<hr class="hr-style-modales" />
+				
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaAlcance').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaAlcance').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+
+		    </p:dialog>		
+			
+			<!-- Dialogo suspension de Contrato -->
+      		<p:dialog header="• ${titles['LBL_CT_SUSPENSION']} •" widgetVar="dlgConsultaReversaSuspension" id="dlgConsultaReversaSuspension" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+	     		responsive="true" draggable="false" closable="false" appendTo="@(body)">
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+					    <p:outputPanel id="idPanelConsultaReversa_07" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">#{contratacionesBean.strMsgReversaModificacionMsg}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					    <p:outputPanel id="idPanelConsultaReversa_078" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+				</div>
+			    
+			    <div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+	      				<div class="col-md-3">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_INI_SUSPENSION_2']}&#58;&#160;"  
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaIniSuspensionConsReversarSuspension"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaInicioModificacion}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>	
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_FIN_SUSPENSION_2']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaFinSuspensionConsReversarSuspension"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaFinModificacion}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_SUSPENSION']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos"/>
+							<p:outputLabel id="idCTFechaAutSuspensionConsReversarSuspension"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaAutorizacionModificacion}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-3">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevSuspension"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word!important;max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_LOG_FECHA']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsRevSuspension"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['TTL_USUARIO_REGISTRO']}:" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversaSuspension"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento} #{null} #{contratacionesBean.personaUsuarioConsultaContrato.numeroIdentificacion}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>	
+						<div class="col-md-3">
+	 						<p:outputLabel value="${titles['TTL_CONTRATOS_PRORROGA_CARGO']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="cargoSus"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word !important"
+								value="#{contratacionesBean.obtenerNombreCargo()}">
+							</p:outputLabel>
+						</div>
+						
+						<div class="col-md-4" style="display:none;">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idTipoDocusuarioConsReversaSuspension"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+						
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_NOMBRE_USUARIO']}: " 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaSuspension"
+								value="#{contratacionesBean.consultarPersona(contratacionesBean.usuarioConsultaReversa.codPersona)}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>							
+												
+			    	</div>
+			    </div>
+			    <div class="row" style="margin-bottom: 1%;">
+				    <div class="col-md-12">
+						
+					</div>
+				</div>
+				
+			    <br />
+				
+				<!-- Modificaciones posteriores Cesion-->
+				<p:panel id="idPanelModposteioresSuspension" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto ">
+						<p:dataTable id="dataTableModPostSuspension"
+							paginator="true"
+							rows="4" reflow="true" 
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableModPostSuspension"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostSuspension.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label"
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostSuspension.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel>	
+	  					    
+				<hr class="hr-style-modales" />
+			   
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaSuspension').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaSuspension').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+
+				<br />
+			</p:dialog>
+			
+			<!-- Dialogo terminacion anticipada de Contrato -->	 
+			<p:dialog header="• ${titles['TTL_CT_TERMINACION_ANTICIPADA_CONTRATO']} •" widgetVar="dlgConsultaReversaTerminacion" id="dlgConsultaReversaTerminacion" 
+				modal="true" resizable="false" closeOnEscape="false" minHeight="300"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)">
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputPanel id="idPanelConsultaReversa_09" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CT_REVERSAR_CONTRATO']}</h5>
+					    	<hr class="hr-style-modales" />
+			    		</p:outputPanel>
+			    		<p:outputPanel id="idPanelConsultaReversa_099" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+				</div>
+				
+				<div class="row" style="margin-bottom: 1%;">
+			    	<div class="col-md-12">
+						<div class="col-md-4">
+	      					<p:outputLabel value="${titles['LBL_CT_FECHA_TERMINACION_ANT_CONTRATO']}&#58;&#160;" 
+	      						styleClass="log-label form-label-contratos" />
+	      					<p:outputLabel id="idCTFechaTerminacionAnticipadaConsultarRev"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaInicioModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_TERMINACION_ANT']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutTerminacionConsultarReversar"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaAutorizacionModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>	
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_MOTIVO_SUSPENSION']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<h:selectOneMenu id="iDSOMMotivoSuspensionConsultarReversar"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.codMotivoSuspencion}"
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-label form-label_contratos_2" disabled="true">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								 <f:selectItems
+									value="#{webUtils.getLstMotivosSuspensionContrato()}" />
+								<p:ajax event="change" process="@this"/> 
+							 </h:selectOneMenu>
+							 <p:message for="iDSOMMotivoSuspension" display="text" />
+						</div>				    
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+			    	<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_FECHA_REGISTRO_SIGEP_2']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsRevTerminacion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_TERMINACION_CONSULTAR_CONTRATO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversaTerminacion"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento} #{null} #{contratacionesBean.personaUsuarioConsultaContrato.numeroIdentificacion}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						
+						<div class="col-md-4" style="display: none;">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idTipoDocusuarioConsReversaTermAnt"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_TERMINACION_NOMBRE_USUARIO']}" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaTermAnt"
+								value="#{contratacionesBean.consultarPersona(contratacionesBean.usuarioConsultaReversa.codPersona)}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>	
+												
+					</div>							
+			    </div>
+				<div class="row" style="margin-bottom: 1%;">
+			    	<div class="col-md-12">
+			    	<div class="col-md-6">
+	 						<p:outputLabel value="${titles['TTL_CONTRATOS_TERMINACION_CARGO']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="terminacionCargo"
+								styleClass="log-label form-label-contratos_2" 
+								style="word-wrap: break-word!important;"
+								value="#{contratacionesBean.obtenerNombreCargo()}" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-6">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevTerminacion"
+								styleClass="log-label form-label-contratos_2" 
+								style="word-wrap: break-word!important; max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+				
+				<br />
+				
+				<!-- Modificaciones posteriores Cesion-->
+				<p:panel id="idPanelModposteioresTerminacion" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto">
+						<p:dataTable id="dataTableModPostterminacion"
+							paginator="true"
+							rows="4" reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableModPostterminacion"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostterminacion.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label" 
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostterminacion.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel> 					
+
+				<hr class="hr-style-modales" />
+
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaTerminacion').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaTerminacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				
+				<br />
+			</p:dialog>
+			
+			<!-- Dialogo Revertir cesion de Contrato -->
+			<p:dialog header="• Cesión •" widgetVar="dlgConsultaReversaCesion" id="dlgConsultaReversaCesion" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)">
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputPanel id="idPanelConsultaReversa_11" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CT_REVERSAR_CONTRATO']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+					<p:outputPanel id="idPanelConsultaReversa_0111" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+			    </div>
+			    
+			    <div class="row" style="margin-bottom: 1%;">
+			    	<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CT_TIPO_DOCUMENTO_CEDE']}&#58;&#160;"
+								
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idNumDocumentoCesionConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nombreIdentificacionInicial}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>								
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CT_NUMERO_DOCUMENTO_CEDE']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idNumDocCesionConsultaReversaCesion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.numeroIdentificacionInicial}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CT_NOMBRE_DOCUMENTO_CEDE']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idNombreContratistaCesionConsultaReversacesion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nombreContratistaInicial}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>						
+					</div>
+					
+					<div class="col-md-12">
+					
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_MONTO_INICIAL_CONTRATO']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />	
+							<p:outputLabel id="idCTMontoInicialContrato"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.montoRegistroContrato}"
+								class="log-label form-label-contratos_2" disabled="true" />
+						</div>
+					</div>
+					
+					
+			    	<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CT_TIPO_DOCUMENTO_RECIBE']}&#58;&#160;"
+								
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idNumDocumentoCesionConsultaReversaRecibe"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nombreIdentificacionNuevo}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>								
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CT_NUMERO_DOCUMENTO_RECIBE']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idNumDocCesionConsultaReversaCesionRecibe"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.numeroIdentificacionNuevo}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CT_NOMBRE_DOCUMENTO_RECIBE']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idNombreContratistaCesionConsultaReversacesionRecibe"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nombreNuevoContratista}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>					
+					
+					
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_INI_CESION']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechainicioCesionConsultaRversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaInicioModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>	
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NUEVO_MONTO_CONTRATO']}&#58;&#160;"
+								styleClass="log-label form-label-contratos" />	
+							<p:outputLabel id="idCTNuevoAlcanceContratoCesionConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nuevoMontoContrato}"
+								class="log-label form-label-contratos_2" disabled="true" />
+						</div>						
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT_CESION']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutCesionConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaAutorizacionModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>											    
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_LOG_FECHA']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdicionConsRevCesion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_USER']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversaCesion"
+								value="#{contratacionesBean.usuarioConsultaReversa.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>	
+												<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idTipoDocusuarioConsReversaCesion"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>		
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NUM_DOCUMENTO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaCesion"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.numeroIdentificacion}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>							
+			    	</div>
+			    </div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-12">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevCesion"
+								styleClass="log-label form-label-contratos_2" 
+								style="word-wrap: break-word!important; max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+			    
+ 				<br />
+				
+				<!-- Modificaciones posteriores Cesion-->
+				<p:panel id="idPanelModposteioresCesion" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto">
+						<p:dataTable id="dataTableModPostCesion"
+							paginator="true"
+							rows="4" reflow="true" 
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableModPostCesion"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostCesion.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label"
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostCesion.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel> 				
+ 				
+				<hr class="hr-style-modales" />
+				
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaCesion').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaCesion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+
+				<br />
+		    </p:dialog>
+		    
+		    
+		    
+		    
+		    
+		<!-- Dialogo Revertir Adicion/prorroga/Alcance -->
+			<p:dialog header="• Prórroga/Adición/Alcance •" widgetVar="dlgConsultaReversaAdPrAl" id="dlgConsultaReversaAdPrAl" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)">
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputPanel id="idPanelConsultaReversa_12" rendered="#{contratacionesBean.lbconsultarReversar and not contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CT_REVERSAR_CONTRATO']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+					</div>
+					<p:outputPanel id="idPanelConsultaReversa_012" rendered="#{contratacionesBean.lbconsultarReversar and contratacionesBean.lbEliminaModPosteriores}">
+					    	<h5 class="advisor" style="font-size: 1.2em !important;">${titles['LBL_CONTRA_REVERSAR_VARIAS']}</h5>
+					    	<hr class="hr-style-modales" />
+					    </p:outputPanel>
+			    </div>
+			    
+			    <div class="row" style="margin-bottom: 1%;">
+			    	<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NUEVO_MONTO_CONTRATO']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTNuevoMontoAdicionConsRevAdPrAl"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nuevoMontoContrato}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4"/>
+						<div class="col-md-4"/>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_FECHA_INI_PRORROGA']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaInicialConsultaReversaAdPrAl"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaInicioModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_FECHA_FIN_PRORROGA']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaFinProrrogaConsultaReversaAdPrAl"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaFinModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>				
+						</div>	
+						<div class="col-md-4"/>
+					</div>	
+					
+			    	<div class="col-md-12">
+      					<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_NUEVO_ALCANCE']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAlcanceConsReversarAdPrAl"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.nuevoAlcanceContrato}"
+								styleClass="log-label form-label-contratos_2">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>		
+						<div class="col-md-4"/>
+						<div class="col-md-4"/>
+					</div>					
+					
+						
+					
+
+					
+				
+					
+					
+				</div>
+
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUT']}&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdPrAlConsultaReversa"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.fechaAutorizacionModificacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TRANSVERSAL_ADMINISTRAR_LOG_FECHA']} de la Adición&#58;&#160;" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTFechaAutAdPrAlConsRevAdicion"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.audFechaActualizacion}"
+								styleClass="log-label form-label-contratos_2" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_CONSULTAR']}: " 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idCTusuarioConsReversaAdPrAl"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreTipoDocuento} #{null} #{contratacionesBean.usuarioConsultaReversa.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>
+						<div class="col-md-4">
+	 						<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_CARGO']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="cargoAdPrAl"
+								styleClass="log-label form-label-contratos_2" required="true"
+								style="word-wrap: break-word!important;"
+								value="#{contratacionesBean.obtenerNombreCargo()}" disabled="true">
+							</p:outputLabel>
+						</div>
+					<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_CONTRATOS_ADICION_NOMBRE_USUARIO']}" 
+								styleClass="log-label form-label-contratos" />
+							<p:outputLabel id="idDocusuarioConsReversaAdPrAl"
+								value="#{contratacionesBean.personaUsuarioConsultaContrato.nombreUsuario}"
+								class="log-label form-label-contratos_2" disabled="true">
+							</p:outputLabel>
+						</div>																								
+						
+			    	</div>
+			    </div>
+				<div class="row" style="margin-bottom: 1%;">
+					<div class="col-md-12">
+						<div class="col-md-12">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}&#58;&#160;" 
+	 							styleClass="log-label form-label-contratos" />
+	 						<p:outputLabel id="idCTJustificacionConsRevAdPrAl"
+								styleClass="log-label form-label-contratos_2" 
+								style="word-wrap: break-word!important; max-height: 50px!important; overflow-y: auto"
+								value="#{contratacionesBean.modificacionConsultaReversaSelected.justificacionModificacion}" disabled="true">
+							</p:outputLabel>
+						</div>
+					</div>
+				</div>
+			    
+ 				<br />
+				
+				<!-- Modificaciones posteriores AdPrAl-->
+				<p:panel id="idPanelModposteioresAdPrAl" rendered="#{contratacionesBean.lbEliminaModPosteriores}">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-bottom: 1%; max-height: 130px!important; overflow-y: auto">
+						<p:dataTable id="dataTableModPostAdPrAl"
+							paginator="true"
+							rows="4" reflow="true" 
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableModPostCesion"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							value="#{contratacionesBean.lstModificacionesContratoReversa}">
+							<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}"
+								style="word-wrap: break-word !important; padding: 0.5% !important;">
+								<h:selectOneMenu 
+									value="#{dataTableModPostCesion.codTipoModificacionContrato}" 
+									disabled="true" styleClass="form-label"
+									style="font-size: 0.7em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+									<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+								</h:selectOneMenu>
+							</p:column>
+							<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+								style="word-wrap: break-word!important; text-align:center!important; padding: 0.5% !important;">
+								<h:outputText value="#{dataTableModPostCesion.audFechaActualizacion}"
+									style="font-size: 0.7em !important;">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>
+					</div>
+	  			</p:panel> 				
+ 				
+				<hr class="hr-style-modales" />
+				
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_ELIMINAR_CAMBIOS']}"
+							process="@this frmConsultarContrato" 
+							styleClass="btn btn-primary"
+							style="padding-left:5%!important;padding-right:5%!important;"
+							rendered="#{contratacionesBean.lbconsultarReversar}"
+							oncomplete="PF('dlgConsultaReversaAdPrAl').hide();"
+							actionListener="#{contratacionesBean.eliminarModificacionContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4" style="margin-bottom: 2%;">
+					    <p:commandButton value="${titles['BTN_CT_VOLVER']}"
+							process="@this" 
+							styleClass="btn btn-default"
+							style="padding-left:17.5%!important;padding-right:17.5%!important;"
+							onclick="PF('dlgConsultaReversaAdPrAl').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+
+				<br />
+		    </p:dialog>		    
+		    
+		    <!-- Dialogo mensaje importante -->
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConsultaContrato" id="dlgConsultaContrato" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;">
+					<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						onclick="PF('dlgConsultaContrato').hide();">
+					</p:commandButton>
+				</div>
+				<br />
+			</p:dialog>
+
+		</p:panel>
+	</p:panel>
+</ui:composition>

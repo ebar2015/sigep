@@ -1,0 +1,133 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/basicTemplate.xhtml">
+	<f:metadata>
+	</f:metadata>
+	<ui:param
+		name="pageTitle"
+		value="${titles['TTL_MENU_IP']}" />
+	<ui:param
+		name="pageSubtitle"
+		value="${titles['TTL_BIENES_RENTAS']}" />
+	<ui:define name="content">
+		<script type="text/javascript">
+	 	var id;
+	 	var msg;
+		    $(window).on('load', function() {
+		    	$('#modal').modal({backdrop: 'static', keyboard: false})  ;
+				 $('#modal').modal('show');
+		    });
+		</script>
+		<h:form>
+			<!-- "Background" de modales de Bienes y Rentas -->
+			<div class="row">
+				<div class="col-md-12" style="text-align: center; margin-left: 9%;">
+					<h2>
+						<p:outputLabel
+							value="• #{declaracionRentaBean.mensajeini}•"
+							styleClass="page-subtitle" />
+					</h2>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-12 roles-hv" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-4"
+						style="padding: 0px !important;">
+						<div class="col-md-12">
+							<a href="#"> 
+								<img
+									src="../resources/images/hoja-de-vida-13.jpg"
+									alt="Mi declaración de Bienes y Rentas"
+									title="Mi declaración de Bienes y Rentas"
+									style="max-height: 20em; min-height: 20em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</a>
+							<div class="col-md-12" style="padding: 0%;">
+								<p:outputLabel
+									value="${titles['TTL_BIENES_RENTAS_INFORMACION_PERSONA_DECLARACION']}"
+									styleClass="form-label-informacion-personal"
+									style="line-height: 30px;" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4" style="padding: 0px !important;">
+						<div class="col-md-12">
+							<a href="#"> 
+								<img
+									src="../resources/images/hoja-de-vida-16.jpg"
+									alt="Mi Histórico de Bienes y Rentas"
+									title="Mi Histórico de Bienes y Rentas"
+									style="max-height: 20em; min-height: 20em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</a>
+							<div class="col-md-12" style="padding: 0%;">
+								<p:outputLabel
+									value="${titles['TTL_BIENES_RENTAS_INFORMACION_PERSONA_HISTORICO']}"
+									styleClass="form-label-informacion-personal"
+									style="line-height: 30px;" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+			
+			<div
+				class="modal fade"
+				id="modal"
+				role="dialog"
+				style="background: rgba(255, 255, 255, 0.45);">
+				<div
+					class="modal-dialog modal-dialog-2"
+					style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+							<div class="row">
+								<div
+									class="col-md-12"
+									align="center">
+									<br />
+									<br />
+									<h4>
+										<p:outputLabel
+											id="txtfinal"
+											value="#{declaracionRentaBean.mensajeE}"
+											style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div
+										class="col-md-3"
+										align="center"
+										style="margin-bottom: 3%;">
+										<p:commandButton
+											value="${titles['TTL_TO_CONTINUE']}"
+											styleClass="btn btn-primary"
+											action="#{declaracionRentaBean.cancelar()}"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+

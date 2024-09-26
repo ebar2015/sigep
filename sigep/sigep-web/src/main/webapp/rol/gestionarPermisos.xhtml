@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{gestionarPermisoBean.id}" />
+		<f:viewParam name="recursoId"
+			value="#{gestionarPermisoBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{gestionarPermisoBean.dialog}" />
+		<f:event listener="#{gestionarPermisoBean.retrieve}"
+			type="preRenderView" />
+		<f:event listener="#{gestionarPermisoBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_ADMIN_SISTEMA_BREADCRUMB']}" />
+	<br /><br />
+	<ui:param name="pageSubtitle" value="${titles['TTL_PERMISOS_TITLE']}" />
+
+	<ui:define name="main">
+		<p:defaultCommand target="searchBtn" />
+
+		<div class="row">
+			<div class="col-md-12" align="center"
+				style="padding-top: 2% !important;">
+				<h:panelGroup>
+					<h2 style="margin-top: -0.5%">
+						<p:outputLabel value="• ${titles['TTL_PERMISOS_TITLE']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<div class="panel-body form-horizontal">
+			<div class="row">
+				<div class="col-md-12" align="center" style="margin-top: -1%;">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['LBL_PERMISOS_GESTIONAR_FILTER2']}"
+							style="color: #235379; font-size: 1.8em; font-weight: 500;" />
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-4" style="margin-left: 6%;">
+						<p:inputText id="nombreRecurso" class="form-control-acti-usua"
+							required="false" maxlength="255" autocomplete="off"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_PERMISOS_GESTIONAR_FILTER2']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							value="#{gestionarPermisoBean.recurso}"
+							style="border-radius: 3px 0px 0px 3px!important;" />
+					</div>
+					<div class="col-md-3" style="margin-left: -9.8%;">
+						<p:commandButton value="#{titles.TTL_SEARCH}" id="searchBtn"
+							title="#{titles.TTL_SEARCH}"
+							actionListener="#{gestionarPermisoBean.printTable()}"
+							update="frmPrincipal" process="@this,nombreRecurso"
+							styleClass="btn btn-buscar" 
+							style="background-color: #2a89b5!important;" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+		</div>
+		<!-- DataTable  -->
+		<br />
+
+		<h:panelGroup styleClass="row">
+			<div class="row  row-background-white">
+				<br /> <br />
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="#{titles['LBL_PERMISOS_GESTIONAR_RESULT'].concat(' ' ).concat(gestionarPermisoBean.rol.descripcionRol.toUpperCase())}"
+						styleClass="advisor" />
+				</div>
+				<br /> <br />
+				<div class="col-md-12">
+					<p:panel id="panelTablePermiso" widgetVar="panelTablePermiso"
+						style="background: transparent;">
+						<p:dataTable id="dataTablePermiso" lazy="true" var="item"
+							paginator="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							value="#{gestionarPermisoBean.listaRecursos}" rowKey="#{item.id}"
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}">
+							<p:column
+								headerText="#{titles['TTL_PERMISOS_GESTIONAR_COMPONENTE']}" sortBy="#{titles[item.padre]}"
+								priority="4"> 
+								<h:outputText id="padre" value="#{titles[item.padre]}"
+									style="text-transform:capitalize" />
+							</p:column>
+							<p:column headerText="#{titles['TTL_PERMISOS_GESTIONAR_VISTA']}" sortBy="#{titles[item.recurso]}"
+								priority="3">
+								<h:outputText id="recurso" value="#{titles[item.recurso]}"
+									style="text-transform:capitalize" />
+							</p:column>
+							<p:column
+								headerText="#{titles['TTL_PERMISOS_GESTIONAR_SECCION']}" sortBy="#{titles[item.seccion]}"
+								priority="1">
+								<h:outputText id="seccion" value="#{titles[item.seccion]}"
+									style="text-transform:capitalize" />
+							</p:column>
+							<p:column headerText="#{titles['TTL_PERMISOS_GESTIONAR_ROL']}"
+								priority="3">
+								<h:outputText id="recursoMenu"
+									value="#{titles['TTL_PERMISOS_GESTIONAR_ROL_MENU']}"
+									style="text-transform:capitalize" rendered="#{!item.flgAccion}" />
+								<h:outputText id="recursoControl"
+									value="#{titles['TTL_PERMISOS_GESTIONAR_ROL_CONTROL']}"
+									style="text-transform:capitalize" rendered="#{item.flgAccion}" />
+							</p:column>
+							<p:column
+								headerText="#{titles['TTL_PERMISOS_GESTIONAR_PERMISOS']}"
+								priority="2" style="max-width:2em;text-align:center">
+								<p:selectBooleanCheckbox value="#{item.flgEstado}"
+									disabled="#{gestionarPermisoBean.noEdit}">
+									<p:ajax process="@this" update="frmPrincipal:botonesControl"
+										listener="#{gestionarPermisoBean.procesarRecurso(item.id)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</div>
+				<div class="col-md-12" align="left">
+					<br />
+					<p:outputLabel
+						value="${titles['LBL_TRANSVERSAL_REPORTEADOR_TOTAL_REGISTROS']}" />
+					<h:outputText
+						value="#{gestionarPermisoBean.listaRecursos.rowCount}" />
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</h:panelGroup>
+		<br />
+		<h:panelGroup styleClass="row" id="botonesControl">
+			<br />
+			<div class="col-md-12" style="padding-right: 9% !important;">
+				<div class="col-md-3"></div>
+				<div class="col-md-3">
+					<p:commandButton value="#{titles.LBL_GUARDAR_CAMBIOS}"
+						disabled="#{!gestionarPermisoBean.habilitarGuardar}"
+						title="#{titles.LBL_GUARDAR_CAMBIOS}" id="saveBtn"
+						onclick="PF('confirmacionGuardar').show();"
+						styleClass="btn btn-primary"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" />
+				</div>
+				<div class="col-md-2">
+					<p:commandButton value="${titles['BTN_VOLVER']}"
+						title="${titles['BTN_VOLVER']}" resetValues="true" process="@this"
+						update="@this" actionListener="#{gestionarPermisoBean.home()}"
+						styleClass="btn btn-print"
+						style="padding-left:18%!important;padding-right:18%!important;font-size:1.6em!important;border-radius:2px!important;" />
+				</div>
+				<div class="col-md-3">
+					<p:commandButton value="${titles['TTL_CANCEL']}"
+						disabled="#{!gestionarPermisoBean.habilitarGuardar}"
+						title="${titles['TTL_CANCEL']}" id="cancelBtn" resetValues="true"
+						onclick="PF('confirmacionCancelar').show();"
+						styleClass="btn btn-default"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.6em!important;border-radius:2px!important;" />
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+		</h:panelGroup>
+		<p:dialog header="• ${messages['DLG_CONFIRMACION']} •"
+			widgetVar="confirmacionGuardar" modal="true" closeOnEscape="false"
+			draggable="false" closable="false" height="auto" resizable="false"
+			style="background: #F1F1F1!important;opacity: 1!important;">
+			<p:panel id="panelGuardar"
+				style="background: #F1F1F1!important;opacity: 1!important;">
+				<br />
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="#{messages['MSG_PERMISOS_GESTIONAR_SAVE'].replaceAll('NOMBRE_ROL', gestionarPermisoBean.rol.descripcionRol)}"
+						style="font-size:1.2em!important; color:#245279; font-weight: normal;margin-bottom: 1em;"
+						escape="false" />
+				</div>
+				<hr
+					style="display: block; margin-top: 1em; margin-bottom: 1em; margin-left: auto; margin-right: auto; border: 0.5px solid #CCCCCC; width: 95%;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnGuardar" value="${titles['TTL_OK']}"
+							styleClass="btn btn-primary"
+							style="padding-left:10%!important;padding-right:10%!important;border-radius:4px!important;margin-bottom:1%;"
+							process="@this frmPrincipal" update="frmPrincipal"
+							actionListener="#{gestionarPermisoBean.persist()}" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							update="@this" styleClass="btn btn-default"
+							style="padding-left:9%!important;padding-right:9%!important;margin-bottom:1%;"
+							onclick="PF('confirmacionGuardar').hide();" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<p:dialog header="• ${messages['DLG_CONFIRMACION']} •"
+			widgetVar="confirmacionCancelar" modal="true" closeOnEscape="false"
+			draggable="false" closable="false" height="auto" resizable="false"
+			style="background: #F1F1F1!important;opacity: 1!important;">
+			<p:panel id="panelCancelar"
+				style="background: #F1F1F1!important;opacity: 1!important;">
+				<br />
+				<div class="col-md-12" align="center">
+					<p:outputLabel value="${messages['MSG_PERMISOS_GESTIONAR_CANCEL']}"
+						style="font-size:1.2em!important; color:#245279; font-weight: normal;margin-bottom: 1em;"
+						escape="false" />
+				</div>
+				<hr
+					style="display: block; margin-top: 1em; margin-bottom: 1em; margin-left: auto; margin-right: auto; border: 0.5px solid #CCCCCC; width: 95%;" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['TTL_OK']}"
+							styleClass="btn btn-primary"
+							style="padding-left:10%!important;padding-right:10%!important;border-radius:4px!important;margin-bottom:1%;"
+							process="@this frmPrincipal" update="frmPrincipal"
+							actionListener="#{gestionarPermisoBean.cancelar()}" />
+					</div>
+					<div class="col-md-4">
+						<p:commandButton id="btnCancelar" value="${titles['TTL_CANCEL']}"
+							process="@this" update="@this" styleClass="btn btn-default"
+							style="padding-left:9%!important;padding-right:9%!important;margin-bottom:1%;"
+							onclick="PF('confirmacionCancelar').hide();" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</p:panel>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

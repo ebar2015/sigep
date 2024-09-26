@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{templateHojaDeVidaBean.id}' />
+		<f:viewParam name="dialog" value='#{templateHojaDeVidaBean.dialog}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Acceso Directo" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_GERENCIA_PUBLICA']}" />
+
+	<ui:define name="mainDataUser">
+		<p:panel id="informacionPersonalUsuario">
+			<div class="row">
+				<div class="col-md-12">
+					<a href="#{templateHojaDeVidaBean.urlImprimir}" target="_blank"
+						class="btn btn-primary">${titles['TTL_IMPRIMIR_HOJA_VIDA']}</a><br />
+					<a href="#{templateHojaDeVidaBean.urlDescargar}" target="_blank"
+						class="btn btn-primary">${titles['TTL_DESCARGAR_HOJA_VIDA']}</a>
+				</div>
+			</div>
+		</p:panel>
+	</ui:define>
+	<ui:define name="main">
+		<br />
+		<div class="row" style="background-color: transparent;">
+
+			<p:inputText id="modificadoHV"
+				binding="#{datosPersonalesBean.uiDatosModificados}" type="hidden"></p:inputText>
+			<p:tabView style="background-color: transparent;" id="tabHojaDeVida"
+				activeIndex="0" cache="false" onTabShow="callRemoteMethod();">
+				<p:ajax event="tabChange" update="tabHojaDeVida"
+					listener="#{gerenciaPublicaBean.init}" />
+				<p:ajax event="tabChange"
+					listener="#{datosPersonalesBean.onTabChange}"
+					update="tabHojaDeVida" />
+				<p:tab title="${titles['TTL_DATOS_GERENCIA_PUBLICA']}"
+					id="tabGerenciaPublica"
+					disabled="#{datosPersonalesBean.editado and datosPersonalesBean.tabGeneralHojaVida != 4}">
+					<p:remoteCommand id="callRemoteMethod" name="callRemoteMethod"></p:remoteCommand>
+					<ui:include src="../tarjetaPersona.xhtml" />
+					<br />
+					<br />
+					<ui:include src="frmGerenciaPublica.xhtml" />
+				</p:tab>
+			</p:tabView>
+			<div class="col-md-12">
+				<p:messages id="messages112223" autoUpdate="true" showDetail="true"
+					closable="true" globalOnly="true"
+					style="font-family:Helvetica;text-align:center;font-size:1.2em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0" />
+			</div>
+		</div>
+		<!-- Modal validación cambio de pestaña -->
+		<div id="dlgValidSaveForm" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-lg" align="center">
+				<div class="modal-content" style="width: 63.3em; height: 17.3em;">
+					<div class="modal-header" align="center">
+						<button type="button" class="close" data-dismiss="modal"
+							style="font-size: 20px; color: #000; background: transparent; width: 1.5em; margin-top: 0px;">
+							<span class="fa fa-times"></span>
+						</button>
+						<h4 class="modal-title" style="font-size: 2.5em !important;">•
+							Validación •</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12"
+								style="color: #255279; margin-top: 1%; margin-bottom: 1%; font-size: 1.4em !important; text-align: center;">
+								Existen datos sin guardar en la pestaña actual, utilice el botón
+								Guardar para confirmar los cambios, de lo contrario use el botón
+								Cancelar para descartarlos</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(document).on( "click", "li.ui-state-disabled",function() {
+				$('#dlgValidSaveForm').modal('show');
+			});
+		
+			$(".readonly").on('keydown paste', function(e){
+		        e.preventDefault();
+		    });
+		    function validacionSinGuardar(){
+		    	$('#dlgValidSaveForm').modal('show');
+			}
+		</script>
+
+		<script type="text/javascript">
+			function datosModificados(modificado) {
+				var obj = document.getElementById("frmPrincipal:modificadoHV");
+				obj.value=modificado;
+			}
+		</script>
+	</ui:define>
+</ui:composition>

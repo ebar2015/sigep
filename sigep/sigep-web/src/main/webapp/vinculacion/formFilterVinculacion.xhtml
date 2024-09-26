@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<h:form id="frmPrincipal" enctype="multipart/form-data">
+		<div class="row">
+			<div class="panel-body form-horizontal row-background-white col-md-12"
+				style="opacity: 0.9 !important; background: #fefefe !important;">
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:outputLabel value="${messages['MSG_VINCULACION_FILTER']}" styleClass="advisor" />
+					</div>
+				</div>
+				<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; border: 0.5px solid #CCCCCC; width: 98%;" />
+				<br />
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:selectOneRadio id="rdbPubli" value="#{personaVinculacionBean.visible}">
+							<f:selectItem itemLabel="${titles['TTL_IDENTIFICACION']}" itemValue="false"/>
+							<f:selectItem itemLabel="${titles['TTL_NOMBRE_SERVIDOR_PUBLICO']}" itemValue="true" />
+							<p:ajax event="change" process="rdbPubli" actionListener="personaVinculacionBean.borrarDatosConsulta" update="frmPrincipal:panelFilterForm" />
+						</p:selectOneRadio>
+					</div>
+				</div>
+				<br />
+				<p:outputPanel id="panelFilterForm">
+					<p:remoteCommand name="validarEnter" action="#{personaVinculacionBean.validateForm}"
+								 process="panelFilterForm" update="panelFilterForm frmPrincipalVincular:panelTableHV frmPrincipalVincular:panelVincular"
+								 oncomplete="window.location.href='#frmPrincipalVincular:panelTableHV'" />
+					<div class="row">						
+						<p:panel id="panelFilterIdentificacion" rendered="#{!personaVinculacionBean.visible}">
+							<hr class="hr-style hr-style-two" />
+							<span class="span-style">${titles['TTL_IDENTIFICACION']}</span>
+							<br /><br /><br />
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:outputLabel for="tDocumento" value="${titles['TTL_TIPO_DOCUMENTO']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:selectOneMenu id="tDocumento" value="#{personaVinculacionBean.personaFilter.codTipoIdentificacion}"
+									styleClass="form-control-form-act-usua" style="width:90%!important;"
+									filter="true" filterMatchMode ="contains">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.tiposDeIdentificacion}" />
+									<p:ajax listener="#{personaVinculacionBean.compararDocumento()}" process="@this" update="numeroDocumento"/>
+								</p:selectOneMenu>
+								
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel for="numeroDocumento" value="${titles['TTL_NICK_NAME']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="numeroDocumento" value="#{personaVinculacionBean.personaFilter.numeroIdentificacion}"
+									class="form-control-acti-usua" style="width:90%!important;"
+									maxlength="16" autocomplete="false"
+									onkeydown="if (event.keyCode === 13) { validarEnter(); return false; }">
+									<c:choose>
+										<c:when test="${personaVinculacionBean.blnPasaporte == true}">
+											<f:validator validatorId="nickNameValidatorPassport" />
+										</c:when>
+										<c:otherwise>
+											<f:validator validatorId="nickNameValidator" />
+										</c:otherwise>
+									</c:choose>
+								</p:inputText>
+								<p:message for="numeroDocumento" display="text" />
+							</div>
+							<div class="col-md-2"></div>
+						</p:panel>
+						<p:panel id="panelFilterNombreServidorPublico" rendered="#{personaVinculacionBean.visible}">
+							<br />
+							<br />
+							<hr class="hr-style hr-style-two" /> <span class="span-style">${titles['TTL_NOMBRE_SERVIDOR_PUBLICO']}</span><br />
+							<div class="col-md-12">
+								<div class="col-sm-6">
+									<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}:"
+										for="primerNombre" styleClass="log-label form-label-formularios" />
+									<p:inputText id="primerNombre" value="#{personaVinculacionBean.personaFilter.primerNombre}"
+										class="form-control-acti-usua" onkeydown="if (event.keyCode === 13) { validarEnter(); return false; }">
+										<f:validator validatorId="textOnlyValidator" />
+									</p:inputText>
+									<p:message for="primerNombre" display="text" />
+								</div>
+								<div class="col-sm-6">
+									<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}:"
+										for="segundoNombre" styleClass="log-label form-label-formularios" />
+									<p:inputText id="segundoNombre" value="#{personaVinculacionBean.personaFilter.segundoNombre}" class="form-control-acti-usua"
+										onkeydown="if (event.keyCode === 13) { validarEnter(); return false; }">
+										<f:validator validatorId="textOnlyValidator" />
+									</p:inputText>
+									<p:message for="segundoNombre" display="text" />
+								</div>
+							</div>
+							<div class="col-md-12"><br /></div>
+							<div class="col-md-12">
+								<div class="col-sm-6">
+									<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}:"
+										for="primerApellido" styleClass="log-label form-label-formularios" />
+									<p:inputText id="primerApellido" value="#{personaVinculacionBean.personaFilter.primerApellido}" class="form-control-acti-usua" 
+										onkeydown="if (event.keyCode === 13) { validarEnter(); return false; }">
+										<f:validator validatorId="textOnlyValidator" />
+									</p:inputText>
+									<p:message for="primerApellido" display="text" />
+								</div>
+								<div class="col-sm-6">
+									<p:outputLabel value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}:"
+										for="segundoApellido" styleClass="log-label form-label-formularios" />
+									<p:inputText id="segundoApellido" value="#{personaVinculacionBean.personaFilter.segundoApellido}" class="form-control-acti-usua"
+										onkeydown="if (event.keyCode === 13) { validarEnter(); return false; }" >
+										<f:validator validatorId="textOnlyValidator" />
+									</p:inputText>
+									<p:message for="segundoApellido" display="text" />
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					<br />
+					<br />
+					<div class="row" align="center">
+						<br />
+						<div class="col-md-12">
+							<div class="col-md-4"></div>
+							<div class="col-md-2 media-btn-vinculacion" >							
+								<p:commandButton id="btnSearch" value="#{titles.TTL_SEARCH}"
+								    update="panelFilterForm frmPrincipalVincular:panelTableHV frmPrincipalVincular:panelVincular"
+								    process="panelFilterForm" actionListener="#{personaVinculacionBean.validateForm}"
+								    oncomplete="window.location.href='#frmPrincipalVincular:panelTableHV'"
+									style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+									styleClass="btn btn-primary"
+									
+									 />
+							</div>
+							<div class="col-md-2 media-btn-vinculacion">
+								<p:commandButton id="btnCancel" value="${titles['TTL_CANCEL']}"
+									process="@this" update="panelFilterForm rdbPubli"
+									onclick="window.location.assign('../index.xhtml?faces-redirect=true');"
+									styleClass="btn btn-default"
+									style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+									/>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+						<br />
+						<div class="col-md-12">
+							<p:messages id="messages2" autoUpdate="true" showDetail="true"
+								closable="true" globalOnly="true"  style="font-family:Helvetica;text-align:center;font-size:1.2em!important;background-color:rgb(242,242,242); border-radius: 1em;padding-top:0" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</div>
+		</div>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+  
+  <p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span  style="font-size: 2em;
+				font-weight: 500;
+				color: #245379;
+				background-color: white;
+				margin-left: 1em;">#{titles.TTL_DATOS_REGISTRO}</span>
+				<br /><br />
+				
+		<div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                    <div class="col-md-12" style="padding: 0px !important">
+                        <p:outputLabel value="#{titles.TTL_NIT}"
+                                       for="itNitEntidad"
+                                       style="width: 76%;"
+                                       styleClass="log-label form-label-formularios" />
+                        <p:outputLabel value="#{titles.LBL_DV}"
+                                       for="iTDvEntidad"
+                                       style="width: 24%;"
+                                       styleClass="log-label form-label-formularios"
+                                       maxlength="20">
+                                      
+                          </p:outputLabel>
+                    </div>
+             
+                <div>
+                    <p:inputText id="itNitEntidad"
+                                 value="#{creacionEntidadBean.entidadN.nit}"
+                                 class="form-control-acti-usua" 
+                                 style="width: 65% !important;"
+                                 maxlength="12" 
+                                 converterMessage="#{messages.DLG_CAMPO_NUMBER_INVALID}"
+                                 title="${titles['TTL_INGRESE']} ${titles['TTL_NIT']} ${titles['TTL_TIPO_NUMERICO']}"
+                                 >
+                        <f:validator validatorId="maxByteLengthValidator" />
+                        <f:convertNumber/> 
+                        <p:keyFilter regEx="/[\d\-]/"/>  
+                        <p:ajax process="@this" event="blur"
+                                listener="#{creacionEntidadBean.itNitListener()}"
+                                update="iTDvEntidad msgNitEntidad itNitEntidad iTDvEntidad"/>
+                    </p:inputText>
+                    <p:inputText id="iTDvEntidad"
+                                 value="#{creacionEntidadBean.entidadN.digitoVerificacion}"
+                                 class="form-control-acti-usua"
+                                 style="width: 35% !important; border-radius: 0px 3px 3px 0px!important;border-left: none;"
+                                 disabled="true"
+                                 title="${titles['TTL_INGRESE']} ${titles['LBL_DV']} ${titles['TTL_TIPO_NUMERICO']}"/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p:outputLabel for="itCodigoDaneEntidad"
+                               value="#{titles.TTL_CODIGO_DANE}"
+                               styleClass="log-label form-label-formularios" /> 
+                 <p:inputText  id="itCodigoDaneEntidad"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_DANE']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{creacionEntidadBean.entidadN.codigoDane}"
+								maxlength= "30"
+								onkeypress="return numbervalida(event)">
+								<f:attribute value="30" name="maxLength" />
+								<f:validator validatorId="numberValidator" />
+				</p:inputText>
+				<p:message for="itCodigoDaneEntidad" display="text" />         
+            </div>
+            <div class="col-md-4">
+                <p:outputLabel for="itCodigoCUIN"
+                               value="#{titles.TTL_CODIGO_CUIN}"
+                               styleClass="log-label form-label-formularios" />
+                 <p:inputText  id="itCodigoCUIN"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_CUIN']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{creacionEntidadBean.entidadN.codigoCuin}"
+								maxlength= "15"
+								onkeypress="return numbervalida(event)">
+								<f:attribute value="15" name="minLength" />
+								<f:validator validatorId="numberValidator" />
+				</p:inputText>
+				<p:message for="itCodigoCUIN" display="text" />
+            </div>
+        </div>
+ </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <p:message for="itNitEntidad"
+                           id="msgNitEntidad"/>
+            </div>
+        </div>
+    </div>
+    <br /><br />
+</html>

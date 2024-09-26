@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+	<ui:param name="pageTitle" value="${titles['TTL_INFORMACION_EMPLEO']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_SITUACIONES_ADMINISTRATIVAS']}" />
+	<ui:define name="main">
+		<!-- Titulo -->
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2>
+					<p:outputLabel
+						value="• ${titles['TTL_CONSULTAR_SITUACIONES_ADMINISTRATIVAS']} •"
+						styleClass="page-subtitle" />
+				</h2>
+			</div>
+		</div>
+		<h:panelGroup id="panelConsultarSA">
+			<ui:include src="../persona/informacionServidorView.xhtml" />
+			<br />
+			<br />
+			<div class="row" align="center">
+				<p:outputLabel
+					value="${messages['MSG_SA_SELECCION_CARGO']}"
+					styleClass="advisor">
+				</p:outputLabel>
+			</div>
+			<br />
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-12">
+					<div class="col-md-4"></div>
+					<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_CARGO']}:" for="cargo"
+							styleClass="log-label form-label-formularios" />
+						<h:selectOneMenu id="cargo"
+							value="#{situacionesAdministrativasBean.vinculacion.codVinculacion}"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+							styleClass="form-control-form-act-usua"
+							title="${titles['TTL_SELECT']} ${titles['LBL_CARGO']}">
+							<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+							<f:selectItems
+								value="#{webUtils.getCargosFuncionario(situacionesAdministrativasBean.persona.codPersona)}" />
+							<p:ajax
+								listener="#{situacionesAdministrativasBean.mostrarHistoricoSACargo(situacionesAdministrativasBean.vinculacion.codVinculacion)}"
+								event="change" process="@this"
+								update="tablaSitAdmin hpgTrajetaCargo frmPrincipal:hpgidTrajetaCargo" />
+						</h:selectOneMenu>
+						<p:message for="cargo" display="text" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<h:panelGroup id="hpgTrajetaCargo">
+				<p:panel
+					rendered="#{situacionesAdministrativasBean.flgInformacionSA}">
+					<ui:include
+						src="../situacionesadmin/tarjetaCargoSituacionAdmin.xhtml" />
+					<br /><br />
+				</p:panel>
+			</h:panelGroup>
+
+			<div class="row row-background-white">
+				<br /> <br />
+				<div class="col-md-12"
+					style="padding-right: 2% !important; padding-left: 2% !important">
+					<p:dataTable id="tablaSitAdmin" var="dataSitAdmin"
+						value="#{situacionesAdministrativasBean.listaSitAdminFuncionarioCargo}"
+						paginator="true"
+						rows="#{paginatorSize}"
+						rowsPerPageTemplate="#{paginatorsSize}"
+						reflow="true"
+						emptyMessage="${messages['MSG_INFO_MENSAJE_BUSQUEDA']}"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						
+						<p:column headerText="#{titles['LBL_SA_SITUACION_DEPENDIENTE']}"
+							sortBy="#{dataSitAdmin.nombreSituacion}">
+							<h:outputText value="#{dataSitAdmin.nombreSituacion}" />
+						</p:column>
+						<p:column
+							headerText="#{titles.LBL_FECHA_INICIAL} #{titles.TTL_SITUACION_ADMIN}"
+							sortBy="#{dataSitAdmin.fechaInicial}">
+							<h:outputText value="#{dataSitAdmin.fechaInicial}" />
+						</p:column>
+						<p:column
+							headerText="#{titles.LBL_FECHA_FIN_2} #{titles.TTL_SITUACION_ADMIN}"
+							sortBy="#{dataSitAdmin.fechaFinal}">
+							<h:outputText value="#{dataSitAdmin.fechaFinal}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_SA_DURACION']}"
+							sortBy="#{dataSitAdmin.duracion}">
+							<h:outputText value="#{dataSitAdmin.duracion}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_SA_ACCION']}"
+							style="word-wrap: break-word!important; text-align:center !important">
+							<p:commandButton title="Visualizar" icon="icon-view"
+								process="@this" id="btnVisualizarSA"
+								actionListener="#{situacionesAdministrativasBean.consultarSituacionAdministrativaCargo(dataSitAdmin)}"
+								update="frmPrincipal:panelSituacionCargo" styleClass="icon-btn">
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br /> <br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4" style="margin-bottom: 3%;">
+							<p:commandButton id="btnCancelar" value="${titles['TTL_CANCEL']}"
+								actionListener="#{situacionesAdministrativasBean.cancelarGestionBusqueda()}"
+								process="@this" update="panelConsultarSA"
+								styleClass="btn btn-default"
+								style="padding-left:10.5%!important;padding-right:10.5%!important;font-size:1.5em!important; padding-top:0!important;" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</div>
+			<p:dialog header="• ${titles['TTL_ADMON_MAESTRO_SITUACION_AD']} •"
+				id="dialogSituacionCargo" widgetVar="dialogSituacionCargo"
+				modal="true" resizable="false" draggable="false" closable="false"
+				responsive="true">
+				<p:panel id="panelSituacionCargo"
+					style="background: transparent !important;">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6">
+								<p:outputLabel for="sitAdminProvisional"
+									styleClass="log-label form-label-formularios"
+									value="${titles['TTL_SITUACION_ADMIN']}:" />
+								<p:inputText id="sitAdminProvisional" disabled="true"
+									required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+									value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+									class="form-control-acti-usua" />
+								<p:message for="sitAdminProvisional" display="text" />
+							</div>
+							<div class="col-md-6">
+								<p:outputLabel for="dependenciaProvisional"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+								<p:inputText id="dependenciaProvisional" required="true"
+									disabled="true"
+									value="#{situacionesAdministrativasBean.sitAdminDepForm}"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+									class="form-control-acti-usua" />
+								<p:message for="dependenciaProvisional" display="text" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<p:outputLabel for="regSAProvisionalFechaInicio"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_FECHA_INICIO']}:" />
+								<p:calendar id="regSAProvisionalFechaInicio" mask="true"
+									yearRange="#{rangoAnios}" navigator="true" disabled="true"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									locale="#{lenguajeBean.localeCode}"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+									pattern="#{fechaFormato}" required="true" effect="slideDown"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									icon="fa fa-calendar">
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="regSAProvisionalFechaInicio" display="text" />
+							</div>
+							<div class="col-md-6">
+								<p:outputLabel for="regSAProvisionalFechaFin"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_TABLA_FECHA_FIN']}:" />
+								<p:calendar id="regSAProvisionalFechaFin" mask="true"
+									yearRange="#{rangoAnios}" navigator="true" disabled="true"
+									placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+									locale="#{lenguajeBean.localeCode}"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.fechaFin}"
+									pattern="#{fechaFormato}" effect="slideDown"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									mindate="#{situacionesAdministrativasBean.situacionAdminPersona.fechaInicio}"
+									icon="fa fa-calendar">
+								</p:calendar>
+								<h:outputText>
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+								<p:message for="regSAProvisionalFechaFin" display="text" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<p:outputLabel for="SAProvisionalActoAdmin"
+									styleClass="log-label form-label-formularios"
+									value="${titles['TTL_TIPO_ACTO_ADMIN']}:" />
+								<h:selectOneMenu id="SAProvisionalActoAdmin" required="true"
+									disabled="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoActoAdministrativo}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+										itemValue="#{null}" />
+									<f:selectItems
+										value="#{situacionesAdministrativasBean.listaTipoActoAdmin}" />
+								</h:selectOneMenu>
+								<p:message for="SAProvisionalActoAdmin" display="text" />
+							</div>
+							<div class="col-md-6">
+								<p:outputLabel for="SAProvisionalNumActoAdmin"
+									value="${titles['TTL_NUM_ACT_ADMIN']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="SAProvisionalNumActoAdmin" autocomplete="false"
+									required="true" disabled="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.numActoAdministrativo}"
+									class="form-control-acti-usua">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+								<p:message for="SAProvisionalNumActoAdmin" display="text" />
+							</div>
+						</div>
+							<div class="row">
+							<div class="col-md-12">
+								<p:outputLabel for="descripcionSAProvisional"
+									value="${titles['LBL_PARAMETRICA_DESCRIPCION']}:"
+									styleClass="log-label form-label-formularios" />
+								<p:inputText id="descripcionSAProvisional" autocomplete="false"
+									disabled="true"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionSituacion}"
+									class="form-control-acti-usua">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+							</div>
+						</div>
+						<p:outputPanel id="panelEnfermedad">
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.habilitarFormEnf}">
+								<div class="row">
+									<div class="col-md-6">
+										<p:outputLabel for="incapacidad"
+											value="${titles['TTL_SA_INCAPACIDAD']}:"
+											styleClass="log-label form-label-formularios" />
+										<p:autoComplete id="incapacidad" forceSelection="false"
+											disabled="true" dropdown="true" required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											completeMethod="#{situacionesAdministrativasBean.listaEnfermedades}"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.codTipoIncapacidad}">
+										</p:autoComplete>
+									</div>
+									<div class="col-md-6">
+										<p:outputLabel for="descIncapacidad"
+											value="${titles['TTL_SA_DESC_INCAPACIDAD']}:"
+											styleClass="log-label form-label-formularios" />
+										<p:inputText id="descIncapacidad" dropdown="true"
+											disabled="true"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionEnfermedad}"
+											style="box-shadow: none!important;" />
+									</div>
+								</div>
+							</p:panel>
+						</p:outputPanel>
+						<p:outputPanel id="panelEncargo">
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.habilitarFormCargo}">
+								<div class="row">
+									<div class="col-md-6">
+										<p:outputLabel value="${titles['LBL_DEPENDENCIA']}:"
+											for="dependenciaGlobal"
+											styleClass="log-label form-label-formularios" />
+										<h:selectOneMenu id="dependenciaGlobal" disabled="true"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.codDependenciaEntidad}"
+											required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											title="${titles['TTL_SELECT']} ${titles['LBL_DEPENDENCIA']}"
+											styleClass="form-control-form-act-usua">
+											<f:selectItem itemLabel="${titles['TTL_SELECT']}" />
+											<f:selectItems
+												value="#{webUtils.getDependenciaEntidadFilter(situacionesAdministrativasBean.lngValorEntidad)}" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-6">
+										<p:outputLabel for="cargoEncargo"
+											styleClass="log-label form-label-formularios"
+											value="${titles['LBL_CARGO']}:" />
+										<p:inputText id="cargoEncargo" disabled="true"
+											value="#{situacionesAdministrativasBean.nombreCargoEncargo}"
+											class="form-control-acti-usua" />
+									</div>
+								</div>
+							</p:panel>
+						</p:outputPanel>
+						<p:outputPanel id="panelComision">
+							<p:panel
+								rendered="#{situacionesAdministrativasBean.habilitarFormComision}">
+								<div class="row">
+									<div class="col-md-6">
+										<p:outputLabel for="codEntidadComision"
+											styleClass="log-label form-label-formularios"
+											value="${titles['LBL_ENTIDAD_COMISION']}:" />
+										<p:inputText id="codEntidadComision" required="true"
+											disabled="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											maxlength="15"
+											value="#{situacionesAdministrativasBean.situacionAdminPersona.codEntidadComision}"
+											class="form-control-acti-usua" style="width:90%!important;">
+										</p:inputText>
+									</div>
+									<div class="col-md-6">
+								<p:outputLabel for="descEntidadComision"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_DESC_ENTIDAD']}:" />
+								<p:inputText id="descEntidadComision" disabled="true"
+									value="#{situacionesAdministrativasBean.situacionAdminPersona.descripcionEntidad}"
+									class="form-control-acti-usua" style="width:90%!important;" />
+									</div>
+								</div>
+							</p:panel>
+						</p:outputPanel>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4" style="margin-bottom: 5%;">
+							<p:commandButton value="${titles['TTL_OK']}"
+								styleClass="btn btn-primary"
+								style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important;"
+								onclick="PF('dialogSituacionCargo').hide();" process="@this"
+								update="panelSituacionCargo" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+					<br />
+				</p:panel>
+			</p:dialog>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

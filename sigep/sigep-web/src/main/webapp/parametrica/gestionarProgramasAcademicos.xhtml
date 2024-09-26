@@ -1,0 +1,304 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_PROGRAMA_ACADEMICO']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_PARAMETRICA_PROGRAMAS_ACADEMICOS} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="nombreProgramaAcademico" maxlength="255"
+						placeholder="${titles['LBL_ROLES_FILTER']} ${titles['TTL_ADMON_MAESTRO_PROGRAMA_ACADEMICO']}"
+						title="${titles['TTL_INGRESE']} ${titles['LBL_PARAMETRICA_PROGRAMAS_ACADEMICOS']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						queryDelay="1000"
+						completeMethod="#{programaAcademicoBean.listarProgramaAcademicoFiltro}"
+						value="#{programaAcademicoBean.strBusquedaProgramaAcademico}">
+						<p:ajax event="itemSelect" listener="#{programaAcademicoBean.filtrarProgramaAcademico()}"
+							update ="dataTableProgramaAcademico"/>
+					</p:autoComplete>
+					<p:message for="nombreProgramaAcademico" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonSearchProgramaAcademico" styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{programaAcademicoBean.filtrarProgramaAcademico()}"
+						process="@this nombreProgramaAcademico"
+						update ="dataTableProgramaAcademico"/>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_PARAMETRICA_PROGRAMAS_ACADEMICOS}</span> <br /> <br />
+
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearProgramaAcademico" process="@this"
+					update="panelProgramaAcademico" actionListener="#{programaAcademicoBean.crearProgramaAcademico()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelProgramaAcademico';">
+					<p:resetInput target="frmPrincipal:panelProgramaAcademico" />
+				</p:commandButton>
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableProgramaAcademico" paginator="true"
+					reflow="true" rowIndexVar="rowIndex" 
+					value="#{programaAcademicoBean.lstProgramaAcademico}"
+					rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+					var="pro"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					
+					<p:column sortBy="#{pro.programaAcademico}" style="word-wrap: break-word!important;" 
+						filterBy="#{pro.programaAcademico}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_PARAMETRICA_CODIGO_PROGRAMA']}" /></f:facet>
+						<h:outputText value="#{pro.programaAcademico}" />
+					</p:column>
+					
+					<p:column sortBy="#{pro.nombreProgramaAcademico}" style="word-wrap: break-word!important;" 
+						filterBy="#{pro.nombreProgramaAcademico}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_PARAMETRICA_NOMBRE_PROGRAMA']}" /></f:facet>
+						<h:outputText value="#{pro.nombreProgramaAcademico}" />
+					</p:column>
+					
+					<p:column sortBy="#{pro.nombreTituloOtorgado}" style="word-wrap: break-word!important;" 
+						filterBy="#{pro.nombreTituloOtorgado}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_PARAMETRICA_NOMBRE_TITULO_PROGRAMA']}" /></f:facet>
+						<h:outputText value="#{pro.nombreTituloOtorgado}" />
+					</p:column>
+					
+					<p:column sortBy="#{pro.nombreInstitucion}" style="word-wrap: break-word!important;"
+						filterBy="#{pro.nombreInstitucion}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_PARAMETRICA_INSTITUCION_EDUCATIVA']}" /></f:facet>
+						<h:outputText value="#{pro.nombreInstitucion}"/>
+					</p:column>
+					
+					<p:column sortBy="#{pro.flgActivo}" style="word-wrap: break-word!important; text-align: center; ">
+						<f:facet name="header" ><h:outputText value="#{titles.TTL_ACTIVO}" /></f:facet>
+						<p:selectBooleanCheckbox value="#{pro.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+					
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarProgramaAcademico" title="${titles['TTL_EDIT']}"
+							icon="icon-edit" styleClass="icon-btn btn-view-data"
+							process="@this" update="frmPrincipal:panelProgramaAcademico"
+							immediate="true"
+							actionListener="#{programaAcademicoBean.modificarProgramaAcademico(pro)}"
+                    		oncomplete="window.location.href='#frmPrincipal:panelProgramaAcademico';">
+						</p:commandButton>
+						<p:commandButton id="btnVerProgramaAcademico"
+							actionListener="#{programaAcademicoBean.consultarProgramaAcademico(pro)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view" styleClass="icon-btn"
+							process="@this" update="frmPrincipal:panelProgramaAcademico"
+                    		oncomplete="window.location.href='#frmPrincipal:panelProgramaAcademico';">
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+							rendered="false"
+							id="btnAdmonEliminarProgramaAcademico" styleClass="icon-btn" process="@this"
+							actionListener="#{programaAcademicoBean.eliminarProgramaAcademico()}" update="frmPrincipal:dlgConfirmarProgramaAcademico">
+							<f:setPropertyActionListener value="#{pro}" target="#{programaAcademicoBean.infoProgramaAcademico}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelProgramaAcademico">
+			<p:spacer height="2" />
+			<p:panel id="subpanelProgramaAcademico" widgetVar="subPanelProgramaAcademico"
+				rendered="#{programaAcademicoBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<p:spacer height="3" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{programaAcademicoBean.strAccionRealizada}</span>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_INSTITUCION_EDUCATIVA}:"
+								styleClass="log-label form-label-formularios" for="txtInstitucion" />
+							<p:autoComplete id="txtInstitucion"
+	                             value="#{programaAcademicoBean.institucionEducativa}"
+	                             converter="institucionEducativaEdFormalConverter"
+	                             var="institucionAcademicaSelect" dropdown="true" forceSelection="true"
+	                             disabled="#{programaAcademicoBean.blnConsultarProgramaAcademico}"
+	                             process="@this" 
+	                             required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+	                             scrollable="true" scrollHeight="150" scrollwidth ="90"
+	                             itemLabel="#{institucionAcademicaSelect.nombreInstitucion}"  itemValue="#{institucionAcademicaSelect}"
+	                             completeMethod="#{programaAcademicoBean.listarInsitucionEducativaFiltro}"
+	                             minQueryLength="3" maxResults="1000"
+	                             queryDelay="1000">
+	                             <p:ajax  event="itemSelect" process="txtInstitucion" update="panelCodProgramaAcademico" 
+	                             		 listener="#{programaAcademicoBean.validarInstitucionExtanjera}"/>
+		                     </p:autoComplete>
+							<p:message for="txtInstitucion" display="text" />
+						</div>
+					
+					
+						<div class="col-md-4">
+						<p:outputPanel id="panelCodProgramaAcademico">
+							<p:panel id="subPanelCodProgramaAcademico" rendered="#{!programaAcademicoBean.blnInsExtranjera}">
+								<p:outputLabel id= "lblCodProgramaAcademico" value="#{titles.LBL_PARAMETRICA_CODIGO_PROGRAMA}:"
+									styleClass="log-label form-label-formularios"
+									for="txtCodigoPrograma" />
+								<p:inputText id="txtCodigoPrograma" 
+									required="true"
+									value="#{programaAcademicoBean.infoProgramaAcademico.codProgramaAcademico}"
+									disabled="#{programaAcademicoBean.blnConsultarProgramaAcademico}"
+									maxlength="8"
+									onkeypress="return numbervalida(event)"
+									requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+									<f:validator validatorId="maxByteLengthValidator" />
+									<f:validator validatorId="numberValidator" />
+								</p:inputText>
+								<p:message for="txtCodigoPrograma" display="text" />
+							</p:panel>
+							<p:panel id="subPanelCodProgramaAcademicoAPlica" rendered="#{programaAcademicoBean.blnInsExtranjera}">
+								<p:outputLabel for="codProgramaAcademicoNoAplica" id="labelCodProgramaAcademicoNoAplica"
+										styleClass="log-label form-label-formularios"
+										value="#{titles.LBL_PARAMETRICA_CODIGO_PROGRAMA}:" />
+								<p:inputText id="codProgramaAcademicoNoAplica"
+											 value="${titles['LBL_NO_APLICA']}" 
+											 disabled="true" title="${titles['LBL_NO_APLICA']}" />
+							</p:panel>		
+						</p:outputPanel>
+					</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.LBL_PARAMETRICA_NOMBRE_PROGRAMA}:"
+								styleClass="log-label form-label-formularios"
+								for="txtNombrePrograma" />
+							<p:inputText id="txtNombrePrograma" required="true"
+								value="#{programaAcademicoBean.infoProgramaAcademico.nombreProgramaAcademico}"
+								disabled="#{programaAcademicoBean.blnConsultarProgramaAcademico}"
+								maxlength="254"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombrePrograma" display="text" />
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_PARAMETRICA_NOMBRE_TITULO_PROGRAMA}:"
+								styleClass="log-label form-label-formularios" for="txtTituloPrograma" />
+							<p:inputText id="txtTituloPrograma" required="true"
+								maxlength="255"
+								value="#{programaAcademicoBean.infoProgramaAcademico.nombreTituloOtorgado}"
+								disabled="#{programaAcademicoBean.blnConsultarProgramaAcademico}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtTituloPrograma" display="text" />
+
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:" for="activoProgramaAcademico"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true" id="activoProgramaAcademico"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{programaAcademicoBean.blnConsultarProgramaAcademico}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{programaAcademicoBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoProgramaAcademico" display="text" />
+						</div>
+						<div class="col-md-4"></div>
+						
+					</div>
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							styleClass="btn btn-primary"
+							rendered="#{!programaAcademicoBean.blnConsultarProgramaAcademico}"
+							disabled="#{programaAcademicoBean.blnConsultarProgramaAcademico}" update="panelProgramaAcademico dataTableProgramaAcademico nombreProgramaAcademico"
+							actionListener="#{programaAcademicoBean.guardarProgramaAcademico()}"
+							process="frmPrincipal:panelProgramaAcademico"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!programaAcademicoBean.blnConsultarProgramaAcademico}"
+							styleClass="btn btn-default" update="dlgConfirmarProgramaAcademico"
+							actionListener="#{programaAcademicoBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{programaAcademicoBean.blnConsultarProgramaAcademico}"
+							styleClass="btn btn-primary" update="panelProgramaAcademico nombreProgramaAcademico"
+							actionListener="#{programaAcademicoBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarProgramaAcademico" id="dlgConfirmarProgramaAcademico" minHeight="300"
+			modal="true" draggable="false" closable="false" height="auto"
+			resizable="false" responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"
+				align="center">
+				<center>
+					<h5>#{programaAcademicoBean.strMensaje}</h5>
+				</center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary" update="panelProgramaAcademico dataTableProgramaAcademico"
+						actionListener="#{programaAcademicoBean.procesarRespuestaConfirmacion}"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;"
+						onclick="PF('dlgConfirmarProgramaAcademico').hide();" />
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarProgramaAcademico').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;"> </div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+
+	<script type="text/javascript">
+		function mayus(e) {
+			e.value = e.value.toUpperCase();
+		}
+	</script>
+
+</ui:composition>

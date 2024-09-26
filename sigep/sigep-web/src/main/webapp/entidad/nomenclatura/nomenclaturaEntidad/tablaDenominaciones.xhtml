@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<div class="col-md-12" >
+		<div class="col-md-7"></div> 
+		<div class="col-md-3" >
+			<p:commandButton value="${titles['TTL_NOMENCLATURA_BASE']}"
+							 id="btnNomenclaturaBase"
+							 widgetVar="wvBtnNomenclaturaBase" 
+							 icon="fa fa-fw fa-plus-circle"
+							 styleClass="btn btn-transparent"
+							 actionListener="#{gestionarNomenclaturaEscalaBean.abrirFormularioNomenclaturaBase()}"
+							 update="formNomenclaturaBase:dlgNomenclaturaBase"
+							 process="@this"
+							 editMode="cell"
+							 editable="true"
+							 onstart="PF('dlgCargaNomenclatura').show()"
+                    		 onsuccess="PF('dlgCargaNomenclatura').hide()"
+							 rendered="#{gestionarNomenclaturaEscalaBean.blnVisibleMensajeCrear}"/>
+		</div>
+		<div class="col-md-2" >
+			<p:commandButton value="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_NUEVO']}"
+							 id="btnCrearDenominacion"
+							 widgetVar="wvBtnCrearDenominacion" 
+							 icon="fa fa-fw fa-plus-circle"
+							 styleClass="btn btn-transparent agregar_mover_deno"
+							 actionListener="#{gestionarNomenclaturaEscalaBean.abrirFormularioCrearDenominacion()}"
+							 update="formCrearDenominacion:dlgNuevaDenominacion"
+							 process="@this"
+							 onstart="PF('dlgCargaNomenclatura').show()"
+                    		 onsuccess="PF('dlgCargaNomenclatura').hide()"
+							 rendered="#{!gestionarNomenclaturaEscalaBean.blnAccionConsultar and !gestionarNomenclaturaEscalaBean.blnAccionEquivalencia
+							 	and !gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral }"/>
+		</div>
+	</div>
+	<br/><br/>
+	<div class="col-md-12"  style ="margin-top: -1%;">
+		<br/>
+		<p:dataTable id="dtDenominacionesNomenclatura" widgetVar="wvDtDenominacionesNomenclatura"
+			value="#{gestionarNomenclaturaEscalaBean.lstDenominacionesNomenclatura}" 
+			var="denominacionesNomenclatura"
+			paginator="true"
+			rows="#{paginatorSize}"
+			rowsPerPageTemplate="#{paginatorsSize}"
+			currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			editMode="cell" editable="true"
+			emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+			selection="#{gestionarNomenclaturaEscalaBean.nomenclaturaDenominacionDestino}"
+       		rowKey="#{denominacionesNomenclatura.codNomenclaturaDenominacion}" >
+			<p:column sortBy="#{denominacionesNomenclatura.nivelCargo}"
+				filterBy="#{denominacionesNomenclatura.nivelCargo}"  filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="#{titles.TTL_NOMENCLATURA_NIVEL_JERARQUICO}" />
+				</f:facet>
+				<h:outputText value="#{denominacionesNomenclatura.codNivelJerarquico}" converter="parametricaBgDecimalConverter" />
+			</p:column>
+			<p:column sortBy="#{denominacionesNomenclatura.nombreCargo}"
+				filterBy="#{denominacionesNomenclatura.nombreCargo}"  filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="#{titles.TTL_NOMENCLATURA_DENOMINCACION_EMPLEO}" />
+				</f:facet>
+				<h:outputText value="#{denominacionesNomenclatura.codDenominacion}" converter="denominacionIDConverter" />
+			</p:column>
+			<p:column sortBy="#{denominacionesNomenclatura.codigoCargo}"
+				filterBy="#{denominacionesNomenclatura.codigoCargo}"  filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="#{titles.LBL_NOMENCLATURA_CODIGO_DENOMINACION}"  />
+				</f:facet>
+				<h:outputText value="#{denominacionesNomenclatura.codCodigo}" converter="parametricaBgDecimalConverter" />
+			</p:column>
+			<p:column sortBy="#{denominacionesNomenclatura.gradoCargo}"
+				filterBy="#{denominacionesNomenclatura.gradoCargo}"  filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="${titles['LBL_CT_GRADO_EMPLEO']}"/>
+				</f:facet>
+				<h:outputText value="#{denominacionesNomenclatura.codGrado}"  converter="parametricaBgDecimalConverter" />
+			</p:column>
+			<p:column sortBy="#{denominacionesNomenclatura.asignacionSalarial}"
+				filterBy="#{denominacionesNomenclatura.asignacionSalarial}"  filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="${titles['LBL_NOMENCLATURA_ASIGNACION']}"/>
+				</f:facet>
+				<h:outputText value="#{denominacionesNomenclatura.asignacionSalarial}">
+					<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true"  maxFractionDigits="0"/>
+				</h:outputText>
+			</p:column>
+			<p:column id="dtColumnaPorcentajeIncremento"
+				headerText="${titles['LBL_ENTIDAD_NOMENCLATURA_PORC_INCREMENTO']}"
+				rendered="#{gestionarNomenclaturaEscalaBean.blnIncrementoSalarial}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{denominacionesNomenclatura.incPorcentaje}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputNumber id="txtValorPorcentajeIndividual" decimalSeparator=","
+							thousandSeparator="." decimalPlaces="2"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}  ${titles['TTL_TIPO_NUMERICO']}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+							value="#{denominacionesNomenclatura.incPorcentaje}"
+							converter="javax.faces.BigDecimal"
+							converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+							<p:keyFilter mask="num"></p:keyFilter>
+							<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+							<p:ajax event="change" update="dtDenominacionesNomenclatura"
+								listener="#{gestionarNomenclaturaEscalaBean.aplicarIncrementoDenominacionIndividual(denominacionesNomenclatura,'0')}"></p:ajax>
+						</p:inputNumber>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column id="dtColumnaValorIncremento"
+				headerText="${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}"
+				rendered="#{gestionarNomenclaturaEscalaBean.blnIncrementoSalarial}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{denominacionesNomenclatura.incValor}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputNumber id="txtValorIndividual" decimalSeparator=","
+							thousandSeparator="." decimalPlaces="2"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_NOMENCLATURA_VALOR_INCREMENTO']}  ${titles['TTL_TIPO_NUMERICO']}"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15_1']}"
+							value="#{denominacionesNomenclatura.incValor}"
+							converter="javax.faces.BigDecimal"
+							converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+							<p:keyFilter mask="num"></p:keyFilter>
+							<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+							<p:ajax event="change" update="dtDenominacionesNomenclatura"
+								listener="#{gestionarNomenclaturaEscalaBean.aplicarIncrementoDenominacionIndividual(denominacionesNomenclatura,'1')}"></p:ajax>
+						</p:inputNumber>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="${titles['TTL_ENTIDADES_NOMENCLATURA_DENOMINACION_ASIGNACION_SAL_N']}"
+				style="word-wrap: break-word!important;"
+				rendered="#{gestionarNomenclaturaEscalaBean.blnIncrementoSalarial}">
+				<h:outputText value="#{denominacionesNomenclatura.nuevaAsignacionSalarial}">
+					<f:convertNumber currencySymbol="$" type="currency" locale="es_CO" groupingUsed="true" maxFractionDigits="0" />
+				</h:outputText>
+			</p:column>
+			<p:column
+				headerText="#{titles.TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS_ORIGEN}"
+				style="word-wrap: break-word!important; text-align:center"
+				rendered="#{gestionarNomenclaturaEscalaBean.blnAccionEquivalencia}">
+				<p:selectBooleanCheckbox value="#{denominacionesNomenclatura.lbOrigenEquivalencia}" />
+			</p:column>
+			<p:column
+				headerText="#{titles.TTL_ENTIDADES_NOMENCLATURA_EQUIVALENCIAS_DESTINO}"
+				style="word-wrap: break-word!important; text-align:center"
+				rendered="#{gestionarNomenclaturaEscalaBean.blnAccionEquivalencia}"
+				selectionMode="single">
+				<p:selectOneRadio value="#{denominacionesNomenclatura.lbDestinoEquivalencia}" />
+			</p:column>
+			
+			<p:column style="width:16px;text-align:center" rendered="#{gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+				<f:facet name="header">
+					<h:outputText value="${titles['LBL_ENTIDAD_NOMENCLATURA_DENOMINACION_PERMITIDA']}"/>
+					<p:selectBooleanCheckbox styleClass="checkbox-aprobacion" value="#{gestionarNomenclaturaEscalaBean.blnPersonalizarTodo}">
+						  <p:ajax update="dtDenominacionesNomenclatura"  listener="#{gestionarNomenclaturaEscalaBean.seleccionarTodasDenominaciones()}" />
+					</p:selectBooleanCheckbox>
+				</f:facet>
+				<p:selectBooleanCheckbox value="#{denominacionesNomenclatura.blnFlgActivoParticular}" styleClass="checkbox-aprobacion">
+					  <p:ajax update="dtDenominacionesNomenclatura dlgPlantaAsociadaPersonalizacion"
+					    listener="#{gestionarNomenclaturaEscalaBean.validarDenominacionPersonalizar(denominacionesNomenclatura)}"/>
+				</p:selectBooleanCheckbox>
+			</p:column>
+
+			<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+				style="opacity: 1!important;padding: 0.5%!important;text-align:center!important;"
+				rendered="#{!gestionarNomenclaturaEscalaBean.blnIncrementoSalarial and !gestionarNomenclaturaEscalaBean.blnAccionEquivalencia}"
+				visible="#{!gestionarNomenclaturaEscalaBean.blnAccionConsultar and !gestionarNomenclaturaEscalaBean.blnAccionPersonalizarGeneral}">
+				<p:commandButton title="${titles['BTN_TABLA_ACTUALIZAR']}" icon="icon-edit"
+					id="btnActualizarDenominacion" styleClass="icon-btn"
+					process="@this" update="formCrearDenominacion:dlgNuevaDenominacion"
+					actionListener="#{gestionarNomenclaturaEscalaBean.modificarDenominacionNomenclatura(denominacionesNomenclatura)}"
+					>
+				</p:commandButton>
+				<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+					id="btnAdmonEliminarDenominacion" styleClass="icon-btn" process="@this"
+					onclick="$('#dlgEliminarDenominacion').modal('show')">
+					<f:setPropertyActionListener value="#{denominacionesNomenclatura}"
+							target="#{gestionarNomenclaturaEscalaBean.denominacion}" />
+				</p:commandButton>
+				<p:commandButton id="btnVerDenominacion"
+					title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+					process="@this"
+					update = "formCrearDenominacion:dlgNuevaDenominacion"
+					actionListener="#{gestionarNomenclaturaEscalaBean.verDenominacionNomenclatura(denominacionesNomenclatura)}"
+					
+					styleClass="icon-btn">
+				</p:commandButton>
+				<p:commandButton id="btnOtrasAsignaciones"
+					title="${titles['TTL_ENTIDADES_NOMENCLATURA_OTRAS_ASIGNACIONES']}"
+					icon="icon-otras_asignacion" styleClass="icon-btn" process="@this"
+					update="formCrearNomenclatura:panelOtrasAsignaciones"
+					rendered="#{gestionarNomenclaturaEscalaBean.habilitarBotonOtrasAsignaciones(denominacionesNomenclatura)}"
+					actionListener="#{gestionarNomenclaturaEscalaBean.verOtraAsignacionDenominacion(denominacionesNomenclatura)}"
+					oncomplete="window.location.href='#formCrearNomenclatura:btnAgregarOtraAsignacionSalarial'">
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</div>
+</ui:composition>

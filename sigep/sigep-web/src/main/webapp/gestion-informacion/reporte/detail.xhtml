@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/dialogTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{detalleReporteBeanS.id}' />
+		<f:viewParam name="parametrosDesdePadre"
+			value="#{detalleReporteBeanS.parametrosDesdePadre}" />
+		<f:event type="preRenderView"
+			listener='#{detalleReporteBeanS.retrieve}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${menu['MENU_REPORTES']} :: ${menu[detalleReporteBeanS.detalleReporte.menu]}" />
+	<ui:param name="pageSubtitle"
+		value="#{detalleReporteBeanS.tipoRegistro.descripcion}" />
+
+	<ui:define name="main">
+		<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid"
+			styleClass="ui-panelgrid-blank">
+			<ui:include src="contentDetail.xhtml" />
+		</p:panelGrid>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton value="${titles['TTL_DOWNLOAD_ALL']}" ajax="false"
+			rendered="#{reporteBeanS.xmlArchivo.extension eq PFFormatoReporte.TTL_REPORTES_FORMATO_EXCEL and reporteBeanS.habilitarBotonesExportar}"
+			immediate="true" icon="ui-icon-arrowstop-1-s"
+			title="#{reporteBeanS.xmlArchivo.extension.value().toLowerCase()}">
+			<pe:exporter type="xlsx" target="resultadosDetalle"
+				tableTitle="${menu[reporteBeanS.reporte.menu]}"
+				fileName="#{reporteBeanS.nombreArchivoDescarga}" />
+		</p:commandButton>
+		<p:commandButton value="${titles['TTL_DOWNLOAD_ALL']}" ajax="false"
+			rendered="#{reporteBeanS.xmlArchivo.extension eq PFFormatoReporte.TTL_REPORTES_FORMATO_CSV and reporteBeanS.habilitarBotonesExportar}"
+			immediate="true" icon="ui-icon-arrowstop-1-s"
+			title="#{reporteBeanS.xmlArchivo.extension.value().toLowerCase()}">
+			<p:dataExporter type="csv" target="resultadosDetalle"
+				tableTitle="${menu[reporteBeanS.reporte.menu]}"
+				fileName="#{reporteBeanS.nombreArchivoDescarga}" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

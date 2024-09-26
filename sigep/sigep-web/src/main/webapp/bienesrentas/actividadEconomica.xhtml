@@ -1,0 +1,465 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="fomularioActividadPrivada">
+		<div
+			class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<ui:include src="tarjetaInformacionDeclaracion.xhtml" />
+			<div class="row">
+				<div
+					class="col-md-12"
+					align="center">
+					<p:outputLabel
+						value="#{titles.LBL_DATOS_AP}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<hr class="hr-style" />
+			<div class="row">
+				<div class="col-md-12" style="text-align: right;">
+					<div style="padding-right: 1%; display: inline-block">
+						<div id="btnNuevoActividadEconomica">
+							<p:commandButton
+								process="@this"
+								value="#{titles.LBL_ADD_NEW}"
+								actionListener="#{bienesRentasBean.crearActividad()}"
+								disabled="#{bienesRentasBean.sinActividadPrivada}"
+								onclick="verFormulario();"
+								styleClass="btn btn-transparent"
+								icon="fa fa-fw fa-plus-circle"
+								update="tabViewBienesRentas:fomularioActividadPrivada:panelFormActividad"/>
+						</div>
+					</div>
+					<div
+						class="col-md-6"
+						align="right">
+						
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-12">
+						<p:dataTable
+							id="tablaActividadEconomica"
+							var="dataActividadPrivada"
+							value="#{bienesRentasBean.listaActividadPrivada}"
+							paginator="true"
+							rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							emptyMessage="${titles['TTL_BIENES_RENTAS_TABLA_SIN_REGISTROS']}">
+							<p:column
+								headerText="#{titles.LBL_DETALLE_ACTIVIDAD}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataActividadPrivada.detalle}">
+								<h:outputText value="#{dataActividadPrivada.detalle}" />
+							</p:column>
+							<p:column
+								headerText="#{titles.LBL_FORMA_PART}"
+								style="word-wrap: break-word!important;"
+								sortBy="#{dataActividadPrivada.nombreFormaParticipacion}">
+								<h:outputText value="#{dataActividadPrivada.nombreFormaParticipacion}" />
+							</p:column>
+							<p:column
+								headerText="#{titles.LBL_ACCIONES}"
+								style="word-wrap: break-word!important; text-align:center!important;">
+								<p:commandButton
+									title="#{titles.TTL_EDIT}"
+									icon="icon-edit"
+									process="@this"
+									update="tabViewBienesRentas:fomularioActividadPrivada:panelFormActividad"
+									action="#{bienesRentasBean.mostrarDialogoEditarActividadPrivada()}"
+									styleClass="icon-btn">
+									<f:setPropertyActionListener
+										value="#{dataActividadPrivada}"
+										target="#{bienesRentasBean.actividadPrivada}" />
+								</p:commandButton>
+								<p:commandButton
+									title="#{titles.TTL_DELETE}"
+									icon="icon-delete"
+									process="@this"
+									update="tabViewBienesRentas:fomularioActividadPrivada"
+									action="#{bienesRentasBean.mostrarDialogoEliminarActividadPrivada()}"
+									styleClass="icon-btn">
+									<f:setPropertyActionListener
+										value="#{dataActividadPrivada}"
+										target="#{bienesRentasBean.actividadPrivada}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div
+					class="col-lg-12"
+					align="center">
+					<div class="col-md-12">
+						<h:outputText
+							styleClass="log-label form-label-formularios"
+							value="#{titles.LBL_NO_AEP}&#160;" />
+						<p:selectBooleanCheckbox value="#{bienesRentasBean.sinActividadPrivada}">
+							<p:ajax
+								update="tabViewBienesRentas:fomularioActividadPrivada"
+								listener="#{bienesRentasBean.bloquarRegistrarActividadPrivada}" />
+						</p:selectBooleanCheckbox>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="col-md-12" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton disabled="#{bienesRentasBean.btnGuardarActividadDeshabilitado}"
+						title="#{bienesRentasBean.btnGuardarActividadMensaje}"
+						value="#{titles.LBL_SAVE_CONT}"
+						styleClass="btn btn-primary"
+						process="@this"
+						style="font-size:1.5em!important; padding-top:0!important;"
+						actionListener="#{bienesRentasBean.guardarContinuarActividadPrivada}" />
+				</div>
+				<div class="col-md-2" style="margin-bottom: 3%;">
+					<p:commandButton
+						value="#{titles.TTL_CANCEL}"
+						type="button"
+						onclick="mostrarDialogCancelarAP();"
+						styleClass="btn btn-default"
+						style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>			
+		</div>
+		<br />
+		<br />
+		<div
+			id="divFormActividadPrivada"
+			class="row row-background-white"
+			style="display: none;">
+			<p:panel id="panelFormActividad" visible="#{bienesRentasBean.lbMostrarFormulario}">
+				<br />
+				<br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style">#{titles.LBL_NEW_AEP}</span>
+				<div
+					class="row"
+					align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-2"></div>
+						<div class="col-md-4">
+							<p:outputLabel
+								for="selectFormaParticipacion"
+								styleClass="log-label form-label-formularios display-block"
+								value="${titles['TTL_BR_ACTIVIDAD_FORMA']}:">
+							</p:outputLabel>
+							<p:selectOneMenu
+								id="selectFormaParticipacion"
+								filter="true" filterMatchMode ="contains"
+								required="true"
+								title="${titles['TTL_SELECT']} ${titles['TTL_BR_ACTIVIDAD_FORMA']}"
+								value="#{bienesRentasBean.actividadPrivada.formaParticipacion}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem
+									itemValue="#{null}"
+									itemLabel="#{titles.TTL_SELECT}" />
+								<f:selectItems value="#{webUtils.formaParticipacion}" />
+							</p:selectOneMenu>
+							<p:message
+								for="selectFormaParticipacion"
+								display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								for="txtDetalleActividad"
+								styleClass="log-label form-label-formularios display-block"
+								value="#{titles.LBL_DETALLE_ACTIVIDAD}:">
+							</p:outputLabel>
+							<p:inputText
+								id="txtDetalleActividad"
+								required="true"
+								maxlength="125" 
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_DETALLE_ACTIVIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{bienesRentasBean.actividadPrivada.detalle}"
+								styleClass="form-control-acti-usua form-control">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message
+								for="txtDetalleActividad"
+								id="msgDetalle"
+								display="text" />
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+				<br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton
+							value="${titles['TTL_BR_BTN_ADICIONAR']}"
+							process="fomularioActividadPrivada txtDetalleActividad"
+							update="panelFormActividad tablaActividadEconomica"
+							actionListener="#{bienesRentasBean.guardarActividadPrivada}"
+							styleClass="btn btn-primary"
+							style="font-size:1.5em!important; padding-top:0!important;" />
+					</div>
+					<div class="col-md-3" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}" 
+							styleClass="btn btn-primary" style="font-size:1.5em!important; 
+							padding-top:0!important;" 
+							process="@this"
+							update="panelFormActividad tablaActividadEconomica"
+							actionListener="#{bienesRentasBean.limpiarActividadPrivada()}">
+														<p:resetInput
+										target="tabViewBienesRentas:fomularioActividadPrivada:panelFormActividad" />	
+					  </p:commandButton>
+					</div>						
+					<div class="col-md-3"></div>
+				</div>
+			</p:panel>
+			<br />
+		</div>
+	</h:form>
+	<div
+		class="modal fade"
+		id="dialogRespuActividad"
+		role="dialog" 
+		data-backdrop="static" 
+		data-keyboard="false" >
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 18%; width: 55%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${titles['TTL_BR_BORRAR_TODO']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div
+						class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton
+								id="btnDeshabiTablaActi"
+								value="${titles['TTL_OK']}"
+								process="@this"
+								styleClass="btn btn-primary"
+								update="tabViewBienesRentas:fomularioActividadPrivada"
+								actionListener="#{bienesRentasBean.limpiarFormActividad()}"
+								onclick="$('#dialogRespuActividad').modal('hide')" />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_CANCEL']}"
+								process="@this"
+								styleClass="btn btn-default"
+								actionListener="#{bienesRentasBean.cancelarEliminacionTablaActividad()}"
+								update="tabViewBienesRentas:fomularioActividadPrivada"
+								onclick="$('#dialogRespuActividad').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dialogEditarActividadEconomica"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['MSG_CONF_EDITAR_REG']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton value="${titles['TTL_YES']}" process="@this" 
+								actionListener="#{bienesRentasBean.editarActividadPrivada}"
+									
+									onclick="verFormulario();$('#dialogEditarActividadEconomica').modal('hide');" styleClass="btn btn-primary"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>								
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogEditarActividadEconomica').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	<div
+		class="modal fade"
+		id="dialogEliminarActividadEconomica"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_INTERROGA_ELIMINACION']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									update="tabViewBienesRentas:fomularioActividadPrivada"
+									actionListener="#{bienesRentasBean.eliminarActividadPrivada}"
+									styleClass="btn btn-primary"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogEliminarActividadEconomica').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div
+		class="modal fade"
+		id="dialogCancelarActividadPrivada"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_DIALOGO_CANCELAR']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3"></div>
+							<div
+								class="col-md-3"
+								align="center"
+								style="margin-bottom: 3%;">
+								<p:commandButton
+									value="${titles['TTL_YES']}"
+									styleClass="btn btn-primary"
+									actionListener="#{bienesRentasBean.cancelarActividadPrivada}"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div
+								class="col-md-3"
+								align="center">
+								<p:commandButton
+									value="${titles['TTL_NO']}"
+									styleClass="btn btn-default"
+									type="button"
+									onclick="$('#dialogCancelarActividadPrivada').modal('hide');"
+									style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;">
+								</p:commandButton>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+        function verFormulario() {
+            $("#divFormActividadPrivada").attr("style", "display:block");
+        }
+        function verFormularioEditar() {
+            $("#divFormActividadPrivada").attr("style", "display:block");
+            $('#dialogEditarActividadEconomica').modal('hide');
+        }
+        function mostrarDialogCancelarAP(){			
+			$('#dialogCancelarActividadPrivada').modal({
+				backdrop : 'static',
+				keyboard : false
+			});
+		}
+    </script>
+</ui:composition>

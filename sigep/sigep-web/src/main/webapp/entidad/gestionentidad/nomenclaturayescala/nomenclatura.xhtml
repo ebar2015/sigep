@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="es" lang="es" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+		<h:form id="formularioBuscarNomenclatura">
+		<div class="row row-background-white" style="margin-left: 0px; padding-top: 2em;">
+		<div class="row">
+			<div class="col-md-12">
+				<div id="btnNuevaNomenclatura" class="text-right" style="margin-bottom: 10px!important;">
+					<p:commandButton value="${titles['LBL_ADD_NOMENCLATURA']}" icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent" process="@this" update="formularioBuscarNomenclatura" style="padding-right: 5px!important;"
+					                actionListener="#{nomenclaturaSalarialBean.habilitarCreacionNomen()}" disabled="#{!nomenclaturaSalarialBean.lbIsRolNomenclatura}" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p:dataTable id="tablaNomenclaturas" widgetVar="wvDttablaNomenc" var="dataNomenclaturas" 
+							 paginator="true" rows="#{paginatorSize}"  reflow="true"
+				             currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}" 
+				             rowsPerPageTemplate="#{paginatorsSize}"
+						     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				             value="#{nomenclaturaSalarialBean.listaNomenclaturas}" emptyMessage="#{messages.MSG_TABLAS_SIN_REGISTROS}">
+					<p:column headerText="#{titles.LBL_NOMENCLATURA_RAMA}" style="word-wrap: break-word!important;text-align: center!important;">
+						<h:outputText value="#{nomenclaturaSalarialBean.obtenerNombreParametrica(dataNomenclaturas.codRamaOrganizacionEnte)}" >
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{titles.LBL_ORDEN}" style="word-wrap: break-word!important;text-align: center!important;">
+						<h:outputText value="#{nomenclaturaSalarialBean.obtenerNombreParametrica(dataNomenclaturas.codOrden)}" >
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{titles.TTL_ASIGNAR_RESPONSABLE_ENT_NATURALEZA}" style="word-wrap: break-word!important;text-align: center!important;">
+						<h:outputText value="#{nomenclaturaSalarialBean.obtenerNombreParametrica(dataNomenclaturas.codNaturalezaJuridica)}" >
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{titles.TTL_GI_TABLERO_CEP_EMP_SISTEMA_CARRERA}" style="word-wrap: break-word!important;text-align: center!important;">
+						<h:outputText value="#{nomenclaturaSalarialBean.obtenerNombreParametrica(dataNomenclaturas.codSistemaCarrera)}" >
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{titles.LBL_ACCIONES}" style="word-wrap: break-word!important;text-align: center!important;">
+						<p:commandButton title="#{titles.TTL_CONSULT}" icon="icon-view" styleClass="icon-btn" process="@this"
+						                 update="tabViewNomenclaturaEscala:formularioBuscarNomenclatura tabViewNomenclaturaEscala" 
+						                 oncomplete="window.location.href='#tabViewNomenclaturaEscala:formularioBuscarNomenclatura:divFormNuevaNomenclatura_content'" 
+						                 onclick="window.location.href='#tabViewNomenclaturaEscala:formularioBuscarNomenclatura:divFormNuevaNomenclatura_content'"
+						                 actionListener="#{nomenclaturaSalarialBean.consultarNomenclatura(dataNomenclaturas)}" >
+						</p:commandButton>
+						<p:commandButton title="#{titles.TTL_MODIFY}" icon="icon-edit" styleClass="icon-btn" process="@this" update="tabViewNomenclaturaEscala:formularioBuscarNomenclatura tabViewNomenclaturaEscala" 
+										 actionListener="#{nomenclaturaSalarialBean.editarNomenclatura(dataNomenclaturas)}" disabled="#{!nomenclaturaSalarialBean.lbIsRolNomenclatura}" >
+						</p:commandButton>
+						<p:commandButton title="#{titles.TTL_DELETE}" oncomplete="$('#dlgElimina').modal('show');" icon="icon-delete" styleClass="icon-btn"
+						 				 actionListener="#{nomenclaturaSalarialBean.eliminarNomenclatura(dataNomenclaturas)}" 
+										 process="@this" update="tabViewNomenclaturaEscala:formularioBuscarNomenclatura:pnlFormBuscarNomenclatura @widgetVar(wvDttablaNomenc)"
+										 disabled="#{!nomenclaturaSalarialBean.lbIsRolNomenclatura}">
+						</p:commandButton>
+						<p:commandButton title="Asociar Nomenclatura a Entidad" icon="icon-planta" styleClass="icon-btn" actionListener="#{nomenclaturaSalarialBean.mostrarEntidades(dataNomenclaturas)}" 
+										 process="@this" update="tabViewNomenclaturaEscala"  disabled="#{!nomenclaturaSalarialBean.lbIsRolNomenclatura}">
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+	<br />
+		<p:panel id="pnlFormBuscarNomenclatura" visible="#{nomenclaturaSalarialBean.visibilidaFormEnti}">
+				<div class="row-background-white" style="margin-top: 50px!important;" id="anclaAsociar">
+					<hr class="hr-style hr-style-two" />
+					<span class="span-style">#{titles.LBL_ASOCIAR_NOMENCLATURA}</span>
+					<p:panel rendered="#{nomenclaturaSalarialBean.estadoTablaNome}" >
+						<div class="row" align="right">
+							<div class="col-md-12">
+								<label class="form-label-formularios">#{titles.TTL_REQUIRED}</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_CODIGO_SIGEP']}:" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}:" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}:" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p:inputText id="codSigep"  maxlength="6" value="#{nomenclaturaSalarialBean.filtro.codigoSigep}" title="${titles['TTL_INGRESE']} ${titles['TTL_CODIGO_SIGEP']}">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+							</div>
+							<div class="col-md-4">
+								<p:inputText id="nomEntidad"  maxlength="255" value="#{nomenclaturaSalarialBean.filtro.nombreEntidad}" title="${titles['TTL_INGRESE']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NOMBRE_ENTIDAD']}">
+									<f:validator validatorId="maxByteLengthValidator" />
+								</p:inputText>
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu id="sec" title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.filtro.codSectorAdministrativo}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1695)}" />
+									<p:ajax event="change" process="@this" ></p:ajax>
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row" style="margin-top: 20px!important">
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['LBL_CLASIFICACION_ORGANICA']}:" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NATURALEZA']}:" />
+							</div>
+							<div class="col-md-4">
+								<p:outputLabel styleClass="log-label form-label-formularios" value="${titles['TTL_ASIGNAR_RESPONSABLE_ENT_ORDEN']}:" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['LBL_CLASIFICACION_ORGANICA']}" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.filtro.codClasificacionOrganica}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1370)}" />
+									<p:ajax event="change" process="@this" ></p:ajax>
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_NATURALEZA']}" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.filtro.codNaturaleza}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1707)}" />
+									<p:ajax event="change" process="@this" ></p:ajax>
+								</h:selectOneMenu>
+							</div>
+							<div class="col-md-4">
+								<h:selectOneMenu title="${titles['TTL_SELECT']} ${titles['TTL_ASIGNAR_RESPONSABLE_ENT_ORDEN']}" styleClass="form-control-form-act-usua" value="#{nomenclaturaSalarialBean.filtro.codOrden}">
+									<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.getListasParametricas(1362)}" />
+									<p:ajax event="change" process="@this" ></p:ajax>
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 30px!important; margin-top: 30px!important">
+							<div class="col-md-6 text-right">
+								<p:commandButton value="#{titles.TTL_SEARCH}" styleClass="btn btn-primary" action="#{nomenclaturaSalarialBean.buscarEntidades()}"  process="pnlFormBuscarNomenclatura" update="formularioBuscarNomenclatura:tablaEntidades" >
+								</p:commandButton>
+							</div>
+							<div class="col-md-6 text-left">
+								<p:commandButton styleClass="btn btn-default" value="#{titles.TTL_CANCEL}" process="@this" update="pnlFormBuscarNomenclatura" actionListener="#{nomenclaturaSalarialBean.confirmacionFiltroBusqueda()}">
+								</p:commandButton>
+							</div>					
+						</div>
+					</p:panel>
+					<p:dataTable id="tablaEntidades" 
+						var="dataEntidades" paginator="true" 
+						rows="#{paginatorSize}" reflow="true" rowsPerPageTemplate="#{paginatorsSize}"
+	 					selection="#{nomenclaturaSalarialBean.entidadesSeleccionadas}" 
+	 					value="#{nomenclaturaSalarialBean.entidadesPersona}"
+						emptyMessage="#{messages.MSG_TABLAS_SIN_REGISTROS}" rowKey="#{dataEntidades.codEntidad}">
+						<p:column selectionMode="multiple" style="width:50px!important;text-align:center" />
+						<p:column headerText="#{titles.TTL_CODIGO_SIGEP}" style="word-wrap: break-word!important;text-align: center!important;">
+							<h:outputText value="#{dataEntidades.codigoSigep}" >
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{titles.LBL_DE_ENTIDAD_USUARIO}" style="word-wrap: break-word!important;text-align: center!important;">
+							<h:outputText value="#{dataEntidades.nombreEntidad}" >
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{titles.TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR}" style="word-wrap: break-word!important;text-align: center!important;">
+							<h:outputText value="#{dataEntidades.nombreSector}" >
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{titles.LBL_CLASIFICACION_ORGANICA}" style="word-wrap: break-word!important;text-align: center!important;">
+							<h:outputText value="#{dataEntidades.nombreClasificacion}" >
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{titles.TTL_ASIGNAR_RESPONSABLE_ENT_NATURALEZA}" style="word-wrap: break-word!important;text-align: center!important;">
+							<h:outputText value="#{dataEntidades.nombreNaturaleza}" >
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{titles.TTL_ASIGNAR_RESPONSABLE_ENT_ORDEN}" style="word-wrap: break-word!important;text-align: center!important;">
+							<h:outputText value="#{dataEntidades.nombreOrden}" >
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+				</div>
+				<div class="row" style="margin-top: 20px!important; margin-bottom: 20px!important">
+					<div class="col-md-12 text-center">
+						<p:commandButton styleClass="btn btn-primary"
+							value="Guardar" actionListener="#{nomenclaturaSalarialBean.asignarNomenclatura()}"  process="@this" update="pnlFormBuscarNomenclatura" >
+							<p:ajax event="click" process="tablaEntidades" update="tablaEntidades"></p:ajax>
+						</p:commandButton>
+						<p:commandButton styleClass="btn btn-default" value="#{titles.TTL_CANCEL}"
+							process="@this" update="pnlFormBuscarNomenclatura" actionListener="#{nomenclaturaSalarialBean.cancelarAsociacionNomenclatura()}">
+						</p:commandButton>
+					</div>					
+				</div>
+			</p:panel>
+	<br />
+	<p:panel id="divFormNuevaNomenclatura" visible="#{nomenclaturaSalarialBean.visibilidaFormNomen}">
+				<hr class="hr-style hr-style-two" />
+					<span class="span-style">#{titles.LBL_NOMENCLATURA_CREAR}</span>
+					<div class="row" align="right">
+						<div class="col-md-12">
+							<label class="form-label-formularios">#{titles.TTL_REQUIRED}</label>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 20px!important">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NOMENCLATURA_RAMA_ORGANIZACION']}:" styleClass="log-label form-label-formularios"  />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SISTEMA_CARRERA']}:" styleClass="log-label form-label-formularios"  />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}:" styleClass="log-label form-label-formularios"  />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<h:selectOneMenu disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}"
+							                 title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_RAMA_ORGANIZACION']}" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.codRamaOrganizacionEnte}" styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(1370)}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}"
+							                 title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_SISTEMA_CARRERA']}" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.codSistemaCarrera}"  styleClass="form-control-form-act-usua" >
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(1455)}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}" title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_NIVEL_JERARQUICO']}" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.codNivelJerarquico}" styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(497)}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 20px!important">
+						<div class="col-md-4">
+							<p:outputLabel for="selectDenominacion" value="${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}:" styleClass="log-label form-label-formularios"  />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="codigoCrear" value="${titles['LBL_CODIGO']}:" styleClass="log-label form-label-formularios" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NOMENCLATURA_TIPO_NORMA']}:" styleClass="log-label form-label-formularios"  />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<h:selectOneMenu disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}"
+							 	id="selectDenominacion" title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_DENOMINCACION_EMPLEO']}"
+							 	required="true" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.codDenominacion}"
+							 	styleClass="form-control-form-act-usua" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" > 
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(1748)}" />
+							</h:selectOneMenu>
+							<p:message for="selectDenominacion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:inputText disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}" id="codigoCrear" title="${titles['TTL_INGRESE']} ${titles['LBL_CODIGO']}" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.codigo}" >
+								<f:validator validatorId="textAlfanumericoValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="codigoCrear" display="text" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}" title="${titles['TTL_SELECT']} ${titles['TTL_NOMENCLATURA_TIPO_NORMA']}" value="#{nomenclaturaSalarialBean.normaSeleccionada.codTipoNorma}" styleClass="form-control-form-act-usua" >
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getListasParametricas(1038)}" />
+								<p:ajax event="change" update="selectNumNorma" listener="#{nomenclaturaSalarialBean.obtenerNormasPorTipo}"></p:ajax>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 20px!important">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_NORMA']}:" styleClass="log-label form-label-formularios"  />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}:" styleClass="log-label form-label-formularios" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="txtJusti" value="${titles['LBL_CT_JUSTIFICACION']}:" styleClass="log-label form-label-formularios" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<p:calendar disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}"
+							 	title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_NORMA']}" 
+							 	navigator="true" validatorMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							 	yearRange="#{rangoAnios}" mode="popup" 
+							 	placeholder="${titles['LBL_FORMATO_FECHA']}"
+							 	requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							 	converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							 	locale="#{lenguajeBean.localeCode}" mask="true"
+							 	value="#{nomenclaturaSalarialBean.normaSeleccionada.fechaNorma}"
+							 	pattern="#{fechaFormato}">
+							 	<p:ajax event="dateSelect" listener="#{nomenclaturaSalarialBean.obtenerNormasPorFecha}" update="selectNumNorma" />
+							</p:calendar>
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}" id="selectNumNorma" title="${titles['TTL_SELECT']} ${titles['TTL_NUMERO_NORMA']}" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.codNorma}" styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{nomenclaturaSalarialBean.listaNormas}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+							<p:inputText disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}" id="txtJusti"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']}"
+								validatorMessage="La longitud del texto supera el máximo permitido"
+								maxlength="255" value="#{nomenclaturaSalarialBean.nomenclaturaSeleccionada.justificacion}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtJusti" display="text" />
+						</div>
+					</div>
+					<div class="row" style="margin-bottom: 20px!important; margin-top: 20px!important">
+						<div class="col-md-12 text-center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p:commandButton styleClass="btn btn-primary"
+							 	disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}"
+							 	visible="#{not nomenclaturaSalarialBean.estadoBotonesFormulario}"
+							 	value="${titles['TTL_SAVE']}"
+							 	process="divFormNuevaNomenclatura"
+							 	update="tabViewNomenclaturaEscala @widgetVar(wvDttablaNomenc)"
+							 	actionListener="#{nomenclaturaSalarialBean.guardarNomenclatura()}">
+							</p:commandButton>
+						</div>	
+						<div class="col-md-3">
+							<p:commandButton disabled="#{nomenclaturaSalarialBean.estadoBotonesFormulario}"
+								visible="#{not nomenclaturaSalarialBean.estadoBotonesFormulario}"
+								 styleClass="btn btn-default"
+								 update="tabViewNomenclaturaEscala"
+								 value="${titles['TTL_CANCEL']}"
+								 process="@this" 
+								 actionListener="#{nomenclaturaSalarialBean.cancelarNomenclatura()}">
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>	
+						</div>					
+					</div>
+		
+		</p:panel>
+		</h:form>
+		
+	
+	<div
+		class="modal fade"
+		id="dlgElimina"
+		role="dialog" data-backdrop="static" data-keyboard="false">
+		<div
+			class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="row">
+						<div
+							class="col-md-12"
+							align="center">
+							<h5>
+								<p:outputLabel
+									value="${messages['BR_INTERROGA_ELIMINACION']}"
+									style="color: #265379!important; font-weight: normal!important; text-align: center;" />
+							</h5>
+						</div>
+					</div>
+					<hr class="hr-style-modales" />
+					<div class="row"
+						align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+							<p:commandButton
+								id="btnElim"
+								value="${titles['TTL_YES']}"
+								process="@this"
+								update="formularioBuscarNomenclatura"
+								styleClass="btn btn-primary"
+								actionListener="#{nomenclaturaSalarialBean.confirmarEliminarNomenclatura()}"
+								onclick="$('#dlgElimina').modal('hide')"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+									 />
+						</div>
+						<div class="col-md-3">
+							<p:commandButton
+								value="${titles['TTL_NO']}"
+								styleClass="btn btn-default"
+								style="padding-left:45%!important;padding-right:45%!important;font-size:1.5em!important; padding-top:0!important;"
+								onclick="$('#dlgElimina').modal('hide')" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>
+</html>

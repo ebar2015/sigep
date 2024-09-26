@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteContratoModificaciones" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="985c1cce-924d-435e-ba03-8154a5e17c02">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="P_CODIGO_ENTIDAD" class="java.lang.String"/>
+	<parameter name="P_SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.*, 
+		(select nombre_grupo_dependencia from GRUPO_DEPENDENCIA where cod_grupo_dependencia = a.cod_predecesor )nombre_grupo_pertenece
+		from (
+		SELECT upper(de.NOMBRE_DEPENDENCIA) NOMBRE_DEPENDENCIA, 
+		 upper(gp.NOMBRE_GRUPO_DEPENDENCIA) NOMBRE_GRUPO_DEPENDENCIA,
+		 gp.cod_predecesor		
+		FROM GRUPO_DEPENDENCIA gp
+		INNER JOIN DEPENDENCIA_ENTIDAD de on gp.COD_DEPENDENCIA_ENTIDAD = de.COD_DEPENDENCIA_ENTIDAD
+ 		WHERE COD_ENTIDAD =   $P{P_CODIGO_ENTIDAD} 
+ 		AND gp.FLG_ACTIVO =1)a]]>
+	</queryString>
+	<field name="NOMBRE_DEPENDENCIA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE_DEPENDENCIA"/>
+	</field>
+	<field name="NOMBRE_GRUPO_DEPENDENCIA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE_GRUPO_DEPENDENCIA"/>
+	</field>
+	<field name="NOMBRE_GRUPO_PERTENECE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE_GRUPO_PERTENECE"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="36" y="0" width="143" height="30" uuid="97b452b5-b693-4b24-9fdb-6232a7897913"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dependencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="0" width="200" height="30" uuid="81fe26b6-29eb-4354-98eb-c962ea6eaf71"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grupo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="379" y="0" width="138" height="30" uuid="c0c4d217-1482-49df-a69e-107a7ebc515d"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grupo al que pertenece]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="179" y="0" width="200" height="20" uuid="bb76d9ce-ff10-4aa8-9449-018eda00981c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e3324922-5448-4a3f-bd63-47cbbc28ec20"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_GRUPO_DEPENDENCIA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="379" y="0" width="138" height="20" uuid="21b6908a-6604-4f29-80b7-dfe7e90fd1ec">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bfce875-0e33-49e2-8394-31c5ec0666e5"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_GRUPO_PERTENECE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="36" y="0" width="143" height="20" uuid="d2d2c4a0-0522-482f-beb1-b71f8b265d21">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="93489d46-dd89-4824-a72e-a29fe83f37e3"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DEPENDENCIA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

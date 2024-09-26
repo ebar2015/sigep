@@ -1,0 +1,87 @@
+package co.gov.dafp.sigep2.view;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
+import javax.persistence.Table;
+
+import co.gov.dafp.sigep2.converter.UpperCaseConverter;
+import co.gov.dafp.sigep2.entity.VistaBase;
+import co.gov.dafp.sigep2.entity.view.TipoOrientacionDTO;
+import co.gov.dafp.sigep2.entity.view.VistaBaseDTO;
+
+/**
+ * Entity implementation class for View: ProcesoArchivo
+ *
+ */
+@Entity(name = "tipoOrientacion")
+@Table(name = "V_TIPO_ORIENTACION")
+@SqlResultSetMappings({ @SqlResultSetMapping(name = TipoOrientacion.TIPO_ORIENTACION_MAPPING, classes = {
+		@ConstructorResult(targetClass = TipoOrientacionDTO.class, columns = {
+				@ColumnResult(name = "TIPO_ORIENTACION_ID", type = Long.class),
+				@ColumnResult(name = "SIGLA", type = String.class),
+				@ColumnResult(name = "DESCRIPCION", type = String.class) }) }) })
+public class TipoOrientacion extends VistaBase implements Serializable {
+	private static final long serialVersionUID = 8202378210619611171L;
+
+	public static final String TIPO_ORIENTACION_MAPPING = "co.gov.dafp.sigep2.view.mapping.TipoOrientacion";
+
+	@Id
+	@Column(name = "TIPO_ORIENTACION_ID", unique = true, nullable = false, precision = 38, insertable = false, updatable = false)
+	protected Long id;
+
+	@Column(insertable = false, updatable = false)
+	@Convert(converter = UpperCaseConverter.class)
+	private String sigla;
+
+	@Column(name = "DESCRIPCION", insertable = false, updatable = false)
+	private String descripcion;
+
+	public TipoOrientacion() {
+		super();
+	}
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getSigla() {
+		return sigla;
+	}
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	@Override
+	public String toString() {
+		return "Orientacion [id=" + id + ", sigla=" + sigla + ", descripcion=" + descripcion + "]";
+	}
+
+	@Override
+	public VistaBaseDTO getDTO() {
+		return new TipoOrientacionDTO(id, sigla, descripcion);
+	}
+
+}

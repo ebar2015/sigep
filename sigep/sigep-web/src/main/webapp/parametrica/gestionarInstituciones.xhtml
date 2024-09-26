@@ -1,0 +1,307 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_ADMON_MAESTROS']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ADMON_MAESTRO_INSTITUCION_EDUCATIVA']}" />
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• #{titles.LBL_PARAMETRICA} #{titles.LBL_PARAMETRICA_INSTITUCION_EDUCATIVA} •" styleClass="page-subtitle" />
+				</h2>
+			</div>
+		</div>
+		<div class="row" style="background: transparent !important;">
+			<p:spacer height="2" />
+			<div class="col-md-12">
+				<div class="col-md-3" style="margin-right: 5.3em;"></div>
+				<div class="col-md-4">
+					<p:autoComplete id="nombreInstitucionEducativa" maxlength="255"
+						placeholder="${titles['LBL_NOMBRE_INSTITUCION']}"
+						title="${titles['TTL_INGRESE']} ${titles['LBL_NOMBRE_INSTITUCION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+						onkeypress="return anular(event)" style="background-color: white"
+						process="@this" scrollable="true" scrollHeight="150"
+						queryDelay="1000"
+						completeMethod="#{institucionBean.listarInstitucionEducativaFiltro}"
+						value="#{institucionBean.strBusquedaInstitucionEducativa}">
+						<p:ajax event="itemSelect"
+							listener="#{institucionBean.filtrarInstitucionEducativa()}"
+							update="dataTableInstitucionEducativa" />
+					</p:autoComplete>
+					<p:message for="nombreInstitucionEducativa" display="text" />
+				</div>
+				<div class="col-md-1 btn-search"
+					style="margin-left: -31px !important;">
+					<p:commandButton value="#{titles.TTL_SEARCH}"
+						id="btnAdmonSearchInstitucionEducativa"
+						styleClass="btn btn-primary"
+						style="font-size: 1.5em!important; border-radius: 0px!important;background-color: #2a89b5!important; margin-right: -11%;"
+						actionListener="#{institucionBean.filtrarInstitucionEducativa()}"
+						process="@this nombreInstitucionEducativa"
+						update="dataTableInstitucionEducativa" />
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white"
+			style="margin-left: 0px; padding-top: 2em;">
+			<p:spacer height="4" />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">#{titles.LBL_PARAMETRICA_INSTITUCION_EDUCATIVA}</span>
+			<br /> <br />
+			<div class="col-md-12" style="text-align: right;">
+				<p:commandButton id="btnCrearInstitucionEducativa" process="@this"
+					update="panelInstitucionEducativa"
+					actionListener="#{institucionBean.crearInstitucionEducativa()}"
+					icon="fa fa-fw fa-plus-circle" styleClass="btn btn-transparent"
+					value="${titles.LBL_ADD_NEW}"
+					oncomplete="window.location.href='#frmPrincipal:panelInstitucionEducativa';" />
+			</div>
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableInstitucionEducativa" paginator="true"
+					reflow="true" rowIndexVar="rowIndex" 
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+					value="#{institucionBean.lstInstitucionEducativa}"
+					var="institucionE"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					
+					<p:column sortBy="#{institucionE.institucionMen}" style="word-wrap: break-word!important;" 
+						filterBy="#{institucionE.institucionMen}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_CODIGO_INSTITUCION_MINISTERIO']}" /></f:facet>
+						<h:outputText value="#{institucionE.institucionMen}" />
+					</p:column>
+					
+					<p:column sortBy="#{institucionE.nombreInstitucion}" style="word-wrap: break-word!important;" 
+						filterBy="#{institucionE.nombreInstitucion}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_NOMBRE_INSTITUCION']}" /></f:facet>
+						<h:outputText value="#{institucionE.nombreInstitucion}" />
+					</p:column>
+					
+					<p:column sortBy="#{institucionE.tipo_institucion}" style="word-wrap: break-word!important;" 
+						filterBy="#{institucionE.tipoInstitucion}"  filterMatchMode="contains">
+						<f:facet name="header" ><h:outputText value="${titles['LBL_TIPO_INSTITUCION']}" /></f:facet>
+						<h:outputText value="#{institucionE.tipoInstitucion}"/>
+					</p:column>
+					
+					<p:column sortBy="#{institucionE.flgActivo}" style="word-wrap: break-word!important;text-align: center!important;" >
+						<f:facet name="header" ><h:outputText value="${titles['TTL_ACTIVO']}" /></f:facet>
+						<p:selectBooleanCheckbox value="#{institucionE.flgActivo == 1 ? true : false}" disabled="true" />
+					</p:column>
+					
+					<p:column sortBy="#{institucionE.flgInstExtranjera}" style="word-wrap: break-word!important;text-align: center!important;" >
+						<f:facet name="header" ><h:outputText value="${titles['LBL_INSTITUCION_EXTRANJERO']}" /></f:facet>
+						<p:selectBooleanCheckbox value="#{institucionE.flgInstExtranjera == 1 ? true : false}" disabled="true" />
+					</p:column>
+	
+					<p:column headerText="${titles['LBL_ACCIONES']}"
+						style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+						<p:commandButton id="btnEditarInstitucionEducativa"
+							title="${titles['TTL_EDIT']}" icon="icon-edit"
+							styleClass="icon-btn btn-view-data" process="@this"
+							update="frmPrincipal:panelInstitucionEducativa" immediate="true"
+							actionListener="#{institucionBean.modificarInstitucionEducativa(institucionE)}"
+							oncomplete="window.location.href='#frmPrincipal:panelInstitucionEducativa';">
+						</p:commandButton>
+						<p:commandButton id="btnVerInstitucionEducativa"
+							actionListener="#{institucionBean.consultarInstitucionEducativa(institucionE)}"
+							title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+							styleClass="icon-btn" process="@this"
+							update="frmPrincipal:panelInstitucionEducativa"
+							oncomplete="window.location.href='#frmPrincipal:panelInstitucionEducativa';">
+						</p:commandButton>
+						<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}"
+							icon="icon-delete" rendered="false"
+							id="btnAdmonEliminarInstitucionEducativa" styleClass="icon-btn"
+							process="@this"
+							actionListener="#{institucionBean.eliminarInistucionEducativa()}"
+							update="frmPrincipal:dlgConfirmarInstitucionEducativa">
+							<f:setPropertyActionListener value="#{institucion}"
+								target="#{institucionBean.infoInstitucionEducativa}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<p:outputPanel id="panelInstitucionEducativa">
+			<p:spacer height="2" />
+			<p:panel id="subpanelInstitucionEducativa"
+				widgetVar="subPanelInstitucionEducativa"
+				rendered="#{institucionBean.blnHabilitaFormulario}">
+				<div class="row row-background-white">
+					<p:spacer height="3" />
+					<span
+						style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+						#{institucionBean.strAccionRealizada}</span>
+					<div class="col-md-12" align="right">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+						<p:outputPanel id="panelCodigoInstitucionMinisterio">
+							<p:panel id="subPanelCodigoInstitucionMinisterio" rendered="#{!institucionBean.blnBloquearCodigoInstitucion}">
+								<p:outputLabel
+									value="#{titles.LBL_CODIGO_INSTITUCION_MINISTERIO}:"
+									styleClass="log-label form-label-formularios"
+									for="txtCodigoInstitucion" />
+								<p:inputText id="txtCodigoInstitucion" required="true"
+									value="#{institucionBean.infoInstitucionEducativa.codInstitucionMen}"
+									disabled="#{institucionBean.blnConsultarInstitucionEducativa}"
+									maxlength="8" onkeypress="return numbervalida(event)"
+									requiredMessage="#{messages.DLG_VALOR_REQUERIDO}">
+									<f:validator validatorId="maxByteLengthValidator" />
+									<f:validator validatorId="numberValidator" />
+								</p:inputText>
+								<p:message for="txtCodigoInstitucion" display="text" />
+							</p:panel>
+							<p:panel id="subPanelCodigoInstitucionMinisterioAPlica" rendered="#{institucionBean.blnBloquearCodigoInstitucion}">
+								<p:outputLabel for="txtCodigoInstitucionNoAplica" id="labeltxtCodigoInstitucionNoAplica"
+										styleClass="log-label form-label-formularios"
+										value="#{titles.LBL_CODIGO_INSTITUCION_MINISTERIO}:" />
+								<p:inputText id="txtCodigoInstitucionNoAplica"
+										value="${titles['LBL_NO_APLICA']}" disabled="true" title="${titles['LBL_NO_APLICA']}" />
+							</p:panel>
+						</p:outputPanel>
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_NOMBRE_INSTITUCION}:"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtNombreInstitucion"
+								value="#{institucionBean.infoInstitucionEducativa.nombreInstitucion}"
+								required="true"
+								disabled="#{institucionBean.blnConsultarInstitucionEducativa}"
+								requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+								maxlength="254">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtNombreInstitucion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_TIPO_INSTITUCION}:"
+								styleClass="log-label form-label-formularios"
+								for="txtTipoInstitucion" />
+							<p:selectOneMenu id="txtTipoInstitucion"
+								value="#{institucionBean.infoInstitucionEducativa.codTipoInstitucion}"
+								required="true" requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+								filter="true" filterMatchMode="contains"
+								disabled="#{institucionBean.blnConsultarInstitucionEducativa}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tipoInstitucion}" />
+							</p:selectOneMenu>
+							<p:message for="txtTipoInstitucion" display="text" />
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.TTL_ACTIVO}:"
+								for="activoInstitucionEducativa"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true"
+								id="activoInstitucionEducativa"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{institucionBean.blnConsultarInstitucionEducativa}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{institucionBean.blnFlgActivo}">
+							</p:selectBooleanCheckbox>
+							<p:message for="activoInstitucionEducativa" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel value="#{titles.LBL_INSTITUCION_EXTRANJERO}:"
+								for="extranjeraInstitucionEducativa"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectBooleanCheckbox required="true"
+								id="extranjeraInstitucionEducativa"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{institucionBean.blnConsultarInstitucionEducativa}"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ACTIVO']}"
+								value="#{institucionBean.blnFlgExtranjera}">
+								<p:ajax event="change" update="panelCodigoInstitucionMinisterio" listener="#{institucionBean.validarInstitucionExtanjera}"/>
+							</p:selectBooleanCheckbox>
+							<p:message for="extranjeraInstitucionEducativa" display="text" />
+						</div>
+					</div>
+					<div class="col-md-12" align="center"
+						style="margin-top: 3em !important">
+						<p:spacer height="2" />
+						<p:commandButton value="${titles['TTL_SAVE']}"
+							styleClass="btn btn-primary"
+							rendered="#{!institucionBean.blnConsultarInstitucionEducativa}"
+							disabled="#{institucionBean.blnConsultarInstitucionEducativa}"
+							update="panelInstitucionEducativa dataTableInstitucionEducativa nombreInstitucionEducativa"
+							actionListener="#{institucionBean.guardarInstitucionEducativa()}"
+							process="frmPrincipal:panelInstitucionEducativa"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							rendered="#{!institucionBean.blnConsultarInstitucionEducativa}"
+							styleClass="btn btn-default"
+							update="dlgConfirmarInstitucionEducativa"
+							actionListener="#{institucionBean.cancelarFormulario()}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;" />
+						<p:commandButton value="#{titles.TTL_OK}" process="@this"
+							rendered="#{institucionBean.blnConsultarInstitucionEducativa}"
+							styleClass="btn btn-primary"
+							update="panelInstitucionEducativa nombreInstitucionEducativa"
+							actionListener="#{institucionBean.procesarRespuestaConfirmacion}"
+							style="padding-left: 2.5%!important;  padding-right: 2.5%!important; font-size: 1.3em!important; padding-top: 0!important;">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgConfirmarInstitucionEducativa"
+			id="dlgConfirmarInstitucionEducativa" minHeight="300" modal="true"
+			draggable="false" closable="false"  resizable="false"
+			responsive="true">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+				<center><h5>#{institucionBean.strMensaje}</h5> </center>
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.LBL_SI}" process="@this"
+						styleClass="btn btn-primary"
+						update="panelInstitucionEducativa dataTableInstitucionEducativa"
+						actionListener="#{institucionBean.procesarRespuestaConfirmacion}"
+						onclick="PF('dlgConfirmarInstitucionEducativa').hide();"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="#{titles.TTL_NO}" process="@this"
+						styleClass="btn btn-default"
+						onclick="PF('dlgConfirmarInstitucionEducativa').hide();"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3" style="margin-bottom: 2%;"></div>
+			</div>
+			<br />
+		</p:dialog>
+	</ui:define>
+
+	<script type="text/javascript">
+		function mayus(e) {
+			e.value = e.value.toUpperCase();
+		}
+	</script>
+
+</ui:composition>

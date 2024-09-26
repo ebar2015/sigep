@@ -1,0 +1,598 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• ${titles['TTL_TAB_CT_BUSCAR_CONTRATO']} •"
+						styleClass="page-subtitle" style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" />
+
+	<br />
+	<br />
+
+	<p:panel id="pnContratacionesTbPrincipalForm"
+		style="background: transparent !important;">
+		<p:panel id="frmBuscarContrato"
+			style="background: transparent !important;">
+			<div class="row row-background-white">
+				<br />
+				<div class="row">
+					<div class="col-md-12" style="text-align: center;">
+						<p:outputLabel value="${titles['LBL_CT_MSG_BUSCAR_CONTRATISTA']}"
+							for="idTipoDocumento" styleClass="advisor" />
+					</div>
+				</div>
+
+				<hr class="hr-style" />
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}:"
+								for="idTipoDocumento"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="idTipoDocumento"
+								title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_DOCUMENTO']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{contratacionesBean.strCodTipoIdentificacionBuscar}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tiposDeIdentificacion}" />
+								<p:ajax listener="#{contratacionesBean.compararDocumento()}"
+									process="@this" update="cedula" />
+							</h:selectOneMenu>
+							<p:message for="idTipoDocumento" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NICK_NAME']}:" for="cedula"
+								styleClass="log-label form-label-formularios" />
+
+							<p:inputText id="cedula"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_NICK_NAME']} ${titles['TTL_TIPO_ALFANUMERICO']} "
+								value="#{contratacionesBean.strNumeroIdentificacionBuscar}"
+								class="form-control-acti-usua" maxlength="12"
+								autocomplete="false">
+								<c:choose>
+									<c:when test="${contratacionesBean.blnPasaporte  == true }">
+										<f:validator validatorId="nickNameValidatorPassport" />
+									</c:when>
+									<c:otherwise>
+										<f:validator validatorId="nickNameValidator" />
+									</c:otherwise>
+								</c:choose>
+							</p:inputText>
+							<p:message for="cedula" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}:"
+								for="primerNombre" styleClass="log-label form-label-formularios" />
+							<p:inputText id="primerNombre"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{contratacionesBean.strPrimerNombreBuscar}"
+								class="form-control-acti-usua">
+								<p:keyFilter mask="alpha"></p:keyFilter>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-4">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}:"
+								for="primerApellido"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="primerApellido"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{contratacionesBean.strPrimerApellidoBuscar}"
+								class="form-control-acti-usua">
+								<p:keyFilter mask="alpha"></p:keyFilter>
+							</p:inputText>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}:"
+								for="segundoNombre"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="segundoNombre"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{contratacionesBean.strSegundoNombreBuscar}"
+								class="form-control-acti-usua">
+								<p:keyFilter mask="alpha"></p:keyFilter>
+							</p:inputText>
+
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}:"
+								for="segundoApellido"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="segundoApellido"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{contratacionesBean.strSegundoApellidoBuscar}"
+								class="form-control-acti-usua">
+								<p:keyFilter mask="alpha"></p:keyFilter>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-4">
+						<p:commandButton value="${titles['BTN_CT_BUSCAR']}"
+							id="idBtBuscarContratistas"
+							action="#{contratacionesBean.consultarPersonas()}"
+							update="idMsgConsultaPersonas dataTablePersonas dataTableContratosPersona
+			                         frContrataciones:viewTabContrataciones:idOLMensajePersona
+									 frContrataciones:viewTabContrataciones:idMsgConsultaContratosPersona
+									 frContrataciones:viewTabContrataciones:dlgAccionesContrato
+									 frmBuscarContrato"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important;font-size:1.5em!important;"
+							process="@this, frmBuscarContrato"
+							oncomplete="window.location.href='#frContrataciones:viewTabContrataciones:btn_importante"
+							onclick="window.location.href='#frContrataciones:viewTabContrataciones:btn_importante'">
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12" id="idPanelMsgConsultapersonas">
+						<p:messages id="idMsgConsultaPersonas" for="idMsgConsultaPersonas"
+							display="text" />
+					</div>
+				</div>
+
+				<hr class="hr-style" />
+			</div>
+			<br />
+			<br />
+			<div class="row row-background-white">
+				<br />
+				<br />
+				<div class="col-md-12"
+					style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable id="dataTablePersonas" paginator="true"
+						rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+						reflow="true"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						var="dataPersonas"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						value="#{contratacionesBean.lstBusquedaPersonasExt}">
+						<p:column headerText="${titles['TTL_TIPO_DOCUMENTO']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dataPersonas.nombreTipoDocuento}">
+							<h:outputText value="#{dataPersonas.nombreTipoDocuento}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_NUM_DOCUMENTO']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dataPersonas.numeroIdentificacion}">
+							<h:outputText value="#{dataPersonas.numeroIdentificacion}" />
+						</p:column>
+						<p:column headerText="${titles['TTL_NOMBRE_COMPLETO']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dataPersonas.primerNombre}">
+							<h:outputText
+								value="#{dataPersonas.primerNombre} #{dataPersonas.segundoNombre} #{dataPersonas.primerApellido}
+							#{dataPersonas.segundoApellido}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+							style="opacity: 1!important; text-align:center!important;">
+							<p:commandButton id="idBtVerContratos"
+								title="${titles['TTL_VERCONTRATOS']}" icon="icon-view"
+								styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.verContratosPorContratista(dataPersonas)}"
+								update="frContrataciones:viewTabContrataciones:dataTableContratosPersona 
+								        frContrataciones:viewTabContrataciones:idMsgConsultaContratosPersona
+								        frContrataciones:viewTabContrataciones:idOLMensajePersona
+								        frContrataciones:viewTabContrataciones:dlgAccionesContrato"
+								onclick="hacer_click_Persona()">
+
+							</p:commandButton>
+
+							<p:commandButton
+								title="${titles['TTL_TAB_CT_REGISTRAR_CONTRATO']}"
+								id="idBtRegistrarContrato" styleClass="icon-btn"
+								icon="icon-registrar" process="@this"
+								actionListener="#{contratacionesBean.selecionarPersona(dataPersonas)}"
+								update="frContrataciones:viewTabContrataciones:idMsgConsultaPersonas
+								        frContrataciones:viewTabContrataciones:dlgAccionesContrato
+								        frContrataciones:viewTabContrataciones:dlgTieneDerechosExclusividad"
+								onclick="window.location.href='#frContrataciones:viewTabContrataciones:btn_importante"
+								oncomplete="window.location.href='#frContrataciones:viewTabContrataciones:btn_importante">
+								<p:ajax
+									update="frContrataciones:viewTabContrataciones:idMsgConsultaContratosPersona"
+									resetValues="true" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+					<div class="row">
+						<div class="col-md-12" id="idPanelidMsgConsultaContratosPersona">
+							<p:messages id="idMsgConsultaContratosPersona"
+								for="idMsgConsultaContratosPersona" display="text" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<div class="row row-background-white">
+				<!-- Tabla de contratos por persona -->
+				<br /> <br />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style"> ${titles['TTL_VERCONTRATOS']} </span> <br />
+				<div class="row">
+					<div class="col-md-12" style="text-align: center;">
+						<p:outputLabel id="idOLMensajePersona"
+							value="#{contratacionesBean.strMsgContratosRegistradosPersona}"
+							styleClass="advisor" />
+					</div>
+				</div>
+				<hr class="hr-style" />
+				<br />
+				<div class="col-md-12"
+					style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable id="dataTableContratosPersona" paginator="true"
+						rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+						reflow="true"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						var="dataContratosPersona"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						value="#{contratacionesBean.lstBuscarContratosPersona}">
+						<p:column headerText="${titles['LBL_CT_NOMBRE_ENTIDAD']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dataContratosPersona.nombreEntidad}">
+							<h:outputText value="#{dataContratosPersona.nombreEntidad}" />
+						</p:column>
+						<p:column headerText="${titles['BR_NUM_CONTRATO']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dataContratosPersona.numeroContrato}">
+							<h:outputText value="#{dataContratosPersona.numeroContrato}" />
+						</p:column>
+						<p:column headerText="${titles['LBL_FECHA_INICIO']}"
+							style="word-wrap: break-word!important; text-align:center!important;"
+							sortBy="#{dataContratosPersona.fechaInicio}">
+							<h:outputText value="#{dataContratosPersona.fechaInicio}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_FECHA_FIN']}"
+							style="word-wrap: break-word!important; text-align:center!important;"
+							sortBy="#{dataContratosPersona.fechaFin}">
+							<h:outputText value="#{dataContratosPersona.fechaFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_ESTADO']}"
+							style="word-wrap: break-word!important; text-align:center!important;"
+							sortBy="#{dataContratosPersona.flgEstadoSuspendido}">
+							<h:selectOneMenu id="iDSOMEstadoContratoBuscar"
+								value="#{dataContratosPersona.flgEstadoSuspendido}"
+								disabled="true" styleClass="form-label"
+								style="font-size: 1em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+								<f:selectItem itemLabel="Activo" itemValue="1" />
+								<f:selectItem itemLabel="Finalizado" itemValue="0" />
+								<f:selectItem itemLabel="Suspendido" itemValue="2" />
+							</h:selectOneMenu>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_DERECHO_EXCLUSIVIDAD']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:selectOneMenu id="iDSOMDDerechoExcBuscar"
+								value="#{dataContratosPersona.derechoExclusividad}"
+								disabled="true" styleClass="form-label"
+								style="font-size: 1em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+								<f:selectItem itemLabel="Sí" itemValue="1" />
+								<f:selectItem itemLabel="No" itemValue="0" />
+							</h:selectOneMenu>
+						</p:column>
+						<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+							style="opacity: 1!important; text-align:center!important;padding: 15px 5px !important;">
+							<p:commandButton id="idCTBtModificarContrato"
+								title="${titles['TTL_CT_CORREGIR_CONTRATO']}" icon="icon-edit"
+								styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.modificarContrato(1,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones">
+							</p:commandButton>
+							<p:commandButton id="idCTBtAdicionContrato"
+								title="${titles['TTL_CT_ADICIONAR_CONTRATO']}"
+								icon="icon-add-doc" styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarAdicionContrato(2,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableContratosPersona">
+							</p:commandButton>
+							<p:commandButton id="idCTBtProrrogaContrato"
+								title="${titles['TTL_CT_PRORROGAR_CONTRATO']}"
+								icon="icon-wait-doc" styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarProrrogaContrato(3,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableProrrogasContrato">
+							</p:commandButton>
+
+							<p:commandButton id="idCTBtAlcanceContrato"
+								title="${titles['TTL_CT_MODIFICAR_ALCANCE_CONTRATO']}"
+								icon="icon-scope-doc" styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarAlcanceContrato(4,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableAlcanceContrato">
+							</p:commandButton>
+
+							<p:commandButton id="idCTBtSuspensionContrato"
+								title="${titles['TTL_CT_QUITAR_SUSPENDER_CONTRATO']}"
+								icon="icon-on-off" styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarSuspensionContrato(5, dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableSuspensionContrato">
+							</p:commandButton>
+							<p:commandButton id="idCTBtTerminacionContrato"
+								title="${titles['TTL_CT_TERMINACION_ANTICIPADA_CONTRATO']}"
+								icon="icon-final-doc" styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarTerminacionContrato(6,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableTerminacionContrato">
+							</p:commandButton>
+							<p:commandButton id="idCTBtAdPrAl"
+								title="${titles['TTL_CT_ADICION_PRORROGA_ALCANCE_CONTRATO']}"
+								icon="icon-add-doc-scope" styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarAdPrAlContrato_1(7,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableAdPrAlcanceContrato">
+							</p:commandButton>
+							<p:commandButton id="idCTBtCesionContrato"
+								title="${titles['TTL_CT_CESION_CONTRATO']}" icon="icon-end-doc"
+								styleClass="icon-btn" process="@this"
+								action="#{contratacionesBean.registrarCesionContrato(8,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableCesionContrato">
+							</p:commandButton>
+
+							<p:commandButton id="idCTBtConsultarContrato"
+								title="${titles['TTL_CT_CONSULTAR_CONTRATO']}"
+								icon="icon-consult-doc" styleClass="icon-btn btn-view-data"
+								process="@this"
+								action="#{contratacionesBean.consultarContrato(9,dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones frContrataciones:viewTabContrataciones:dataTableConsultarCoModificaciones">
+							</p:commandButton>
+							<p:commandButton id="idCTBtTerminacionManual"
+								title="${titles['TTL_CT_TERMINACION_MANUAL_CONTRATO']}"
+								icon="icon-end-doc-manual" styleClass="icon-btn" process="@this"
+								actionListener="#{contratacionesBean.registrarTerminacionManualContrato(dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones:dlgTerminacionManualContrato">
+							</p:commandButton>
+							<p:commandButton id="idCTBtEliminarContrato"
+								title="${titles['BTN_ELIMINAR']} Contrato" icon="icon-delete"
+								styleClass="icon-btn" process="@this"
+								actionListener="#{contratacionesBean.MostrarDialogoEliminarContrato(dataContratosPersona)}"
+								update="frContrataciones:viewTabContrataciones:dlgAccionContratoEliminar"
+								rendered="#{contratacionesBean.lbEliminarContratoRol}">
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br />
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<p:commandButton value="${titles['BTN_CT_VOLVER']}"
+								styleClass="btn btn-primary"
+								style="padding-left:12%!important;padding-right:12%!important;font-size:1.5em!important;"
+								action="#{contratacionesBean.volverBusqueda()}"
+								update="idMsgConsultaPersonas dataTablePersonas dataTableContratosPersona
+			                         frContrataciones:viewTabContrataciones:idOLMensajePersona"
+								process="@this, frmBuscarContrato" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+
+		<!-- Dialogo Registrar Contrato en SIGEP -->
+		<p:dialog header="• ${titles['TTL_REGISTRAR_CONTRATO_SIGEP']} •"
+			widgetVar="dlg1" id="dlg1" minHeight="300" modal="true"
+			resizable="false" closeOnEscape="true" responsive="true"
+			draggable="false" closable="false" appendTo="@(body)">
+			<br />
+			<br />
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-3">
+					<p:commandButton value="${titles['LBL_REGRESAR']}" process="@this"
+						styleClass="btn btn-primary" onclick="PF('dlg1').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-4"
+					style="padding-right: 14% !important; margin-right: 2%;">
+					<p:commandButton value="${titles['TTL_CONSULTAR_SECOP']}"
+						tittle="#{messages.MSG_DISPONIBILIDAD}" disabled="true"
+						process="@this" styleClass="btn btn-primary"
+						style="background: #19708c !important; border-color: #19708c !important;"
+						onclick="alert('10.2.2. No disponible en este momento, por favor verifique más tarde');">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3">
+					<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+						process="@this" styleClass="btn btn-primary"
+						style="background: #135970 !important; border-color: #135970 !important;"
+						action="#{contratacionesBean.registrarContrato(1)}"
+						update="frContrataciones:viewTabContrataciones"
+						onclick="PF('dlg1').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<br />
+			<br />
+		</p:dialog>
+
+		<!-- Dialogo Mensaje Importante -->
+		<p:dialog header="• ${messages['DLG_CT_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgAccionesContrato" id="dlgAccionesContrato"
+			minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false"
+			appendTo="@(body)">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;">
+				<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+			</div>
+			<hr class="hr-style-modales" />
+			<div class="row" align="center">
+				<p:commandButton value="${titles['TTL_OK']}" process="@this"
+					id="btn_importante" styleClass="btn btn-primary"
+					onclick="PF('dlgAccionesContrato').hide(); hacer_click()">
+				</p:commandButton>
+			</div>
+			<br />
+		</p:dialog>
+
+		<!-- TERMINACION MANUAL -->
+		<p:dialog header="• ${titles['TTL_CT_TERMINACION_MANUAL_CONTRATO']} •"
+			widgetVar="dlgTerminacionManualContrato"
+			id="dlgTerminacionManualContrato" minHeight="300" modal="true"
+			resizable="false" closeOnEscape="false" responsive="true"
+			draggable="false" closable="false" appendTo="@(body)">
+			<br />
+			<div class="row" id="idPanelTerminacionManual_01">
+				<div class="col-md-12" style="text-align: center;">
+					<p:outputLabel
+						value="Está seguro que desea hacer la Terminación Manual del contrato 
+						#{contratacionesBean.contrato.numeroContrato} asociado con el contratista #{contratacionesBean.consultarPersona(contratacionesBean.contrato.codPersona)}?"
+						styleClass="log-label form-label-formularios" />
+				</div>
+			</div>
+			<br />
+			<hr class="hr-style-modales" />
+			<p:outputPanel id="idPanelTerminacionManual_02">
+				<div class="row" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-3" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_OK']}"
+							process="@this frmConsultarContrato" styleClass="btn btn-primary"
+							style="padding-left: 5% !important; padding-right: 5% !important;"
+							onclick="PF('dlgTerminacionManualContrato').hide();"
+							actionListener="#{contratacionesBean.terminacionManualContrato()}"
+							update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="Cancelar" process="@this"
+							styleClass="btn btn-default"
+							style="padding-left: 4% !important; padding-right: 4% !important;"
+							onclick="PF('dlgTerminacionManualContrato').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</p:outputPanel>
+			<br />
+		</p:dialog>
+
+		<!-- Dialogo continuar -->
+		<p:dialog header="• #{contratacionesBean.strMsgContinuar} •"
+			widgetVar="dlgContinuar" id="dlgContinuar" minHeight="300"
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false"
+			appendTo="@(body)">
+			<br />
+			<hr class="hr-style-modales" />
+			<div class="row" align="center">
+				<p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+					process="@this" styleClass="btn btn-primary"
+					action="#{contratacionesBean.continuarAccion}"
+					update="frContrataciones:viewTabContrataciones"
+					onclick="PF('dlgContinuar').hide();">
+				</p:commandButton>
+			</div>
+			<br />
+		</p:dialog>
+
+		<!-- Dialogo Mensaje Importante; Contratos vigentes -->
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •"
+			widgetVar="dlgTieneDerechosExclusividad"
+			id="dlgTieneDerechosExclusividad" minHeight="300" modal="true"
+			resizable="false" closeOnEscape="false" responsive="true"
+			draggable="false" closable="false" appendTo="@(body)">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 5%;">
+				<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+			</div>
+			<hr class="hr-style-modales" />
+			<div class="row" align="center">
+				<div class="col-md-1"></div>
+				<div class="col-md-5" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['TTL_OK']}" process="@this"
+						styleClass="btn btn-primary"
+						style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;"
+						update="frContrataciones:viewTabContrataciones"
+						onclick="PF('dlgTieneDerechosExclusividad').hide();" />
+				</div>
+				<div class="col-md-4" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['LBL_VER_CONTRATOS_VIGENTES']}"
+						process="@this" styleClass="btn btn-default"
+						style="padding-left:5%!important;padding-right:5%!important;font-size:1.5em!important;"
+						action="#{contratacionesBean.verContratosPorContratista(null)}"
+						update="frContrataciones:viewTabContrataciones:dataTableContratosPersona 
+								frContrataciones:viewTabContrataciones:idMsgConsultaContratosPersona
+								frContrataciones:viewTabContrataciones:idOLMensajePersona"
+						onclick="PF('dlgTieneDerechosExclusividad').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+			<br />
+		</p:dialog>
+
+		<!-- Dialogo Mensaje Eliminar Contrato -->
+		<p:dialog header="• ${titles['TTL_CT_ELIMINAR_CONTRATO']} •"
+			widgetVar="dlgAccionContratoEliminar" id="dlgAccionContratoEliminar"
+			minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false"
+			appendTo="@(body)" width="40%">
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;">
+				<h5 style="color:#2A89B5;">#{contratacionesBean.strMsgAccionesContrato}</h5>
+			</div>
+			<hr class="hr-style-modales" />
+			<div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+				<p:commandButton value="${titles['BTN_ELIMINAR']}" process="@this"
+					id="btn_eliminar" styleClass="btn btn-primary"
+					style="padding-left: 4% !important; padding-right: 4% !important;"
+					onclick="PF('dlgAccionContratoEliminar').hide();"
+					actionListener="#{contratacionesBean.confirmarEliminarContrato()}"
+					update="dataTableContratosPersona">
+				</p:commandButton>
+				<p:commandButton value="Cancelar" process="@this"
+					styleClass="btn btn-default"
+					id="btn_eliminar_cancelar"
+					style="padding-left: 4% !important; padding-right: 4% !important;"
+					onclick="PF('dlgAccionContratoEliminar').hide();">
+				</p:commandButton>
+			</div>
+			<br />
+		</p:dialog>
+
+		<script type="text/javascript">
+		function hacer_click()
+		{
+		   window.location.href='#frContrataciones:viewTabContrataciones:dataTablePersonas:0:idBtVerContratos'
+		}
+		
+		function hacer_click_Persona()
+		{
+		   window.location.href='#frContrataciones:viewTabContrataciones:idOLMensajePersona'
+		}
+
+	</script>
+	</p:panel>
+</ui:composition>

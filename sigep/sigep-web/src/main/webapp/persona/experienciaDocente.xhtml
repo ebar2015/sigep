@@ -1,0 +1,1104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:metadata>
+		<f:viewParam name="id" value='#{experienciaDocenteBean.id}' />
+		<f:viewParam name="dialog" value='#{experienciaDocenteBean.dialog}' />
+		<f:event type="preRenderView"
+			listener='#{experienciaDocenteBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{experienciaDocenteBean.showDialog}' />
+	</f:metadata>
+
+	<div class="row row-background-white">
+		<br />
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarExperienciaDocenteHV"
+					value="${titles['LBL_ADD_NEW']}" icon="fa fa-fw fa-plus-circle"
+					process="@this" styleClass="btn btn-transparent"
+					actionListener="#{experienciaDocenteBean.habilitarFormularioExpDocente(true)}"
+					immediate="true"
+					update="panelExperienciaDocente, indicativoTelExperienciaDocente, panelBanderaTelefono"
+					oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelExperienciaDocente';
+					            oncomplete=datosModificados(1);"
+					            rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					<p:resetInput
+						target="frmPrincipal:tabHojaDeVida:panelExperienciaDocente" />
+					
+				</p:commandButton>
+			</div>
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"> </label>
+			</div>
+		</div>
+
+		<!-- Tabla experiencia Docente-->
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTabExpDocente" paginator="true" reflow="true"
+				rowIndexVar="rowIndex"
+				value="#{experienciaDocenteBean.listExperienciaDocenteExt}"
+				var="dataTableExpDocente"
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				
+				<p:column sortBy="#{dataTableExpDocente.nombreInstitucionIe}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_INSTITUCION']}" /></f:facet>
+					<h:outputText value="#{dataTableExpDocente.nombreInstitucion != null ? dataTableExpDocente.nombreInstitucion : 'SIN DATO' }" />
+				</p:column>
+		
+				<p:column sortBy="#{dataTableExpDocente.nivelEducativo}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_TABLA_NIVEL_EDUCATIVO']}" /></f:facet>
+					<h:outputText value="#{dataTableExpDocente.nivelEducativo}" />
+				</p:column>
+				
+				<p:column sortBy="#{dataTableExpDocente.areaConocimiento}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_AREA_CONOCIMIENTO']}" /></f:facet>
+					<h:outputText value="#{dataTableExpDocente.areaConocimiento}" />
+				</p:column>
+				
+				<p:column sortBy="#{dataTableExpDocente.nombrePais}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_PAIS']}" /></f:facet>
+					<h:outputText value="#{dataTableExpDocente.nombrePais}" />
+				</p:column>
+				
+				<p:column sortBy="#{dataTableExpDocente.fechaInicio}" style="word-wrap: break-word!important; text-align:center!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_EXPERIENCIA_DOCENTE_FECHA_INGRESO']}" /></f:facet>
+					<h:outputText value="#{dataTableExpDocente.fechaInicio}" />
+				</p:column>
+				
+				<p:column sortBy="#{dataTableExpDocente.fechaFinal}" style="word-wrap: break-word!important; text-align:center!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_FECHA_TERMINACION']}" /></f:facet>
+					<h:outputText value="#{dataTableExpDocente.fechaFinal}" />
+				</p:column>
+				
+				<p:column sortBy="#{dataTableExpDocente.flgVerificado}" style="word-wrap: break-word!important; text-align:center!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_VERIFICADO']}" /></f:facet>
+					<p:selectBooleanCheckbox value="#{dataTableExpDocente.flgVerificado}" styleClass="checkbox-aprobacion" disabled="true" />
+				</p:column>
+			
+				<p:column headerText="${titles['LBL_ACCIONES']}"
+					style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					<p:commandButton id="btnVerExperienciaDocenteHV"
+						title="Ver detalle" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:tabHojaDeVida:panelExperienciaDocente"
+						actionListener="#{experienciaDocenteBean.verExperienciaDocente(dataTableExpDocente.codExperienciaDocente)}"
+						oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelExperienciaDocente'">
+					</p:commandButton>
+					<p:commandButton id="btnEliminarExperienciaDocenteHV"
+						title="Eliminar" icon="icon-delete" process="@this"
+						styleClass="icon-btn"
+						disabled="#{dataTableExpDocente.flgVerificado}"
+						onclick="$('#eliminarExperiencia').modal('show')"
+						rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						<f:setPropertyActionListener value="#{dataTableExpDocente}"
+							target="#{experienciaDocenteBean.detalleExperienciaDocente}" />
+					</p:commandButton>
+					<p:commandButton id="btnEditarExperienciaDocenteHV"
+						title="Actualizar" icon="icon-edit"
+						disabled="#{dataTableExpDocente.flgVerificado and !experienciaDocenteBean.flgValidRolPermission}"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:tabHojaDeVida:panelExperienciaDocente"
+						oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelExperienciaDocente';datosModificados(1);"
+						actionListener="#{experienciaDocenteBean.actualizarExperienciaDocente(dataTableExpDocente.codExperienciaDocente)}"
+						rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						
+					</p:commandButton>
+					<c:set var="valorpdf"
+						value="window.open('#{templateHojaDeVidaBean.get64(dataTableExpDocente.urlDocumentoSoporte)}')" />
+					<c:set var="novalorpdf"
+						value="$('#documentoAdjuntoExpDoc').modal('show')" />
+					<p:commandButton id="btnVerDocumentosExperienciaDocenteHV"
+						title="Ver Documentos Adjuntos" icon="icon-open-folder"
+						styleClass="icon-btn"
+						onclick="#{dataTableExpDocente.urlDocumentoSoporte != null ? valorpdf : novalorpdf}">
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+		<!-- Finaliza Tabla Experiencia Docente-->
+		<div class="row" align="right">
+			<div class="col-md-12" align="right" style="margin-top: 1.5%;">
+				<div class="col-md-4"></div>
+				<div class="col-md-4"></div>
+				<div class="col-md-4" align="left"
+					style="padding-left: 3%; opacity: 1 !important;">
+					<p:outputLabel value="${titles['LBL_TIEMPO_TOTAL_LABORADO']}:"
+						for="tiempoExpLaboral" styleClass="log-label form-label label-laborado"/>
+					<p:panel id="tiempoExpLaboral">
+						<p:outputLabel disabled="true"
+							value="${titles['LBL_ANIO']}&#58;&#160;"
+							styleClass="log-label form-label label-laborado" />
+						<p:outputLabel disabled="true"
+							value="#{experienciaDocenteBean.anio}"
+							styleClass="log-label form-label label-rta" />
+						<p:outputLabel disabled="true"
+							value="${titles['LBL_MES']}&#58;&#160;"
+							styleClass="log-label form-label label-laborado" />
+						<p:outputLabel disabled="true"
+							value="#{experienciaDocenteBean.mes}"
+							styleClass="log-label form-label label-rta" />
+						<p:outputLabel disabled="true"
+							value="${titles['LBL_DIA']}&#58;&#160;"
+							styleClass="log-label form-label label-laborado" />
+						<p:outputLabel disabled="true"
+							value="#{experienciaDocenteBean.dia}"
+							styleClass="log-label form-label label-rta" />
+					</p:panel>
+
+					<!-- <p:inputText id="tiempoExpLaboral" readonly="true"
+						value="#{experienciaDocenteBean.calcularTiempoLaborado()}"
+						class="form-control-acti-usua"
+						style="color: #808080!important;border: none!important;text-overflow: ellipsis!important;">
+					</p:inputText> -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<p:outputPanel id="panelExperienciaDocente">
+		<p:panel id="subPanelExperienciaDocente"
+			widgetVar="subPanelExperienciaDocente"
+			rendered="#{experienciaDocenteBean.habilitarFormulario}">
+			<!-- Inicia el Panel con el formulario -->
+			<div class="row row-background-white">
+				<div class="col-md-12" align="center" style="margin-top: 0.8%;">
+					<h5 style="font-size: 17px !important;">
+						<p:outputLabel
+							value="${messages['MSG_REGISTRO_EXPERIENCIA_DOCENTE']}"
+							styleClass="page-subtitle"
+							style="color: #2A89B5!important; font-weight: normal!important;" />
+					</h5>
+				</div>
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_ADD_EXPERIENCIA_DOCENTE']}</span> <br /> <br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="tipoInstitucion"
+								value="${titles['LBL_TIPO_INSTITUCION']}:"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="tipoInstitucion"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_INSTITUCION']}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.flgEntidadPublica}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="custom" filterFunction="contains">
+								<f:selectItem itemValue="true" itemLabel="PÚBLICA" />
+								<f:selectItem itemValue="false" itemLabel="PRIVADA" />
+							</p:selectOneMenu>
+							<p:message for="tipoInstitucion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel for="Institucion"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_INSTITUCION']}:" />
+							<p:autoComplete id="Institucion"
+								minQueryLength="3"
+								scrollable="true" scrollHeight="100"
+								title="${titles['TTL_SELECT']} ${titles['LBL_INSTITUCION']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								dropdown="true"
+								completeMethod="#{experienciaDocenteBean.listarInstitucionEducativa}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.nombreInstitucion}"
+								required="true"
+								maxResults="1000"
+							    queryDelay="1000"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+								
+							</p:autoComplete>
+							<p:message for="Institucion" display="text" />
+						</div>
+
+
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PAIS']}:" for="pais"
+								styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="pais"
+								title="${titles['TTL_SELECT']} ${titles['LBL_PAIS']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.codPais}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="custom" filterFunction="contains">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.pais}" />
+								<p:ajax
+									listener="#{experienciaDocenteBean.mostrarPanelDatosPorPais()}"
+									process="@this"
+									update="panelPais, panelBanderaTelefono, indicativoTelExperienciaDocente" />
+
+							</p:selectOneMenu>
+							<p:message for="pais" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<p:outputPanel id="panelPais">
+							<p:panel>
+								<div class="col-md-4">
+									<p:outputLabel value="${titles['LBL_DEPARTAMENTO']}:"
+										for="tDepartamento"
+										styleClass="log-label form-label-formularios" />
+									<p:selectOneMenu id="tDepartamento"
+										title="${titles['TTL_SELECT']} ${titles['LBL_DEPARTAMENTO']}"
+										disabled="#{experienciaDocenteBean.habilitarControles or !experienciaDocenteBean.mostrarDatosPorPais}"
+										value="#{experienciaDocenteBean.detalleExperienciaDocente.codDepartamento}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										filter="true" filterMatchMode ="custom" filterFunction="contains">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems value="#{webUtils.getDeptos(experienciaDocenteBean.detalleExperienciaDocente.codPais)}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.agregarIndicativoDepartamento()}"
+											process="@this"
+											update="tMunicipio indicativoTelExperienciaDocente" />
+									</p:selectOneMenu>
+									<p:message for="tDepartamento" display="text" />
+								</div>
+								<div class="col-md-4">
+									<p:outputLabel for="tMunicipio"
+										styleClass="log-label form-label-formularios"
+										value="${titles['LBL_EXPERIENCIA_DOCENTE_MUNICIPIO_CIUDAD']}:" />
+									<p:selectOneMenu id="tMunicipio"
+										title="${titles['TTL_SELECT']} ${titles['LBL_EXPERIENCIA_DOCENTE_MUNICIPIO_CIUDAD']}"
+										disabled="#{experienciaDocenteBean.habilitarControles or !experienciaDocenteBean.mostrarDatosPorPais}"
+										value="#{experienciaDocenteBean.detalleExperienciaDocente.codCiudad}"
+										required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+										styleClass="form-control-form-act-usua"
+										filter="true" filterMatchMode ="custom" filterFunction="contains">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+										<f:selectItems
+											value="#{webUtils.getMunicipios(experienciaDocenteBean.detalleExperienciaDocente.codDepartamento)}" />
+									</p:selectOneMenu>
+									<p:message for="tMunicipio" display="text" />
+								</div>
+							</p:panel>
+						</p:outputPanel>
+						<div class="col-md-4">
+							<p:outputLabel for="tNivelEducativo"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_TABLA_NIVEL_EDUCATIVO']}:" />
+							<p:selectOneMenu id="tNivelEducativo"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TABLA_NIVEL_EDUCATIVO']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.codNivelEducativo}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="custom" filterFunction="contains">
+								<f:selectItem itemValue="#{null}" itemLabel="${titles['TTL_SELECT']}" />
+								<f:selectItems value="#{webUtils.nivelEducativo}" />
+							</p:selectOneMenu>
+							<p:message for="tNivelEducativo" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel for="tAreaConocimiento"
+								styleClass="log-label form-label-formularios"
+								value="${titles['LBL_AREA_CONOCIMIENTO']}:" />
+							<p:selectOneMenu id="tAreaConocimiento"
+								title="${titles['TTL_SELECT']} ${titles['LBL_AREA_CONOCIMIENTO']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.codAreaConocimiento}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="custom" filterFunction="contains">
+								<f:selectItem itemValue="#{null}" itemLabel="${titles['TTL_SELECT']}" />
+								<f:selectItems value="#{webUtils.areaConocimiento}" />
+							</p:selectOneMenu>
+							<p:message for="tAreaConocimiento" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_TIPO_ZONA']}:"
+								for="codTipoZona" styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu id="codTipoZona"
+								title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_ZONA']}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.codTipoZona}"
+								required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								styleClass="form-control-form-act-usua"
+								filter="true" filterMatchMode ="custom" filterFunction="contains">
+								<p:ajax event="change" listener="#{experienciaDocenteBean.habilitaDireccion()}" 
+								        update="expDodenteDireccion btnEditarDireccion"/>	
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" itemDisabled="true" />
+								<f:selectItems value="#{webUtils.tipoZona}" />
+							</p:selectOneMenu>
+							<p:message for="codTipoZona" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_DIRECCION']}:"
+								for="expDodenteDireccion"
+								styleClass="log-label form-label-formularios" />
+							<div class="ui-inputgroup">
+								<p:inputText id="expDodenteDireccion"
+									title="${titles['TTL_INGRESE']} ${titles['LBL_DIRECCION']} "
+									disabled="#{experienciaDocenteBean.flgDisabledDireccionTexto}"
+									required="true"
+									value="#{experienciaDocenteBean.detalleExperienciaDocente.direccion}"
+									class="form-control-acti-usua" autocomplete="false"
+									style="width: 72% !important;border-radius:3px 0px 0px 3px!important;">
+									<p:ajax event="change" update="expDodenteDireccion"/>									
+								</p:inputText>
+								<p:commandButton id="btnEditarDireccion" value="${titles['TTL_EDITAR']}"
+									disabled="#{experienciaDocenteBean.flgDisabledDireccionBoton}"
+									styleClass="white-button"
+									style="width: 20% !important; color: #c8d1d8; border-radius:0px 3px 3px 0px!important; background: #0a375b!important; "
+									actionListener="#{experienciaDocenteBean.mostrarPanelEditarDireccion(true)}"
+									process="@this" update="expProfesionaleditarDireccion"
+									oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:expProfesionaleditarDireccion'" />
+								<h:outputText value="${messages['DLG_VALOR_REQUERIDO']}"
+									for="expDodenteDireccion"
+									rendered="#{experienciaDocenteBean.flgDireccionRequerida}"
+									style='color:red' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<div class="row">
+								<div class="col-sm-12" style="padding: 0px !important">
+									<p:outputLabel value="${titles['LBL_INDICATIVO']}"
+										title="${titles['LBL_INDICATIVO']}"
+										for="indicativoTelExperienciaDocente" style="width:30%;"
+										styleClass="log-label form-label-formularios" />
+									<p:outputLabel value="${titles['TTL_TELEFONO']}:"
+										for="telefono" style="width:70%;"
+										styleClass="log-label form-label-formularios" />
+								</div>
+							</div>
+							<div class="row">
+								<p:panel id="panelBanderaTelefono"
+									style="padding: 0px!important;" styleClass="col-sm-12">
+									<div style="padding-right: 0px; width: 30%; float: left;">
+										<p:panel id="indicativoTelExperienciaDocente"
+											class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all form-control-acti-usua"
+											style="border-radius:3px 0px 0px 3px!important; height:2.45em !important;">
+											<img src="..#{experienciaDocenteBean.banderaPais}"
+												height="13" width="18" alt="Bandera" title="Bandera" />
+											<h:outputLabel
+												value="#{experienciaDocenteBean.detalleExperienciaDocente.indicativoTelefono}"
+												styleClass="label-indicativo" />
+										</p:panel>
+										<p:message for="indicativoTelExperienciaDocente"
+											display="text" />
+									</div>
+									<div style="width: 70%; float: right;">
+										<p:inputText id="telefono"
+											title="${titles['TTL_INGRESE']} ${titles['TTL_TELEFONO']} ${titles['TTL_TIPO_NUMERICO']}"
+											disabled="#{experienciaDocenteBean.habilitarControles}"
+											value="#{experienciaDocenteBean.detalleExperienciaDocente.telefono}"
+											class="form-control-acti-usua" autocomplete="false"
+											maxlength="20" onkeypress="return numbervalida(event)"
+											style="border-radius:0px 3px 3px 0px!important;">
+											<f:attribute value="7" name="minLength" />
+											<f:attribute value="20" name="maxLength" />
+											<f:validator validatorId="numberValidator" />
+										</p:inputText>
+										<p:message for="telefono" display="text" />
+									</div>
+								</p:panel>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_BOOL_TRABAJO']}:"
+								for="Actualmente"
+								title="${titles['TTL_SELECT']} ${titles['TTL_LABORANDO_ACTUALMENTE']}"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:selectOneRadio id="Actualmente"
+								title="${titles['TTL_SELECT']} ${titles['TTL_LABORANDO_ACTUALMENTE']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.flgActualmente}">
+								<f:selectItem itemLabel="${titles['LBL_SI']}" itemValue="true" />
+								<f:selectItem itemLabel="${titles['LBL_NO']}" itemValue="false" />
+								<p:ajax listener="#{experienciaDocenteBean.changeState()}"
+									update="panelFechaFin, tiempoExperienciaExpDoc"></p:ajax>
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_EXPERIENCIA_DOCENTE_FECHA_INGRESO']}:"
+								for="fechaIngresoExperienciaDocente"
+								styleClass="log-label form-label-formularios" />
+
+							<p:calendar id="fechaIngresoExperienciaDocente" mask="true"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_EXPERIENCIA_DOCENTE_FECHA_INGRESO']}"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								maxdate="#{fechaSistema}" mode="popup"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.fechaIngreso}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+								<p:ajax event="dateSelect" update="fechaFin" />
+								<p:ajax update="tiempoExperienciaExpDoc" process="@this" event="dateSelect"
+									listener="#{experienciaDocenteBean.calcularTiempoExperienciaDocente}" />
+								<p:ajax update="tiempoExperienciaExpDoc" process="@this" event="change"
+									listener="#{experienciaDocenteBean.calcularTiempoExperienciaDocente}" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="fechaIngresoExperienciaDocente" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:panel id="panelFechaFin" style="padding: 0px!important;">
+								<p:outputPanel>
+									<p:outputLabel value="${titles['LBL_FECHA_RETIRO']}:"
+										for="fechaFin" styleClass="log-label form-label-formularios" />
+									<p:calendar id="fechaFin" mask="true" yearRange="#{rangoAnios}"
+										title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_RETIRO']}"
+										placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+										navigator="true"
+										converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+										disabled="#{experienciaDocenteBean.habilitarControles or !experienciaDocenteBean.habilitarFechaRetiro}"
+										value="#{experienciaDocenteBean.detalleExperienciaDocente.fechaFinalizacion}"
+										pattern="#{fechaFormato}" effect="slideDown"
+										mindate="#{experienciaDocenteBean.detalleExperienciaDocente.fechaIngreso}"
+										maxdate ="#{fechaSistema}"
+										locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar">
+										<f:attribute name="startDateName"
+											value="${titles['LBL_EXPERIENCIA_DOCENTE_FECHA_INGRESO']}" />
+										<f:attribute name="endDateName"
+											value="${titles['LBL_FECHA_RETIRO']}" />
+										<f:attribute name="startDate"
+											value="#{experienciaDocenteBean.detalleExperienciaDocente.fechaIngreso}" />
+										<f:attribute name="maxDate" value="#{fechaSistema}" />
+										<p:ajax update="tiempoExperienciaExpDoc horasPromedioMes" process="@this jornadaLaboral"
+											event="dateSelect" listener="#{experienciaProfesionalBean.calcularTiempoExperiencia}" />
+										<p:ajax update="tiempoExperienciaExpDoc horasPromedioMes" process="@this jornadaLaboral"
+											event="change" listener="#{experienciaDocenteBean.calcularTiempoExperienciaDocente}" />
+								<f:validator validatorId="maxDateValidator" />
+									</p:calendar>
+									<h:outputText>
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<p:message for="fechaFin" display="text" />
+
+								</p:outputPanel>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_JORNADA_LABORAL']}:"
+									for="jornadaLaboralExpDoc" styleClass="log-label form-label-formularios" />
+								<p:selectOneMenu id="jornadaLaboralExpDoc"
+									title="#{titles.TTL_SELECT} #{titles.LBL_JORNADA_LABORAL}"
+									disabled="#{experienciaDocenteBean.habilitarControles}"
+									locale="#{lenguajeBean.localeCode}"
+									styleClass="form-control-form-act-usua"
+									value="#{experienciaDocenteBean.detalleExperienciaDocente.codJornadaLaboral}"
+									filter="true" filterMatchMode ="custom" filterFunction="contains">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.jornadaLaboral}" />
+									<p:ajax event="change" process="@this"
+										update="horasPromedioMesExpDoc labelHorasPromedioExpDoc tiempoExperienciaExpDoc"
+										listener="#{experienciaDocenteBean.habilitarHorasPromedioMes()}" />
+								</p:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+						<p:outputLabel value="${titles['LBL_HORAS_PROM_MES']}:" id="labelHorasPromedioExpDoc"
+								for="horasPromedioMesExpDoc"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:inputText id="horasPromedioMesExpDoc"
+								required="#{!experienciaDocenteBean.deshabilitarHorasMesExpDoc}" 
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO_HV']}"
+								title="#{titles.TTL_INGRESE} #{titles.LBL_HORAS_PROM_MES} #{titles['TTL_TIPO_NUMERICO']} "
+								disabled="#{experienciaDocenteBean.deshabilitarHorasMesExpDoc}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.horasPromedioMes}"
+								class="form-control-acti-usua" autocomplete="true" maxlength="3"
+								onkeypress="return numbervalida(event)" style="width:20%;">
+								<f:validator validatorId="numberValidator" />
+								<p:ajax update="tiempoExperienciaExpDoc" process="@this" event="change"
+									listener="#{experienciaDocenteBean.calcularTiempoExperienciaDocente}" />
+							</p:inputText>
+							<p:message for="horasPromedioMesExpDoc" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MOTIVO_RETIRO']}:"
+									for="motivoRetiroExpDoc" styleClass="log-label form-label-formularios" />
+								<p:selectOneMenu id="motivoRetiroExpDoc"
+									title="#{titles.TTL_SELECT} #{titles.LBL_MOTIVO_RETIRO}"
+									disabled="#{experienciaDocenteBean.habilitarControles}"
+									filter="true" filterMatchMode ="custom" filterFunction="contains"
+									value="#{experienciaDocenteBean.detalleExperienciaDocente.codMotivoRetiro}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.motivoRetiro}" />
+								</p:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIEMPO_DE_EXPERIENCIA']}:"
+								for="tiempoExperienciaExpDoc"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="tiempoExperienciaExpDoc" disabled="true"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.tiempoExperienciaExpDoc}"
+								class="form-control-acti-usua"
+								style="color: #808080!important;text-overflow: ellipsis!important;">
+							</p:inputText>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_MATERIA_IMPARTIDA']}:"
+								for="materiaImpartida"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="materiaImpartida" autocomplete="false"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_MATERIA_IMPARTIDA']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								value="#{experienciaDocenteBean.detalleExperienciaDocente.materiaImpartida}"
+								class="form-control-acti-usua" maxlength="256">
+								<f:attribute name="maxLength" value="256" />
+							</p:inputText>
+							<p:message for="materiaImpartida" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<p:panel rendered="#{!experienciaDocenteBean.habilitarControles}">
+					<br />
+					<br />
+					<hr class="hr-style" />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<p:outputLabel value=" ${titles['TTL_CERTIFICACION_LABORAL']}"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_CERTIFICACION_LABORAL']}"
+									styleClass="log-label form-label-formularios" />
+							</div>
+							<div class="col-md-5" style="padding-left: 10% !important;">
+								<p:fileUpload id="documentoCertifDocente"
+									disabled="#{experienciaDocenteBean.detalleExperienciaDocente.flgVerificado}"
+									value="#{experienciaDocenteBean.cargarExpDocente.fileName}"
+									label="${titles['LBL_SUBIR']}"
+									update="labelDocumentoExpDocentePDF"
+									fileUploadListener="#{experienciaDocenteBean.uploadDocumentoExpDocente}"
+									mode="advanced" auto="true" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+									allowTypes="/(\.|\/)(pdf)$/"
+									sizeLimit="#{templateHojaDeVidaBean.tamPdfExpeienciaLaboralDocente}"
+									invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}"
+									oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:peDocente0'" />
+								<p:outputLabel value="#{experienciaDocenteBean.nombreArchivo}"
+									id="labelDocumentoExpDocentePDF" />
+								<p:message for="documentoCertifDocente" display="text" />
+							</div>
+							<div class="col-md-1 vista-media"
+								style="padding-top: 1% !important;">
+								<p:commandButton
+									title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']} ${titles['TTL_CERTIFICACION_LABORAL']}"
+									id="idBtnVerexperienciaDocente" icon="icon-view"
+									styleClass="icon-btn" process="@this"
+									update="frmPrincipal:tabHojaDeVida:panelDiaVisualizarExpDocente"
+									actionListener="#{experienciaDocenteBean.visualizarArchivoExperienciaDocente('1')}"
+									onclick="$('#documentosAdjuntosExpDocente').modal('show')" />
+							</div>
+							<div class="col-md-3">
+								<p:outputLabel value="• ${titles['LBL_DOCUMENTO_VERIFICADO']}"
+									for="checkboxverificado"
+									styleClass="log-label form-label-formularios" />
+								<p:spacer width="8" />
+								<p:selectBooleanCheckbox id="checkboxverificado"
+									title="${titles['TTL_SELECT']} ${titles['LBL_DOCUMENTO_VERIFICADO']}"
+									value="#{experienciaDocenteBean.detalleExperienciaDocente.flgVerificado}"
+									disabled="#{!experienciaDocenteBean.flgValidadoDocumento}" />
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</div>
+				</p:panel>
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="peDocente0" style="padding: 0%;">
+							<p:commandButton id="btnGuardarExperienciaDocenteHV"
+								value="${titles['TTL_SAVE']}"
+								styleClass="btn btn-primary btn-update-disable"
+								disabled="#{experienciaDocenteBean.habilitarControles}"
+								process="frmPrincipal:tabHojaDeVida:panelExperienciaDocente"
+								update="frmPrincipal:tabHojaDeVida:panelExperienciaDocente, dataTabExpDocente, tiempoExpLaboral frmPrincipal:tabHojaDeVida
+								        frmPrincipal:informacionPersonalUsuario"
+								actionListener="#{experienciaDocenteBean.guardarExperienciaDocente}"
+								style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+								oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelBanderaTelefono'" />
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-default btn-update-disable"
+							actionListener="#{experienciaDocenteBean.habilitarFormularioExpDocente(false)}"
+							process="@this" immediate="true"
+							update="frmPrincipal:tabHojaDeVida:panelExperienciaDocente frmPrincipal:tabHojaDeVida"
+							style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; 
+							font-size:1.5em!important; padding-top:0!important;"
+							oncomplete="datosModificados(0);">
+							<p:resetInput
+								target="frmPrincipal:tabHojaDeVida:panelExperienciaDocente" />
+
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				<p:outputPanel id="expProfesionaleditarDireccion">
+					<p:panel
+						rendered="#{experienciaDocenteBean.mostratEditarDireccion}">
+						<hr class="hr-style hr-style-two" />
+						<span class="span-style"> ${titles['TTL_EDITAR_DIRECCION']}
+						</span>
+						<br />
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-12">
+									<p:outputLabel styleClass="log-label form-label-formularios"
+										value="${titles['LBL_VIA_PRINCIPAL']}" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4 col-lg-3">
+									<p:outputLabel for="tipovia" value="${titles['TTL_VIA']}"
+										styleClass="log-label form-label-formularios" />
+									<h:selectOneMenu id="tipovia"
+										title="#{titles.TTL_SELECT} #{titles.TTL_VIA}"
+										value="#{experienciaDocenteBean.editarDireccion.tipoVia}"
+										converter="tipoViaConverter" filterMatchMode="contains"
+										filter="true" styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoVia}" var="tipovia"
+											itemLabel="#{tipovia.sigla}" itemValue="#{tipovia}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-md-4 col-lg-3">
+									<p:outputLabel for="numero" value="${titles['TTL_NUMERO']}"
+										styleClass="log-label form-label-formularios"
+										style="width:100% !important;" />
+									<p:inputText id="numero"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}"
+										value="#{experienciaDocenteBean.editarDireccion.numero}"
+										maxlength="3" onkeypress="return numbervalida(event)"
+										class="form-control-acti-usua" autocomplete="false"
+										style="width:30%!important;">
+										<p:ajax event="change"
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+									<h:selectOneMenu id="primerLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{experienciaDocenteBean.editarDireccion.primerLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua"
+										style="width:70%!important;">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-md-4 col-lg-1">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<p:selectBooleanCheckbox
+										value="#{experienciaDocenteBean.editarDireccion.bis}">
+										<p:ajax event="change"
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:selectBooleanCheckbox>
+									<p:spacer width="5" />
+									<p:outputLabel id="bis" value="${titles['LBL_BIS']}"
+										title="#{titles.TTL_SELECT} #{titles.LBL_BIS}"
+										styleClass="log-label form-label-formularios" />
+								</div>
+								<div class="col-md-4 col-lg-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="segundaLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{experienciaDocenteBean.editarDireccion.segundaLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-md-4 col-lg-3">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="orientacion"
+										title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}"
+										value="#{experienciaDocenteBean.editarDireccion.orientacion}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoOrientacionConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoOrientacion}"
+											var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+											itemValue="#{tipoorientacion}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-sm-12">
+									<p:outputLabel styleClass="log-label form-label-formularios"
+										value="#{titles['LBL_VIA_SECUNDARIA']}" style="font-weight: 600!important;" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-4 col-lg-2">
+									<p:outputLabel value="${titles['TTL_NUMERO']}"
+										for="segundoNumero"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="segundoNumero"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERO}"
+										value="#{experienciaDocenteBean.editarDireccion.segundoNumero}"
+										maxlength="3" onkeypress="return numbervalida(event)"
+										class="form-control-acti-usua" autocomplete="false">
+										<p:ajax event="change"
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+								<div class="col-md-4 col-lg-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="tercerLetra"
+										title="#{titles.TTL_SELECT} #{titles.TTL_LETRA}"
+										value="#{experienciaDocenteBean.editarDireccion.tercerLetra}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoLetraConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoLetra}" var="letravia"
+											itemLabel="#{letravia.sigla}" itemValue="#{letravia}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-md-4 col-lg-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<p:inputText id="tercerNumero" maxlength="3"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_NUMERICO}"
+										value="#{experienciaDocenteBean.editarDireccion.tercerNumero}"
+										class="form-control-acti-usua" autocomplete="false"
+										onkeypress="return numbervalida(event)">
+										<p:ajax event="change"
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+								<div class="col-md-4 col-lg-2">
+									<label style="color: transparent; width: 100%;"
+										class="log-label form-label">.</label>
+									<h:selectOneMenu id="segundaOrientacion"
+										title="#{titles.TTL_SELECT} #{titles.TTL_CARDINALIDAD}"
+										value="#{experienciaDocenteBean.editarDireccion.segundaOrientacion}"
+										filterMatchMode="contains" filter="true"
+										converter="tipoOrientacionConverter"
+										styleClass="form-control-form-act-usua">
+										<f:selectItem itemLabel="#{titles['TTL_SELECT']}"
+											itemValue="#{null}" />
+										<f:selectItems value="#{tipoOrientacion}"
+											var="tipoorientacion" itemLabel="#{tipoorientacion.sigla}"
+											itemValue="#{tipoorientacion}" />
+										<p:ajax
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</h:selectOneMenu>
+								</div>
+								<div class="col-md-4 col-lg-4">
+									<p:outputLabel value="${titles['TTL_COMPLEMENTO']}"
+										for="complemento"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="complemento"
+										title="#{titles.TTL_INGRESE} #{titles.TTL_COMPLEMENTO} #{titles['TTL_TIPO_ALFANUMERICO']} "
+										value="#{experienciaDocenteBean.editarDireccion.complemento}"
+										class="form-control-acti-usua" autocomplete="false"
+										maxlength="100">
+										<p:ajax event="change"
+											listener="#{experienciaDocenteBean.generarDireccion()}"
+											process="@this" update="direccionGenerada" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<p:outputLabel value="${titles['TTL_DIRECCION_GENERADA']}"
+										for="direccionGenerada"
+										styleClass="log-label form-label-formularios" />
+									<p:inputText id="direccionGenerada"
+										title="#{titles.TTL_DIRECCION_GENERADA}"
+										value="#{experienciaDocenteBean.editarDireccion.direccionGenerada}"
+										class="form-control-acti-usua" readonly="true" />
+								</div>
+							</div>
+						</div>
+						<br />
+						<br />
+						<!-- 						Boton de la direccion  -->
+						<div class="row" align="center">
+							<div class="col-md-4"></div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_OK']}"
+									styleClass="btn btn-primary btn-update-disable"
+									style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									process="@this"
+									update="expProfesionaleditarDireccion expDodenteDireccion"
+									actionListener="#{experienciaDocenteBean.agergarDireccion()}"
+									oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelBanderaTelefono';
+									            oncomplete=datosModificados(0);" />
+							</div>
+							<div class="col-md-2" style="margin-bottom: 2%;">
+								<p:commandButton value="${titles['TTL_CANCEL']}"
+									styleClass="btn btn-default btn-update-disable"
+									style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+									actionListener="#{experienciaDocenteBean.mostrarPanelEditarDireccion(false)}"
+									process="@this" update="expProfesionaleditarDireccion"
+									oncomplete="datosModificados(0);" />
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</p:panel>
+				</p:outputPanel>
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+
+	<p:dialog header="• ${titles['LBL_CONFIRMAR_ACTUALIZACION']} •"
+		id="dialogExpDocente" minHeight="300" widgetVar="dialogExpDocente"
+		modal="true" resizable="false" closeOnEscape="false" draggable="false"
+		closable="false" responsive="true">
+		<p:panel id="panelExpDocenteConfirmacion"
+			style="background: transparent !important;">
+			<div class="row" align="center">
+				<div class="col-md-12" style="margin-top: 3%; margin-bottom: 3%;">
+					<p:outputLabel for="edJustificacionModificacion"
+						value="${titles['LBL_JUSTIFICACION_ACTUALIZACION_DATOS']}:"
+						styleClass="log-label form-label-formularios" />
+					<p:inputTextarea rows="4" cols="25"
+						id="edJustificacionModificacion"
+						value="#{experienciaDocenteBean.modificacionHojaVida.justificacionModificacion}"
+						required="true" autoResize="false"
+						requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+						styleClass="form-control-acti-usua form-control"
+						style="resize: none;overflow-x: hidden;word-wrap: break-word!important;" />
+					<p:message for="edJustificacionModificacion" display="text" />
+				</div>
+			</div>
+			<hr class="hr-style-modales" />
+			<div class="row" align="center">
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<p:commandButton id="btnConfirmarExprDocente"
+						value="${titles['TTL_SAVE']}"
+						actionListener="#{experienciaDocenteBean.guardarConfirmacionDatos}"
+						process="panelExpDocenteConfirmacion"
+						update="panelExpDocenteConfirmacion, frmPrincipal:tabHojaDeVida:panelExperienciaDocente, dataTabExpDocente, tiempoExpLaboral"
+						styleClass="btn btn-primary" 
+						oncomplete="datosModificados(0);"/>
+				</div>
+				<div class="col-md-4">
+					<p:commandButton id="btnCancelarExprDocente"
+						value="${titles['TTL_CANCEL']}"
+						actionListener="#{experienciaDocenteBean.cancelarConfirmacionDatos}"
+						process="@this"
+						update="panelExpDocenteConfirmacion, frmPrincipal:tabHojaDeVida:panelExperienciaDocente, dataTabExpDocente, tiempoExpLaboral"
+						styleClass="btn btn-default"
+						oncomplete="datosModificados(0);" />
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+			<br />
+		</p:panel>
+	</p:dialog>
+
+	<p:dialog header="${titles['LBL_VER_ADJUNTOS']}"
+		widgetVar="documentoAdjuntoExpPro" minHeight="40">
+		<h:outputText value="${titles['LBL_SIN_SOPORTE']}" />
+	</p:dialog>
+
+	<div id="eliminarExperiencia" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title" style="font-size: 2em !important;">•
+						#{titles.TTL_ELIMINAR_EXPERIENCIA_DOCENTE} •</h4>
+				</div>
+				<div class="modal-body">
+					<p:panel id="panelComfirmacionExperienciaDocente"
+						style="background: transparent;">
+						<div class="col-md-12" align="center"
+							style="margin-top: 2%; margin-bottom: 3%;">
+							<p:outputLabel
+								value="${titles['LBL_CONFIRMACION_EXPERIENCIA_DOCENTE']}"
+								style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+								escape="false" />
+						</div>
+						<hr
+							style="border-top: 1.5px solid rgb(196, 196, 196); width: 95%; margin-top: 15px; margin-bottom: 15px;" />
+						<div class="row" align="center">
+							<div class="col-md-2"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnEliminarExperienciaDocente"
+									value="${titles['TTL_DELETE']}" styleClass="btn btn-primary"
+									style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									process="@this" update="dataTabExpDocente, tiempoExpLaboral"
+									actionListener="#{experienciaDocenteBean.desactivarExperienciaDocente(experienciaDocenteBean.detalleExperienciaDocente.codExperienciaDocente)}"
+									onclick="$('#eliminarExperiencia').modal('hide')" />
+								<p:message for="btnEliminarExperienciaDocente" display="text" />
+							</div>
+							<div class="col-md-4">
+								<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+									update="dataTabExpDocente" styleClass="btn btn-default"
+									style="padding-left:11.5%!important;padding-right:11.5%!important; font-size:1.5em!important; margin-bottom:0.5%;"
+									onclick="$('#eliminarExperiencia').modal('hide')" />
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="documentoAdjuntoExpDoc" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title" style="font-size: 2em !important;">•
+						${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-md-12" align="center"
+						style="margin-top: 2%; margin-bottom: 3%;">
+						<h:outputText value="${titles['LBL_ADJUNTOS_EXPERIENCIA']}"
+							style="font-size:1.5em!important; color:#245379; font-weight: normal;" />
+					</div>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-4" style="margin-bottom: 5%;">
+						<p:commandButton value="${titles['TTL_OK']}"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important;"
+							onclick="$('#documentoAdjuntoExpDoc').modal('hide')" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal para ver los archivos adjuntos-->
+	<div id="documentosAdjuntosExpDocente" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 60%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+				</div>
+
+				<div class="modal-body" align="center">
+					<p:panel id="panelDiaVisualizarExpDocente"
+						style="background: transparent!important;">
+						<c:if test="#{experienciaDocenteBean.rutaArchivo==null}">
+							<h:outputLabel value="${titles['LBL_SIN_SOPORTE']}"
+								class="form-label-formularios" />
+						</c:if>
+						<c:if test="#{experienciaDocenteBean.rutaArchivo!=null}">
+							<iframe src ="#{experienciaDocenteBean.rutaArchivo}" width='600' height='400'></iframe>								
+						</c:if>
+					</p:panel>
+				</div>
+
+				<div class="modal-footer">
+					<p:commandButton value="${titles['TTL_CLOSE']}"
+						styleClass="btn btn-default" process="@this"
+						style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+						onclick="$('#documentosAdjuntosExpDocente').modal('hide')" />
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+</ui:composition>

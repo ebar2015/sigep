@@ -1,0 +1,184 @@
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+  	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+ 	xmlns:h="http://java.sun.com/jsf/html"
+ 	xmlns:p="http://primefaces.org/ui"
+ 	xmlns:c="http://java.sun.com/jsp/jstl/core">
+ 	
+ 	
+	
+	<div class="row header-media header-style2">
+		<div class="col-md-8" style="float: left">
+			<div class="col-md-7 media-salto-logo" style="float: left">
+				<p:graphicImage dir="resources" class="media-tamano-logo"
+					name="images/logos_ul.png" title="Gobierno de Colombia"
+					alt="Gobierno de Colombia" onclick="redirectToIndex()" />
+			</div>
+			
+		</div>
+		<div class="col-md-4" style="float: right;" align="right">
+		<div class="row">
+				
+				<p:link href="http://www.funcionpublica.gov.co/suscripcion-a-rss" tabindex="1">
+					<p:graphicImage dir="resources" height="28" width="28"
+						name="images/logos/rss.jpg"
+						title="RSS" alt="RSS" />
+				</p:link>
+				 
+				 <!-- 
+				 <p:commandLink id="idBtContrastePT"
+						actionListener="#{contrasteBean.cambiarContraste}"
+						styleClass="accountEditBtn">
+						<p:graphicImage dir="resources" height="28" width="28"
+							name="images/logos/contraste.svg" title="contraste"
+							alt="contraste" />
+					</p:commandLink> 
+				 -->
+					<p:commandLink id="idBtContrastePT"
+						onclick="PF('wvComprobarCambioContrasteBT').show();">
+						<p:graphicImage dir="resources" height="28" width="28"
+							name="images/logos/contraste.svg" title="contraste"
+							alt="contraste" />
+					</p:commandLink>				 
+				<p:link href="javascript:fontSize(.1)" id="incfont" tabindex="2">
+					<p:graphicImage dir="resources" height="28" width="28"
+						name="images/logos/aplus.jpg"
+						title="${titles['TTL_FONT_SIZE_UP']}"
+						alt="${titles['TTL_FONT_SIZE_UP']}" />
+				</p:link>
+				<p:link href="javascript:fontSize(-.1)" id="decfont" tabindex="3">
+					<p:graphicImage dir="resources" height="28" width="28"
+						name="images/logos/aminus.jpg"
+						title="${titles['TTL_FONT_SIZE_DOWN']}"
+						alt="${titles['TTL_FONT_SIZE_DOWN']}" />
+				</p:link>
+				<p:spacer width="2" />
+				<c:forEach items="#{lenguajes}" var="len">
+					<!-- <p:link outcome="/index.xhtml" tabindex="4"
+						rendered="#{empty len.pais or len.pais ne lenguajeBean.localeCode}"
+						actionListener="#{lenguajeBean.seleccionarIdioma}" onclick="PF('wvComprobarCambioIdiomaCT').show();">
+						<f:param name="productId" value="10" />
+						<f:param name="l" value="#{len.pais}" />
+						<p:graphicImage dir="resources" height="28" width="28"
+							name="#{'images/logos/'.concat(len.imagen)}"
+							title="az" alt="az1" />
+					</p:link>
+					 -->
+					<p:commandLink outcome="/index.xhtml" tabindex="4"
+						rendered="#{empty len.pais or len.pais ne lenguajeBean.localeCode}"
+						actionListener="#{lenguajeBean.solicitarRefrescarIdioma(len,1)}">
+						<f:param name="faces-redirect" value="true" />
+						<f:param name="l" value="#{len.pais}" />
+						<p:graphicImage dir="resources" height="28" width="28"
+							name="#{'images/logos/'.concat(len.imagen)}"
+							title="#{len.etiqueta}" alt="#{len.etiqueta}" />
+					</p:commandLink>					
+				</c:forEach>
+			</div>
+	
+			<ui:fragment rendered="#{not sesionBean.sesionValida}">
+				<div class="row">
+					<p:link href="https://www.facebook.com/FuncionPublica"
+						tabindex="4" target="_blank">
+						<p:graphicImage dir="resources" height="24" width="24"
+							name="images/logos/facebook.svg" title="Facebook" alt="Facebook" />
+					</p:link>
+					<p:spacer width="3" />
+					<p:link href="https://twitter.com/dafp_colombia" tabindex="5" 
+						target="_blank">
+						<p:graphicImage dir="resources" height="24" width="24"
+							name="images/logos/twitter.svg" title="Twitter" alt="Twitter" />
+					</p:link>
+					<p:spacer width="3" />
+					<p:link tabindex="6"
+						href="https://www.linkedin.com/company/departamento-administrativo-de-la-funci%C3%B3n-p%C3%BAblica"
+						target="_blank">
+						<p:graphicImage dir="resources" height="24" width="24"
+							name="images/logos/linkedin.svg" title="LinkedIn" alt="LinkedIn" />
+					</p:link>
+					<p:spacer width="3" />
+					<p:link href="http://www.youtube.com/webmasterdafp" tabindex="7"
+						target="_blank">
+						<p:graphicImage dir="resources" height="24" width="24"
+							name="images/logos/youtube.svg" title="Youtube" alt="Youtube" />
+					</p:link>
+					<p:spacer width="3" />
+					<p:link
+						href="https://www.flickr.com/photos/funcionpublica/albums"
+						tabindex="8" target="_blank">
+						<p:graphicImage dir="resources" height="24" width="24"
+							name="images/logos/flickr.svg" title="Flickr" alt="Flickr" />
+					</p:link>
+				</div>
+			</ui:fragment>
+			
+			
+			<ui:fragment rendered="#{sesionBean.sesionValida}">
+				<h:form id="frmRolesLogin"
+					rendered="#{not restablecerPasswordBean.ticketValido}">
+					<div class="row">
+						<h:outputLabel value="#{sesionBean.usuarioSesion.nombrePersona}"
+							styleClass="form-label header-label" />
+						<h:outputLink id="roles" value="#" style="text-decoration:none">
+							<h:outputText value="${titles['TTL_ROLES_TITLE']}"
+								styleClass="form-label header-link"	 />
+						</h:outputLink>
+						<p:tooltip id="toolTipRoles" for="roles"
+							widgetVar="wvToolTipRoles"
+							value="#{sesionBean.rolesUsuarioSesionString}" escape="false"
+							trackMouse="true" />
+						<h:link value="${titles['TTL_LOGON']}" outcome="/logout.xhtml"
+							class="header-h_link"/>
+					</div>
+				</h:form>
+			</ui:fragment>
+			<div class="row">
+				<p:outputLabel value="#{sesionBean.verVersion()}" class="form-label-version header-version"/>
+			</div>
+			<p:spacer height="2" />
+		
+		</div>
+		
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="wvComprobarCambioContrasteBT"
+				id="wvComprobarCambioContrasteBT" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false" responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center>
+						<h5>${messages['MSG_CONFIMRAR_CAMBIAR_CONTRASTE']}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_TO_CONTINUE']}" 
+				    	process="@this" styleClass="btn btn-primary" 
+				    	action="#{contrasteBean.cambiarContraste}" 
+				    	onclick="PF('wvComprobarCambioContrasteBT').hide();" 
+				    	/>
+				    <p:commandButton value="${titles['TTL_CANCEL']}" 
+				    	process="@this" styleClass="btn btn-default" 
+				    	onclick="PF('wvComprobarCambioContrasteBT').hide();" />
+				</div>
+				<br />
+			</p:dialog>	
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="wvComprobarCambioIdiomaBT"
+				id="wvComprobarCambioIdiomaBT" minHeight="300" modal="true" resizable="false" 
+				closeOnEscape="false" responsive="true" draggable="false" closable="false" appendTo="@(body)"><br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center><h5>${messages['MSG_CONFIMRAR_CAMBIAR_CONTRASTE']}</h5></center>
+				</div><br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_TO_CONTINUE']}" 
+				    	process="@this" styleClass="btn btn-primary" action="#{lenguajeBean.refrescarIdiomaConfirmacion}" 
+				    	onclick="PF('wvComprobarCambioIdiomaBT').hide();"	/>
+				    <p:commandButton value="${titles['TTL_CANCEL']}" 
+				    	process="@this" styleClass="btn btn-default" 
+				    	onclick="PF('wvComprobarCambioIdiomaBT').hide();" />
+				</div><br />
+			</p:dialog>						
+		
+		
+	</div>
+
+</html>

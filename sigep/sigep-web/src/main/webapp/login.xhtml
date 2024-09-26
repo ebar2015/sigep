@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{sesionBean.retrieve}" />
+	</f:metadata>
+
+	<style>
+.ui-dialog {
+	display: none !important;
+}
+</style>
+
+
+	<ui:param name="pageTitle" value="${titles['TTL_HOME']}" />
+	<ui:param name="pageSubtitle"
+		value="#{titles['TTL_WELCOME'].concat(' ').concat(sesionBean.usuarioSesion.nombreUsuario)}" />
+
+	<p:importConstants
+		type="co.gov.dafp.sigep2.util.enums.TipoDocumentoIdentidadEnum"
+		var="PFTipoDocs" />
+
+	<div class="header">
+		<script src="https://www.google.com/recaptcha/api.js?render=#{initParam['primefaces.PUBLIC_CAPTCHA_KEY']}"></script>
+		
+	</div>
+	<div class="body container-fluid">
+	
+	
+		<div class="row" style="padding-top: 5rem; padding-bottom: 5rem">
+			<div class="imgLogin col-xs-12 col-md-8 hidden-xs">
+				<p:graphicImage dir="resources" class="img-responsive"
+					name="images/imagenBannerMigracion.png"
+					title="Gobierno de Colombia" alt="Gobierno de Colombia" />
+
+			</div>
+			<div class="formLogin col-xs-12 col-md-4">
+				<div class="container-fluid">
+					<h:form id="frmLogin"
+						style="border: 1.5px solid rgba(196, 196, 196, 0.85); border-radius:0px!important; "
+						autocomplete="off">
+						
+						<h:panelGroup>
+							<p:inputText id="uiCaptcha" binding="#{sesionBean.uiCaptcha}" type="hidden" ></p:inputText>
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<p:outputLabel
+										value="• ${titles['TTL_SUB_TRANSVERSAL_USUARIO_RESTABLECER']} •"
+										rendered="#{contrasena.habilitarRestablecerContrasenia}"
+										styleClass="page-subtitle"
+										style="font-size: 2.5em!important; font-weight: 600!important; padding-bottom: 0.2em; padding-top: 0.2em; color: #235379!important;" />
+									<p:outputLabel value="• ${titles['TTL_LOGIN']} •"
+										rendered="#{!contrasena.habilitarRestablecerContrasenia}"
+										styleClass="page-subtitle"
+										style="font-size: 2.5em!important; font-weight: 600!important; padding-bottom: 0.2em; padding-top: 0.2em; color: #235379!important;" />
+								</div>
+							</div>
+						</h:panelGroup>
+						<!-- required -->
+						<div class="row" align="right"
+							style="box-shadow: 0em -1em 3em -1.5em #000; padding-top: 1em;">
+							<div class="col-md-12">
+								<label class="form-label-login">${titles['TTL_REQUIRED']}</label>
+							</div>
+						</div>
+						<!-- Tipo documento -->
+						<div class="row">
+							<div class="col-md-12" style="margin-top:1rem; margin-bottom:1rem;">
+								<div class="form-group">
+									<div class="col-md-12">
+										<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}"
+											for="tipoDocumento" styleClass="log-label form-label-login" />
+									</div>
+									<div class="col-md-12">
+										<h:selectOneMenu id="tipoDocumento"
+											converter="tipoDocumentoConverter"
+											value="#{sesionBean.tipoDocumento}" var="t" filter="false"
+											filterMatchMode="contains" required="true" tabindex="10"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control-form-act-usua"
+											title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_DOCUMENTO']}"
+											style="color: #999999!important;">
+											<f:selectItem itemValue="#{null}" itemDisabled="true"
+												itemLabel="${titles['TTL_SELECT']}" />
+											<f:selectItems value="#{tiposDocumentoEntidad}" var="tipoDoc"
+												itemLabel="#{tipoDoc.descripcion}" itemValue="#{tipoDoc}" />
+											<p:ajax process="@this" update="@form" global="false"
+												listener="#{sesionBean.limpiarDoc()}" />
+											<f:validator validatorId="tipoDocumentoValidator" />
+										</h:selectOneMenu>
+									</div>
+									<div class="col-md-12">
+										<p:message for="tipoDocumento" display="text" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Numero documento -->
+						<div class="row">
+							<div class="col-md-12" style="margin-top:1rem; margin-bottom:1rem;">
+								<div class="form-group">
+									<div class="col-md-12">
+										<p:outputLabel value="${titles['TTL_NICK_NAME']}"
+											for="userName" styleClass="log-label form-label-login" />
+									</div>
+									<div class="col-md-12">
+										<p:inputText id="userName" value="#{sesionBean.name}"
+											required="true" maxlength="15" tabindex="11"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											styleClass="form-control"
+											title="${titles['TTL_INGRESAR']} ${titles['TTL_NICK_NAME']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+											autocomplete="off"
+											onchange="recaptcha()">
+											<f:attribute name="documentType" value="#{sesionBean.tipoDocumento.id}" />
+											<p:ajax process="@this" update="@form" global="false"
+												disabled="#{contrasena.habilitarRestablecerContrasenia}" />
+											<p:keyFilter regEx="/[A-Z0-9_]/i" />
+										</p:inputText>
+									</div>
+									<div class="col-md-12">
+										<p:message for="userName" display="text" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Contraseña -->
+						<div class="row">
+							<div class="col-md-12" style="margin-top:1rem; margin-bottom:1rem;">
+								<div class="form-group">
+									<div class="col-md-12">
+										<p:outputLabel for="password"
+											value="${titles['TTL_PASSWORD']}"
+											styleClass="log-label form-label-login"
+											rendered="#{!contrasena.habilitarRestablecerContrasenia}" />
+									</div>
+									<div class="col-md-12">
+										
+										<h:panelGroup id="panelPassword"
+											rendered="#{!contrasena.habilitarRestablecerContrasenia}">
+											<p:link id="linkPassword" value="" href="javascript:void(0);"
+												title="${titles['LBL_MOSTRAR_OCULTAR_PASSWORD']} "
+												styleClass="mostrarContrasenia" target="_self" tabindex="13"
+												onmouseover="document.getElementById('frmLogin:password').type='text';document.getElementById('frmLogin:linkPassword').className='ocultarContrasenia';dragStart();"
+												onmouseout="document.getElementById('frmLogin:password').type='password';document.getElementById('frmLogin:linkPassword').className='mostrarContrasenia';dragStart();">
+											</p:link>
+
+											<p:password id="password" value="#{sesionBean.pass}"
+												required="true" tabindex="12"
+												style="padding: 0.5em 4.4em 0.5em 0.5em!important;"
+												title="${titles['TTL_INGRESAR']} ${titles['TTL_PASSWORD']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+												requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+												styleClass="form-control" autocomplete="off"
+												onchange="recaptcha()">
+												<f:attribute name="nickName" value="#{sesionBean.name}" />
+												<f:attribute name="documentType" value="#{sesionBean.tipoDocumento.id}" />
+												<f:validator validatorId="passwordSesionValidator" />
+												<f:validator validatorId="passwordValidator" />
+											</p:password>
+										</h:panelGroup>
+									</div>
+									<div class="col-md-12">
+										<p:message id="passwordMsg" for="password" display="text"
+											rendered="#{!contrasena.habilitarRestablecerContrasenia}" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Anexos -->
+						<h:panelGroup
+							rendered="#{!contrasena.habilitarRestablecerContrasenia}">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<div class="col-md-12">
+											<h:panelGroup id="forgotPass" rendered="true">
+												<p:commandLink id="forgotPassLink"
+													rendered="#{!contrasena.habilitarRestablecerContrasenia}"
+													title="${titles['TTL_FORGET_PASSWORD_NOTE']}"
+													value="${titles['TTL_FORGET_PASSWORD']}"
+													style="text-decoration:none; color: #24547A!important; font-size: 1.6em!important; font-family: 'neue_helvetica_bqregular'!important;">
+													<p:ajax process="@this" update="@form" global="false"
+														listener="#{contrasena.habilitarRestablecerContraseniaF()}" />
+												</p:commandLink>
+											</h:panelGroup>
+										</div>
+									</div>
+								</div>
+							</div>
+						</h:panelGroup>
+						<hr
+							style="display: block; margin-top: 0em; margin-bottom: 1.8em; margin-left: auto; margin-right: auto; border: 0.7px solid #B3B3B3; width: 90%; opacity: 1 !important;" />
+						<!-- Boton -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-12" align="center">
+										
+										<h:panelGroup
+											rendered="#{!contrasena.habilitarRestablecerContrasenia}">
+											<div class="col-md-3"></div>
+											<div class="col-md-6" style="margin: 1.5rem auto 3rem;">
+												
+												<h:commandButton value="${titles['TTL_ENTER']}"
+													type="submit" title="${titles['TTL_ENTER']}" id="entrar"
+													process="@form" update="@all"
+													actionListener="#{sesionBean.login()}"
+													styleClass="btn btn-primary"
+													style="padding-left: 17%!important;padding-right: 17%!important;margin-bottom: -3%;padding-top: 0%!important;padding-bottom: 0%!important;margin-top: 4%;font-size: 1.8em;font-family: 'neue_helvetica_bqregular'!important;">
+													
+												</h:commandButton>
+											</div>
+										</h:panelGroup>
+										<h:panelGroup
+											rendered="#{contrasena.habilitarRestablecerContrasenia}">
+											<div class="col-md-6" style="margin: 1.5rem auto 3rem;">
+												<h:commandButton value="${titles['TTL_ENTER']}"
+													type="submit" id="restablecerContrasenia" process="@all"
+													update="@all" ajax="false"
+													actionListener="#{sesionBean.restablecerPassword()}"
+													action="#{contrasena.restablecerPassword()}"
+													styleClass="btn btn-primary"
+													style="padding-left: 17%!important; padding-right: 17%!important; margin-bottom: -3%; padding-top: 0%!important; padding-bottom: 0%!important; margin-top: 4%; font-size: 1.8em!important; font-family: 'neue_helvetica_bqregular'!important;">
+												</h:commandButton>
+											</div>
+											<div class="col-md-6" style="margin: 1.5rem auto 3rem;">
+												<h:commandButton id="ingresarLink"
+													value="${titles['TTL_CANCEL']}"
+													styleClass="btn btn-primary"
+													style="padding-left: 17%!important; padding-right: 17%!important; margin-bottom: -3%; padding-top: 0%!important; padding-bottom: 0%!important; margin-top: 4%; font-size: 1.8em!important; font-family: 'neue_helvetica_bqregular'!important;"
+													type="reset">
+													<p:ajax process="@this" global="false"
+														update="#{redireccionarUrlPortal ? '@all' : '@form'}"
+														listener="#{contrasena.habilitarRestablecerContraseniaF()}" />
+												</h:commandButton>
+											</div>
+										</h:panelGroup>
+									</div>
+								</div>
+							</div>
+						</div>
+						<p:messages id="messages" showSummary="false" showDetail="true"
+							escape="false" globalOnly="true" style="text-align:justify" />
+						<p:dialog id="habeasDataDialog" widgetVar="habeasDataDialog"
+							closeOnEscape="true" draggable="false" resizable="false"
+							modal="true" header="${titles['TTL_HABEAS_DATA']}">
+							<h:outputText value="${titles['TXT_HABEAS_DATA']}" escape="false" />
+						</p:dialog>
+
+						<script type="text/javascript">
+				 	$(window).on('load', function() {
+				 		x = document.getElementsByTagName("A");
+				 	    var i;
+				 	    for (i = 0; i &lt; x.length; i++) {
+				 	      x[i].setAttribute("draggable","false");
+				 	    }
+				 	});
+				</script>
+
+						<script type="text/javascript">
+				 	function dragStart(){
+				 		x = document.getElementsByTagName("A");
+				 	    var i;
+				 	    for (i = 0; i &lt; x.length; i++) {
+				 	      x[i].setAttribute("draggable","false");
+				 	    }
+				 	}
+				</script>
+				
+					<script>
+					window.onload = function() {
+						recaptcha();
+				    };
+
+					function recaptcha() {
+						    grecaptcha.ready(() => {
+						      const claveSitio = '#{initParam["primefaces.PUBLIC_CAPTCHA_KEY"]}';
+						      grecaptcha.execute(claveSitio, { action: 'formulario' })
+						        .then(token => {
+						        	document.getElementById('frmLogin:uiCaptcha').value = token; 
+						    });
+						  });
+						}
+					</script>
+					
+				
+				</h:form>
+					<h:outputScript>onload();</h:outputScript>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</ui:composition>

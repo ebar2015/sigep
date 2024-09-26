@@ -1,0 +1,1023 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1ansitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+	
+	
+	<f:metadata>
+		<f:viewParam name="id" value="#{tablaResultadosBean.id}" />
+		<f:viewParam name="recursoId" value="#{tablaResultadosBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{tablaResultadosBean.dialog}" />
+		<f:event listener="#{tablaResultadosBean.retrieve}"
+			type="preRenderView" />
+		<f:event listener="#{tablaResultadosBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_GI_BREADCRUMBS']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_REPORTES_CATALOGO']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_GI_BREADCRUMB_TABLA_RESULTADOS']}" />
+
+	<ui:define name="main">
+		<h:messages globalOnly="true" styleClass="error" />
+		<f:event listener="#{tablaResultadosBean.validateForm}"
+			type="postValidate" />
+
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• ${titles['TTL_GI_BREADCRUMB_TABLA_RESULTADOS2']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<h:panelGroup id="parametros"
+			rendered="#{tablaResultadosBean.habilitarConsulta}">
+			<div class="panel-body form-horizontal">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+								styleClass="log-label form-label-formularios" for="codOrden" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codOrden"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_ORDEN']}"
+								value="#{tablaResultadosBean.filtro.codOrden}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{cifrasEmpleoPublicoBean.listaOrden}"
+									var="orden" itemLabel="#{orden.nombreParametro}"
+									itemValue="#{orden.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-2">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+								styleClass="log-label form-label-formularios"
+								for="codClasificacionOrganica" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codClasificacionOrganica"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_CLA_ORG']}"
+								value="#{tablaResultadosBean.filtro.codClasificacionOrganica}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{cifrasEmpleoPublicoBean.listaClasificacionOrganica}"
+									var="clasificacionOrganica"
+									itemLabel="#{clasificacionOrganica.nombreParametro}"
+									itemValue="#{clasificacionOrganica.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+								styleClass="log-label form-label-formularios"
+								for="codNaturalezaJuridica" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codNaturalezaJuridica"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NAT_ORG']}"
+								value="#{tablaResultadosBean.filtro.codNaturalezaJuridica}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{cifrasEmpleoPublicoBean.listaNaturalezaJuridica}"
+									var="naturalezaJuridica"
+									itemLabel="#{naturalezaJuridica.nombreParametro}"
+									itemValue="#{naturalezaJuridica.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-2">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']}"
+								styleClass="log-label form-label-formularios" for="entidad" />
+						</div>
+						<div class="col-md-4">
+							<p:inputText id="entidad" class="form-control" required="false"
+								autocomplete="off"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_NOM_ENTIDAD']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{tablaResultadosBean.filtro.entidad}">
+								<f:attribute value="3" name="minLength" />
+								<f:attribute value="255" name="maxLength" />
+								<f:validator validatorId="textOnlyTildesValidator" />
+							</p:inputText>
+							<p:message for="entidad" display="text" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2">
+							<p:outputLabel
+								value="${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+								styleClass="log-label form-label-formularios" for="codSector" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codSector"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_GI_MATRIZ_EMPLEO_PUBLICO_SECTOR']}"
+								value="#{tablaResultadosBean.filtro.codSector}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{cifrasEmpleoPublicoBean.listaSectores}"
+									var="sector" itemLabel="#{sector.nombreParametro}"
+									itemValue="#{sector.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-2">
+							<p:outputLabel value="${titles['LBL_CATEGORIA']}"
+								styleClass="log-label form-label-formularios" for="codCategoria" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codCategoria"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['LBL_CATEGORIA']}"
+								value="#{tablaResultadosBean.filtro.codCategoria}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{cifrasEmpleoPublicoBean.listaCategoria}"
+									var="categoria" itemLabel="#{categoria.nombreParametro}"
+									itemValue="#{categoria.codTablaParametrica.intValue()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2">
+							<p:outputLabel value="${titles['TTL_DEPARTAMENTO_ENTIDAD']}"
+								styleClass="log-label form-label-formularios"
+								for="codDepartamento" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codDepartamento"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_DEPARTAMENTO_ENTIDAD']}"
+								value="#{tablaResultadosBean.filtro.codDepartamento}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getDeptos(169)}" />
+								<p:ajax process="@this" update="codMunicipio" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-2">
+							<p:outputLabel value="${titles['TTL_MUNICIPIO_ENTIDAD']}"
+								styleClass="log-label form-label-formularios" for="codMunicipio" />
+						</div>
+						<div class="col-md-4">
+							<h:selectOneMenu id="codMunicipio"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_MUNICIPIO_ENTIDAD']}"
+								value="#{tablaResultadosBean.filtro.codMunicipio}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.getMunicipios(tablaResultadosBean.filtro.codDepartamento)}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+
+		<!-- DataTable  -->
+		<br />
+		<h:panelGroup>
+			<div class="row row-background-white">
+				<br />
+				<div class="col-md-12" align="right">
+					<p:commandButton id="cancelBtn" value="${titles['BTN_VOLVER']}"
+						title="${titles['TTL_FINALIZE']}" process="@this" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{tablaResultadosBean.cancelar()}"
+						icon="fa fa-fw fa-backward">
+					</p:commandButton>
+					<p:spacer width="2" />
+					<p:commandButton id="searchBtn" value="${titles['TTL_CONSULT']}"
+						title="${titles['TTL_CONSULT']}" process="@form" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{tablaResultadosBean.montarDatos()}"
+						icon="fa fa-fw fa-search">
+					</p:commandButton>
+					<h:panelGroup id="exportarBtn"
+						rendered="#{tablaResultadosBean.listaCifras.size() gt 0}">
+						<p:spacer width="2" />
+						<p:commandButton id="exportXLSXBtn"
+							value="${titles['TTL_DOWNLOAD']} Excel"
+							title="${titles['TTL_DOWNLOAD']} Excel"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false">
+							<pe:exporter type="xlsx"
+								target="dataTablePlanAnualVacantes,dataTableLeyCuotas,dataTableEmpleos,dataTableSeguimiento,dataTableAcuerdosGestion,dataTableBienestarIncentivos,dataTableCapacitacion,dataTableHorariosFlexibles,dataTableTeletrabajo,dataTableBilinguismo,dataTableBilinguismoDetalle"
+								fileName="#{titles.TTL_GI_BREADCRUMB_TABLA_RESULTADOS2} #{fechaSistemaString}"
+								orientation="Landscape"
+								postProcessor="#{tablaResultadosBean.postProcessXLSX}" />
+						</p:commandButton>
+						<p:spacer width="2" />
+						<p:commandButton id="exportPDFBtn"
+							value="${titles['TTL_DOWNLOAD']} PDF"
+							title="${titles['TTL_DOWNLOAD']} PDF"
+							styleClass="btn btn-transparent" style="padding: 0% !important;"
+							icon="fa fa-fw fa-download" ajax="false">
+							<pe:exporter type="pdf"
+								target="dataTablePlanAnualVacantes,dataTableLeyCuotas,dataTableEmpleos,dataTableSeguimiento,dataTableAcuerdosGestion,dataTableBienestarIncentivos,dataTableCapacitacion,dataTableHorariosFlexibles,dataTableTeletrabajo,dataTableBilinguismo,dataTableBilinguismoDetalle"
+								fileName="#{titles.TTL_GI_BREADCRUMB_TABLA_RESULTADOS2} #{fechaSistemaString}"
+								tableTitle="${titles['TTL_GI_BREADCRUMB_TABLA_RESULTADOS2']}"
+								orientation="Landscape" facetFontSize="12" facetFontStyle="BOLD"
+								cellFontSize="12" cellFontStyle="NORMAL" />
+						</p:commandButton>
+					</h:panelGroup>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-6"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTablePlanAnualVacantes"
+							widgetVar="panelTablePlanAnualVacantes"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTablePlanAnualVacantes" var="dataPAV"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaPlanAnualVacantes}">
+								<p:columnGroup type="header">
+									<p:column colspan="6"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_PLAN_ANUAL_VACANTES']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+									<p:row>
+										<p:column colspan="3" headerText="${titles['TTL_GI_TABLERO_FECHA_CORTE']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.formatoFecha(tablaResultadosBean.planAnualVacantes.fechaCorte)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="3"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTAR']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.planAnualVacantes.debeReportarPAV}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="3"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTARON_INFO']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.planAnualVacantes.reportoPAV}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="3"
+											headerText="${titles['TTL_GI_TABLERO_PORCENTAJE_ENTIDADES_REPORT']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.formatoPorcentaje(tablaResultadosBean.planAnualVacantes.porcentaje)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											headerText="" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_ASESOR']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_PROFESIONAL']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_TECNICO']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_ASISTENCIAL']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_TOTAL']}" />
+									</p:row>
+								</p:columnGroup>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-izq borde">
+									<h:outputText value="#{dataPAV.etiqueta}" />
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataPAV.asesor}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataPAV.profesional}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataPAV.tecnico}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataPAV.asistencial}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde total">
+									<h:outputText value="#{dataPAV.total}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-6">
+						<p:chart type="bar" model="#{tablaResultadosBean.graficoPAV}" />
+					</div>
+					<br /> <br /> <br /> <br />
+					<div class="col-md-8"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableLeyCuotas" widgetVar="panelTableLeyCuotas"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto" id="dataTableLeyCuotas"
+								var="dataLC"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaLeyCuotas}"
+								style="font-size:1em!important">
+								<p:columnGroup type="header">
+									<p:column colspan="8"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_LEY_CUOTAS']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+									<p:row>
+										<p:column colspan="4" headerText="${titles['TTL_GI_TABLERO_FECHA_CORTE']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="3"
+											headerText="#{tablaResultadosBean.formatoFecha(tablaResultadosBean.leyCuotas.fechaCorte)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="4"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTAR']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="3"
+											headerText="#{tablaResultadosBean.leyCuotas.debeReportarLC}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="4"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTARON_INFO']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="3"
+											headerText="#{tablaResultadosBean.leyCuotas.reportoLC}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="4"
+											headerText="${titles['TTL_GI_TABLERO_PORCENTAJE_ENTIDADES_REPORT']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="3"
+											headerText="#{tablaResultadosBean.formatoPorcentaje(tablaResultadosBean.leyCuotas.porcentaje)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											headerText="" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_TOTAL']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_VACANTES']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_PROVISTOS']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_MUJERES']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_HOMBRES']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_PORCENTAJE_MUJERES']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_PORCENTAJE_HOMBRES']}" />
+									</p:row>
+								</p:columnGroup>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-izq borde">
+									<h:outputText value="#{dataLC.etiqueta}" />
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioTotal}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioVacantes}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioProvistos}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioMujeres}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioHombres}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioPMujeres}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column styleClass="tematica numero col-der borde">
+									<h:outputText value="#{dataLC.nivelDecisorioPHombres}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-4">
+						<p:chart type="bar" model="#{tablaResultadosBean.graficoLC}"
+							responsive="true" />
+					</div>
+					<br /> <br /> <br /> <br />
+					<div class="col-md-12 tematica-col tabla-resultado col-cab borde"
+						style="padding-left: 2% !important; padding-right: 2% !important; padding: 0.4em">
+						<h:outputText
+							value="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_GEP']}" />
+					</div>
+					<div class="col-md-4"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableEmpleos" widgetVar="panelTableEmpleos"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto" id="dataTableEmpleos"
+								var="dataEmp"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaEmpleos}">
+								<p:columnGroup type="header">
+									<p:column colspan="3"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_EMPLEOS']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+									<p:row>
+										<p:column colspan="2" headerText="${titles['TTL_GI_TABLERO_FECHA_CORTE']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column
+											headerText="#{tablaResultadosBean.formatoFecha(tablaResultadosBean.empleos.fechaCorte)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="2"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTAR']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column
+											headerText="#{tablaResultadosBean.empleos.debeReportarEmp}"
+											styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="2"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTARON_INFO']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column
+											headerText="#{tablaResultadosBean.empleos.reportoEmp}"
+											styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="2"
+											headerText="${titles['TTL_GI_TABLERO_PORCENTAJE_ENTIDADES_REPORT']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column
+											headerText="#{tablaResultadosBean.formatoPorcentaje(tablaResultadosBean.empleos.porcentaje)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+								</p:columnGroup>
+								<p:column colspan="2"
+									styleClass="tematica-col tabla-resultado col-izq borde">
+									<h:outputText value="#{dataEmp.etiqueta}" />
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-der borde">
+									<h:outputText value="#{dataEmp.valor}" />
+								</p:column>
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											colspan="3" footerText="${titles['TTL_GI_TABLERO_CONVENCIONES']}:" />
+									</p:row>
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											colspan="3" footerText="${titles['TTL_GI_TABLERO_REON']}" />
+									</p:row>
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											colspan="3" footerText="${titles['TTL_GI_TABLERO_EP']}" />
+									</p:row>
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											colspan="3" footerText="${titles['TTL_GI_TABLERO_TO']}" />
+									</p:row>
+								</p:columnGroup>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-8"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelSeguimiento" widgetVar="panelSeguimiento"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto" id="dataTableSeguimiento"
+								var="dataSeg"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaSeguimiento}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column
+										colspan="#{tablaResultadosBean.listaSeguimientoClasificacion.size()}"
+										headerText="${titles['TTL_SYSTEM_NAME']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+									<p:row>
+										<p:column colspan="5" headerText="${titles['TTL_GI_TABLERO_FECHA_CORTE']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.formatoFecha(tablaResultadosBean.seguimiento.fechaCorte)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="5"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTAR']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.seguimiento.debeReportarSeg}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="5"
+											headerText="${titles['TTL_GI_TABLERO_ENTIDADES_REPORTARON_INFO']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.seguimiento.reportoSeg}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column colspan="5"
+											headerText="${titles['TTL_GI_TABLERO_PORCENTAJE_ENTIDADES_REPORT']}"
+											styleClass="tematica-col tabla-resultado col-izq" />
+										<p:column colspan="2"
+											headerText="#{tablaResultadosBean.formatoPorcentaje(tablaResultadosBean.seguimiento.porcentaje)}"
+											styleClass="tematica-col tabla-resultado col-der" />
+										<p:column styleClass="tematica-col tabla-resultado col-der" />
+									</p:row>
+									<p:row>
+										<p:column styleClass="tematica-col tabla-resultado col-izq"
+											style="width:20em!important" headerText="" />
+										<p:columns var="column"
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											value="#{tablaResultadosBean.listaSeguimientoClasificacion}"
+											headerText="#{column.entidad}">
+											<f:facet name="header">
+												<h:outputText value="#{column.entidad}" />
+											</f:facet>
+										</p:columns>
+									</p:row>
+								</p:columnGroup>
+								<p:column
+									styleClass="tabla-resultado col-izq borde#{rowIndex gt 6 ? ' numero total' : ''}"
+									style="width:20em!important">
+									<h:outputText title="#{titles[dataSeg.etiqueta]}"
+										value="#{titles[dataSeg.etiqueta]}" />
+								</p:column>
+								<p:columns var="column"
+									styleClass="tabla-resultado col-der borde tematica#{rowIndex gt 6 ? ' numero total' : ''}#{rowIndex eq 7 and not empty cifrasEmpleoPublicoBean.getNoVinculado(dataSeg.listaValor.get(colIndex)) ? cifrasEmpleoPublicoBean.getNoVinculado(dataSeg.listaValor.get(colIndex)) : ''}#{rowIndex eq 9 and not empty cifrasEmpleoPublicoBean.getError(dataSeg.listaValor.get(colIndex)) ? cifrasEmpleoPublicoBean.getError(dataSeg.listaValor.get(colIndex)) : ''}"
+									value="#{tablaResultadosBean.listaSeguimientoClasificacion}"
+									headerText="#{column.entidad}" columnIndexVar="colIndex">
+									<f:facet name="header">
+										<h:outputText value="#{column.entidad}" />
+									</f:facet>
+									<h:outputText title="#{dataSeg.listaValor.get(colIndex)}"
+										rendered="#{rowIndex le 6}"
+										value="#{dataSeg.listaValor.get(colIndex)}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText title="#{dataSeg.listaValor.get(colIndex)}"
+										rendered="#{rowIndex gt 6 and rowIndex ne 11 and rowIndex ne 7 and rowIndex ne 9}"
+										value="#{dataSeg.listaValor.get(colIndex)}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataSeg.listaValor.get(colIndex)}"
+										title="#{dataSeg.listaValor.get(colIndex)}"
+										rendered="#{rowIndex eq 7 and dataSeg.listaValor.get(colIndex).doubleValue() ne -0.01}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText
+										value="${titles['TTL_GI_TABLERO_CEP_NO_VINCULADO']}"
+										title="${titles['TTL_GI_TABLERO_CEP_NO_VINCULADO']}"
+										rendered="#{dataSeg.listaValor.get(colIndex).doubleValue() eq -0.01}" />
+									<h:outputText value="#{dataSeg.listaValor.get(colIndex)}"
+										title="#{dataSeg.listaValor.get(colIndex)}"
+										rendered="#{rowIndex eq 9}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<p:graphicImage dir="resources"
+										rendered="#{rowIndex eq 11 and dataSeg.listaValor.get(colIndex) gt -1}"
+										styleClass="seguimiento-semaforo"
+										name="images/gi/#{cifrasEmpleoPublicoBean.getSemaforo(dataSeg.listaValor.get(colIndex))}.png"
+										title="#{cifrasEmpleoPublicoBean.getSemaforo(dataSeg.listaValor.get(colIndex))}"
+										alt="#{cifrasEmpleoPublicoBean.getSemaforo(dataSeg.listaValor.get(colIndex))}"
+										height="16" width="16" />
+									<h:outputText value="#{dataSeg.listaValor.get(colIndex)}"
+										title="#{dataSeg.listaValor.get(colIndex)}"
+										rendered="#{rowIndex eq 11 and dataSeg.listaValor.get(colIndex) gt -1}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText value="${titles['TTL_GI_TABLERO_CEP_NO_APLICA']}"
+										rendered="#{rowIndex eq 11 and dataSeg.listaValor.get(colIndex) le -1}" />
+								</p:columns>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-12 tematica-col tabla-resultado col-cab borde"
+						style="padding-left: 2% !important; padding-right: 2% !important; padding: 0.4em">
+						<h:outputText
+							value="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_ETH']}" />
+					</div>
+					<div class="col-md-5"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableAcuerdosGestion"
+							widgetVar="panelTableAcuerdosGestion"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTableAcuerdosGestion" var="dataAG"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaAcuerdosGestion}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="3"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_ACUERDOS_GESTION']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+								</p:columnGroup>
+								<p:column colspan="2"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'izq borde' : 'cab-fecha col-izq'}">
+									<h:outputText value="#{dataAG.etiqueta}" />
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'der borde' : 'cab-fecha col-der'}">
+									<h:outputText value="#{dataAG.fechaCorte}"
+										rendered="#{rowIndex eq 0}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataAG.debeReportar}"
+										rendered="#{rowIndex eq 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataAG.reporto}"
+										rendered="#{rowIndex eq 2}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataAG.porcentaje}"
+										rendered="#{rowIndex eq 3}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataAG.valor}"
+										rendered="#{rowIndex gt 3}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-6"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableBienestarIncentivos"
+							widgetVar="panelTableBienestarIncentivos"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTableBienestarIncentivos" var="dataBI"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaBienestarIncentivos}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="5"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BIENESTAR']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+								</p:columnGroup>
+								<p:column colspan="4"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'izq borde' : 'cab-fecha col-izq'}">
+									<h:outputText value="#{dataBI.etiqueta}" />
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'der borde' : 'cab-fecha col-der'}">
+									<h:outputText value="#{dataBI.fechaCorte}"
+										rendered="#{rowIndex eq 0}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataBI.debeReportar}"
+										rendered="#{rowIndex eq 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataBI.reporto}"
+										rendered="#{rowIndex eq 2}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataBI.porcentaje}"
+										rendered="#{rowIndex eq 3}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataBI.valor}"
+										rendered="#{rowIndex gt 3}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-1" />
+					<div class="col-md-7"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableCapacitacion"
+							widgetVar="panelTableCapacitacion"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto" id="dataTableCapacitacion"
+								var="dataC"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaCapacitacion}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="7"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_CAPACITACION']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+								</p:columnGroup>
+								<p:column colspan="5"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'izq borde' : 'cab-fecha col-izq'}">
+									<h:outputText value="#{dataC.etiqueta}" />
+								</p:column>
+								<p:column colspan="2"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'der borde' : 'cab-fecha col-der'}">
+									<h:outputText value="#{dataC.fechaCorte}"
+										rendered="#{rowIndex eq 0}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataC.debeReportar}"
+										rendered="#{rowIndex eq 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataC.reporto}"
+										rendered="#{rowIndex eq 2}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataC.porcentaje}"
+										rendered="#{rowIndex eq 3}">
+										<f:convertNumber pattern="#{porcentajeFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataC.valor}"
+										rendered="#{rowIndex gt 3 and rowIndex ne 6}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataC.valor}"
+										rendered="#{rowIndex eq 6}">
+										<f:convertNumber pattern="#{monedaFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-5"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableHorariosFlexibles"
+							widgetVar="panelTableHorariosFlexibles"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTableHorariosFlexibles" var="dataHF"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaHorariosFlexibles}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="3"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_HORARIOS']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+								</p:columnGroup>
+								<p:column colspan="2"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'izq borde' : 'cab-fecha col-izq'}">
+									<h:outputText value="#{dataHF.etiqueta}" />
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'der borde' : 'cab-fecha col-der'}">
+									<h:outputText value="#{dataHF.fechaCorte}"
+										rendered="#{rowIndex eq 0}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataHF.reporto}"
+										rendered="#{rowIndex eq 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataHF.valor}"
+										rendered="#{rowIndex gt 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-9"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableTeletrabajo"
+							widgetVar="panelTableTeletrabajo"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto" id="dataTableTeletrabajo"
+								var="dataT"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaTeletrabajo}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="8"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_TELETRABAJO']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+								</p:columnGroup>
+								<p:column rendered="#{rowIndex ne 2}" colspan="3"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'izq borde' : 'cab-fecha col-izq'}">
+									<h:outputText value="#{dataT.etiqueta}" />
+								</p:column>
+								<p:column rendered="#{rowIndex ne 2}"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'der borde' : 'cab-fecha col-der'}">
+									<h:outputText value="#{dataT.fechaCorte}"
+										rendered="#{rowIndex eq 0}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataT.reporto}"
+										rendered="#{rowIndex eq 1 or rowIndex eq 3}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataT.valor}"
+										rendered="#{rowIndex gt 2}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column colspan="3" rendered="#{rowIndex eq 1}" rowspan="3"
+									styleClass="tematica-col tabla-resultado col-izq borde total">
+									<h:outputText
+										value="#{tablaResultadosBean.listaTeletrabajo.get(2).etiqueta}" />
+								</p:column>
+								<p:column rendered="#{rowIndex eq 1}" rowspan="3"
+									styleClass="tematica-col tabla-resultado col-der borde total">
+									<h:outputText
+										value="#{tablaResultadosBean.listaTeletrabajo.get(2).reporto}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-3" />
+					<div class="col-md-8"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableBilinguismo"
+							widgetVar="panelTableBilinguismo"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto" id="dataTableBilinguismo"
+								var="dataB"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaBilinguismo}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:column colspan="3"
+										headerText="${titles['TTL_GI_RESUMEN_CARGOS_PUBLICOS_BILINGUISMO']}"
+										styleClass="tematica-col tabla-resultado col-cab" />
+								</p:columnGroup>
+								<p:column colspan="2"
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'izq total' : 'cab-fecha col-izq'}">
+									<h:outputText value="#{dataB.etiqueta}" />
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-#{rowIndex ne 0 ? 'der total' : 'cab-fecha col-der'}">
+									<h:outputText value="#{dataB.fechaCorte}"
+										rendered="#{rowIndex eq 0}">
+										<f:convertDateTime pattern="#{fechaFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataB.reporto}"
+										rendered="#{rowIndex eq 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+									<h:outputText value="#{dataB.valor}"
+										rendered="#{rowIndex gt 1}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-4" />
+					<div class="col-md-8"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableBilinguismoDetalle"
+							widgetVar="panelTableBilinguismoDetalle"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable tableStyle="width:auto"
+								id="dataTableBilinguismoDetalle" var="dataBD"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								value="#{tablaResultadosBean.listaBilinguismoDetalle}"
+								rowIndexVar="rowIndex">
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="5"
+											styleClass="tematica-col tabla-resultado col-izq"
+											headerText="" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_PRE_INSC']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_INI']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_TERMINARON']}" />
+										<p:column
+											styleClass="tematica-col tabla-resultado col-centro borde"
+											headerText="${titles['TTL_GI_TABLERO_CEP_BIL_CANTIDAD_APROBARON']}" />
+									</p:row>
+								</p:columnGroup>
+								<p:column colspan="5"
+									styleClass="tematica-col tabla-resultado col-izq borde#{rowIndex eq 4 or rowIndex eq 8 or rowIndex eq 12 ? ' total' : ''}">
+									<h:outputText value="#{dataBD.etiqueta}" />
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-der borde#{rowIndex eq 4 or rowIndex eq 8 or rowIndex eq 12 ? ' total' : ''}">
+									<h:outputText value="#{dataBD.cantidadPreInsc}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-der borde#{rowIndex eq 4 or rowIndex eq 8 or rowIndex eq 12 ? ' total' : ''}">
+									<h:outputText value="#{dataBD.cantidadIni}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-der borde#{rowIndex eq 4 or rowIndex eq 8 or rowIndex eq 12 ? ' total' : ''}">
+									<h:outputText value="#{dataBD.cantidadTer}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									styleClass="tematica-col tabla-resultado col-der borde#{rowIndex eq 4 or rowIndex eq 8 or rowIndex eq 12 ? ' total' : ''}">
+									<h:outputText value="#{dataBD.cantidadApro}">
+										<f:convertNumber pattern="#{enteroFormato}" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+					<div class="col-md-4" />
+				</div>
+			</div>
+			<br />
+			<br />
+			<p:defaultCommand target="frmPrincipal:searchBtn" />
+		</h:panelGroup>
+		<script id="sample_s" type="text/javascript">
+		
+		function showLegend() 
+		{
+		     this.cfg.legend = {
+		          show: true
+		     };
+		}		
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,358 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{historicoCarguesMasivosBean.id}" />
+		<f:viewParam name="dialog"
+			value="#{historicoCarguesMasivosBean.dialog}" />
+		<f:event listener="#{historicoCarguesMasivosBean.retrieve}"
+			type="preRenderView" />
+		<f:event listener="#{historicoCarguesMasivosBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value=" ${titles['TTL_CARGUES_MASIVOS']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_MIHISTORICODECARGUESMASIVOS']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2><p:outputLabel value="• ${titles['TTL_HISTORICO_CARGA_MASIVA']} •" styleClass="page-subtitle" style="color: #263948!important;" /></h2>
+			</div>
+		</div>
+		
+		<div class="row row-background-white" style="padding-top: 2em;">
+			<br /> <br />
+			<hr class="hr-style hr-style-two" />
+			<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+				${titles['TTL_HISTORICO_CARGA_MASIVA']} 
+			</span> <br /> <br />
+			
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<p:outputLabel
+						value="#{titles.PREFIJO_SUBTTL_HISTORICO_CARGA_MASIVA} #{historicoCarguesMasivosBean.diasHistoricoCM} #{titles.SUFIJO_SUBTTL_HISTORICO_CARGA_MASIVA}"
+						styleClass="advisor" />
+				</div>
+			</div>
+			<br /><br />
+			<p:panel id="formHistoricoCM">
+				<div class="row">
+					<div class="col-md-12">
+						 <div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_HISTORICO_CM_TIPO_CARGUE']}:" for="tipoCargue" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="tipoCargue"
+								title="${titles['TTL_SELECT']} ${titles['TTL_HISTORICO_CM_TIPO_CARGUE']}"
+								value="#{historicoCarguesMasivosBean.tipoCargue}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}"/>
+								<f:selectItems value="#{webUtils.lstTiposProcesosCarguesMasivos}" />
+							</h:selectOneMenu>
+							<p:message for="tipoCargue" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_INICIAL']}:"
+								for="fechaInicio" styleClass="log-label form-label-formularios" />
+							<p:calendar  id="fechaInicio" mask="true"
+							     title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_INICIAL']}"
+							 	 yearRange="#{rangoAnios}" navigator="true" 
+							 	 placeholder="${titles['LBL_FORMATO_FECHA_HORA']}"
+							 	 maxdate="#{fechaSistema}" mode="popup"
+							 	 value="#{historicoCarguesMasivosBean.fechaInicio}"
+							 	 pattern="dd/MM/yyyy HH:mm"
+							 	 effect="slideDown" 
+							 	 icon="fa fa-calendar"
+							 	 locale="#{lenguajeBean.localeCode}"
+							 	 converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+							 		<f:attribute name="maxDate" value="#{fechaSistema}" />
+									<f:validator validatorId="maxDateValidator" />
+							 		<p:ajax event="dateSelect" update="fechaFin @this" />
+									<p:ajax event="change" update="fechaFin" />
+							 </p:calendar>
+							 <p:message for="fechaInicio" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_FECHA_FIN_2']}:"
+								for="fechaFin" styleClass="log-label form-label-formularios" />
+							<p:calendar mask="true"
+								id="fechaFin"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_FIN_2']}"
+								navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA_HORA']}"
+								pattern="dd/MM/yyyy HH:mm"
+								value="#{historicoCarguesMasivosBean.fechaFin}" 
+								effect="slideDown" 
+								icon="fa fa-calendar"
+								locale="#{lenguajeBean.localeCode}"
+								readonlyInput="true"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+								<p:ajax update="@this" event="dateSelect"/>
+								<f:attribute name="startDate" value="#{historicoCarguesMasivosBean.fechaInicio}" />
+								<f:validator validatorId="dateRangeValidator" />
+								<f:attribute name="startDateName" value="${titles['LBL_FECHA_INICIAL']}" />
+								<f:attribute name="endDateName" value="${titles['LBL_FECHA_FIN_2']}" />
+							</p:calendar>
+							<p:message for="fechaFin" display="text" />
+						</div>
+					</div>
+				</div>
+			
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}:"
+								for="tipoDocumento" styleClass="log-label form-label-formularios" />
+							<h:panelGroup>
+								<h:selectOneMenu id="tipoDocumento"
+									converter="tipoDocumentoConverter" 
+									value="#{historicoCarguesMasivosBean.persona.tipoIdentificacionId}"
+									var="t" filter="true" filterMatchMode="contains"
+									title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_DOCUMENTO']}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" />
+									<f:selectItems value="#{tiposDocumentoEntidad}" var="tipoDoc"
+										itemLabel="#{tipoDoc.descripcion}" itemValue="#{tipoDoc}" />
+									<p:ajax process="@this" update="@this"/>
+								</h:selectOneMenu>
+								<p:message for="tipoDocumento" display="text" />
+							</h:panelGroup>
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['TTL_NICK_NAME']}:"
+								for="numeroDocumento"
+								styleClass="log-label form-label-formularios" />
+							<h:panelGroup>
+								<p:inputText id="numeroDocumento"
+									maxlength="15"
+									styleClass="form-control-acti-usua" autocomplete="off"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_NICK_NAME']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+									value="#{historicoCarguesMasivosBean.persona.numeroIdentificacion}">
+									<c:choose>
+									<c:when
+										test="${historicoCarguesMasivosBean.persona.tipoIdentificacionId.descripcion == historicoCarguesMasivosBean.TIPO_DOC_PASAPORTE}">
+										<f:validator validatorId="nickNameValidatorPassport" />
+									</c:when>
+									<c:otherwise>
+										<f:validator validatorId="nickNameValidator" />
+									</c:otherwise>
+								</c:choose>
+								</p:inputText>
+								<p:message for="numeroDocumento" display="text" />
+							</h:panelGroup>
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}:"
+								for="primerNombre"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="primerNombre"
+								maxlength="50"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								onkeypress="return anular(event)"
+								styleClass="form-control-acti-usua" autocomplete="off"
+								value="#{historicoCarguesMasivosBean.persona.primerNombre}" />
+							<p:message for="primerNombre" display="text" />
+						</div>
+					</div>
+				</div>
+			
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}:"
+								for="primerApellido"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="primerApellido"
+								maxlength="50"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								onkeypress="return anular(event)"
+								styleClass="form-control-acti-usua" autocomplete="off"
+								value="#{historicoCarguesMasivosBean.persona.primerApellido}" />
+							<p:message for="primerApellido" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_ESTADO']}:"
+								for="estado"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="estado"
+								value="#{historicoCarguesMasivosBean.estado}"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ESTADO']}">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}"/>
+								<f:selectItems value="#{webUtils.lstEstadosCargueMasivo}" />
+							</h:selectOneMenu>
+							<p:message for="estado" display="text" />
+						</div>
+						
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_ENTIDAD']}:"
+								for="entidad"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText 
+								value="#{historicoCarguesMasivosBean.entidad.nombreEntidad}"
+								rendered="#{!historicoCarguesMasivosBean.bmultiEntidad}"
+								disabled="true">	
+							</p:inputText>
+							<p:selectOneMenu id="entidad"
+							                 title="${titles['TTL_SELECT']} ${titles['TTL_ENTIDAD']}"
+								             value="#{historicoCarguesMasivosBean.entidadSelect}"
+								             rendered="#{historicoCarguesMasivosBean.bmultiEntidad}"
+								             styleClass="form-control-form-act-usua"
+								             filter="true">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}"/>
+								<f:selectItems value="#{historicoCarguesMasivosBean.lstEntidadesCombo}" />
+							</p:selectOneMenu>
+							<p:message for="entidad" />
+							
+						</div>
+					</div>
+				</div>
+			</p:panel>
+			
+			<br /><br />
+			
+			<h:panelGroup>
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_SEARCH']}" id="btnBuscarHistoricoCM"
+							update="formHistoricoCM, panelTableHistoricoCM"
+							process="@this,formHistoricoCM,"
+							styleClass="btn btn-primary"
+							oncomplete="window.location.href='#frmPrincipal:dataTableHistoricoCM';"
+							actionListener="#{historicoCarguesMasivosBean.consultarProcesos()}"
+							style="font-size: 1.5em!important; padding-left:16%!important; padding-right:16%!important;" />
+					</div>	
+						
+					<div class="col-md-2" style="margin-bottom: 4%;">
+						<p:commandButton value="${titles['TTL_CLEAN']}"
+							resetValues="true" process="@this" update="fechaInicio,fechaFin,tipoCargue,tipoDocumento,numeroDocumento,
+							primerNombre,primerApellido,estado,entidad, panelTableHistoricoCM"
+							actionListener="#{historicoCarguesMasivosBean.limpiar()}"
+							styleClass="btn btn-default"
+							style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12" id="idPanelMsgConsultaRoles">
+						<p:messages id="idMsgConsultaRoles" for="idMsgConsultaRoles" display="text"/>
+					</div>
+				</div>
+			</h:panelGroup>
+			<h:panelGroup>
+				<div class="row">
+					<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:panel id="panelTableHistoricoCM" widgetVar="panelTableHistoricoCM" style="background: transparent; padding: 0px!important;">
+							<p:scrollPanel mode="native"  id="areaScroll">
+							<p:dataTable id="dataTableHistoricoCM" lazy="true" var="dataHistoricoCM"
+								class="dataTableHistoricoCM"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								paginator="true"
+								rows="#{paginatorSize}"
+								rowsPerPageTemplate="#{paginatorsSize}"
+								reflow="true"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								value="#{historicoCarguesMasivosBean.listaHistoricoCM}">
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_CODIGO_PROCESO}" priority="2"
+									style="width:18em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.codProcesoCargaMasiva}">
+									<h:outputText value="#{dataHistoricoCM.codProcesoCargaMasiva}" />
+								</p:column>
+								
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_FECHA_INICIO}" priority="2"
+									style="width:18em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.fechaInicio}">
+									<h:outputText value="#{dataHistoricoCM.fechaInicio}">
+										<f:convertDateTime pattern="yyyyMMdd hh:mm a" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_FECHA_FIN}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.fechaFin}">
+									<h:outputText value="#{dataHistoricoCM.fechaFin}">
+										<f:convertDateTime pattern="yyyyMMdd hh:mm a" />
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_ENTIDAD}" priority="3"
+									rendered="#{historicoCarguesMasivosBean.lstEntidadesCombo.size() > 1}"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.nombreEntidad}">
+									<h:outputText value="#{dataHistoricoCM.nombreEntidad}" />
+								</p:column>
+								
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_TIPO_CARGUE}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.nombreTipoCargue}">
+									<h:outputText value="#{dataHistoricoCM.nombreTipoCargue}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_TIPO_DOCUMENTO}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.tipoDocumento}">
+									<h:outputText value="#{dataHistoricoCM.tipoDocumento}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_NUMERO_IDENTIFICACION}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.numeroIdentificacion}">
+									<h:outputText value="#{dataHistoricoCM.numeroIdentificacion}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_NOMBRE_USUARIO}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.nombreCompleto}">
+									<h:outputText value="#{dataHistoricoCM.nombreCompleto}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_ESTADO}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.nombreEstado}">
+									<h:outputText value="#{dataHistoricoCM.nombreEstado}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_REGISTROS_EXITOSOS}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.registrosExitosos}">
+									<h:outputText value="#{dataHistoricoCM.registrosExitosos}" />
+								</p:column>
+								<p:column headerText="#{titles.TTL_HISTORICO_CM_REGISTROS_FALLIDOS}" priority="3"
+									style="width:36em; padding: 2%!important;"
+									sortBy="#{dataHistoricoCM.registrosFallidos}">
+									<h:outputText value="#{dataHistoricoCM.registrosFallidos}" />
+								</p:column>
+								<p:column headerText="${titles['TTL_HISTORICO_CM_RESULTADO_PROCESO']}"
+									style="opacity: 1!important;word-wrap: break-word!important;text-align:center!important;">
+									<p:commandButton id="btnDescargarLogCM" title="${titles['LBL_DESCARGAR_LOG']}"
+										icon="icon-view" styleClass="icon-btn btn-view-data"
+										actionListener="#{historicoCarguesMasivosBean.descargarLogProceso(dataHistoricoCM)}" ajax="false"
+										onclick="PrimeFaces.monitorDownload(start, stop);">
+										<p:fileDownload value="#{historicoCarguesMasivosBean.archivoLog}" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+							</p:scrollPanel>
+						</p:panel>
+					</div>
+				</div>
+			</h:panelGroup>
+		</div>
+	</ui:define>
+</ui:composition>

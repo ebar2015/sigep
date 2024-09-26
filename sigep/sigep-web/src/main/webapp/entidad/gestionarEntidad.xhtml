@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/template/basicTemplate.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewAction action="#{gestionEntidadBean.startConversation()}"/>
+        </f:metadata>
+    </ui:define>    
+    <script type="text/javascript">
+        function mayus(e) {
+            e.value = e.value.toUpperCase();
+        }
+    </script>
+    <ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+    <ui:param name="pageSubtitle" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+    
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <h2>
+                    <p:outputLabel value="#{titles.TTL_GESTIONAR_ENTIDAD}"
+                                   styleClass="page-subtitle" />
+                </h2>
+            </div>
+        </div>
+        <h:panelGroup rendered="#{gestionEntidadBean.verFiltros}">
+            <ui:include src="gestionentidad/formularioGestionEntidad.xhtml" />
+        </h:panelGroup>
+        <br /><br />
+        <p:panel id="tablaGestionarEntidad">
+        	 <ui:include src="gestionentidad/tablaGestionEntidad.xhtml" />
+        </p:panel>
+        <br /> <br />
+        <div class="row">
+            <div class="col-md-12">
+            	<div class="col-md-4" style = "padding-right: 10%;" ></div>
+            	<h:form id = "botonesEntidad">
+                        <p:commandButton styleClass="btn btn-primary"
+                                         value="${titles.LBL_AMBITO_APLICACION}"
+                                         title = "${titles.LBL_AMBITO_APLICACION}"
+                                         action="#{gestionEntidadBean.btnAmbitoAplicacion()}"
+                                         rendered = "#{gestionEntidadBean.btnHabilitarBotonPoliticas}">
+                                         <p:ajax event="click" listener="#{gestionEntidadBean.seleccionarAmbitoPoliticas}" />
+                        </p:commandButton>
+              
+                
+                        <p:commandButton styleClass="btn btn-primary"
+                                         value="${titles.TTL_EXPORTAR}" ajax="false"
+                                         title = "${titles.TTL_EXPORTAR_ENTIDAD}">
+                        <p:dataExporter type="xls" target="tablaExport"
+                                            fileName="Entidades" />
+                        </p:commandButton>
+              
+                </h:form>
+                <div class="col-md-7"></div>
+            </div>
+        </div>
+        <p:dialog widgetVar="dlgCargaEntidad" modal="true" draggable="false"
+                  closable="false" resizable="false" showHeader="false"
+                  style="width:auto;height:auto">
+            <img src="../resources/images/loading.gif" alt="" height="45"
+                 width="70" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

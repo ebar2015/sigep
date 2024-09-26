@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="dialog" value='#{sesionBean.dialog}' />
+		<f:viewParam name="r"
+			value="#{contrasena.habilitarRestablecerContrasenia}" />
+		<f:event type="preRenderView" listener='#{sesionBean.showDialog}' />
+		<f:viewParam name="l" value="#{lenguajeBean.localeCode}" />
+		<f:viewParam name="c"
+			actionListener="#{contrasteBean.cambiarContraste}" />
+		<f:event type="preRenderView"
+			listener='#{lenguajeBean.refrescarIdioma()}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['TTL_HOME']}" />
+	<ui:param name="pageSubtitle"
+		value="#{titles['TTL_WELCOME'].concat(' ').concat(sesionBean.usuarioSesion.nombrePersona)}" />
+
+	<ui:define name="main">
+		<h:outputScript rendered="#{sesionBean.homeHojaDeVida}">
+			var dialog = '#{sesionBean.dialog}';
+
+			if(dialog == null || dialog == 'null' || dialog == ''){
+			dialog = '';
+			} else {
+			dialog = '\u0026dialog=' + dialog;
+			}
+			window.location = getContextPath() + '/sigep2/persona/informacionPersonal.xhtml?recursoId=HojaDeVidaSubMenu' + dialog;
+		</h:outputScript>
+
+		<style>
+tr {
+	background-color: transparent !important;
+}
+</style>
+
+		<!-- Modal Seleccionar Entidad -->
+
+		<div id="seleccionarEntidadDialog" class="modal fade" role="dialog"
+			style="max-width: 70% !important; margin-left: 21.3em;">
+			<div class="modal-dialog modal-dialog-2"
+				style="width: 100% !important;">
+				<div class="col-md-6"></div>
+				<div class="modal-enti">
+					<div class="modal-header " align="center">
+						<h4 class="modal-title"
+							style="font-size: 2em !important; text-align: center !important; color: #263948 !important; font-family: 'Poppins' !important;">
+							• #{titles.TTL_ENTIDAD_USUARIO} •</h4>
+					</div>
+					<div class="modal-body">
+						<h:form>
+							<h:panelGrid style="text-align:center;width:100%;">
+								<p:selectOneMenu id="entidadUsuario"
+									value="#{sesionBean.entidadSeleccion}"
+									converter="entidadConverter"
+									panelStyle="width: 52.5%!important; margin-left: 10px!important;"
+									effect="fade" var="e" style="width:100%"
+									styleClass="form-control-entidad navegador" required="true"
+									valueChangeListener="#{sesionBean.valueChangeEntidad}"
+									filter="true" filterMatchMode="custom"
+									filterFunction="contains"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+										itemValue="#{null}" itemDisabled="true" />
+									<f:selectItems value="#{entidadesUsuario}" var="entidad"
+										itemLabel="#{entidad.codigoSigep.concat(' - ').concat(entidad.nombreEntidad).replaceAll('&nbsp;', '')}"
+										itemValue="#{entidad}" style="width: 934px!important;" />
+
+									<p:column style="width:0%;">
+										<h:outputText value="#{e.codigoSigep}" style="color:#2A89B5;" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{e.nombreEntidad.replaceAll('&nbsp;', '')}"
+											style="text-transform: uppercase;" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="entidadUsuario" />
+							</h:panelGrid>
+							<hr
+								style="border-top: 1px solid rgb(196, 196, 196); width: 100%; margin-top: 15px; margin-bottom: 15px;" />
+							<div class="row">
+								<div class="col-md-4"></div>
+								<div class="col-md-4" align="center">
+									<h:commandButton value=" #{titles.TTL_OK}" onclick="submit()"
+										styleClass="btn btn-primary"
+										actionListener="#{sesionBean.setEntidad}"
+										style="background:#2A89B5; font-size: 1.5em !important; border:0px;padding:0.75% 5%!important;">
+										<p:ajax process="@this"
+											update="@widgetVar(seleccionarEntidadDialog),@widgetVar(habeasDataUsuarioDialog)" />
+									</h:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(window).on('load', function () {
+				if (#{sesionBean.entidadUsuario eq null and entidadesUsuario.size() gt 1}) {
+					$('#seleccionarEntidadDialog').modal({backdrop: 'static', keyboard: false});
+				}
+			});
+
+			function contains(itemLabel, filterValue) {
+				return itemLabel.includes(filterValue) || specialCharacters(itemLabel).includes(filterValue);
+
+			}
+
+			function specialCharacters(input) {
+
+				var c = input.toLowerCase();
+				c = c.replace(new RegExp("[àáâãäå]", 'g'), "a");
+				c = c.replace(new RegExp("æ", 'g'), "ae");
+				c = c.replace(new RegExp("ç", 'g'), "c");
+				c = c.replace(new RegExp("[èéêë]", 'g'), "e");
+				c = c.replace(new RegExp("[ìíîï]", 'g'), "i");
+				c = c.replace(new RegExp("[òóôõö]", 'g'), "o");
+				c = c.replace(new RegExp("œ", 'g'), "oe");
+				c = c.replace(new RegExp("[ùúûü]", 'g'), "u");
+				c = c.replace(new RegExp("[ýÿ]", 'g'), "y");
+				return c;
+			}
+		</script>
+
+		<script async="async"
+			src="https://www.googletagmanager.com/gtag/js?id=UA-11142030-3"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-11142030-3');
+		
+		</script>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,421 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<script type="text/javascript">
+			function uploadEmpy(index){
+				if(index == 1){
+					$("#uploadRequerido").attr("style", "color:#c42328; margin-top:-2.1em!important; display:block");
+				}else{
+					$("#uploadRequerido").attr("style", "display:none");
+				}
+			}
+   </script>
+	<div class="row row-background-white">
+		<br />
+		<div class="col-md-12" style="text-align: right;">
+			<div style="padding-right: 1%; display: inline-block">
+				<p:commandButton id="btnAgregarDocumentoAdicional"
+					value="${titles['LBL_ADD_NEW']}" icon="fa fa-fw fa-plus-circle"
+					process="@this" styleClass="btn btn-transparent"
+					actionListener="#{documentosAdicionalesHVBean.nuevoDocumentoAdicional()}"
+					immediate="true"
+					oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales';"
+					update="panelDocumentosAdicionales"
+					rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					<p:resetInput target="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales" />
+				</p:commandButton>
+			</div>
+			<div
+				style="padding: 0px 0px 0px 5px; margin-left: 1px; display: inline-block; vertical-align: bottom;">
+				<label class="form-label-formularios"
+					style="line-height: 1.7; margin-right: 10px;"> </label>
+			</div>
+		</div>
+		<div class="col-md-12"
+			style="padding-left: 2% !important; padding-right: 2% !important;">
+			<p:dataTable id="dataTableDocumentosAdicionales" paginator="true" reflow="true"
+				rowIndexVar="rowIndex" 
+				rows="#{paginatorSize}"
+				rowsPerPageTemplate="#{paginatorsSize}"
+				value="#{documentosAdicionalesHVBean.lstDocumentosAdicionales}"
+				var="dataDocumentoAdicional"
+				currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+				
+				<p:column sortBy="#{dataDocumentoAdicional.nombretipo}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['TTL_ADICIONAL_TIPO_DOCUMENTO']}" /></f:facet>
+					<h:outputText value="#{dataDocumentoAdicional.nombretipo}" />
+				</p:column>
+				
+				<p:column sortBy="#{dataDocumentoAdicional.descripciontipo}" style="word-wrap: break-word!important;">
+					<f:facet name="header"><h:outputText value="${titles['LBL_PARAMETRICA_DESCRIPCION']}" /></f:facet>
+					<h:outputText value="#{dataDocumentoAdicional.descripciontipo}" />
+				</p:column>
+				
+			
+				<p:column headerText="${titles['LBL_ACCIONES']}"
+					style="opacity: 1!important; text-align:center!important; padding: 1%!important;">
+					<p:commandButton id="btnEditarDocumentoAdicionalHV"
+						title="${titles['TTL_EDIT']}" icon="icon-edit"
+						styleClass="icon-btn btn-view-data" 
+						immediate="true"
+						process="@this"
+						update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales"
+						oncomplete="window.location.href='#frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales';datosModificados(1);"
+						actionListener="#{documentosAdicionalesHVBean.modificarDocumentoAdicional(dataDocumentoAdicional)}"
+						rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+					</p:commandButton>					
+					
+					<p:commandButton id="btnConsultarDocumentoAdicionalHV"
+						title="${titles['BTN_TABLA_VER']}" icon="icon-view"
+						styleClass="icon-btn btn-view-data" process="@this"
+						update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales"
+						actionListener="#{documentosAdicionalesHVBean.consultarDocumentoAdicional(dataDocumentoAdicional)}">
+					</p:commandButton>
+					<p:commandButton id="btnEliminarDocumentoAdicionalHV"
+						title="${titles['BTN_ELIMINAR']}" icon="icon-delete" process="@this"
+						styleClass="icon-btn"
+						rendered="#{!datosPersonalesBean.lbISGestionarSoloConsultaHV}">
+						 <p:ajax process="@this" listener="#{documentosAdicionalesHVBean.solicitarConfirmacionEliminarDocumentoAdicional(dataDocumentoAdicional)}" 
+										update="frmPrincipal:tabHojaDeVida:tabViewGerenciaPublica:dlgConfirmarAccionGerenciaPublicaPublicaciones"	 />	
+					</p:commandButton>
+
+					<c:set var="valorpdf"
+						value="window.open('#{templateHojaDeVidaBean.get64(dataDocumentoAdicional.urlDocumentoAdicional)}')" />
+					<c:set var="novalorpdf"
+						value="$('#documentoAdjuntoExpDoc').modal('show')" />
+					<p:commandButton id="btnVerDocumentosAdicionalHV"
+						title="${titles['LBL_VER_ADJUNTOS']}" icon="icon-open-folder"
+						styleClass="icon-btn"
+						onclick="#{dataDocumentoAdicional.urlDocumentoAdicional != null ? valorpdf : novalorpdf}">
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</div>
+
+	</div>
+	<br />
+	<p:outputPanel id="panelDocumentosAdicionales">
+		<p:panel id="subPanelDocumentosAdicionales"
+			widgetVar="subPanelDocumentosAdicionales"
+			rendered="#{documentosAdicionalesHVBean.habilitaFormulario}">
+			<div class="row row-background-white">
+				<div class="col-md-12" align="center" style="margin-top: 0.8%;">
+					<h5 style="font-size: 17px !important;">
+						<p:outputLabel
+							value="${titles['TTL_DOCUMENTOS_ADICIONALES']}"
+							styleClass="page-subtitle"
+							style="color: #2A89B5!important; font-weight: normal!important;" />
+					</h5>
+				</div>
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['TTL_AGREGAR_DOC_ADICIONAL']}</span> <br /> <br />
+				<div class="row" align="right">
+					<div class="col-md-12">
+						<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+					</div>
+				</div>
+				<p:panel>
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['TTL_ADICIONAL_TIPO_DOCUMENTO']}" for="tipDocAdic" styleClass="log-label form-label-formularios" />
+								<h:selectOneMenu id="tipDocAdic"
+									disabled="#{documentosAdicionalesHVBean.lbEsConsulta}"
+									required="true"
+									value="#{documentosAdicionalesHVBean.tipoDocumentoAdicional}"
+									requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+									title="${titles['TTL_SELECT']} ${titles['LBL_TABLA_NIVEL_EDUCATIVO']}"
+									styleClass="form-control-form-act-usua">
+									<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="#{null}" />
+									<f:selectItems value="#{webUtils.lstDocumentosAdicionales}" />
+									<p:ajax event="change" listener="#{documentosAdicionalesHVBean.leerDescripcion(this.value)}"
+										process="@this" update="descipciontipo documentoAdicionalPDF" />
+								</h:selectOneMenu>
+								<p:message for="tipDocAdic" value="#{documentosAdicionalesHVBean.descripciontipo}" />
+							</div>
+							<div class="col-md-6">
+								<p:outputLabel value="${titles['LBL_PARAMETRICA_DESCRIPCION']}" styleClass="log-label form-label-formularios" />
+								<p:inputText id="descipciontipo" readonly="true"
+									value="#{documentosAdicionalesHVBean.descripciontipo}"></p:inputText>
+							</div>
+						</div>
+						<br /><br />
+						<div class="col-md-12">
+							<div class="col-md-3" style="top: 3.3em !important">
+								<p:outputLabel value=" ${titles['LBL_ADJUNTAR_DOC']}" 
+									title="${titles['LBL_ADJUNTAR_DOC']}"
+									styleClass="log-label form-label-formularios" />
+							</div>
+							<div class="col-md-5" style="top: 3.3em !important">
+								<p:fileUpload id="documentoAdicionalPDF"
+									disabled="#{documentosAdicionalesHVBean.lbEsConsulta}"
+									value="#{documentosAdicionalesHVBean.cargarDodumento.fileName}"
+									label="${titles['LBL_SUBIR']}"
+									update="labelDocumentoAdicionalPDF" required="true"
+									requiredMessage="#{messages.DLG_VALOR_REQUERIDO}"
+									fileUploadListener="#{documentosAdicionalesHVBean.documentoUpload}"
+									mode="advanced" auto="true"
+									invalidFileMessage="${titles['LBL_WRONG_FILE']}"
+									allowTypes="/(\.|\/)(pdf)$/"
+									sizeLimit="#{templateHojaDeVidaBean.tamPdfDocumentosAdicionales}"
+									invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+							<p:outputLabel
+								value="#{documentosAdicionalesHVBean.strNombreArchivoDocumento}"
+								id="labelDocumentoAdicionalPDF" />									
+									<div id="uploadRequerido"
+									style="color: #c42328; margin-top: -2.1em !important; display: none">#{messages.DLG_VALOR_REQUERIDO}</div>
+							</div>
+							<div class="col-md-1 vista-media"
+								style="padding-top: 3.3% !important;">
+								<p:commandButton
+									title="${titles['LBL_TRANSVERSAL_VER_ADJUNTO']}"
+									id="idBtnVerDocumentoAdicional" icon="icon-view"
+									styleClass="icon-btn" process="@this"
+									update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales frmPrincipal:tabHojaDeVida:panelDiaVisualizarDocumentoAdicionalHV"
+									onclick="$('#documentosAdjuntosAdicionalesHV').modal('show')" />
+							</div>
+
+							<p:message for="documentoAdicionalPDF" display="text" />
+						</div>
+					</div>
+					<!-- Modal para ver los archivos adjuntos-->
+				</p:panel>
+				<div class="row" align="center" style="margin-top:4.3em!important">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:panel id="idpanelGuardarDocumentoAdicional"
+							style="padding: 0%;">
+							<c:if test="#{!documentosAdicionalesHVBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_SAVE']}"
+									process="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales"
+									update=" frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales dataTableDocumentosAdicionales"
+									actionListener="#{documentosAdicionalesHVBean.guardarDocumentoAdicional()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+							<c:if test="#{documentosAdicionalesHVBean.lbEsConsulta}">
+								<p:commandButton value="${titles['TTL_OK']}"
+									process="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales"
+									update="panelDocumentosAdicionales dataTableDocumentosAdicionales"
+									actionListener="#{documentosAdicionalesHVBean.aceptarConsulta()}"
+									styleClass="btn btn-primary"
+									style="font-size: 1.5em!important; padding-left: 1.5em!important; padding-right: 1.5em!important;" />
+							</c:if>
+						</p:panel>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 2%;">
+						<p:commandButton value="${titles['TTL_CANCEL']}"
+							styleClass="btn btn-default btn-update-disable"
+							actionListener="#{documentosAdicionalesHVBean.solicitarConfirmacionCancelar()}"
+							process="@this" immediate="true"
+							update="panelDocumentosAdicionales dlgConfirmarAccionDocumentoAdicional documentoAdicionalPDF"
+							style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; 
+							font-size:1.5em!important; padding-top:0!important;"
+							oncomplete="datosModificados(0);">
+							<p:resetInput
+								target="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales" />
+
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+				
+				<br />
+			</div>
+		</p:panel>
+	</p:outputPanel>
+
+	<p:dialog header="${titles['LBL_VER_ADJUNTOS']}"
+		widgetVar="documentoAdjuntoExpPro" minHeight="40">
+		<h:outputText value="${titles['LBL_SIN_SOPORTE']}" />
+	</p:dialog>
+
+	<div id="documentoAdjuntoExpDoc" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-2"
+			style="top: 25%; width: 34.5%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title" style="font-size: 2em !important;">•
+						${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-md-12" align="center"
+						style="margin-top: 2%; margin-bottom: 3%;">
+						<h:outputText value="${titles['LBL_VER_ADJUNTOS']}"
+							style="font-size:1.5em!important; color:#245379; font-weight: normal;" />
+					</div>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-4" style="margin-bottom: 5%;">
+						<p:commandButton value="${titles['TTL_OK']}"
+							styleClass="btn btn-primary"
+							style="padding-left:12%!important;padding-right:12%!important; font-size:1.5em!important;"
+							onclick="$('#documentoAdjuntoExpDoc').modal('hide')" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="documentosAdjuntosAdicionalesHV" class="modal" role="dialog">
+		<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 60%;">
+			<div class="modal-content">
+				<div class="modal-header" align="center">
+					<h4 class="modal-title">• ${titles['TTL_DOCUMENTO_ADJUNTO']} •</h4>
+				</div>
+
+				<div class="modal-body" align="center">
+					<p:panel id="panelDiaVisualizarDocumentoAdicionalHV"
+						style="background: transparent!important;">
+						<c:if test="#{documentosAdicionalesHVBean.rutaArchivo==null}">
+							<h:outputLabel value="${titles['LBL_SIN_SOPORTE']}"
+								class="form-label-formularios" />
+						</c:if>
+						<c:if test="#{documentosAdicionalesHVBean.rutaArchivo!=null}">
+							<iframe src ="#{documentosAdicionalesHVBean.rutaArchivo}" width='600' height='400'></iframe> 
+						</c:if>
+					</p:panel>
+				</div>
+
+				<div class="modal-footer">
+					<p:commandButton value="${titles['TTL_CLOSE']}"
+						styleClass="btn btn-default" process="@this"
+						style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; padding-top:0!important; margin-bottom:1.5%;"
+						onclick="$('#documentosAdjuntosAdicionalesHV').modal('hide')" />
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarAccionDocumentoAdicional" id="dlgConfirmarAccionDocumentoAdicional" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{documentosAdicionalesHVBean.strMensajeConfirmacion}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						    <p:commandButton value="${titles['TTL_YES']}"
+								process="@this" 
+								styleClass="btn btn-primary"
+								style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+								action="#{documentosAdicionalesHVBean.accionConfirmada()}"
+		    		    		onclick="PF('dlgConfirmarAccionDocumentoAdicional').hide();"
+		    		    		update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales frmPrincipal:tabHojaDeVida:dataTableDocumentosAdicionales"/>
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgConfirmarAccionDocumentoAdicional').hide();"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>	
+		
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgAdicionalRepetido" id="dlgAdicionalRepetido" 
+		          minHeight="300" modal="true" resizable="false" closeOnEscape="false"
+					responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+					<br />
+					<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+						<center><h5>#{documentosAdicionalesHVBean.msgAdicionalduplicado}</h5></center>
+					</div>
+					<br />
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3" style="margin-bottom: 2%;">
+						 <p:commandButton value="${titles['TTL_YES']}"
+									process="@this" 
+									styleClass="btn btn-primary"
+									actionListener="#{documentosAdicionalesHVBean.confirmarReemplazarDocumento()}"
+									style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+			    		    		update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales frmPrincipal:tabHojaDeVida:dataTableDocumentosAdicionales"/>
+							
+			         	</div>
+			         	<div class="col-md-3" style="margin-bottom: 2%;">
+							<p:commandButton value="${titles['TTL_NO']}"
+								process="@this" 
+								styleClass="btn btn-default"
+								action="#{documentosAdicionalesHVBean.noreemplazar()}"
+								style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+			                    onclick="PF('dlgAdicionalRepetido').hide();"
+			                    update="frmPrincipal:tabHojaDeVida:panelDocumentosAdicionales frmPrincipal:tabHojaDeVida:dataTableDocumentosAdicionales"
+			                   >
+							</p:commandButton>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+					<br />
+		</p:dialog>		
+	
+		
+		
+	<p:dialog header="• ${titles['LBL_CONFIRMAR_ACTUALIZACION']} •"
+			id="dialogJustificaDocAdicional" minHeight="300" widgetVar="dialogJustificaDocAdicional"
+			modal="true" resizable="false" closeOnEscape="false" draggable="false"
+			closable="false" responsive="true">
+			<p:panel id="paneljustificaDocAdicional"
+				style="background: transparent !important;">
+				<div class="row" align="center">
+					<div class="col-md-12" style="margin-top: 3%; margin-bottom: 3%;">
+						<p:outputLabel for="itaJustificaDocAdicional"
+							value="${titles['LBL_JUSTIFICACION_ACTUALIZACION_DATOS']}:"
+							styleClass="log-label form-label-formularios" />
+						<p:inputTextarea rows="4" cols="25"
+							id="itaJustificaDocAdicional"
+							value="#{documentosAdicionalesHVBean.modificacionHojaVida.justificacionModificacion}"
+							required="true" autoResize="false"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							styleClass="form-control-acti-usua form-control"
+							style="resize: none;overflow-x: hidden;word-wrap: break-word!important;" />
+						<p:message for="itaJustificaDocAdicional" display="text" />
+					</div>
+				</div>
+				<hr class="hr-style-modales" />
+				<div class="row" align="center">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<p:commandButton id="btnConfirmarjustificaDocAdicional"
+							value="${titles['TTL_SAVE']}"
+							actionListener="#{documentosAdicionalesHVBean.guardarDocumentoAdicionalConConfirmacion}"
+							process="paneljustificaDocAdicional"
+							styleClass="btn btn-primary" 
+							oncomplete="datosModificados(0);"
+							update="paneljustificaDocAdicional frmPrincipal:tabHojaDeVida"
+							/>
+					</div>
+					<div class="col-md-4">
+						<p:commandButton id="btnCancelarJustificaDocAdicional"
+							value="${titles['TTL_CANCEL']}"
+							actionListener="#{documentosAdicionalesHVBean.cancelarConfirmacionDatos}"
+							process="@this"
+							styleClass="btn btn-default"
+							oncomplete="datosModificados(0);" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				<br />
+			</p:panel>
+		</p:dialog>		
+</ui:composition>

@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"  xmlns:p="http://primefaces.org/ui" template="/resources/template/basicTemplate.xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="#{titles.TTL_ENTIDADES}" />
+	<ui:param name="pageSubtitle1" value="#{titles.TTL_GESTIONAR_ENTIDAD}" />
+	<ui:param name="pageSubtitle2" value="#{titles.TXT_ESCISION_DE_UNA_ENTIDAD_EN_SIGEPII}" />
+    
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>
+                    <p:outputLabel value="• #{titles.TXT_ESCISION_DE_UNA_ENTIDAD_EN_SIGEPII} •" styleClass="page-subtitle"  />
+                </h2>
+            </div>
+        </div>
+        <style>
+        	.btn-list{
+        		width: 100%!important;
+        	}
+        </style>
+       <h:form id="frmEscindir" style="background-color: #fff!important;" >
+	       	<p:panel id="seleccionEntidad" visible="#{escisionEntidadBean.estSeccPpals}" style="margin-left: 20px!important; margin-right:20px!important;" >
+		  		<div class="row">
+		           	<div class="col-md-12 text-center">
+		                <h4>
+		                    <p:outputLabel value="#{titles.TTL_ENT_ESC_SELECCIONE_ENTIDADES_DESTINO}  #{escisionEntidadBean.entidadProceso.nombreEntidad}"  styleClass="advisor"  style ="font-size: 17px!important;" />
+		                </h4>
+		            </div>           
+	        	</div>
+	       		<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<p:dataTable
+								id="entidadesTabla" var="entidad" value="#{escisionEntidadBean.listaEntidades}" 
+								scrollable="true" scrollHeight="450" styleClass="tabla-respo-4"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}" 
+								selection="#{escisionEntidadBean.entidadesSeleccionadas}" rowKey="#{entidad.codEntidad}" >
+								<p:column selectionMode="multiple" style="text-align:center" />
+								<p:column headerText="#{titles.TTL_NIT}" style="word-wrap: break-word!important;width:22%!important;">
+									<h:outputText style="display: inline-block; margin-right: 5px;" value="#{entidad.nit}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.TTL_COD_SIGEP}" style="word-wrap: break-word!important;width:22%!important">
+									<h:outputText value="#{entidad.codigoSigep}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.LBL_DE_ENTIDAD_USUARIO}" style="width: 50%!important; word-wrap: break-word!important;">
+									<h:outputText value="#{entidad.nombreEntidad}" >
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px!important;">
+					<div class="col-md-12 text-center">
+					<div class="col-md-3" style="margin-right: 4.3em;"></div>
+					<div class="col-md-3">
+						<p:commandButton value="#{titles.TTL_TO_CONTINUE}" styleClass="btn btn-primary margen" style="width: 12.3em!important;" >
+							<p:ajax process="entidadesTabla" update="distribuccionEmpleados seleccionEntidad" event="click">
+							</p:ajax>
+							<p:ajax listener="#{escisionEntidadBean.continuarProcesoEscinsion}" update="distribuccionEmpleados seleccionEntidad">
+							</p:ajax>
+						</p:commandButton>
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="#{titles.TTL_CANCEL}" styleClass="btn btn-default" style="width: 12.3em!important;" type="button" onclick="location.href='../gestionarEntidad.xhtml'">
+						</p:commandButton>
+					</div>
+					</div>
+				</div>
+			</p:panel>
+			<br />
+			<p:panel id="distribuccionEmpleados" visible="#{not escisionEntidadBean.estSeccPpals}" style="margin-left: 20px!important; margin-right:20px!important;" >
+				<div class="row" style="margin-top: 30px!important;">
+		           	<div class="col-md-12 text-center">
+		                <h4>
+		                    <p:outputLabel value="${titles['TTL_ENT_ESC_SELECCIONE_ENTIDAD']}" styleClass="advisor"  style ="font-size: 17px!important;" />
+		                </h4>
+		            </div>
+	        	</div>
+				<div class="row">
+					<div class="col-md-12 text-center" style="padding-top: 10px!important;">
+						<p:outputLabel styleClass="log-label form-label-formularios display-block" 
+							style="display: inline-block; margin-right: 5px;" 
+							value="#{titles.LBL_ENTIDAD_A_ESCINDIR}: #{escisionEntidadBean.entidadProceso.nombreEntidad}" >
+						</p:outputLabel>
+					</div>
+					<div class="col-md-12 text-center">
+						<p:outputLabel styleClass="log-label form-label-formularios display-block" 
+							style="display: inline-block; margin-right: 5px;" value="${titles['TTL_ENTIDAD_DESTINO']}: " >
+						</p:outputLabel>
+						<h:selectOneMenu id="entidadContexto" styleClass="form-control-form-act-usua" autoWidth="false" 
+							style="max-width:80%!important;" value="#{escisionEntidadBean.codEntidadSeleccionada}" >
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{escisionEntidadBean.entidadContextoMostrar}" />
+							<p:ajax process="@this" update="empleadosTabla" listener="#{escisionEntidadBean.establecerEntidadContexto}" ></p:ajax>
+						</h:selectOneMenu>
+					</div>
+				</div>
+				<hr style="margin-top: 30px!important;">
+				</hr>
+				<div class="row" style="margin-bottom: 40px!important;">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="margin-top:5px!important;">
+						<p:outputLabel for="seleccionTipoNorma" styleClass="log-label form-label-formularios display-block"
+						 	style="display: inline-block; margin-right: 5px;" value="#{titles.TTL_TIPO_NORMA}" >
+						</p:outputLabel>
+						<h:selectOneMenu id="seleccionTipoNorma" value="#{escisionEntidadBean.filtroNorma.codTipoNorma}" styleClass="form-control-form-act-usua" required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+							<f:selectItems value="#{webUtils.getListasParametricas(1038)}" />
+							<p:ajax process="@this" event="change" update="acSelectNumeroNorma">
+	      					</p:ajax>
+						</h:selectOneMenu>
+						<p:message for="seleccionTipoNorma" display="text" />
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="margin-top:5px!important;">
+						<p:outputLabel for="seleccionFechaNorma" styleClass="log-label form-label-formularios display-block"
+							style="display: inline-block; margin-right: 5px;" value="#{titles.LBL_FECHA_NORMA}" >
+						</p:outputLabel>
+						<p:calendar id="seleccionFechaNorma" required="true" navigator="true" mask="true"
+							yearRange="#{rangoAnios}" value="#{escisionEntidadBean.filtroNorma.fechaNorma}"  
+							mode="popup"  placeholder="${titles['LBL_FORMATO_FECHA']}" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" 
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}" locale="#{lenguajeBean.localeCode}" effect="slideDown" 
+							title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_NACIMIENTO']}" pattern="#{fechaFormato}">
+							<p:ajax process="@this" update="acSelectNumeroNorma" event="dateSelect">
+	      					</p:ajax>
+		               	</p:calendar>
+						<p:message for="seleccionFechaNorma" display="text" />
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="margin-top:5px!important;">
+						<p:outputLabel for="acSelectNumeroNorma" styleClass="log-label form-label-formularios display-block"
+							 style="display: inline-block; margin-right: 5px;" value="${titles['TTL_GESTION_PLANTA_NUM_NORMA']}" >
+						</p:outputLabel>
+      					<p:autoComplete id="acSelectNumeroNorma" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" dropdown="true" value="#{escisionEntidadBean.filtroNorma}" var="normSelect"        						
+                        style="width:100%!important;" completeMethod="#{escisionEntidadBean.buscarNormasCoincidencia}" itemLabel="#{normSelect.numeroNorma}" 
+                        itemValue="#{normSelect}" converter="normaBdConverter" required="true" valueChangeListener="#{escisionEntidadBean.acNombreNormaSelectListener}" >
+                        	<p:ajax process="@this" update="@this" event="itemSelect" />
+                        </p:autoComplete>
+      					<p:message for="acSelectNumeroNorma" display="text" />	
+					</div>
+				</div>
+				
+				<div class="row">
+		           	<div class="col-md-12">
+		                 <hr class="hr-style hr-style-two" />
+				<span class="span-style">
+					#{titles.LBL_EMPLEADOS_ACTIVOS}
+				</span> <br /> <br />
+		            </div>
+			          
+	        	</div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<p:dataTable id="empleadosTabla" var="empleado" value="#{escisionEntidadBean.listaEmpleados}" 
+								paginator="true" reflow="true" rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+								<p:column headerText="Documento" style="word-wrap: break-word!important; " >
+									<h:outputText value="#{empleado.nombreDocumento} #{null} #{empleado.numeroIdentificacion}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.TTL_NOMBRES}" style="word-wrap: break-word!important;" >
+									<h:outputText value="#{empleado.primerNombre} #{null} #{empleado.segundoNombre} #{null} #{empleado.primerApellido} #{null} #{empleado.segundoApellido}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.TTL_CARGO_ACTUAL_PERSONA}" style="word-wrap: break-word!important;" >
+									<h:outputText value="#{empleado.nombreCargo}" >
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{titles.TTL_PLANTA_DESTINO}" style="word-wrap: break-word!important;">
+			                       <h:selectOneMenu requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" title="${titles['TTL_SELECT']} ${titles['LBL_REASIGNAR_CARGO']}" value="#{empleado.codPlantaDestino}"  class="form-select-esci" style="width:100%!important;">
+			                            <f:selectItem  itemLabel="Seleccione" itemValue="0" />
+			                            <f:selectItems value="#{escisionEntidadBean.obtenerPlantasPorEntidad()}" />
+			                            <p:ajax process="@this" event="change" update="empleadosTabla" />
+									</h:selectOneMenu>
+								</p:column>
+								<p:column headerText="#{titles.TTL_CARGO_DESTINO}" style="word-wrap: break-word!important;">
+			                       	<h:selectOneMenu  id="codCargo" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}" title="${titles['TTL_SELECT']} ${titles['LBL_REASIGNAR_CARGO']}" value="#{empleado.codCargoDestino}"  class="form-select-esci" style="width:100%!important;">
+			                            <f:selectItem  itemLabel="Seleccione" itemValue="#{null}" />
+			                            <f:selectItems value="#{escisionEntidadBean.obtenerCargosPlanta(empleado.codPlantaDestino)}"/>
+			                            <p:ajax process="@this" event="change" update="empleadosTabla" />
+									</h:selectOneMenu>
+								</p:column>
+								<p:column headerText="#{titles.TTL_ASIGNAR}" style="word-wrap: break-word!important;width:150px!important;text-align:center!important" >
+									<p:commandButton process="empleadosTabla" update="empleadosTabla" actionListener="#{escisionEntidadBean.almacenarPersonaLista(empleado)}" styleClass="btn btn-primary" style="max-height: 30px!important; font-size: 12px!important;" value="Asignar" title="Asignar">
+            						</p:commandButton>
+								</p:column>
+								
+							</p:dataTable>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 30px!important; margin-bottom: 30px!important;">
+					<div class="col-lg-12 col-md-12 text-center">
+						<p:commandButton value="#{titles.TTL_ESCINDIR}" process="frmEscindir" 
+							update="frmEscindir" actionListener="#{escisionEntidadBean.escindir()}" 
+							styleClass="btn btn-primary">
+						</p:commandButton>
+						<p:commandButton value="#{titles.TTL_GUARDADO_PARCIAL}" process="frmEscindir" 
+							update="frmEscindir" actionListener="#{escisionEntidadBean.guardadoParcial()}"
+							styleClass="btn btn-default">
+						</p:commandButton>
+						<p:commandButton value="#{titles.TTL_SALIR}" type="button"
+							 onclick="location.href='../gestionarEntidad.xhtml'"
+							 styleClass="btn btn-default">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+		
+       </h:form>
+      
+    </ui:define>
+</ui:composition>

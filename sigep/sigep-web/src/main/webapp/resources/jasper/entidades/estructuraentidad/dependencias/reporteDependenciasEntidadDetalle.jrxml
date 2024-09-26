@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteContratoModificaciones" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="985c1cce-924d-435e-ba03-8154a5e17c02">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="P_CODIGO_ENTIDAD" class="java.lang.String"/>
+	<parameter name="P_SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT JERARQUIA, upper(NOMBRE_DEPENDENCIA) NOMBRE_DEPENDENCIA, 
+DECODE(FLG_ESPECIAL, 0,'NO','SI') DEPENDENCIA_ESPECIAL 
+FROM DEPENDENCIA_ENTIDAD
+ WHERE COD_ENTIDAD =   $P{P_CODIGO_ENTIDAD} 
+ AND FLG_ACTIVO =1
+  ORDER BY jerarquia asc]]>
+	</queryString>
+	<field name="JERARQUIA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="JERARQUIA"/>
+	</field>
+	<field name="NOMBRE_DEPENDENCIA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE_DEPENDENCIA"/>
+	</field>
+	<field name="DEPENDENCIA_ESPECIAL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DEPENDENCIA_ESPECIAL"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="36" y="0" width="143" height="30" uuid="97b452b5-b693-4b24-9fdb-6232a7897913"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número de la jerarquía]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="0" width="220" height="30" uuid="81fe26b6-29eb-4354-98eb-c962ea6eaf71"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de la dependencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="0" width="118" height="30" uuid="c0c4d217-1482-49df-a69e-107a7ebc515d"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dependencia especial]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="179" y="0" width="220" height="20" uuid="bb76d9ce-ff10-4aa8-9449-018eda00981c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e3324922-5448-4a3f-bd63-47cbbc28ec20"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DEPENDENCIA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="399" y="0" width="118" height="20" uuid="21b6908a-6604-4f29-80b7-dfe7e90fd1ec">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bfce875-0e33-49e2-8394-31c5ec0666e5"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{DEPENDENCIA_ESPECIAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="36" y="0" width="143" height="20" uuid="d2d2c4a0-0522-482f-beb1-b71f8b265d21">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="93489d46-dd89-4824-a72e-a29fe83f37e3"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{JERARQUIA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

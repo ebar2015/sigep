@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:panelGroup id="idpgfrmSituacionesAdProrrogar"
+		style="background: transparent !important;">
+
+		<p:spacer height="2" />
+		<hr class="hr-style hr-style-two"
+			style="margin-left: 24%; width: 75.5%; margin-top: 1em;" />
+		<span style="font-size: 2em; font-weight: 500; color: #245379;">
+			${titles['TTL_HIST_PRORROGA_SA']}</span>
+		<br />
+		<br />
+		<div class="row row-background-white">
+			<br />
+			<br />
+			<div class="col-md-12"
+				style="padding-left: 2% !important; padding-right: 2% !important;">
+				<p:dataTable id="dataTableProrrogasSA" 
+					value="#{situacionesAdministrativasBean.listModificacionSA}"
+					paginator="true"
+					rows="#{paginatorSize}"
+					rowsPerPageTemplate="#{paginatorsSize}"
+					reflow="true"
+					currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					var="dataTableModificacionSA"
+					emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+					<p:column headerText="${titles['LBL_F_INI_PRORROGA']}" sortBy="#{dataTableModificacionSA.fechaInicial}"
+						style="word-wrap: break-word!important; text-align:center!important;">
+						<h:outputText value="#{dataTableModificacionSA.fechaInicial}" />
+					</p:column>
+					<p:column headerText="${titles['LBL_F_FIN_PRORROGA']}" sortBy="#{dataTableModificacionSA.fechaFinal}"
+						style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionSA.fechaFinal}" />
+					</p:column>
+					<p:column headerText="${titles['LBL_SAD_DESCRIPCION']}" sortBy="#{dataTableModificacionSA.descripcionModificacion}"
+						style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionSA.descripcionModificacion}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<br />
+		<div class="row row-background-white">
+			<br /> <br />
+			<hr class="hr-style hr-style-two" />
+			<span class="span-style">
+				${titles['TTL_SITUACIONES_ADMINISTRATIVAS_PRORROGAR']} </span> <br /> <br />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4">
+						<p:outputLabel for="sitAdmin"
+							styleClass="log-label form-label-formularios"
+							value="${titles['TTL_SITUACION_ADMIN']}:" />
+						<p:inputText id="somSitAdprorrogaSituacion"
+							value="#{situacionesAdministrativasBean.sitAdminPadreForm}"
+							styleClass="form-control-acti-usua form-control"
+							style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+							disabled="true">
+						</p:inputText>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="itsitAdminDepProrroga"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_SA_SITUACION_DEPENDIENTE']}:" />
+						<p:inputText id="itsitAdminDepProrroga"
+							value="#{situacionesAdministrativasBean.situacionAdminVinculacionExtSelected.nombreSituacion}"
+							styleClass="form-control-acti-usua form-control"
+							style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+							disabled="true">
+						</p:inputText>
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel for="somSitAdprorrogaSituacionDependienteII"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_SA_SITUACION_DEPENDIENTE_II']}:" />
+						<h:selectOneMenu id="somSitAdprorrogaSituacionDependienteII"
+							value="#{situacionesAdministrativasBean.sitAdminDep}"
+							styleClass="form-control-form-act-usua">
+							<f:selectItem itemLabel="#{titles.TTL_SELECT}"
+								itemValue="#{null}" />
+							<f:selectItems
+								value="#{situacionesAdministrativasBean.listSitAdminDependiente}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4" style="margin-top: 1.5%;">
+						<p:outputLabel for="calSitAdprorrogaFISitAd"
+							styleClass="log-label form-label-formularios"
+							value="${titles['LBL_FECHA_INI_SIT_AD']}:" />
+						<p:calendar mask="true" id="calSitAdprorrogaFISitAd"
+							placeholder="${titles['LBL_FORMATO_FECHA']}"
+							pattern="#{fechaFormato}" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							locale="#{lenguajeBean.localeCode}" maxdate="today"
+							readonlyInput="true"
+							value="#{situacionesAdministrativasBean.situacionAdminVinculacionExtSelected.fechaInicio}"
+							disabled="true">
+							<p:ajax event="dateSelect"></p:ajax>
+						</p:calendar>
+					</div>
+					<div class="col-md-4" style="margin-top: 1.5%;">
+						<p:outputLabel value="${titles['LBL_FECHA_FIN_SIT_AD']}:"
+							styleClass="log-label form-label-formularios"
+							for="calSitAdprorrogaFFinSitAd" />
+						<p:calendar mask="true" id="calSitAdprorrogaFFinSitAd"
+							placeholder="${titles['LBL_FORMATO_FECHA']}"
+							pattern="#{fechaFormato}" required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							locale="#{lenguajeBean.localeCode}" readonlyInput="true"
+							value="#{situacionesAdministrativasBean.situacionAdminVinculacionExtSelected.fechaFin}"
+							disabled="true">
+							<p:ajax event="keyup" update="calSitAdprorrogaFIniProrroga" />
+							<p:ajax event="dateSelect" update="calSitAdprorrogaFIniProrroga" />
+							<p:ajax event="change" update="calSitAdprorrogaFIniProrroga" />
+						</p:calendar>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-4" style="margin-top: 1.5%;">
+						<p:outputLabel value="${titles['LBL_F_INI_PRORROGA']}:"
+							for="calSitAdprorrogaFIniProrroga"
+							styleClass="log-label form-label-formularios" />
+						<p:calendar id="calSitAdprorrogaFIniProrroga" mask="true"
+							readonlyInput="true" yearRange="#{rangoAnios}" navigator="true"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							pattern="#{fechaFormato}" effect="slideDown"
+							locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+							mindate="#{situacionesAdministrativasBean.situacionAdminVinculacionExtSelected.fechaFin}"
+							value="#{situacionesAdministrativasBean.prorrogaSituacion.fechaInicialProrroga}">
+							<f:attribute name="startDateName"
+								value="${titles['LBL_F_INI_PRORROGA']}" />
+							<f:attribute name="endDateName"
+								value="${titles['LBL_FORMATO_FECHA']}" />
+							<f:validator validatorId="dateRangeValidator" />
+							<p:ajax event="dateSelect" update="calSitAdprorrogaFFiProrroga" />
+							<p:ajax event="change" update="calSitAdprorrogaFFiProrroga" />
+						</p:calendar>
+						<p:message for="calSitAdprorrogaFIniProrroga" display="text" />
+					</div>
+					<div class="col-md-4" style="margin-top: 1.5%;">
+						<p:outputLabel value="${titles['LBL_F_FIN_PRORROGA']}:"
+							for="calSitAdprorrogaFFiProrroga"
+							styleClass="log-label form-label-formularios" />
+						<p:calendar id="calSitAdprorrogaFFiProrroga" mask="true"
+							yearRange="#{rangoAnios}" navigator="true"
+							placeholder="${titles['LBL_FORMATO_FECHA']}" mode="popup"
+							converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+							pattern="#{fechaFormato}" effect="slideDown"
+							locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+							mindate="#{situacionesAdministrativasBean.prorrogaSituacion.fechaInicialProrroga}"
+							value="#{situacionesAdministrativasBean.prorrogaSituacion.fechaFinProrroga}">
+							<f:attribute name="startDateName"
+								value="${titles['LBL_F_INI_PRORROGA']}" />
+							<f:attribute name="endDateName"
+								value="${titles['LBL_F_FIN_PRORROGA']}" />
+							<f:attribute name="startDate"
+								value="#{situacionesAdministrativasBean.prorrogaSituacion.fechaInicialProrroga}" />
+							<f:validator validatorId="dateRangeValidator" />
+						</p:calendar>
+						<h:outputText>
+							<f:convertDateTime pattern="#{fechaFormato}" />
+						</h:outputText>
+						<p:message for="calSitAdprorrogaFFiProrroga" display="text" />
+					</div>
+
+					<div class="col-md-4" style="margin-top: 1.5%;">
+						<p:outputLabel value="${titles['LBL_SAD_DESCRIPCION']}:"
+							for="idSADDescripcionProrroga"
+							styleClass="log-label form-label-formularios" />
+						<p:inputText id="idSADDescripcionProrroga"
+							value="#{situacionesAdministrativasBean.prorrogaSituacion.descripcionModificacion}"
+							styleClass="form-control-acti-usua form-control" maxlength="254"
+							style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+							required="true"
+							requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+						</p:inputText>
+						<p:message for="idSADDescripcionProrroga" display="text" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+
+			</div>
+			<br /> <br />
+
+			<div class="row" align="center">
+
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['TTL_SAVE']}"
+						id="idBtRegistrarProrrogaSAD" styleClass="btn btn-primary"
+						process="frmPrincipal:idpgfrmSituacionesAdProrrogar"
+						actionListener="#{situacionesAdministrativasBean.registrarProrroga()}"
+						style="border:0px;padding-left:12%!important;padding-right:12%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+						update="frmPrincipal frmPrincipal:idpgfrmSituacionesAdProrrogar frmPrincipal:tablaSitAdmin">
+					</p:commandButton>
+				</div>
+				<div class="col-md-2" style="margin-bottom: 2%;">
+					<p:commandButton value="Cancelar" id="idBtCancelarProrrogaSAD"
+						styleClass="btn btn-default" process="@this"
+						action="#{situacionesAdministrativasBean.cerrarModificacionesSitAd()}"
+						style="border:0px;padding-left:11.5%!important;padding-right:11.5%!important; font-family:Helveltica; font-size:1.5em!important; padding-top:0!important;"
+						update="frmPrincipal frmPrincipal:idpgfrmSituacionesAdProrrogar">
+					</p:commandButton>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+	</h:panelGroup>
+</ui:composition>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subEducacion" pageWidth="555" pageHeight="14" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a7fa51a3-e57f-43c1-8941-63598699f365">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="semestresAprobado" class="java.lang.Integer"/>
+	<field name="nivelEducativo" class="java.lang.String"/>
+	<field name="flgFinalizado" class="java.lang.Boolean"/>
+	<field name="nombreProgramaAcademico" class="java.lang.String"/>
+	<field name="numTarjetaProfesional" class="java.lang.String"/>
+	<field name="fechaFinalizacion" class="java.util.Date"/>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="76" height="14" backcolor="#FFFFFF" uuid="cdb8f0ad-7da4-42df-be11-92276e1bf646"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="76" y="0" width="84" height="14" backcolor="#FFFFFF" uuid="0db3a6a0-687e-4eaa-a447-53854906cc90"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="160" y="0" width="38" height="14" backcolor="#FFFFFF" uuid="5064b7fa-5f5c-4baf-94ae-308bfa8bde7b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="198" y="0" width="38" height="14" isRemoveLineWhenBlank="true" backcolor="#FFFFFF" uuid="4bd06d3b-abd1-41c7-8093-3980f2c78744"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="236" y="0" width="143" height="14" backcolor="#FFFFFF" uuid="8335d88d-6e1f-40b8-bb7c-0091948d75a4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="378" y="0" width="38" height="14" backcolor="#FFFFFF" uuid="c176ff8b-7895-41e6-8472-75392880e820"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="416" y="0" width="53" height="14" backcolor="#FFFFFF" uuid="c363e694-e0bc-4a38-a7f4-7bd2cbad5a65"/>
+			</rectangle>
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="469" y="0" width="86" height="14" backcolor="#FFFFFF" uuid="18590a1c-e300-45e2-aaf8-116ac5d21cc2"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="160" y="0" width="38" height="14" backcolor="#FFFFFF" uuid="7df1c025-e211-4f1c-8873-37299b97f24f">
+					<printWhenExpression><![CDATA[$F{flgFinalizado}.equals(true) ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="198" y="0" width="38" height="14" backcolor="#FFFFFF" uuid="d0cd9023-11f6-4138-acf9-6e91790f880c">
+					<printWhenExpression><![CDATA[$F{flgFinalizado}.equals(true) ? Boolean.FALSE:Boolean.TRUE]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="76" y="0" width="84" height="14" backcolor="#FFFFFF" uuid="c86b496a-7671-4a1d-936e-139c08d562e1"/>
+				<box topPadding="0" leftPadding="3" bottomPadding="0" rightPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{semestresAprobado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="76" height="14" backcolor="#FFFFFF" uuid="c06f4caa-f372-4d24-b2b7-c6db1d5337e5"/>
+				<box topPadding="0" leftPadding="3" bottomPadding="0" rightPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nivelEducativo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="236" y="0" width="142" height="14" backcolor="#FFFFFF" uuid="5208be62-5f79-4b71-a85d-53d8fcdacaec"/>
+				<box topPadding="0" leftPadding="3" bottomPadding="0" rightPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreProgramaAcademico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="469" y="0" width="86" height="14" backcolor="#FFFFFF" uuid="1a999d75-1abd-451b-bb6c-f086f48b7bfe"/>
+				<box topPadding="0" leftPadding="3" bottomPadding="0" rightPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numTarjetaProfesional}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="416" y="0" width="52" height="14" backcolor="#FFFFFF" uuid="cc5ae1b5-3424-462e-b073-2f93ad0c2271"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy").format($F{fechaFinalizacion})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="378" y="0" width="38" height="14" backcolor="#FFFFFF" uuid="bf09b6d8-58a4-47a6-a7c9-d9bcdd6640b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("MM").format($F{fechaFinalizacion})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

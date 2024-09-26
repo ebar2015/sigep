@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{usuarioBean.usuarioVO.id}' />
+		<f:viewParam name="dialog" value='#{usuarioBean.dialog}' />
+		<f:event type="preRenderView" listener='#{usuarioBean.retrieve}' />
+		<f:event type="preRenderView" listener='#{usuarioBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="${titles['TTL_TRANSVERSAL_USUARIO']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_USUARIO_EDITAR']}" />
+
+	<f:event listener="#{usuarioBean.validateForm}" type="postValidate" />
+	<ui:define name="main">
+		<p:panelGrid columns="6"
+			columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1"
+			layout="grid" styleClass="ui-panelgrid-blank">
+<!-- 			<p:outputLabel for="usuario" -->
+<!-- 				value="${titles['LBL_TRANSVERSAL_USUARIO_USUARIO']}" /> -->
+			<p:selectOneMenu id="usuario" filter="true"
+				filterMatchMode="contains"
+				title="${titles['LBL_TRANSVERSAL_USUARIO_USUARIO']}"
+				value="#{usuarioBean.usuario}" converter="usuarioConverter" var="t"
+				required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					noSelectionOption="true" itemValue="#{null}" />
+				<f:selectItems value="#{usuarios}" var="usuario"
+					itemLabel="#{usuario.login}" itemValue="#{usuario}" />
+				<p:column>
+					<h:outputText value="#{t.login}" />
+				</p:column>
+				<p:clientValidator />
+				<p:ajax event="change" process="@this" update="@this contains"
+					listener="#{usuarioBean.cargarUsuario}" />
+			</p:selectOneMenu>
+			<p:message for="usuario" display="icon" />
+
+			<p:outputLabel for="personaId"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_RESPONSABLE']}" />
+			<p:selectOneMenu id="personaId" filter="true"
+				filterMatchMode="contains"
+				value="#{usuarioBean.usuarioVO.personaId}"
+				converter="personaConverter" var="t" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{personas}" var="persona"
+					itemLabel="#{persona.primerNombre.concat(' ').concat(persona.primerApellido)}"
+					itemValue="#{persona}" />
+				<p:column>
+					<h:outputText value="#{t.numeroIdentificacion}" />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{t.primerNombre.concat(' ').concat(t.primerApellido).concat(' ').concat(t.segundoApellido)}" />
+				</p:column>
+			</p:selectOneMenu>
+			<p:message for="personaId" display="icon" />
+
+			<p:outputLabel for="regionalId"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_SEDE']}" />
+			<p:selectOneMenu id="regionalId" filter="true" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				filterMatchMode="contains"
+				value="#{usuarioBean.usuarioVO.regionalId}"
+				converter="regionalConverter" var="t">
+				<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+					itemValue="#{null}" />
+				<f:selectItems value="#{regionales}" var="regional"
+					itemLabel="#{regional.descripcion}" itemValue="#{regional}" />
+				<p:column>
+					<h:outputText value="#{t.descripcion}" />
+				</p:column>
+			</p:selectOneMenu>
+			<p:message for="regionalId" display="icon" />
+			<p:outputLabel for="correoElectronico"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_CORREO_ELECTRONICO']}" />
+			<p:inputText id="correoElectronico"
+				placeholder="${titles['LBL_TRANSVERSAL_USUARIO_CORREO_ELECTRONICO']}"
+				value="#{usuarioBean.usuarioVO.correoElectronico}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:validator validatorId="emailValidator" />
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="correoElectronico" display="icon" />
+			<p:outputLabel for="login"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_LOGIN']}" />
+			<p:inputText id="login" readonly="true"
+				placeholder="${titles['LBL_TRANSVERSAL_USUARIO_LOGIN']}"
+				value="#{usuarioBean.usuarioVO.login}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:inputText>
+			<p:message for="login" display="icon" />
+			<p:outputLabel for="passwd" rendered="false"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD']}" />
+			<p:password id="passwd" match="passwd2" rendered="false"
+				placeholder="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD']}"
+				value="#{usuarioBean.usuarioVO.passwd}" feedback="true"
+				inline="true"
+				promptLabel="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_PROMPT']}"
+				weakLabel="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_DEBIL']}"
+				goodLabel="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_MEDIO']}"
+				strongLabel="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_FUERTE']}">
+				<p:clientValidator />
+			</p:password>
+			<p:message for="passwd" display="icon" rendered="false" />
+			<p:outputLabel for="passwd2" rendered="false"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_CONFIRMAR']}" />
+			<p:password id="passwd2" rendered="false"
+				placeholder="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_CONFIRMAR']}"
+				value="#{usuarioBean.usuarioVO.passwd}"
+				promptLabel="${titles['LBL_TRANSVERSAL_USUARIO_PASSWORD_PROMPT2']}" />
+			<p:message for="passwd2" display="icon" rendered="false" />
+			<p:outputLabel for="bloqueado"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_BLOQUEADO']}" />
+			<p:selectBooleanCheckbox id="bloqueado"
+				title="${titles['LBL_TRANSVERSAL_USUARIO_BLOQUEADO']}"
+				value="#{usuarioBean.usuarioVO.bloqueado}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:selectBooleanCheckbox>
+			<p:message for="bloqueado" display="icon" />
+			<p:outputLabel for="estado"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_ESTADO']}" />
+			<p:selectBooleanCheckbox id="estado"
+				title="${titles['LBL_TRANSVERSAL_USUARIO_ESTADO']}"
+				value="#{usuarioBean.usuarioVO.estado}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<p:clientValidator />
+			</p:selectBooleanCheckbox>
+			<p:message for="estado" display="icon" />
+			<p:outputLabel
+				value="${titles['LBL_TRANSVERSAL_USUARIO_FECHA_CREACION']}" />
+			<h:outputText value="#{usuarioBean.usuarioVO.fechaCreacion}">
+				<f:convertDateTime pattern="#{fechaHoraFormato}" />
+			</h:outputText>
+			<h:outputText />
+			<p:outputLabel for="fechaVence"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_FECHA_VENCE']}" />
+			<p:calendar mask="true" yearRange="#{rangoAnios}" navigator="true"
+				id="fechaVence" value="#{usuarioBean.usuarioVO.fechaVence}"
+				locale="#{lenguajeBean.localeCode}" pattern="#{fechaFormato}"
+				mindate="#{maniana}" required="true"
+				requiredMessage="${messages['DLG_VALOR_REQUERIDO']}">
+				<f:attribute name="minDate" value="#{maniana}" />
+				<f:validator validatorId="minDateValidator" />
+			</p:calendar>
+			<p:message for="fechaVence" />
+			<p:outputLabel
+				value="${titles['LBL_TRANSVERSAL_USUARIO_ULTIMO_INGRESO']}" />
+			<h:outputText value="#{usuarioBean.usuarioVO.ultimoIngreso}">
+				<f:convertDateTime pattern="#{fechaHoraFormato}" />
+			</h:outputText>
+			<h:outputText />
+			<p:outputLabel
+				value="${titles['LBL_TRANSVERSAL_USUARIO_LUGAR_ULTIMO_INGRESO']}" />
+			<h:outputText value="#{usuarioBean.usuarioVO.lugarUltimoIngreso}" />
+			<h:outputText />
+		</p:panelGrid>
+		<p:separator />
+		<p:panelGrid columns="3"
+			columnClasses="ui-grid-col-2,ui-grid-col-9,ui-grid-col-1"
+			layout="grid" styleClass="ui-panelgrid-blank">
+			<p:outputLabel for="perfiles"
+				value="${titles['LBL_TRANSVERSAL_USUARIO_PERFILES']}" />
+			<p:pickList id="perfiles" value="#{usuarioBean.perfiles}"
+				required="true" requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+				var="perfil" effect="bounce" itemValue="#{perfil}"
+				itemLabel="#{perfil.descripcion}" showSourceControls="true"
+				showTargetControls="true" showCheckbox="true" responsive="true"
+				showSourceFilter="true" showTargetFilter="true"
+				filterMatchMode="contains" converter="perfilConverter">
+				<p:column>
+					<h:outputText style="white-space:nowrap"
+						value="#{perfil.descripcion}" />
+				</p:column>
+			</p:pickList>
+			<p:message for="perfiles" display="icon" />
+		</p:panelGrid>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton value="${titles['TTL_EDIT']}" icon="ui-icon-disk"
+			process="@this contains" update="contains"
+			action="#{usuarioBean.update}" />
+	</ui:define>
+	<ui:define name="restablecer">
+		<p:commandButton value="${titles['TTL_RESET']}"
+			icon="ui-icon-arrowreturnthick-1-w" process="@this"
+			update="@this contains" actionListener="#{usuarioBean.init()}">
+			<p:ajax resetValues="true" />
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

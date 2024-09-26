@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<h:panelGroup>
+				<h2 style="margin: 0px;">
+					<p:outputLabel value="• ${titles['TTL_TAB_CT_REGISTRAR_ADICION']} •"
+						styleClass="page-subtitle"
+						style="color: #263948!important;" />
+				</h2>
+			</h:panelGroup>
+		</div>
+	</div>
+	
+	<ui:include src="../persona/tarjetaPersonaView.xhtml" /> 
+	
+	<br /><br />	
+	      
+	<p:panel id="idpnContratacionesTbRegistrarAdCto" style="background: transparent !important;">
+		<p:panel id="frmAdicionContrato" style="background: transparent !important;">
+			<div class="row row-background-white">
+				<br />
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span class="span-style"> ${titles['TTL_REGISTRAR_ADICION_CONTRATO']} </span> 
+				<br /> <br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_VALOR_ADICION_CONTRATO']}:" styleClass="log-label form-label-formularios" for="idCTNuevoMontoAdicion"/>
+							<p:inputNumber id="idCTNuevoMontoAdicion"
+								symbol="#{contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaPesos ? '$' : 
+								      contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaEuros ? '€' : 
+								      contratacionesBean.contrato.codMonedaMonto eq contratacionesBean.liMonedaDolar ? 'U$D':'' } " 
+                                decimalSeparator=","
+                                thousandSeparator="."
+                                decimalPlaces="2"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_VALOR_ADICION_CONTRATO']} ${titles['TTL_TIPO_NUMERICO']}"
+								value="#{contratacionesBean.modificacionContrato.valorAdicion}"
+								
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								validatorMessage="${messages['DLG_VALIDATOR_MESSAGE_POSTIVOS_15']}"
+								converter="javax.faces.BigDecimal"
+								converterMessage="${messages['DLG_VALIDATOR_MESSAGE_ENTEROS']}">
+								<p:keyFilter mask="num"></p:keyFilter>
+								<f:validateDoubleRange minimum="0" maximum="999999999999999" />
+							</p:inputNumber>
+							<p:message for="idCTNuevoMontoAdicion" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_CT_FECHA_AUTORZACION_ADICION']}:" styleClass="log-label form-label-formularios" for="idCTFechaAutAdicion"/>
+							<p:calendar mask="true" 
+								id="idCTFechaAutAdicion"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CT_FECHA_AUTORZACION_ADICION']}"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								value="#{contratacionesBean.modificacionContrato.fechaAutorizacionModificacion}"
+								pattern="#{fechaFormato}" 
+								required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								locale="#{lenguajeBean.localeCode}" readonlyInput="true" yearRange="#{rangoAnios}" navigator="true">
+								<p:ajax event="dateSelect"></p:ajax>
+							</p:calendar>
+							<p:message for="idCTFechaAutAdicion" display="text" />
+						</div>							
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+	 					<div class="col-md-12">
+	 						<p:outputLabel value="${titles['LBL_CT_JUSTIFICACION']}:" 
+	 							styleClass="log-label form-label-formularios" for="idCTJustificacionAdicion"/>
+	 						<p:inputTextarea id="idCTJustificacionAdicion" rows="3" cols="32"
+	 						   title="${titles['TTL_INGRESE']} ${titles['LBL_CT_JUSTIFICACION']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								counterTemplate="Quedan {0} caracteres." autoResize="false" maxlength="900"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-acti-usua form-control" required="true"
+								style="resize: none;overflow-x: hidden;word-wrap: break-word!important;"
+								value="#{contratacionesBean.modificacionContrato.justificacionModificacion}">
+							</p:inputTextarea>
+							<p:message for="idCTJustificacionAdicion" display="text" />
+					 	</div>
+					</div>
+				</div>
+				<br />
+				<div class="col-md-12" align="center">
+					<div class="col-md-4"></div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="${titles['TTL_CT_ADICIONAR_CONTRATO']}" id="idBtGuardarAdicionContrato" 
+				        	styleClass="btn btn-primary"
+				        	style="font-size:1.5em!important; padding-top:0!important;" 
+				         	process="@this frmAdicionContrato"
+				          	action="#{contratacionesBean.persist()}"
+				         	update="frContrataciones:viewTabContrataciones">
+						</p:commandButton>
+					</div>
+					<div class="col-md-2" style="margin-bottom: 3%;">
+						<p:commandButton value="#{titles.BTN_CT_VOLVER}" id="idBtRegresarAdicion" 
+	                        styleClass="btn btn-default"
+	                        style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+	                        process="@this"
+	                        action="#{contratacionesBean.regresarBusqueda()}"
+	                 		 update="frContrataciones:viewTabContrataciones">             
+						</p:commandButton>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+			<br />
+			<p:spacer height="2" />
+			<hr class="hr-style hr-style-two" style="margin-left: 24%; width: 75.5%; margin-top: 1em;" />
+			<span
+				style="font-size: 2em; font-weight: 500; color: #245379;">${titles['TTL_REGISTRO_CONTRATO_MODIFICACIONES']} </span> <br /> <br />
+			<div class="row row-background-white">
+				<br /><br />
+				<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important;">
+					<p:dataTable
+						id="dataTableModificacionAdicion"
+						
+						paginator="true"
+						rows="#{paginatorSize}"
+						rowsPerPageTemplate="#{paginatorsSize}"
+						reflow="true"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						
+						
+						var="dataTableModificacionAdicion"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+						value="#{contratacionesBean.lstModificacionesContrato}">
+						<p:column headerText="${titles['LBL_CT_TIPO_MODIFICACION']}" style="word-wrap: break-word!important;">
+							<h:selectOneMenu id="iDSOMTipoModListaAdicion" value="#{dataTableModificacionAdicion.codTipoModificacionContrato}" 
+								disabled="true" styleClass="form-label" 
+								style="font-size: 1em !important;padding: 0.5em 2.8em 0.5em 0.5em !important;opacity: 1!important;">
+								<f:selectItems value="#{webUtils.getLstTiposModificacionContratos()}" />
+							</h:selectOneMenu>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_FECHA_MODIFICACION']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.audFechaActualizacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_MONTO_INICIAL_CONTRATO']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nuevoMontoContrato - dataTableModificacionAdicion.valorAdicion}"/>
+						</p:column>		
+						<p:column headerText="${titles['LBL_CT_VALOR_ADICION_CONTRATO']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.valorAdicion}"/>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_NUEVO_MONTO_CONTRATO_2']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.nuevoMontoContrato}"/>
+						</p:column>	
+						<p:column headerText="${titles['LBL_CT_FECHA_AUT_ADICION']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.fechaAutorizacionModificacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${titles['LBL_CT_JUSTIFICACION']}"
+							style="word-wrap: break-word!important;">
+							<h:outputText value="#{dataTableModificacionAdicion.justificacionModificacion}"/>
+						</p:column>																		
+					</p:dataTable>
+				</div>
+			</div>
+			<br />
+			
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgAdContrato_01" id="dlgAdContrato_01" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;">
+					<h5>El valor de la adición no es menor o igual a la mitad del valor estipulado inicialmente para la ejecución de este contrato</h5>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						onclick="PF('dlgAdContrato_01').hide();">
+					</p:commandButton>
+				</div>
+				<br />
+			</p:dialog>	
+			
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgAdContrato_02" id="dlgAdContrato_02" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+					<center>
+						<h5>#{contratacionesBean.strMsgMensajesvalidacionesProrroga}</h5>
+					</center>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						onclick="PF('dlgAdContrato_02').hide();">
+					</p:commandButton>
+				</div>
+				<br />
+			</p:dialog>				
+			
+			<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgRegistroAdicionGuardar" id="dlgRegistroAdicionGuardar" minHeight="300" 
+				modal="true" resizable="false" closeOnEscape="false"
+				responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+				<br />
+				<div class="row" style="text-align: justify; padding: 0% 3%;" align="center">
+					<center>
+						<h5>#{contratacionesBean.strMsgAccionesContrato}</h5>
+					</center>
+				</div>
+				<br />
+				<div class="row" align="center">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						action="#{contratacionesBean.regresarBusqueda()}"
+	   		   			update="frContrataciones:viewTabContrataciones"
+	   		    		onclick="PF('dlgRegistroAdicionGuardar').hide();" />
+				</div>
+				<br />
+			</p:dialog>									
+	
+		</p:panel>
+	</p:panel>
+</ui:composition>

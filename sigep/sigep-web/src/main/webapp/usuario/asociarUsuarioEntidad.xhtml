@@ -1,0 +1,431 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{asociarUsuarioEntidadBean.id}' />
+		<f:viewParam name="recursoId"
+			value="#{asociarUsuarioEntidadBean.recursoId}" />
+		<f:viewParam name="dialog" value='#{asociarUsuarioEntidadBean.dialog}' />
+		<f:viewParam name="tipoId" value='#{asociarUsuarioEntidadBean.tipoId}' />
+		<f:viewParam name="numeroId"
+			value='#{asociarUsuarioEntidadBean.numeroId}' />
+
+
+		<f:event type="preRenderView"
+			listener='#{asociarUsuarioEntidadBean.retrieve}' />
+		<f:event type="preRenderView"
+			listener='#{asociarUsuarioEntidadBean.showDialog}' />
+	</f:metadata>
+
+	<ui:param name="pintarMiga" value="3" />
+	<ui:param name="pageTitle" value="${titles['TTL_ADMON_SISTEMA']}" />
+	<ui:param name="pageSubtitle1" value="${titles['TTL_USER']}" />
+	<ui:param name="pageSubtitle2" value="${titles['TTL_ASOCIAR_USUARIO_ENTIDAD']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel
+							value="• ${titles['TTL_ASOCIAR_USUARIO_ENTIDAD']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+		<div class="panel-body form-horizontal cuadrito col-md-8"
+			style="margin: auto !important; padding-right: 0px !important; padding-left: 0px !important; padding-top: 12px !important; padding-bottom: 25px !important;">
+			<div class="row" align="right">
+				<div class="col-md-12">
+					<label class="form-label-formularios">${titles['TTL_REQUIRED']}</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['TTL_TIPO_DOCUMENTO']}"
+							for="tipoDocumento" styleClass="log-label form-label-formularios" />
+						<h:panelGroup>
+							<h:selectOneMenu id="tipoDocumento"
+								rendered="#{not asociarUsuarioEntidadBean.habilitarFormulario}"
+								converter="tipoDocumentoConverter"
+								value="#{asociarUsuarioEntidadBean.persona.tipoIdentificacionId}"
+								var="t" filter="false" filterMatchMode="contains"
+								required="true"
+								title="${titles['TTL_SELECT']} ${titles['TTL_TIPO_DOCUMENTO']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<p:ajax process="@this" update="@form" />
+								<f:validator validatorId="tipoDocumentoValidator" />
+								<f:selectItem itemValue="#{null}" itemDisabled="true"
+									itemLabel="${titles['TTL_SELECT']}" />
+								<f:selectItems value="#{tiposDocumentoEntidad}" var="tipoDoc"
+									itemLabel="#{tipoDoc.descripcion}" itemValue="#{tipoDoc}" />
+							</h:selectOneMenu>
+							<br />
+							<h:outputText
+								value="#{asociarUsuarioEntidadBean.persona.tipoIdentificacionId.descripcion}"
+								styleClass="log-label form-label form-control"
+								style="color: #333;"
+								rendered="#{asociarUsuarioEntidadBean.habilitarFormulario}" />
+						</h:panelGroup>
+						<p:message for="tipoDocumento" display="text" />
+					</div>
+					<div class="col-md-6">
+						<p:outputLabel value="${titles['TTL_NICK_NAME']}" for="cedula"
+							styleClass="log-label form-label-formularios" />
+						<h:panelGroup>
+							<p:remoteCommand name="validarCedula"
+								action="#{asociarUsuarioEntidadBean.listener}"
+								process="contains" update="contains" />
+							<p:inputText id="cedula" maxlength="15"
+								rendered="#{not asociarUsuarioEntidadBean.habilitarFormulario}"
+								value="#{asociarUsuarioEntidadBean.persona.numeroIdentificacion}"
+								required="true"
+								title="${titles['TTL_INGRESAR']} ${titles['TTL_NICK_NAME']} ${titles['TTL_TIPO_NUMERICO']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								class="form-control-acti-usua" autocomplete="false"
+								onkeydown="if (event.keyCode === 13) { validarCedula(); return false; }">
+								<c:choose>
+									<c:when
+										test="${asociarUsuarioEntidadBean.persona.tipoIdentificacionId.descripcion == asociarUsuarioEntidadBean.TIPO_DOC_PASAPORTE}">
+										<f:validator validatorId="nickNameValidatorPassport" />
+									</c:when>
+									<c:otherwise>
+										<f:validator validatorId="nickNameValidator" />
+									</c:otherwise>
+								</c:choose>
+								<p:keyFilter regEx="/[A-Z0-9_]/i" />
+							</p:inputText>
+							<br />
+							<h:outputText
+								value="#{asociarUsuarioEntidadBean.persona.numeroIdentificacion}"
+								styleClass="log-label form-label form-control"
+								rendered="#{asociarUsuarioEntidadBean.habilitarFormulario}" />
+						</h:panelGroup>
+						<p:message for="cedula" display="text" />
+					</div>
+				</div>
+			</div>
+			<br />
+			<h:panelGroup
+				rendered="#{asociarUsuarioEntidadBean.habilitarFormulario}">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}"
+								for="primerNombre" styleClass="log-label form-label-formularios" />
+							<p:inputText id="primerNombre" maxlength="50"
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.primerNombre}"
+								required="true"
+								title="${titles['TTL_INGRESAR']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								class="form-control-acti-usua" autocomplete="false">
+								<f:attribute value="50" name="maxLength" />
+								<f:validator validatorId="textOnlyTildesValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.primerNombre}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="primerNombre" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}"
+								for="segundoNombre"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="segundoNombre" maxlength="50"
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								title="${titles['TTL_INGRESAR']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{asociarUsuarioEntidadBean.persona.segundoNombre}"
+								autocomplete="false" class="form-control-acti-usua">
+								<f:validator validatorId="maxByteLengthValidator" />
+								<f:attribute value="50" name="maxLength" />
+								<f:validator validatorId="textOnlyTildesValidator" />
+							</p:inputText>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{empty asociarUsuarioEntidadBean.persona.segundoNombre ? '&#160;' : asociarUsuarioEntidadBean.persona.segundoNombre}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="segundoNombre" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}"
+								for="primerApellido"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="primerApellido"
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.primerApellido}"
+								maxlength="50" required="true"
+								title="${titles['TTL_INGRESAR']} ${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								class="form-control-acti-usua" autocomplete="false">
+								<f:validator validatorId="maxByteLengthValidator" />
+								<f:attribute value="50" name="maxLength" />
+								<f:validator validatorId="textOnlyTildesValidator" />
+							</p:inputText>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.primerApellido}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="primerApellido" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}"
+								for="segundoApellido"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText id="segundoApellido"
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								maxlength="50"
+								title="${titles['TTL_INGRESAR']} ${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{asociarUsuarioEntidadBean.persona.segundoApellido}"
+								autocomplete="false" class="form-control-acti-usua">
+								<f:validator validatorId="maxByteLengthValidator" />
+								<f:validator validatorId="textOnlyTildesValidator" />
+								<f:attribute value="50" name="maxLength" />
+							</p:inputText>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{empty asociarUsuarioEntidadBean.persona.segundoApellido  ? '&#160;' : asociarUsuarioEntidadBean.persona.segundoApellido}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="segundoApellido" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_FECHA_NACIMIENTO']}"
+								for="fechaNacimiento"
+								styleClass="log-label form-label-formularios" />
+							<p:calendar navigator="true"
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								mask="true" yearRange="#{rangoAnios}" id="fechaNacimiento"
+								title="${titles['TTL_SELECT']} ${titles['LBL_FECHA_NACIMIENTO']} ${titles['TTL_TIPO_NUMERICO']}"
+								placeholder="DD/MM/AAAA" maxdate="#{fechaSistema}" mode="popup"
+								value="#{asociarUsuarioEntidadBean.persona.fechaNacimiento}"
+								pattern="#{fechaFormato}" required="true" effect="slideDown"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+								autocomplete="off">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="edadMinDateValidator" />
+							</p:calendar>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.fechaNacimiento}"
+								styleClass="log-label form-label form-control">
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="fechaNacimiento" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['TTL_TRANSVERSAL_TIPO_GENERO']}"
+								for="genero" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								id="genero" converter="generoConverter"
+								value="#{asociarUsuarioEntidadBean.persona.genero}" var="ta"
+								filter="true" filterMatchMode="contains" required="true"
+								title="${titles['TTL_SELECT']} ${titles['TTL_TRANSVERSAL_TIPO_GENERO']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" itemDisabled="true" />
+								<f:selectItems value="#{genero}" var="tipoGenero"
+									itemLabel="#{tipoGenero.descripcion}" itemValue="#{tipoGenero}" />
+							</h:selectOneMenu>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.genero.sigla}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="genero" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_MAIL']}"
+								for="email" styleClass="log-label form-label-formularios" />
+							<p:inputText
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								id="email" label="email" size="40" required="true"
+								maxlength="100" onkeypress="return sololetrasEmail(event);"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								title="${titles['TTL_INGRESAR']} ${titles['TTL_CORREO_PRINCIPAL']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{asociarUsuarioEntidadBean.persona.correoElectronico}"
+								class="form-control-acti-usua" autocomplete="false">
+								<f:validator validatorId="emailValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{asociarUsuarioEntidadBean.persona.correoElectronico}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="email" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['TTL_CORREO_ALTERNATIVO']}"
+								for="emailAlternativo"
+								styleClass="log-label form-label-formularios" />
+							<p:inputText
+								rendered="#{asociarUsuarioEntidadBean.disponibleEdicion}"
+								id="emailAlternativo" label="email" size="40"
+								onkeypress="return sololetrasEmail(event);"
+								title="${titles['TTL_INGRESAR']} ${titles['TTL_CORREO_ALTERNATIVO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{asociarUsuarioEntidadBean.persona.correoAlternativo}"
+								maxlength="100" class="form-control-acti-usua"
+								autocomplete="false">
+								<f:validator validatorId="emailValidator" />
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<h:outputText
+								rendered="#{not asociarUsuarioEntidadBean.disponibleEdicion}"
+								value="#{empty asociarUsuarioEntidadBean.persona.correoAlternativo ? '&#160;' : asociarUsuarioEntidadBean.persona.correoAlternativo}"
+								styleClass="log-label form-label form-control" />
+							<p:message for="emailAlternativo" display="text" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<p:outputLabel
+								value="${titles['TTL_TRANSVERSAL_TIPO_ASOCIACION']}"
+								for="tipoAsociacion"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="tipoAsociacion"
+								converter="tipoAsociacionConverter"
+								title="${titles['TTL_SELECT']} ${titles['TTL_TRANSVERSAL_TIPO_ASOCIACION']}"
+								value="#{asociarUsuarioEntidadBean.tipoAsociacion}" var="ta"
+								filter="true" filterMatchMode="contains" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" itemDisabled="true" />
+								<f:selectItems value="#{tipoAsociacionActivarUsuario}"
+									var="tipAsociacion" itemLabel="#{tipAsociacion.sigla}"
+									itemValue="#{tipAsociacion}" />
+							</h:selectOneMenu>
+							<p:message for="tipoAsociacion" display="text" />
+						</div>
+						<div class="col-md-6">
+							<p:outputLabel value="${titles['LBL_DE_ENTIDAD_USUARIO']}"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<h:outputText value="#{sesionBean.entidadUsuario.nombreEntidad}"
+								styleClass="log-label form-label form-control" />
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+			<hr style="border-top: 1.5px solid rgb(196, 196, 196); width: 92.5%;" />
+			<div class="row" align="center">
+				<h:panelGroup
+					rendered="#{asociarUsuarioEntidadBean.habilitarFormulario}">
+					<div class="col-md-3"></div>
+					<div class="col-md-3 media-btn-cancelar">
+						<p:commandButton value="${titles['TTL_ACTIVATE']}"
+							id="btnActivarUsuarioAsociar" process="contains"
+							update="contains"
+							actionListener="#{asociarUsuarioEntidadBean.guardarPersona()}"
+							styleClass="btn btn-primary"
+							style="padding-left:3em!important;padding-right:3em!important; font-size:1.6em!important;border-radius:4px!important;" />
+					</div>
+					<div class="col-md-3">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							resetValues="true" update="contains"
+							actionListener="#{asociarUsuarioEntidadBean.cancelarAtras()}"
+							styleClass="btn btn-default"
+							style="background:#D1D1D1!important;color:#2A89B5!important;padding-left:2.6em!important;padding-right:2.6em!important;font-size:1.6em!important;border-radius:4px!important;" />
+					</div>
+					<div class="col-md-3"></div>
+				</h:panelGroup>
+				<h:panelGroup
+					rendered="#{not asociarUsuarioEntidadBean.habilitarFormulario}">
+					<div class="col-md-3"></div>
+					<div class="col-md-3">
+						<p:commandButton value="${titles['TTL_SEARCH']}"
+							id="btnBuscarUsuarioAsociar" process="contains" update="contains"
+							actionListener="#{asociarUsuarioEntidadBean.listener}"
+							styleClass="btn btn-primary"
+							style="font-size: 1.6em!important; padding-left:4%!important; padding-right:4%!important; border-radius: 4px!important;" />
+					</div>
+					<div class="col-md-3 media-btn-cancelar ">
+						<p:commandButton value="${titles['TTL_CANCEL']}" process="@this"
+							resetValues="true" update="contains"
+							actionListener="#{asociarUsuarioEntidadBean.cancelar()}"
+							styleClass="btn btn-default"
+							style="background:#D1D1D1!important;color:#2A89B5!important;font-size: 1.6em!important; padding-left:4%!important; padding-right:4%!important; border-radius: 4px!important;" />
+					</div>
+					<div class="col-md-3"></div>
+				</h:panelGroup>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+		<script type="text/javascript">
+				function sololetras(e) {
+					var key =e.keyCode || e.which;
+					var teclado =String.fromCharCode(key).toLowerCase();
+					var letras ="ABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚabcdefghijklmnñopqrstuvwxyzáéíóúÑñ ";
+					var especiales ="8-37-38-46-164";
+					var teclado_especial=false;
+					for(var i in especiales){
+						if(key == especiales[i]){
+							teclado_especial=true;
+							break;
+						}
+					}
+					if(letras.indexOf(teclado) ==-1){
+						if(!teclado_especial){
+						  return false;
+						 }
+					}
+				}
+				function sololetrasEmail(e) {
+					var key =e.keyCode || e.which;
+					var teclado =String.fromCharCode(key).toLowerCase();
+					var letras ="@_-1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz. ";
+					var especiales ="8-37-38-46-164";
+					var teclado_especial=false;
+					for(var i in especiales){
+						if(key == especiales[i]){
+							teclado_especial=true;
+							break;
+						}
+					}
+					if(letras.indexOf(teclado) ==-1){
+						if(!teclado_especial){
+						  return false;
+						 }
+					}
+				}
+		</script>
+	</ui:define>
+</ui:composition>

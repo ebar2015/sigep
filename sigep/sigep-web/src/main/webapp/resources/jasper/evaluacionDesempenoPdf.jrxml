@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="descargarcertificadoempleadojrxml" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="64485ef0-050e-4fa3-9526-fd2effa2cc2a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="urlLogo" class="java.lang.String"/>
+	<field name="urlBackground" class="java.lang.String"/>
+	<field name="urlFooter" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="contenido" class="java.lang.String"/>
+	<field name="evaluacionDesempeno.nombreEntidad" class="java.lang.String"/>
+	<field name="evaluacionDesempeno.resultadoEvaluacion" class="java.lang.Integer"/>
+	<field name="evaluacionDesempeno.cargoEntidadPrivada" class="java.lang.String"/>
+	<field name="evaluacionDesempeno.valorMinimoEscala" class="java.lang.String"/>
+	<field name="evaluacionDesempeno.fechaInicioEvaluacion" class="java.util.Date"/>
+	<field name="evaluacionDesempeno.valorMaximoEscala" class="java.lang.String"/>
+	<field name="evaluacionDesempeno.fechaFinEvaluacion" class="java.util.Date"/>
+	<field name="evaluacionDesempeno.nombreNivelCumplimiento" class="java.lang.String"/>
+	<field name="evaluacionDesempeno.nombreTipEevaluacion" class="java.lang.String"/>
+	<variable name="evaluacionDesempeno.nombreEntidad1" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{evaluacionDesempeno.nombreEntidad}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="573" splitType="Stretch">
+			<image>
+				<reportElement x="20" y="38" width="180" height="80" uuid="da869ab3-7c90-4d09-bfca-40bdeca85e72"/>
+				<imageExpression><![CDATA[$F{urlLogo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="20" y="187" width="510" height="60" uuid="3bcb91dc-a823-4b24-8a44-94fa0fe6ff24"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contenido}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="20" y="270" width="255" height="31" uuid="ee6bd6f7-28e4-498f-b70e-b3fac284f279"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="20" y="270" width="60" height="30" uuid="cb0185e4-2a5c-43e7-96f9-0273f1bfc104"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Entidad:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="270" width="195" height="30" uuid="8a2cdbe4-5030-42de-870a-54762fe66af2"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.nombreEntidad}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="275" y="270" width="255" height="31" uuid="ed9640be-4479-4901-9b83-1be64a792f97"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="275" y="270" width="60" height="30" uuid="90980ddd-817e-4405-bc69-0bd30ad06b4d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Nota:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="20" y="301" width="255" height="31" uuid="2c06d593-c9a4-407e-9a1a-55cee9006eff"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="20" y="301" width="60" height="30" uuid="e897b25c-b923-4941-8a6a-55f9f4634d1d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Cargo:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="275" y="301" width="255" height="31" uuid="c8421028-b2ca-4cf7-988c-58daf4566f0a"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="275" y="301" width="85" height="30" uuid="41317123-77da-498f-8fe3-51c514b3db79"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Mínimo Escala:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="275" y="332" width="255" height="31" uuid="be744b48-33dc-4d60-bf2e-047c1d03a601"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="275" y="332" width="85" height="30" uuid="83ce2336-b70d-46c1-acc7-d1100cf250ba"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Máximo Escala:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="20" y="332" width="255" height="31" uuid="30a1070d-6640-4dd0-8aff-dd08e215f31f"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="19" y="332" width="160" height="30" uuid="6fc2d830-a664-480a-9651-6c6b0be9927a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Fecha Inicio Periodo Evaluado:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="275" y="363" width="255" height="31" uuid="2f3d53f0-f2f2-4c4f-9038-a8fb4306cecd"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="275" y="363" width="160" height="30" uuid="f4c9480f-8c72-4a9c-881f-a0cf4a4784a8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Nivel de Cumplimiento Logrado:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="20" y="363" width="255" height="31" uuid="a4195ff5-132b-4417-a221-7833c1638ddf"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="19" y="363" width="150" height="30" uuid="fcc3ce44-3a6b-4ebb-9603-c091a7f86eb0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Fecha Fin Periodo Evaluado: ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="20" y="394" width="255" height="31" uuid="47fe550a-6899-43db-b098-338403fd8f75"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="19" y="394" width="105" height="30" uuid="354f763d-6fff-4baa-a5f6-46a88b58c16f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Tipo de Evaluación:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="335" y="270" width="195" height="30" uuid="4c5096e9-e552-49ac-baf8-7bf52b2ea35e"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.resultadoEvaluacion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="301" width="195" height="30" uuid="2e94bb18-a053-4ed4-89b2-4a704ede2c6a"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.cargoEntidadPrivada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="360" y="301" width="170" height="30" uuid="3f417344-0ccc-47c9-b408-7d0cd6e6b061"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.valorMinimoEscala}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="179" y="331" width="96" height="30" uuid="60aa5498-5cb8-4e85-95e3-43448013092d"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{evaluacionDesempeno.fechaInicioEvaluacion})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="360" y="331" width="170" height="30" uuid="1b995f4b-764f-4291-a553-e1cc60c23075"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.valorMaximoEscala}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="169" y="363" width="106" height="30" uuid="218b778b-1110-448c-bc62-fbc420fbb043"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{evaluacionDesempeno.fechaFinEvaluacion})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="435" y="363" width="95" height="30" uuid="03962198-fd34-4e14-a5e3-2b2f273eafbc"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.nombreNivelCumplimiento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="124" y="394" width="151" height="30" uuid="108793a8-74a4-4db7-aaa9-64156acae4fc"/>
+				<textFieldExpression><![CDATA[$F{evaluacionDesempeno.nombreTipEevaluacion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="20" y="122" width="359" height="34" forecolor="#FFFFFF" backcolor="#E79B39" uuid="7d9880e8-5df2-4911-abbe-56cd79ea6fbd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageFooter>
+		<band height="74">
+			<image>
+				<reportElement x="231" y="0" width="299" height="74" uuid="0385a05b-f1b7-47bb-a2d2-68fa8ea8b09c"/>
+				<imageExpression><![CDATA[$F{urlFooter}]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+</jasperReport>

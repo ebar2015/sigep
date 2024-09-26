@@ -1,0 +1,193 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{gestionarRolBean.id}" />
+		<f:viewParam name="recursoId" value="#{gestionarRolBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{gestionarRolBean.dialog}" />
+		<f:event listener="#{gestionarRolBean.retrieve}" type="preRenderView" />
+		<f:event listener="#{gestionarRolBean.showDialog}" type="preRenderView" />
+		<f:event listener="#{gestionarRolBean.cargarRolesBase}" type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_ADMIN_SISTEMA_BREADCRUMB']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_ROLES_TITLE']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_ROLES_JERARQUIA']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<div class="row row-background-white">
+			<br />
+
+			<div id="asignacionJerarquia" class="row">
+				<div class="row">
+					<div class="col-md-12" style="text-align: center;">
+						<p:outputLabel
+							value="${titles['LBL_ROLES_MSG_ASIGNAR_JERARQUIA']}"
+							styleClass="advisor" />
+					</div>
+				</div>
+
+				<hr class="hr-style" />
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-1"></div>
+						<div class="col-md-5">
+							<p:outputLabel value="${titles['TTL_ROLES_COL1']}:" for="rol"
+								styleClass="log-label form-label-formularios" />
+							<br />
+							<p:inputText id="rol" autocomplete="false" required="true"
+								value="#{gestionarRolBean.rol.nombre.concat(' - ').concat(gestionarRolBean.rol.descripcionRol)}"
+								class="form-control-acti-usua" disabled="true">
+							</p:inputText>
+							<p:message for="rol" display="text" />
+						</div>
+						<div class="col-md-5">
+							<p:outputLabel value="${titles['TTL_ROLES_JERARQUIA_A']}:"
+								for="rolPadre" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="rolPadre"
+								value="#{gestionarRolBean.rol.codRolPadre}" required="true"
+								title="${titles['TTL_SELECT']} ${titles['TTL_ROLES_JERARQUIA_A']}"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemValue="#{null}"
+									itemLabel="${titles['TTL_SELECT']}" />
+								<f:selectItems value="#{gestionarRolBean.lstRolBase}" />
+							</h:selectOneMenu>
+							<p:message for="rolPadre" display="text" />
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+				</div>
+			</div>
+
+			<br /> <br />
+
+			<div class="row" align="center">
+				<div class="col-md-4"></div>
+				<div class="col-md-2" style="margin-bottom: 4%;">
+					<p:commandButton value="#{titles.TTL_ADD}" type="submit"
+						process="contains" update="contains"
+						actionListener="#{gestionarRolBean.asignarJerarquiaRol()}"
+						styleClass="btn btn-primary"
+						style="padding-left:16.5%!important;padding-right:16.5%!important; font-size:1.5em!important;">
+					</p:commandButton>
+				</div>
+				<div class="col-md-2" style="margin-bottom: 4%;">
+					<p:commandButton value="${titles['TTL_CANCEL']}" resetValues="true"
+						process="@this" update="contains"
+						actionListener="#{gestionarRolBean.cancelar()}"
+						styleClass="btn btn-default"
+						style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;" />
+
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+		</div>
+		<br />
+		<br />
+
+		<p:outputPanel id="detalleJerarquiaRoles">
+			<p:panel id="paneldetalleJerarquiaRoles"
+				widgetVar="paneldetalleJerarquiaRoles"
+				style="background: transparent;"
+				rendered="#{gestionarRolBean.habilitarDetalleJerarquia}">
+				<div class="row row-background-white">
+					<br /> <br />
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+						<p:dataTable id="tabladetalleJerarquiaRoles" paginator="true"
+							reflow="true"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							rowIndexVar="rowIndex" rows="#{paginatorSize}" rowsPerPageTemplate="#{paginatorsSize}"
+							var="paramDetalle"
+							value="#{gestionarRolBean.jerarquiaRolesDetalle}"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+							<p:column headerText="#{titles.TTL_ROLES_JERARQUIA_A}" sortBy="#{paramDetalle.nombre}"
+								style="width:26em">
+								<h:outputText value="#{paramDetalle.nombre}" />
+							</p:column>
+							<p:column headerText="#{titles.TTL_ROLES_COL3}" sortBy="#{paramDetalle.descripcionRol}"
+								style="width:36em">
+								<h:outputText value="#{paramDetalle.descripcionRol}" />
+							</p:column>
+							<p:column headerText="${titles['LBL_ACCIONES']}"
+								style="opacity: 1!important; width:12em; text-align:center">
+								<p:commandButton title="${titles['BTN_TABLA_ELIMINAR']}" icon="icon-delete"
+									process="@this" styleClass="icon-btn"
+									onclick="$('#eliminarRolJerarquia').modal('show')">
+									<f:setPropertyActionListener value="#{paramDetalle}"
+										target="#{gestionarRolBean.detalleRolJerarquiaParam}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<br />
+
+		<!-- MODAL PARA CONFIRMAR LA ELIMINACION DE LOS HIJOS DE LAS JERARQUIAS PADRES -->
+		<div id="eliminarRolJerarquia" class="modal fade" role="dialog">
+			<div class="modal-dialog" style="top: 25%; width: 34.5%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<p:panel id="panelConfirmacionDetalleJerarquia"
+							style="background: transparent;">
+							<div class="col-md-12" align="center"
+								style="margin-top: 2%; margin-bottom: 2%;">
+								<p:outputLabel
+									value="${messages['MSG_JERARQUIA_ROL_ELIMINADO']}"
+									style="font-size:1.5em!important; color:#245379; font-weight: normal;"
+									escape="false" />
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row" align="center">
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<p:commandButton id="btnEliminarDetalleJerarquia"
+										value="${titles['TTL_OK']}" styleClass="btn btn-primary"
+										style="padding-left:18%!important;padding-right:18%!important;font-size:1.4em!important; margin-bottom:1.5%;"
+										process="@this" update="frmPrincipal:contains"
+										actionListener="#{gestionarRolBean.eliminardetalleRolJerarquiaParametrica(gestionarRolBean.detalleRolJerarquiaParam)}"
+										onclick="$('#eliminarRolJerarquia').modal('hide')" />
+									<p:message for="btnEliminarDetalleJerarquia" display="text" />
+								</div>
+								<div class="col-md-3">
+									<p:commandButton value="${titles['TTL_CANCEL']}"
+										process="@this"
+										update="frmPrincipal:rolPadre frmPrincipal:detalleJerarquiaRoles"
+										styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important; font-size:1.4em!important; margin-bottom:1.5%;"
+										onclick="$('#eliminarRolJerarquia').modal('hide')" />
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- FIN MODAL PARA CONFIRMAR LA ELIMINACION DE LOS HIJOS DE LAS JERARQUIAS PADRES -->
+
+	</ui:define>
+</ui:composition>

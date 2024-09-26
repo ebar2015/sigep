@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/template/basicTemplate.xhtml"
+                >
+
+    <ui:param name="pageTitle" value="${titles['TTL_ENTIDADES']}" />
+    <ui:param name="pageSubtitle" value="${titles['TTL_CREAR_ENTIDAD']}" />
+
+
+    <ui:define name="content">
+
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <h2>
+                    <p:outputLabel value="• ${titles['TTL_CREAR_PLANTA']} •"
+                                   styleClass="page-subtitle" />
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="row row-background-white" id="child-tab-data-basic">
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_CLASE_PLANTA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_CLASE']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_CLASIFICACION_PLANTA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_CLASIFICACION']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+
+            <br /> <br />
+            <hr class="hr-style hr-style-two" />
+            <span
+                style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+                ${titles['TTL_CREACION_PLANTA']} 
+            </span>
+            <br /> <br />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_TIPO_NORMA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_NORMA']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_FECHA_NORMA']}:" />
+                        <p:outputPanel
+                            >
+
+                            <p:calendar  
+                                placeholder="${titles['TTL_SELECT_FECHA']}">
+                            </p:calendar>
+                            <h:outputText>
+                                <f:convertDateTime pattern="#{fechaFormato}" />
+                            </h:outputText>
+                        </p:outputPanel>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['TTL_NUMERO_NORMA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_NUMERO']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br /> 
+                    <div class="col-md-12">
+                        <p:outputLabel 
+                            value="${titles['LBL_CT_JUSTIFICACION']}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:inputText  
+                            class="form-control-acti-usua"
+                            style="width:100%!important; height: 68px!important;"
+                            maxlength="12" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_FECHA_INICIO']}:" />
+                        <p:outputPanel>
+                            <p:calendar 
+                                placeholder="${titles['TTL_SELECT_FECHA']}">
+                            </p:calendar>
+                            <h:outputText>
+                                <f:convertDateTime pattern="#{fechaFormato}" />
+                            </h:outputText>
+                        </p:outputPanel>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_FECHA_FIN']}:" />
+                        <p:outputPanel>
+                            <p:calendar 
+                                placeholder="${titles['TTL_SELECT_FECHA']}"
+                                icon="fa fa-calendar">
+                            </p:calendar>
+                            <h:outputText>
+                                <f:convertDateTime pattern="#{fechaFormato}" />
+                            </h:outputText>
+                        </p:outputPanel>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_NOMBRE_NOMENCLATURA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_NOMBRE']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+
+                    <div class="col-md-4">
+                        <p:outputLabel 
+                            value="${titles['LBL_OTRA_NOMENCLATURA']}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:inputText 
+                            class="form-control-acti-usua"
+                            style="width:90%!important;"
+                            maxlength="12" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_NIVEL']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_NIVEL']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_DENOMINACION']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_DENOMINACION']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_TRANSVERSAL_RECURSO_CODIGO']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_CODIGO']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_GRADO']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_GRADO']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_TIPO_PLANTA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_TIPO_PLANTA']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_DEPENDENCIA']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_DEPENDENCIA']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p:outputLabel 
+                            value="${titles['LBL_CARGO']}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:inputText 
+                            class="form-control-acti-usua"
+                            style="width:90%!important;"
+                            maxlength="12" />
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel 
+                            value="${titles['LBL_CARGOS_APRO_PRESUPUESTAL']}:"
+                            styleClass="log-label form-label-formularios" />
+                        <p:inputText 
+                            class="form-control-acti-usua"
+                            style="width:90%!important;"
+                            maxlength="12" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+
+                    <div class="col-md-4">
+                        <h:outputText
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_REPRESENTANTE_LEGAL']}:"
+                            style="color: #00537B" />
+                        <p:spacer width="5" />
+                        <p:selectBooleanCheckbox
+                            value="#">
+                        </p:selectBooleanCheckbox>
+                    </div>
+
+                    <div class="col-md-4">
+                        <h:outputText
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['TTL_DATOS_GERENCIA_PUBLICA']}:"
+                            style="color: #00537B" />
+                        <p:spacer width="5" />
+                        <p:selectBooleanCheckbox
+                            value="#">
+                        </p:selectBooleanCheckbox>
+                    </div>
+                    <div class="col-md-4">
+                        <p:outputLabel
+                            styleClass="log-label form-label-formularios"
+                            value="${titles['LBL_NATURALEZA_EMPLEO']}:" />
+                        <h:selectOneMenu 
+                            styleClass="form-control-form-act-usua"
+                            style="width:100%!important;">
+                            <f:selectItem 
+                                itemLabel="${titles['TTL_SELECT_NATURALEZA']}" />
+                            <f:selectItems 
+                                />
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>	
+
+
+
+    </ui:define>
+</ui:composition>

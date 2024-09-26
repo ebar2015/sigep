@@ -1,0 +1,612 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/basicTemplate.xhtml">
+	<f:metadata>
+	</f:metadata>
+	<ui:param name="pageTitle" value="${titles['TTL_INFORMACION_PERSONAL']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_VERHISTORICOBIENESYRENTAS']}" />
+	<ui:define name="content">
+	<script type="text/javascript">
+            function volverConsulta() {
+            	console.log("volverConsulta()");
+               	location.href="consultarBienesRentas.xhtml";
+            }
+            
+            function soloLetras( e ) {
+            	key=e.keyCode || e.which;
+            	teclado=String.fromCharCode(key).toLowerCase();
+            	letras="qwertyuiopasdfghjklñzxcvbnmñÑáéíóúÁÉÍÓÚ ";
+            	especiales="8-37-38-46-164";
+            	teclado_especial=false;
+            	//<![CDATA[
+	            	if (event.ctrlKey==true && (event.which == '118' || event.which == '86'))
+	            		return false;
+        		//]]>
+            	for(var i in especiales){
+            		if(key==especiales[i]){
+            			teclado_especial=true;
+            			break;
+            		}
+            	}
+            	if(letras.indexOf(teclado)== -1){
+            		if(!teclado_especial)
+            		     return false;
+            	}
+            }
+            
+
+            function soloLetrasNumeros(e) {
+            	key=e.keyCode || e.which;
+            	teclado=String.fromCharCode(key).toLowerCase();
+            	numeros="1234567890";
+            	letrasNumeros="1234567890qwertyuiopasdfghjklñzxcvbnmñÑáéíóúÁÉÍÓÚ ";
+            	var letras = numeros;
+            	especiales="8-37-38-46-164";
+            	teclado_especial=false;
+            	solo_numeros=true;
+            	//<![CDATA[
+	            	if (event.ctrlKey==true && (event.which == '118' || event.which == '86'))
+	            		return false;
+    			//]]>
+            	for(var i in especiales){
+            		if(key==especiales[i]){
+            			teclado_especial=true;
+            			break;
+            		}
+            	}
+            	if(document.getElementById('formCons:cmbTipDoc').value == 42){
+            		letras = letrasNumeros;
+            		solo_numeros = false;
+            	}else{
+            		letras = numeros;
+            		solo_numeros = true;
+            	}
+            	if(letras.indexOf(teclado)== -1){
+            		if(!teclado_especial){
+            			if(!solo_numeros){
+            		    	return false;
+            		    }else{
+            		    	if( key == '96' || key == '97' || key == '98' || key == '99' || key == '100' || key == '101' || key == '102' 
+            		    			        || key == '103' || key == '104' || key == '105'){
+            		    		
+            		    	}else{
+            		    		return false;
+            		    	}
+            		    }
+            		}
+            	}
+            }
+            
+        </script>
+		<h:form id="formCons">
+			<div class="row">
+				<div
+					class="col-md-12"
+					align="center">
+					<h2>
+						<p:outputLabel
+							value="• #{titles.TTL_BR_CONSULTAR_DECLARACION} •"
+							styleClass="page-subtitle" />
+					</h2>
+				</div>
+			</div>
+			<div
+				class="row row-background-white"
+				style="margin-left: 0px !important;">
+				<br />
+				<br />
+				<div class="row">
+					<div
+						class="col-md-12"
+						align="center">
+						<p:outputLabel
+							value="#{titles.TTL_BYN_ADVISOR}"
+							styleClass="advisor" />
+					</div>
+				</div>
+				<hr class="hr-style" />
+				<div id="formConsulta">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								styleClass="log-label form-label-formularios"
+								value="#{titles.TTL_BR_FILTRAR_ACTIVOS}" />
+							<br />
+							<p:selectBooleanCheckbox
+								id="activos"
+								value="#{consultaBienesRentasBean.activos}">
+								<p:ajax />
+							</p:selectBooleanCheckbox>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="${titles['TTL_TIPO_DOCUMENTO']}:"
+								for="cmbTipDoc"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu
+								id="cmbTipDoc"
+								styleClass="form-control-form-act-usua"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_TIPO_DOCUMENTO']}"
+								value="#{consultaBienesRentasBean.consultar.codTipoDocumento}">
+								<f:selectItem
+									itemLabel="#{titles.TTL_SELECT}"
+									itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.tiposDeIdentificacion}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.TTL_NICK_NAME}:"
+								for="txtNumDoc"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText
+								id="txtNumDoc"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_NICK_NAME']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{consultaBienesRentasBean.consultar.numeroIdentificacion}"
+								styleClass="form-control-acti-usua form-control" onkeydown="return soloLetrasNumeros(event)" onpaste="alert('No permitido');" oncopy="return false" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.TTL_NOMBRES}:"
+								for="txtNoms"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText
+								id="txtNoms"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_NOMBRES']} ${titles['TTL_TIPO_TEXTO']}"
+								value="#{consultaBienesRentasBean.consultar.nombres}"								
+								styleClass="form-control-acti-usua form-control" onkeydown="return soloLetras(event);" onpaste="alert(hola');" oncopy="return false" >
+								<f:validator validatorId="textOnlyTildesValidator" />
+							</h:inputText>
+							<p:message for="txtNoms" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.TTL_APELLIDOS}:"
+								for="txtApes"
+								styleClass="log-label form-label-formularios" />
+							<h:inputText
+								id="txtApes"
+								title="${titles['TTL_INGRESE']} ${titles['TTL_APELLIDOS']} ${titles['TTL_TIPO_TEXTO']}"
+								value="#{consultaBienesRentasBean.consultar.apellidos}"
+								styleClass="form-control-acti-usua form-control" onkeydown="return soloLetras(event);"  >
+								<f:validator validatorId="textOnlyTildesValidator" />
+							</h:inputText>
+							<p:message for="txtApes" display="text" />
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.LBL_ENTIDAD_USUARIO}:"
+								for="txtNomEnt" rendered="#{consultaBienesRentasBean.habilitadoTxtEntidad}"
+								styleClass="log-label form-label-formularios" />
+							<p:autoComplete
+								id="txtNomEnt"
+								title="${titles['TTL_INGRESE']} ${titles['LBL_ENTIDAD_USUARIO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+								value="#{consultaBienesRentasBean.consultar.entidadReceptora}" 
+								rendered="#{consultaBienesRentasBean.habilitadoTxtEntidad}"
+								minQueryLength="2"  onkeydown="return soloLetras(event)" 
+								scrollable="true" scrollHeight="100"
+								completeMethod="#{consultaBienesRentasBean.completeText}" effect="fade"
+								 />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.TTL_BR_TIPO_DECLARACION}:"
+								for="tipDec"
+								styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu
+								id="tipDec"
+								title="${titles['TTL_SELECT']} ${titles['TTL_BR_TIPO_DECLARACION']}"
+								value="#{consultaBienesRentasBean.consultar.codTipoDeclaracion}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem
+									itemLabel="${titles['TTL_SELECT']}"
+									itemValue="" />
+								<f:selectItems value="#{webUtils.getTiposDeclaracion()}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.TTL_BR_PERIODO_DECLARADO}:"
+								for="txtFechaIni"
+								styleClass="log-label form-label-formularios col-sm-12"
+								style="padding:0;" />
+							<div
+								class="col-sm-5"
+								style="padding: 0">
+								<p:calendar navigator="true" locale="es"
+									id="txtFechaIni" pattern="yyyy" yearRange="c-100:c+100"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_BR_PERIODO_DECLARADO']}"
+									value="#{consultaBienesRentasBean.consultar.periodoInicial}"
+									placeholder="yyyy"
+									style="font-size:1em!important"
+									disabled="false"
+									mask="true" yearNavigator="true"
+									>
+								</p:calendar>
+							</div>
+							<p:outputLabel
+								value="${titles['TTL_BIENES_RENTAS_AL']}"
+								styleClass="log-label form-label-formularios col-sm-2"
+								style="padding: 0; text-align: center; line-height: 2.5;" />
+							<div
+								class="col-sm-5"
+								style="padding: 0">
+								<p:calendar navigator="true" locale="es"
+									id="txtFechaFin" pattern="yyyy" yearRange="c-100:c+100"
+									style="font-size:1em!important"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_BR_PERIODO_DECLARADO']}"
+									value="#{consultaBienesRentasBean.consultar.periodoFinal}"
+									placeholder="yyyy"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									disabled="false"
+									mask="true"
+									yearNavigator="true">
+									<f:validator validatorId="dateRangeValidator" />
+								</p:calendar>
+								<p:message for="txtFechaFin" display="text" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<p:outputLabel
+								value="#{titles.TTL_BR_FECHA_REALIZACION_DECLARACION}:"
+								for="txtFechaIniD"
+								styleClass="log-label form-label-formularios col-sm-12"
+								style="padding: 0" />
+							<div
+								class="col-sm-5"
+								style="padding: 0">
+								<p:calendar navigator="true" locale="es"
+									id="txtFechaIniD" pattern="dd/MM/yyyy" yearRange="c-100:c+100"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_BR_FECHA_REALIZACION_DECLARACION']}"
+									value="#{consultaBienesRentasBean.consultar.fechaIniD}"
+									style="font-size:1em!important"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									disabled="false"
+									mask="true"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+									>
+									<p:ajax event="dateSelect" update="txtFechaFinD" />
+									<p:ajax event="change" update="txtFechaFinD" />
+								</p:calendar>
+								<p:message for="txtFechaIniD" display="text" />
+							</div>
+							<p:outputLabel
+								value="${titles['TTL_BIENES_RENTA_HASTA']}"
+								styleClass="log-label form-label-formularios col-sm-2"
+								style="padding: 0; text-align:center; line-height: 2.5;" />
+							<div
+								class="col-sm-5"
+								style="padding: 0">
+								<p:calendar navigator="true" locale="es" 
+									id="txtFechaFinD" pattern="dd/MM/yyyy" yearRange="c-100:c+100"
+									title="${titles['TTL_INGRESE']} ${titles['TTL_BR_FECHA_REALIZACION_DECLARACION']}"
+									value="#{consultaBienesRentasBean.consultar.fechaFniD}"
+									placeholder="${titles['LBL_FORMATO_FECHA']}"
+									disabled="false"
+									style="font-size:1em!important"
+									mindate="#{consultaBienesRentasBean.consultar.fechaIniD}"
+									mask="true"
+									converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+									<f:attribute name="startDate" value="#{consultaBienesRentasBean.consultar.fechaIniD}" />
+									<f:attribute name="startDateName" value="${titles['TTL_BR_FECHA_REALIZACION_DECLARACION']} Inicial" />
+									<f:attribute name="endDateName" value="${titles['TTL_BR_FECHA_REALIZACION_DECLARACION']} Final" />
+									<f:validator validatorId="dateRangeValidator" />	
+								</p:calendar>
+								<p:message for="txtFechaFinD" display="text" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								styleClass="log-label form-label-formularios"
+								value="#{titles.TTL_BR_EXTEMPORANEAS}" />
+							<br />
+							<p:selectBooleanCheckbox value="#{consultaBienesRentasBean.extemporanea}">
+								<p:ajax />
+							</p:selectBooleanCheckbox>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-md-4">
+							<p:outputLabel
+								styleClass="log-label form-label-formularios"
+								value="#{titles.TTL_BR_MODIFICADA}" />
+							<br />
+							<p:selectBooleanCheckbox value="#{consultaBienesRentasBean.modificada}">
+								<p:ajax />
+							</p:selectBooleanCheckbox>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div
+					class="row"
+					align="center">
+					<div class="col-md-4"></div>
+					<div
+						class="col-md-2"
+						style="margin-bottom: 3%;">
+						<p:commandButton disabled="#{consultaBienesRentasBean.btnBuscarBRServidorPublicoDeshabilitado}"
+							title="#{consultaBienesRentasBean.btnBuscarBRServidorPublicoMensaje}"
+							value="#{titles.TTL_SEARCH}"
+							styleClass="btn btn-primary"
+							id="btnBuscarBRServidorPublico"
+							style="font-size: 1.5em!important; padding-left:20%!important; padding-right:20%!important; opacity:1!important;"
+							action="#{consultaBienesRentasBean.getDeclaracionseConsulta()}"
+							oncomplete="window.location.href='#formCons:panelConsulta';"
+							update="formCons:panelConsulta" >
+						</p:commandButton>
+					</div>
+					<div
+						class="col-md-2"
+						style="margin-bottom: 3%;">
+						<p:commandButton
+							value="#{titles.BTN_VOLVER}"
+							styleClass="btn btn-default"
+							style="font-size: 1.5em!important; padding-left:21.5%!important; padding-right:21.5%!important; opacity:1!important;"
+							action="#{consultaBienesRentasBean.cancelar()}" />
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+			</div>
+			
+			<br />
+			<p:spacer height="2" />
+			<hr
+				class="hr-style hr-style-two"
+				style="margin-left: 29%; width: 70.5%; margin-top: 1em;" />
+			
+			<div class="col-md-12">
+				<p:panel visible="#{consultaBienesRentasBean.visibilidadConsulta}" id="panelConsulta">
+				<span style="font-size: 2em; font-weight: 500; color: #245379;"> #{titles.TTL_BR_RESULTADO_BUSQUEDA_BIENES}</span>
+			<br />
+			<br />
+			<p:scrollPanel mode="native" id="panelScroll">
+					<p:dataTable visible="#{consultaBienesRentasBean.visibilidadConsulta}" style="width: 1500px"
+						id="declaraciones"
+						var="dec"
+						lazy="true"
+						paginator="true"
+						rows="#{paginatorSize}"
+						rowsPerPageTemplate="#{paginatorsSize}"
+						reflow="true"
+						currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						value="#{consultaBienesRentasBean.listDecM}"
+						emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}">
+						<p:column
+							headerText="#{titles.TTL_BR_TIPO_DECLARACION}"
+							style="word-wrap: break-word!important;" 
+							sortBy="#{dec.nombreTipoDeclaracion}" sortable="true">
+							<h:outputText value="#{dec.nombreTipoDeclaracion}" />
+						</p:column>
+						<p:column
+							headerText="#{titles.TTL_BR_PERIODO_DECLARADO}"
+							style="word-wrap: break-word!important; text-align: center!important;"
+							sortBy="#{dec.fechaInicio}" sortable="true">
+							<h:outputText value="#{dec.fechaInicio}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText> - 
+				       		<h:outputText value="#{dec.fechaFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{titles.TTL_BR_FECHA_REALIZACION_DECLARACION}"
+							style="word-wrap: break-word!important; text-align: center!important;"
+							sortBy="#{dec.fechaPresentacion}" sortable="true">
+							<h:outputText value="#{dec.fechaPresentacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{titles.TTL_BR_EXTEMPORANEAS_TITULO_TABLA}"
+							style="word-wrap: break-word!important; text-align: center!important;"
+							sortBy="#{dec.extmp}" sortable="true">
+							<h:outputText value="#{dec.extmp}" />
+						</p:column>
+						<p:column
+							headerText="#{titles.TTL_BR_MODIFICADA}"
+							style="word-wrap: break-word!important; text-align: center!important;"
+							sortBy="#{dec.modifi}" sortable="true">
+							<h:outputText value="#{dec.modifi}" />
+						</p:column>
+						<p:column
+							headerText="${titles['TTL_TIPO_DOCUMENTO']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dec.nombreTipoDocumento}" sortable="true">
+							<h:outputText value="#{dec.nombreTipoDocumento}" />
+						</p:column>
+						<p:column
+							headerText="${titles['TTL_NICK_NAME']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dec.numeroIdentificacion}" sortable="true">
+							<h:outputText value="#{dec.numeroIdentificacion}" />
+						</p:column>
+						<p:column
+							headerText="${titles['TTL_BIENES_RENTAS_NOMBRE_COMPLETO']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dec.nombreCompleto}" sortable="true">
+							<h:outputText value="#{dec.nombreCompleto}" />
+						</p:column>
+						<p:column
+							headerText="${titles['TTL_BIENES_RENTAS_RECEIVER_ENTITY_NAME']}"
+							style="word-wrap: break-word!important;"
+							sortBy="#{dec.entidadReceptora}" sortable="true">
+							<h:outputText value="#{dec.entidadReceptora}" />
+						</p:column>
+						<p:column
+							headerText="${titles['LBL_ACCIONES']}"
+							style="word-wrap: break-word!important; text-align:center!important;">
+							<p:commandButton disabled="#{consultaBienesRentasBean.btnVerDetalleBRDeshabilitado}"
+								title="#{consultaBienesRentasBean.btnVerDetalleBRMensaje}"
+								ajax="true"
+								action="#{consultaBienesRentasBean.prepararPDF(dec, 0)}"
+								update="panelDiaVisualizarExt lblTituloVentana"
+								oncomplete="$('#dlgConfirmExtCon').modal('show');"
+								icon="icon-view"
+								styleClass="icon-btn">
+								<f:setPropertyActionListener
+									value="#{dec}"
+									target="#{consultaBienesRentasBean.declaracionSeleccionada}" />
+							</p:commandButton>
+							<p:commandButton disabled="#{consultaBienesRentasBean.btnExportarDetalleBRDeshabilitado}"
+								title="#{consultaBienesRentasBean.btnExportarDetalleBRMensaje}"
+								ajax="false"
+								action ="#{consultaBienesRentasBean.exportarDeclaracion(dec, 0)}"
+								process="@this"
+								icon="icon-export-pdf"
+								styleClass="icon-btn">
+								<f:setPropertyActionListener
+									value="#{dec}"
+									target="#{consultaBienesRentasBean.declaracionSeleccionada}" />
+							</p:commandButton>
+							<p:commandButton disabled="#{consultaBienesRentasBean.btnImprimirDetalleBRDeshabilitado}"
+								title="#{consultaBienesRentasBean.btnImprimirDetalleBRMensaje}"
+								ajax="false"
+								onclick="this.form.target='_blank'"
+								action="#{consultaBienesRentasBean.visualizarEimprimir(dec, 0)}"
+								process="@this"
+								icon="icon-print"
+								styleClass="icon-btn" >
+								<f:setPropertyActionListener
+									value="#{dec}"
+									target="#{consultaBienesRentasBean.declaracionSeleccionada}" />
+									</p:commandButton>
+						</p:column>
+					</p:dataTable>
+			</p:scrollPanel>
+		
+					<div class="row" align="center">
+					<div class="col-md-5"></div>	
+						<div class="col-md-2">
+									<br />
+									<br />
+									<p:commandButton disabled="#{consultaBienesRentasBean.btnNuevaBusquedaBRDeshabilitado}"
+											title="#{consultaBienesRentasBean.btnNuevaBusquedaBRMensaje}"
+											value="${titles['BR_REALIZAR_NUEVA_BUSQUEDA']}"
+											onclick="volverConsulta();"
+											type="button"
+											styleClass="btn btn-azul"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;">
+									</p:commandButton>
+					       </div>	
+					 <div class="col-md-5">  </div>	
+					 </div><br /><br />
+					 
+				</p:panel>
+				
+			</div>
+			<!-- Modal sin declaraciones -->
+			<div
+				class="modal fade"
+				id="declaracionNO"
+				role="dialog"
+				style="background: rgba(255, 255, 255, 0.45);">
+				<div
+					class="modal-dialog modal-dialog-2"
+					style="top: 18%; width: 55%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+							<div class="row">
+								<div
+									class="col-md-12"
+									align="center">
+									<br />
+									<h4>
+										<p:outputLabel
+											id="txtCapital"
+											value="#{consultaBienesRentasBean.mensaje}"
+											style="color: #265379!important; font-weight: normal!important;" />
+									</h4>
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4"></div>
+									<div
+										class="col-md-3"
+										align="center"
+										id="cancel">
+										<p:commandButton
+											value="${titles['TTL_TO_CONTINUE']}"
+											action="#{consultaBienesRentasBean.cancelar()}"
+											styleClass="btn btn-default"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+			<div
+		class="modal fade"
+		id="dlgConfirmExtCon"
+		role="dialog">
+		<div class="modal-dialog modal-dialog-2"
+			style="top: 10%; width: 80%;">
+			<div class="modal-content">
+				<!-- Modal body -->
+				
+									
+									<div class="modal-body">
+									<h2>
+						<p:outputLabel
+							value="• #{consultaBienesRentasBean.tituloVentana} •"
+							styleClass="page-subtitle" id="lblTituloVentana" />
+					</h2>
+										<p:panel id="panelDiaVisualizarExt" style="background: transparent!important;">
+											<c:if test="#{consultaBienesRentasBean.obtenerRutaPdf()==null}">
+								                <h:outputLabel value="Sin soporte" class="form-label-formularios" />
+								            </c:if>
+								            <c:if test="#{consultaBienesRentasBean.obtenerRutaPdf()!=null}">
+								                <pe:documentViewer height="400" id="pdfVisualizerExt"  value="#{consultaBienesRentasBean.obtenerRutaPdf()}" />
+								            </c:if>
+								         </p:panel>
+								         <div class="text-center">
+								         <p:commandButton
+										value="${titles['TTL_CLOSE']}"
+										type="button"
+										styleClass="btn btn-azul"
+										style="border-right: 1px groove #245379 !important"
+										onclick="$('#dlgConfirmExtCon').modal('hide');" 
+									/>
+									</div>
+									</div>
+									
+			</div>
+		</div>
+	</div>
+	</ui:define>
+</ui:composition>

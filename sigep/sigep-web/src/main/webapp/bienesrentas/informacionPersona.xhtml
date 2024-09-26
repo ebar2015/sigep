@@ -1,0 +1,717 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:c="http://java.sun.com/jsp/jstl/core" template="/resources/template/basicTemplate.xhtml">
+	<f:metadata>
+	</f:metadata>
+	<ui:param name="pageTitle" value="${titles['TTL_INFORMACION_PERSONAL']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_MIDECLARACIONEHISTORICODEBIENESYRENTAS']}" />
+	<ui:define name="content">
+		<script type="text/javascript">
+	 	var id;
+	 	var msg;
+		    $(window).on('load', function() {
+			    var capital =  #{declaracionRentaBean.distritoC};
+			    var rol = #{declaracionRentaBean.rol};
+			    if(capital){
+			    	$('#entidadCapital').modal({backdrop: 'static', keyboard: false})  ;
+			      	$('#entidadCapital').modal('show');
+			      	$("#cancelBog").attr("style", "display:block");
+				}else{
+					$('#accionRealizarDialog').modal({backdrop: 'static', keyboard: false})  ;
+				    $('#accionRealizarDialog').modal('show');
+				}
+			});
+            
+		    function setId(index){
+			    id = index;
+			    if(id == 822){
+			    	 msg = document.getElementById('txtTextoIngreso').value + '[#{declaracionRentaBean.entidadUsuario.getNombreEntidad()}]'
+				}
+			    if(id == 741){
+			    	 msg = document.getElementById('txtTextoPeriodica').value + '[#{declaracionRentaBean.entidadUsuario.getNombreEntidad()}]'
+				}
+			    if(id == 742){
+			    	 msg = document.getElementById('txtTextoActualizacion').value + '[#{declaracionRentaBean.entidadUsuario.getNombreEntidad()}]'
+				}
+			    if(id == 743){
+			    	 msg = document.getElementById('txtTextoRetiro').value + '[#{declaracionRentaBean.entidadUsuario.getNombreEntidad()}]'
+				}
+			    document.getElementById("txtfinalEntidader").innerHTML = msg;
+			    if(index == 0){
+					$("#boton2tipos").attr("style", "display:block");
+		    	    		$("#boton1tipos").attr("style", "display:none");
+				}else{
+					$("#boton1tipos").attr("style", "display:block");
+		    	    		$("#boton2tipos").attr("style", "display:none");
+				}
+			}
+			
+		    function selectDeclaN(){
+		    		$('#accionRealizarDialog').modal({backdrop: 'static', keyboard: false})  ;
+		    		$('#modificacion').modal('toggle');
+			        $('#accionRealizarDialog').modal('show');
+			}
+			
+			function seguirMsg(){
+			    $('#unaEntidad').modal({backdrop: 'static', keyboard: false})  ;
+				$('#msgantes').modal('toggle');
+				$('#unaEntidad').modal('show');
+			}
+
+			function continueFinal(){
+				 $('#unaEntidad').modal({backdrop: 'static', keyboard: false})  ;
+				 $('#listEntidades').modal('toggle');
+				 $('#unaEntidad').modal('show');
+			}
+			function continueFinalM(){
+				 $('#unaEntidad').modal({backdrop: 'static', keyboard: false})  ;
+				 $('#modificacion').modal('toggle');
+				 $('#unaEntidad').modal('show');
+
+				 $("#cancelM").attr("style", "display:block");
+			}
+			function activarbotonEnt(data){
+				if(data == 0){
+					$("#boton2entidad").attr("style", "display:block");
+		    	    		$("#boton1entidad").attr("style", "display:none");
+				}else{
+					$("#boton1entidad").attr("style", "display:block");
+		    	    		$("#boton2entidad").attr("style", "display:none");
+				}
+			}
+			function activarbotonDec(data){
+				if(data == 0){
+					$("#boton2declaracion").attr("style", "display:block");
+		    	    		$("#boton1declaracion").attr("style", "display:none");
+				}else{
+					$("#boton1declaracion").attr("style", "display:block");
+		    	    		$("#boton2declaracion").attr("style", "display:none");
+				}
+			}
+			function contains(itemLabel, filterValue) {
+	
+				    return itemLabel.includes(filterValue) || specialCharacters(itemLabel).includes(filterValue);
+	
+			}
+			function specialCharacters(input){
+
+		           var c=input.toLowerCase();
+		           c = c.replace(new RegExp("\\s", 'g'),"");
+		           c = c.replace(new RegExp("[àáâãäå]", 'g'),"a");
+		           c = c.replace(new RegExp("æ", 'g'),"ae");
+		           c = c.replace(new RegExp("ç", 'g'),"c");
+		           c = c.replace(new RegExp("[èéêë]", 'g'),"e");
+		           c = c.replace(new RegExp("[ìíîï]", 'g'),"i");                           
+		           c = c.replace(new RegExp("[òóôõö]", 'g'),"o");
+		           c = c.replace(new RegExp("œ", 'g'),"oe");
+		           c = c.replace(new RegExp("[ùúûü]", 'g'),"u");
+		           c = c.replace(new RegExp("[ýÿ]", 'g'),"y");
+		           return c;
+		}			
+		</script>
+		<h:form>
+			<!-- "Background" de modales de Bienes y Rentas -->
+			<div class="row">
+				<div class="col-md-12" style="text-align: center; margin-left: 9%;">
+					<h2>
+						<p:outputLabel value="• #{declaracionRentaBean.mensajeini}•" styleClass="page-subtitle" />
+					</h2>
+				</div>
+			</div>
+			<br />
+			<input type="text" style="display:none;" id="txtTextoIngreso" value="${titles['TTL_BIENES_RENTAS_MENSAJE_DECLARACION_INGRESO']}">
+			</input>
+			<input type="text" style="display:none;" id="txtTextoRetiro" value="${titles['TTL_BIENES_RENTAS_MENSAJE_DECLARACION_RETIRO']}">
+			</input>
+			<input type="text" style="display:none;" id="txtTextoPeriodica" value="${titles['TTL_BIENES_RENTAS_MENSAJE_DECLARACION_PERIODICA']}">
+			</input>
+			<input type="text" style="display:none;" id="txtTextoActualizacion" value="${titles['TTL_BIENES_RENTAS_MENSAJE_DECLARACION_ACTUALIZACION']}">
+			</input>
+			<div class="row">
+				<div class="col-md-12 roles-hv" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-4" style="padding: 0px !important;">
+						<div class="col-md-12">
+							<a href="#"> 
+								<img src="../resources/images/hoja-de-vida-13.jpg" alt="Mi declaración de Bienes y Rentas" title="Mi declaración de Bienes y Rentas"
+									style="max-height: 20em; min-height: 20em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</a>
+							<div class="col-md-12" style="padding: 0%;">
+								<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_PERSONA_DECLARACION']}" styleClass="form-label-informacion-personal" style="line-height: 30px;" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4" style="padding: 0px !important;">
+						<div class="col-md-12">
+							<a href="#"> 
+								<img src="../resources/images/hoja-de-vida-16.jpg" alt="Mi Histórico de Bienes y Rentas" title="Mi Histórico de Bienes y Rentas"
+									style="max-height: 20em; min-height: 20em; max-width: 23em; min-width: 23em; border-radius: 4px; -webkit-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5); box-shadow: 2px 0px 37px -3px rgba(0, 0, 0, 0.5);" />
+							</a>
+							<div class="col-md-12" style="padding: 0%;">
+								<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_PERSONA_HISTORICO']}" styleClass="form-label-informacion-personal" style="line-height: 30px;" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+			<!-- Modal accion a realizar -->
+			<div class="modal fade" id="accionRealizarDialog" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+						<div id="block-accion">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<br />
+									<h4>
+										<p:outputLabel value="${titles['TTL_BIENES_RENTAS_MENSAJE_INICIO']}" style="color: #265379!important; font-weight: normal!important; margin-bottom: 2%;" />
+									</h4>
+									<h:selectOneMenu id="seleccioneTipoDeclaracion" onchange="setId(this.value);" 
+									value="#{declaracionRentaBean.tipoDeclaracion}"
+										styleClass="form-control-form-act-usua-byr">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="" itemDisabled="true" />
+										<f:selectItems value="#{declaracionRentaBean.getTiposDeclaracion()}" />
+									</h:selectOneMenu>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" style="margin-top: 2%;" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<div id="boton1tipos" style="display: none">
+											<p:commandButton disabled="#{declaracionRentaBean.btnValidarTipoDeshabilitado}" 
+											title="#{declaracionRentaBean.btnValidarTipoMensaje}" value="${titles['TTL_TO_CONTINUE']}"
+												styleClass="btn btn-primary" 
+												update="txtfinalEntidad txtmodalErrorNoContinuar" 
+												action="#{declaracionRentaBean.validarTipo()}"
+												style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+											</p:commandButton>
+										</div>
+										<div id="boton2tipos" style="display: block">
+										    <p:commandButton value="${titles['TTL_TO_CONTINUE']}"
+												styleClass="btn btn-primary" disabled="true" style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+											</p:commandButton>
+									    </div>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_CANCEL']}" 
+ 
+										    action="#{declaracionRentaBean.cancelar()}"	
+										    styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+							<!-- close ask -->
+							<div id="block-cancel" style="display: none;">
+								<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<br />
+									<h4>
+										<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_DESCARTAR']}" style="color: #265379!important; font-weight: normal!important; margin-bottom: 2%;" />
+									</h4>
+								</div>
+							</div>
+							<div  class="row" >
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_YES']}" styleClass="btn btn-primary" update="txtfinalEntidad" action="#{declaracionRentaBean.cancelar()}"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_NO']}" onclick="$('#block-cancel').css('display', 'none'); $('#block-accion').css('display', 'block');" styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>					
+							<br />
+							<br />
+							<!-- modal body -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal asociacion varias entidades -->
+			<div class="modal fade" id="listEntidades" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+						<div id="msg-enti-block">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<p:outputLabel value="${titles['TTL_BIENES_RENTAS_MENSAJE_VARIAS_ENTIDADES']}" 
+											style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<p:selectOneMenu id="seleccioneEntidad" value="#{declaracionRentaBean.entidadSelect}" 
+										onchange="activarbotonEnt(this.value)" panelStyle="width: 25%!important;"
+										filter="true" filterMatchMode="custom" filterFunction="contains">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="0" itemDisabled="true" />
+										<f:selectItems value="#{declaracionRentaBean.lisEntida}" />
+										
+										<p:ajax process="@this seleccioneEntidad" event="change" 
+											listener = "#{declaracionRentaBean.validacionEntidadDistritoBogotaVariasEntidadesSelect()}"
+											update="txtmodalEntidadCapital" />
+											 
+									</p:selectOneMenu>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<div id="boton1entidad" style="display: none">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" 
+										    styleClass="btn btn-primary" onclick="continueFinal();" 
+										    
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div id="boton2entidad" style="display: block">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" styleClass="btn btn-primary" disabled="true" 
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									</div>
+									<div class="col-md-3" align="center">
+										<!-- onclick="$('#msg-enti').css('display','block'); $('#msg-enti-block').css('display', 'none');"  -->
+										<p:commandButton value="${titles['TTL_CANCEL']}" 
+										
+											action="#{declaracionRentaBean.cancelar()}"	
+										styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+				
+							<div id="msg-enti" style="display: none;">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_DESCARTAR']}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_YES']}" styleClass="btn btn-primary" action="#{declaracionRentaBean.cancelar()}" 
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default" style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;"
+											onclick="$('#msg-enti').css('display','none'); $('#msg-enti-block').css('display', 'block');">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal txt final entidad -->
+			<div class="modal fade" id="unaEntidad" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+						<div id="msg-entifin">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<p:outputLabel id="txtfinalEntidad" value="#{declaracionRentaBean.mensaje}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" styleClass="btn btn-primary" action="#{declaracionRentaBean.guardarDeclaracion()}"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center" id="cancel">
+										<!-- onclick="$('#msg-entifin').css('display' , 'none'); $('#msg-entifin-block').css('display', 'block');" -->
+										<p:commandButton styleClass="btn btn-default" value="${titles['TTL_CANCEL']}" 
+										action="#{declaracionRentaBean.cancelar()}"	
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+							<div id="msg-entifin-block" style="display: none;">
+								<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_DESCARTAR']}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_YES']}" styleClass="btn btn-primary" action="#{declaracionRentaBean.cancelar()}"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_NO']}" styleClass="btn btn-default"
+											onclick="$('#msg-entifin').css('display','block'); $('#msg-entifin-block').css('display', 'none');"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal txt final entidad -->
+			<div class="modal fade" id="msgantes" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+						<div id="block-2">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<div id="txtfinalEntidader" style="color: #265379 !important; font-weight: normal !important; font-size: 1.1em;">
+										</div>
+									</h4>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" styleClass="btn btn-primary" 
+										onclick="seguirMsg();" 
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center" id="cancel">
+										<!-- 	onclick="$('#block-2').css('display', 'none'); $('#block-3').css('display', 'block');"  -->
+										<p:commandButton value="${titles['TTL_CANCEL']}" 
+									
+											 action="#{declaracionRentaBean.cancelar()}" 
+										styleClass="btn btn-default" 
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+							<div id="block-3" style="display: none;">
+								<div class="row">
+									<div class="col-md-12" align="center">
+										<br />
+										<h4>
+											<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_DESCARTAR']}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+										</h4>
+										<br />
+										<br />
+									</div>
+								</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" styleClass="btn btn-primary" action="#{declaracionRentaBean.cancelar()}"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_CANCEL']}" onclick="$('#block-3').css('display', 'none'); $('#block-2').css('display', 'block');" styleClass="btn btn-default"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal txt final entidad -->
+			<div class="modal fade" id="entidadCapital" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+						<div id="block-4">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<br />
+									<h4>
+										<p:outputLabel id="txtCapital" value="#{declaracionRentaBean.mensaje}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-1"></div>
+									<div class="col-md-3" align="center" id="cancelBog" style="display: none">
+										<p:commandButton value="${titles['TTL_OK']}" action="#{declaracionRentaBean.cancelar()}" styleClass="btn btn-default"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center" id="cancelM" style="display: none">
+										<p:commandButton value="${titles['TTL_TO_CONTINUE']}" action="#{declaracionRentaBean.guardarDeclaracion()}" styleClass="btn btn-default"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center" id="cancelE" style="display: none">
+										<p:commandButton value="${titles['TTL_CANCEL']}" onclick="$('#block-5').css('display', 'block'); $('#block-4').css('display', 'none');" styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-1"></div>
+								</div>
+							</div>
+							</div>
+							<div id="block-5" style="display: none;">
+								<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<br />
+									<h4>
+										<p:outputLabel value="${titles['TTL_BIENES_RENTAS_INFORMACION_DESCARTAR']}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-1"></div>
+									<div class="col-md-3" align="center" style="display: none">
+									</div>
+									<div class="col-md-3" align="center" style="display: none">
+										<p:commandButton value="${titles['TTL_YES']}" action="#{declaracionRentaBean.cancelar()}" styleClass="btn btn-default"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center" style="display: none">
+										<p:commandButton value="${titles['TTL_NO']}" onclick="$('#block-5').css('display','none'); $('#block-4').css('display', 'block');" styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-1"></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal txt final modificar -->
+			<div class="modal fade" id="modificacion" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 60%;">
+					<div class="modal-content">
+						<!-- Modal body -->
+						<div class="modal-body">
+						<div id="block-6">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<p:outputLabel id="txtCapitalModDec" value="${titles['TTL_MODIFICACION_DECLARACION']}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+									<h:selectOneMenu id="seleccioneDeclara" 
+									                 onchange="activarbotonDec(this.value)" 
+									                 value="#{declaracionRentaBean.declaracionM}" 
+									                 styleClass="form-control-form-act-usua-byr "
+													 style= "width: max-content!important;">
+										<f:selectItem itemLabel="${titles['TTL_SELECT']}" itemValue="0" itemDisabled="true" />
+										<f:selectItems value="#{declaracionRentaBean.lisDecla}" />
+									</h:selectOneMenu>
+									<br />
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<div id="boton1declaracion" style="display: none">
+											<p:commandButton value="${titles['TTL_TO_CONTINUE']}" styleClass="btn btn-primary" onclick="continueFinalM();"
+												action="#{declaracionRentaBean.validarTipo()}"
+												style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+											</p:commandButton>
+										</div>
+										<div id="boton2declaracion" style="display: block">
+										    <p:commandButton value="${titles['TTL_TO_CONTINUE']}" styleClass="btn btn-primary" disabled="true"
+												style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+											</p:commandButton>
+									    </div>
+									</div>
+									<div class="col-md-3" align="center" id="cancel">
+										<p:commandButton value="${titles['TTL_CANCEL']}" 
+										 action="#{declaracionRentaBean.cancelar()}" 
+										styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+							<div id="block-7" style="display: none;">
+								<div class="row">
+								<div class="col-md-12" align="center">
+									<br />
+									<h4>
+										<p:outputLabel  value="${titles['TTL_BIENES_RENTAS_INFORMACION_DESCARTAR']}" style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+									</h4>
+									<br />
+								</div>
+							</div>
+							<hr class="hr-style-modales" />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-3"></div>
+									<div class="col-md-3" align="center" style="margin-bottom: 3%;">
+										<p:commandButton value="${titles['TTL_YES']}" styleClass="btn btn-primary" action="#{declaracionRentaBean.cancelar()}"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3" align="center" id="cancel">
+										<p:commandButton value="${titles['TTL_NO']}" onclick="$('#block-7').css('display','none'); $('#block-6').css('display', 'block');" styleClass="btn btn-default"
+											style="padding-left:16.5%!important;padding-right:16.5%!important;font-size:1.5em!important; padding-top:0!important;">
+										</p:commandButton>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="modalEntidadCapital" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div id="block-4">
+								<div class="row">
+									<div class="col-md-12" align="center">
+										<br /><br />
+										<h4> 
+											<p:outputLabel id="txtmodalEntidadCapital" value="#{declaracionRentaBean.mensaje}" 
+														   style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+										</h4>
+										<br /><br />
+									</div>
+								</div>
+								<hr class="hr-style-modales" />
+								<div class="row" align="center">
+									<div class="col-md-3" align="center">
+										<p:commandButton value="${titles['TTL_OK']}" 
+										    styleClass="btn btn-default"
+											style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; 
+											padding-top:0!important;"
+											onclick="activarbotonEnt(0);$('#modalEntidadCapital').modal('hide');">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+			<div class="modal fade" id="modalErrorNoContinuar" role="dialog" style="background: rgba(255, 255, 255, 0.45);">
+				<div class="modal-dialog modal-dialog-2" style="top: 25%; width: 42%;">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div id="block-4">
+								<div class="row">
+									<div class="col-md-12" align="center">
+										<br /><br />
+										<h4>
+											<p:outputLabel id="txtmodalErrorNoContinuar" value="#{declaracionRentaBean.strErrorNoContinuar}" 
+											               style="color: #265379!important; font-weight: normal!important; font-size: 1.1em;" />
+										</h4>
+										<br /><br />
+									</div>
+								</div>
+								<hr class="hr-style-modales" />
+								<div class="row" align="center">
+									<p:commandButton value="${titles['TTL_OK']}" 
+									    styleClass="btn btn-default"
+										style="padding-left:15%!important;padding-right:15%!important;font-size:1.5em!important; 
+										padding-top:0!important;"
+										action="#{declaracionRentaBean.cancelar()}"
+										onclick="activarbotonEnt(0);$('#modalErrorNoContinuar').modal('hide');">
+									</p:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>						
+			
+			
+			
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+

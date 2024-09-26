@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://reporte.xml.util.sigep2.dafp.gov.co/config"
+	xmlns="http://reporte.xml.util.sigep2.dafp.gov.co/config"
+	elementFormDefault="qualified"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0">
+	<xsd:annotation>
+		<xsd:documentation>Copyright (c) 2019, 2019 ADA S.A. All rights
+			reserved.
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:globalBindings generateIsSetMethod="true">
+				<xjc:serializable uid="1" />
+			</jaxb:globalBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:element name="reporte" type="Reporte" />
+	<!-- Reporte -->
+	<xsd:element name="id" type="numero-entero" />
+	<xsd:element name="versionEsquema" type="version-type"
+		default="1.0" />
+	<xsd:element name="nombre" type="cadena-vacia" />
+	<xsd:element name="periodoGeneracion"
+		type="periodo-generacion" default="TTL_REPORTES_PERIODO_DIARIO" />
+	<xsd:element name="formatoReporte" type="formato-reporte"
+		default="TTL_REPORTES_FORMATO_EXCEL" />
+	<xsd:element name="formaConsulta" type="forma-consulta"
+		default="TTL_REPORTES_FORMA_CONSULTA_LOCAL" />
+	<xsd:element name="publicado" type="boolean"
+		default="false" />
+	<xsd:element name="eliminado" type="boolean"
+		default="false" />
+	<xsd:element name="usuarioSolicita" type="CuentaCorreo" />
+	<xsd:element name="rol" type="cadena-no-vacia" />
+	<xsd:element name="mallaReporte" type="MallaReporte" />
+	<xsd:element name="tipoPlantilla" type="tipo-plantilla"
+		default="REPORTE" />
+	<xsd:element name="tipoGrafico" type="tipo-grafico" />
+	<xsd:element name="mallaConfiguracion"
+		type="MallaConfiguracion" />
+	<xsd:element name="claseJava" type="cadena-no-vacia"
+		default="co.gov.dafp.sigep2.util.sistema.ReporteDefault" />
+	<!-- Bloque -->
+	<xsd:element name="mascara" type="xsd:string" />
+	<xsd:element name="version" type="version-type" />
+	<xsd:element name="calificadorLongitudNombre"
+		type="calificador-comparacion" />
+	<xsd:element name="longitudNombre" type="numero-entero" />
+	<xsd:element name="omitirPrimerRegistro" type="boolean" />
+	<xsd:element name="bloquearCargueLote" type="boolean" />
+	<xsd:element name="registro" type="Registro" />
+	<!-- Cuenta correo -->
+	<xsd:element name="bandeja" type="tipo-bandeja" />
+	<xsd:element name="nombreCuenta" type="correo" />
+	<xsd:element name="porPerfil" type="cadena-no-vacia" />
+	<!-- Notificacion -->
+	<xsd:element name="cuentaCorreo" type="CuentaCorreo" />
+	<xsd:element name="notificar" type="boolean" />
+	<xsd:element name="desde" type="correo" />
+	<xsd:element name="asunto" type="cadena-no-vacia" />
+	<xsd:element name="cuerpo" type="cadena-no-vacia" />
+	<!-- Columna -->
+	<xsd:element name="etiquetaColumna" type="cadena-no-vacia" />
+	<xsd:element name="descripcion" type="cadena-no-vacia" />
+	<xsd:element name="tipoDato" type="tipo-dato"
+		default="TTL_REPORTES_FORMA_TIPO_DATO_STRING" />
+	<xsd:element name="orden" type="numero-entero" />
+	<xsd:element name="requerido" type="boolean"
+		default="false" />
+	<xsd:element name="mostrarEnReporte" type="boolean"
+		default="true" />
+	<xsd:element name="valorPorDefecto" type="cadena-vacia" />
+	<xsd:element name="validarContraFechaSistema"
+		type="boolean" default="false" />
+	<xsd:element name="calificadorValidacionContraFechaSistema"
+		type="calificador-comparacion" />
+	<xsd:element name="observaciones" type="cadena-vacia" />
+	<xsd:element name="esParametro" type="boolean"
+		default="false" />
+	<xsd:element name="agrupamiento" type="boolean"
+		default="false" />
+	<xsd:element name="totalizado" type="boolean"
+		default="false" />
+	<xsd:element name="conteo" type="boolean" default="false" />
+	<xsd:element name="graficar" type="boolean" default="false" />
+	<xsd:element name="calificadorParametro"
+		type="calificador-comparacion" />
+	<xsd:element name="valorComparacionParametro"
+		type="cadena-vacia" />
+	<xsd:element name="permiteOperacionesAgrupamiento"
+		type="boolean" default="false" />
+	<!-- SQL -->
+	<xsd:element name="parametro" type="Parametro" />
+	<xsd:element name="sentencia" type="cadena-vacia" />
+	<!-- Validacion -->
+	<xsd:element name="validar" type="boolean" />
+	<xsd:element name="tipoValidacion" type="tipo-validacion" />
+	<xsd:element name="transaccional" type="boolean" />
+	<xsd:element name="persistido" type="boolean" />
+	<xsd:element name="notificacion" type="Notificacion" />
+	<!-- Registro -->
+	<xsd:element name="SQL" type="SQL" />
+	<xsd:element name="columna" type="Columna" />
+	<xsd:element name="csv" type="boolean" />
+	<xsd:element name="caracterCsv" type="separador-csv" />
+	<xsd:element name="tipoRegistro" type="tipo-registro" />
+	<xsd:element name="contieneSentenciaSQL" type="boolean" />
+
+	<!-- MallaReporte -->
+	<xsd:element name="nombreTabla" type="cadena-no-vacia"
+		default="TABLA POR DEFINIR" />
+	<xsd:element name="prefijoTabla" type="cadena-no-vacia"
+		default="PREFIJO POR DEFINIR" />
+	<xsd:element name="valorMalla" type="ValorMalla" />
+	<xsd:element name="nombreColumna" type="cadena-no-vacia"
+		default="COLUMNA POR DEFINIR" />
+
+	<xsd:complexType name="Reporte">
+		<xsd:sequence>
+			<xsd:element ref="id" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="nombre" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="descripcion" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="periodoGeneracion" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="formatoReporte" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="formaConsulta" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="tipoPlantilla" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="tipoGrafico" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="versionEsquema" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="publicado" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="eliminado" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="usuarioSolicita" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="rol" minOccurs="1"
+				maxOccurs="unbounded" />
+			<xsd:element ref="mallaReporte" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xsd:element ref="mallaConfiguracion" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xsd:element ref="claseJava" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="SQL" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xsd:element ref="registro" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xsd:element ref="notificacion" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MallaReporte">
+		<xsd:sequence>
+			<xsd:element ref="id" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="nombre" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="valorMalla" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ValorMalla">
+		<xsd:sequence>
+			<xsd:element ref="id" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="nombre" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="nombreColumna" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="mostrarEnReporte" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="orden" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="esParametro" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="calificadorParametro" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="valorComparacionParametro"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="permiteOperacionesAgrupamiento"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="agrupamiento" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="totalizado" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="conteo" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="graficar" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="requerido" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MallaConfiguracion">
+		<xsd:annotation>
+			<xsd:documentation>Define la estructura del bloque
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="id" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="nombre" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="nombreTabla" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="prefijoTabla" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="columna" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="CuentaCorreo">
+		<xsd:sequence>
+			<xsd:element ref="bandeja" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="nombreCuenta" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="porPerfil" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Notificacion">
+		<xsd:sequence>
+			<xsd:element ref="tipoValidacion" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="notificar" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="desde" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="asunto" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="cuerpo" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="cuentaCorreo" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Columna">
+		<xsd:sequence>
+			<xsd:element ref="etiquetaColumna" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="id" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="orden" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="descripcion" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="nombreColumna" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="tipoDato" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="requerido" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="valorPorDefecto" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="validarContraFechaSistema"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element
+				ref="calificadorValidacionContraFechaSistema" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="parametro" type="cadena-vacia"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="sentencia" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="mascara" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="observaciones" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="totalizado" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="agrupamiento" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="conteo" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="graficar" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Parametro">
+		<xsd:sequence>
+			<xsd:element ref="id" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="nombre" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="tipoDato" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="etiquetaColumna" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="requerido" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="sentencia" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="SQL">
+		<xsd:sequence>
+			<xsd:element ref="parametro" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xsd:element ref="sentencia" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="Registro">
+		<xsd:sequence>
+			<xsd:annotation>
+				<xsd:documentation>Configuración de cada registro que
+					contendrá
+					el
+					bloque
+				</xsd:documentation>
+			</xsd:annotation>
+			<xsd:element ref="descripcion" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="SQL" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="csv" minOccurs="1" maxOccurs="1" />
+			<xsd:element ref="caracterCsv" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element ref="tipoRegistro" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="contieneSentenciaSQL" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element ref="columna" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="cadena-no-vacia">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value=".+" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="cadena-vacia">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value=".*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="numero-entero">
+		<xsd:restriction base="xsd:integer">
+			<xsd:pattern value="[0-9]+" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="calificador-comparacion">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="TTL_REPORTES_IGNORAR" />
+			<xsd:enumeration value="TTL_REPORTES_IGUAL" />
+			<xsd:enumeration value="TTL_REPORTES_DIFERENTE_A" />
+			<xsd:enumeration value="TTL_REPORTES_EMPIEZA_POR" />
+			<xsd:enumeration value="TTL_REPORTES_ACABA_POR" />
+			<xsd:enumeration value="TTL_REPORTES_NO_EMPIEZA_POR" />
+			<xsd:enumeration value="TTL_REPORTES_NO_ACABA_POR" />
+			<xsd:enumeration value="TTL_REPORTES_NO_CONTIENE" />
+			<xsd:enumeration
+				value="TTL_REPORTES_VIENE_DESPUES_DE" />
+			<xsd:enumeration value="TTL_REPORTES_VIENE_ANTES_DE" />
+
+			<xsd:enumeration value="TTL_REPORTES_MENOR_QUE" />
+			<xsd:enumeration value="TTL_REPORTES_MENOR_IGUAL_QUE" />
+			<xsd:enumeration value="TTL_REPORTES_MAYOR_QUE" />
+			<xsd:enumeration value="TTL_REPORTES_MAYOR_IGUAL_QUE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-cruce-fecha">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="IGNORAR" />
+			<xsd:enumeration value="SISTEMA" />
+			<xsd:enumeration value="CAPTURA" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-dato">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_ANIO" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_BOOLEAN" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_CSV" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_CSV_OP" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_DATE" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_FIRST_DAY_ANIO" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_LAST_DAY_ANIO" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_DATE_STRING" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_DECIMAL" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_INTEGER" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_MONTH" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_PERCENT" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_STRING" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_PERIOD" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_QUERY" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_LINK" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_CRUD" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-dato-reporte">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_ANIO" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_CSV" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_CSV_OP" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_DATE_LARGE" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_FIRST_DAY" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_MONTH" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_SEMESTER" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_TRIMESTER" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_PERIOD" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_QUERY_OP" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_TOOLTIP" />
+			<!-- 
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_LINK" />
+				 -->
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_TIPO_DATO_CRUD" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="boolean">
+		<xsd:restriction base="xsd:boolean" />
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-bandeja">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="DESDE" />
+			<xsd:enumeration value="A" />
+			<xsd:enumeration value="CC" />
+			<xsd:enumeration value="CCO" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-validacion">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="PERIODICIDAD" />
+			<xsd:enumeration value="PUBLICACION" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-registro">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="CABECERA" />
+			<xsd:enumeration value="DETALLE" />
+			<xsd:enumeration value="ENCABEZADO DE LOTE" />
+			<xsd:enumeration value="CONTROL DE LOTE" />
+			<xsd:enumeration value="PIE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-plantilla">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="CONFIGURACION" />
+			<xsd:enumeration value="REPORTE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="separador-csv">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="COMA" />
+			<xsd:enumeration value="PUNTO_COMA" />
+			<xsd:enumeration value="RETORNO_CARRO" />
+			<xsd:enumeration value="TABULADOR" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="version-type">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:pattern value="[0-9]+(\.[0-9]+)*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="correo">
+		<xsd:restriction base="cadena-vacia">
+			<xsd:pattern
+				value="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="formato-reporte">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration value="TTL_REPORTES_FORMATO_EXCEL" />
+			<xsd:enumeration value="TTL_REPORTES_FORMATO_CSV" />
+			<xsd:enumeration value="TTL_REPORTES_FORMATO_PDF" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="forma-consulta">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_CONSULTA_CORREO" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_CONSULTA_PORTAL" />
+			<xsd:enumeration
+				value="TTL_REPORTES_FORMA_CONSULTA_LOCAL" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="periodo-generacion">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration
+				value="TTL_REPORTES_PERIODO_UNICA_VEZ" />
+			<xsd:enumeration value="TTL_REPORTES_PERIODO_DIARIO" />
+			<xsd:enumeration value="TTL_REPORTES_PERIODO_SEMANAL" />
+			<xsd:enumeration value="TTL_REPORTES_PERIODO_MENSUAL" />
+			<xsd:enumeration
+				value="TTL_REPORTES_PERIODO_TRIMESTRAL" />
+			<xsd:enumeration
+				value="TTL_REPORTES_PERIODO_SEMESTRAL" />
+			<xsd:enumeration value="TTL_REPORTES_PERIODO_ANUAL" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="tipo-grafico">
+		<xsd:restriction base="cadena-no-vacia">
+			<xsd:enumeration
+				value="TTL_TIPO_GRAFICO_BARRA_VERTICAL" />
+			<xsd:enumeration
+				value="TTL_TIPO_GRAFICO_BARRA_HORIZONTAL" />
+			<xsd:enumeration value="TTL_TIPO_GRAFICO_TORTA" />
+			<xsd:enumeration
+				value="TTL_TIPO_GRAFICO_LINEA_TENDENCIA" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

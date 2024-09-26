@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+	<f:metadata>
+		<f:viewParam name="id" value="#{carguesMasivosBean.id}" />
+		<f:viewParam name="dialog" value="#{carguesMasivosBean.dialog}" />
+		<f:event listener="#{carguesMasivosBean.retrieve}"
+			type="preRenderView" />
+		<f:event listener="#{carguesMasivosBean.showDialog}"
+			type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value=" ${titles['TTL_CARGUES_MASIVOS']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_REALIZARCARGUE']}" /> 
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_CARGUES_MASIVOS']} •" styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<div class="panel-body form-horizontal">
+			<div class="row row-background-white" style="padding-top: 2em;">
+				<!-- Paso 1 - Seleccionar proceso -->
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+					${titles['LBL_CARGA_MASIVA_PASO_1']} </span> <br /> <br />
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:outputLabel value="${titles['LBL_CARGA_MASIVA_SELECT_PROCESO']}" styleClass="advisor" />
+					</div>
+				</div>
+
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<p:outputLabel value="${titles['LBL_PROCESO_A_GESTIONAR']}"
+								for="tipoProceso" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="tipoProceso"
+								value="#{carguesMasivosBean.tipoProceso}" required="true"
+								requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+								styleClass="form-control-form-act-usua">
+								<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+									itemValue="#{null}" />
+								<f:selectItems
+									value="#{webUtils.lstTiposProcesosCarguesMasivos}" />
+								<p:ajax event="change" process="tipoProceso"
+									update="labelcargaMasivaXLS panelcargaMasivaAnexo"
+									listener="#{carguesMasivosBean.habilitarAnexos()}" />
+							</h:selectOneMenu>
+							<p:message for="tipoProceso" display="text" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<br />
+			</div>
+			<br /><br />
+       
+       
+       <div class="row row-background-white" style="padding-top: 2em;">
+				<!-- Fin Paso 1 - Seleccionar proceso -->
+
+				<!-- Paso 2 - Descargar plantilla -->
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">${titles['LBL_CARGA_MASIVA_PASO_2']} </span> <br /> <br />
+
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:outputLabel value="${titles['LBL_CARGA_MASIVA_SELECT_PLANTILLA']}" styleClass="advisor" />
+					</div>
+				</div>
+
+				<br /> <br />
+
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<p:commandButton value="${titles['TTL_DOWNLOAD_FORMAT']}" id="btnDescargarPlantillaCM"
+								actionListener="#{carguesMasivosBean.descargarPlantilla()}"
+								ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+								styleClass="btn btn-primary"
+								style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important;">
+								<p:fileDownload value="#{carguesMasivosBean.formato}" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				</div>
+			<br />	<br />
+				<div class="row row-background-white" style="padding-top: 2em;">
+
+				<!-- Fin Paso 2 - Descargar plantilla -->
+
+				<!-- Paso 3 - . Registre la información -->
+
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">${titles['LBL_CARGA_MASIVA_PASO_3']} </span> <br /> <br />
+					 <br /> <br />
+
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:outputLabel value="${titles['TTL_REGISTRE_INFORMACION_PLANTILLA']}" 
+							styleClass="advisor" />
+					</div>
+				</div>
+				 <br /> <br /> <br /> <br />
+				</div>
+
+				<br /> <br />
+
+				
+	<div class="row row-background-white" style="padding-top: 2em;">
+				<!-- Fin Paso 3 - . Registre la información -->
+				<!-- Paso 4 - . Cargue la plantilla del proceso de carga masiva a ejecutar -->
+				<p:spacer height="2" />
+				<hr class="hr-style hr-style-two" />
+				<span
+					style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">${titles['LBL_CARGA_MASIVA_PASO_4']} </span> <br /> <br />
+
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<p:outputLabel value="${titles['LBL_CARGA_MASIVA_CARGUE_ARCHIVOS']}" styleClass="advisor" />
+					</div>
+				</div>
+
+				<br /> <br />
+
+				<p:outputPanel id="panelcargaMasiva">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p:outputLabel for="cargaMasivaXLS"
+									title="${titles['LBL_PLANTILLA']}:"
+									styleClass="log-label form-label-formularios"
+									value="${titles['LBL_PLANTILLA']}:" />
+								<p:fileUpload id="cargaMasivaXLS" auto="true"
+									fileUploadListener="#{carguesMasivosBean.cargaMasivaUpload}"
+									value="#{carguesMasivosBean.archivoCargaMasiva.fileName}"
+									label="${titles['LBL_SUBIR']}" update="labelcargaMasivaXLS labelcargaMasivaXLS"
+									mode="advanced" required="true"
+									requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+									invalidFileMessage="${titles['LBL_FORMATO_INVALIDO_CM']}"
+									allowTypes="/(\.|\/)(xlsx)$/" style="width:100%;"
+									sizeLimit="#{carguesMasivosBean.llTamArchivos}"
+									invalidSizeMessage="#{carguesMasivosBean.strMsgTamanoArchivo}" />
+								<p:outputLabel
+									value="#{carguesMasivosBean.nombreArchivoCargaActivacionUsuarios}"
+									id="labelcargaMasivaXLS" />
+								<p:message for="cargaMasivaXLS" display="text" />
+							</div>
+							<div class="col-md-4"></div>
+
+						</div>
+						<p:outputPanel id="panelcargaMasivaAnexo">
+							<p:panel rendered="#{carguesMasivosBean.habilitadoArchivoAnexo}">
+
+								<div class="col-lg-12">
+									<div class="col-md-4"></div>
+									<div class="col-md-4">
+										<p:outputLabel for="cargaMasivaAnexos"
+											title="${titles['LBL_ANEXO']}:"
+											styleClass="log-label form-label-formularios"
+											value="${titles['LBL_ANEXO']}:" />
+										<p:fileUpload id="cargaMasivaAnexos" auto="true"
+											fileUploadListener="#{carguesMasivosBean.cargaMasivaAnexoUpload}"
+											value="#{carguesMasivosBean.archivoCargaMasivaAnexo.fileName}"
+											label="${titles['LBL_SUBIR']}" update="cargaMasivaAnexos labelcargaMasivaAnexos"
+											mode="advanced" required="true"
+											requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+											invalidFileMessage="${titles['LBL_FORMATO_INVALIDO_ZIP']}"
+											allowTypes="/(\.|\/)(zip)$/" style="width:100%;"
+											sizeLimit="1000000"
+											invalidSizeMessage="${messages['MSG_ARCHIVO_TAMANIO_SUPERADO']}" />
+										<p:outputLabel
+											value="#{carguesMasivosBean.nombreArchivoCargaAnexos}"
+											id="labelcargaMasivaAnexos" />
+										<p:message for="cargaMasivaAnexos" display="text" />
+									</div>
+									<div class="col-md-4"></div>
+
+								</div>
+							</p:panel>
+						</p:outputPanel>
+						<br /> <br />
+					</div>
+					
+				<div class="col-md-12" align="center" style="padding-top: 4%!important;">
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p:commandButton id="btnProcesarCM"
+									value="${titles['BTN_INICIAR_CARGA_MASIVA']}" process="panelcargaMasiva"
+									actionListener="#{carguesMasivosBean.procesarArchivoConfirmar}"
+									styleClass="btn btn-primary"
+									style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important;"
+									update="panelcargaMasiva tipoProceso dlgConfirmarProcesar" />
+							</div>
+							<div class="col-md-4"></div>
+						</div>					
+					
+				</p:outputPanel>
+				
+				</div>	
+					<br /> <br />
+				
+
+
+				<!-- Fin Paso 4 - . Cargue la plantilla del proceso de carga masiva a ejecutar -->
+			<!--natalia  -->
+		</div>
+		
+		
+		<p:dialog header="• ${titles['TTL_MENSAJE_IMPORTANTE']} •" widgetVar="dlgConfirmarProcesar" id="dlgConfirmarProcesar" minHeight="300" 
+			modal="true" resizable="false" closeOnEscape="false"
+			responsive="true" draggable="false" closable="false" appendTo="@(body)"> 
+			<br />
+			<div class="row" style="text-align: justify; padding: 0% 3%;"  align="center">
+				<center>
+					<h5>#{carguesMasivosBean.strMsgMensajes}</h5>
+				</center>
+				
+			</div>
+			<br />
+			<div class="row" align="center">
+				<div class="col-md-3"></div>
+				<div class="col-md-3" style="margin-bottom: 2%;">
+				    <p:commandButton value="${titles['TTL_OK']}"
+						process="@this" 
+						styleClass="btn btn-primary"
+						style="padding-left:10%!important;padding-right:10%!important;font-size:1.5em!important;" 
+						action="#{carguesMasivosBean.procesarArchivo}"
+						update="panelcargaMasiva tipoProceso dlgConfirmarProcesar"
+    		    		onclick="PF('dlgConfirmarProcesar').hide();" />
+	         	</div>
+	         	<div class="col-md-3" style="margin-bottom: 2%;">
+					<p:commandButton value="${titles['TTL_CANCEL']}"
+						process="@this" 
+						styleClass="btn btn-default"
+						style="padding-left:9%!important;padding-right:9%!important;font-size:1.5em!important;" 
+						action="#{carguesMasivosBean.procesarArchivoCancelar}"
+						update="panelcargaMasiva tipoProceso dlgConfirmarProcesar"
+	                    onclick="PF('dlgConfirmarProcesar').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<br />
+		</p:dialog>			
+	</ui:define>
+</ui:composition>

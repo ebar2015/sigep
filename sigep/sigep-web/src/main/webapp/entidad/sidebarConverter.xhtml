@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:x_rt="http://java.sun.com/jstl/xml_rt"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt"
+	xmlns:x="http://java.sun.com/jsp/jstl/xml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:permittedTaglibs="http://jakarta.apache.org/taglibs/standard/permittedTaglibs"
+	xmlns:scriptfree="http://jakarta.apache.org/taglibs/standard/scriptfree">
+	<h:body>
+		<h:selectOneMenu converter="entidadConverter" var="t" id="sidConverte"
+			value="#{sesionBean.entidadUsuario}" required="true"
+			filter="false" filterMatchMode="contains"
+			requiredMessage="${messages['DLG_VALOR_REQUERIDO']}"
+			styleClass="form-control-form-act-usua side">
+			<f:selectItem itemLabel="${titles['TTL_SELECT']}"
+				itemValue="#{null}" itemDisabled="true"/>
+			<f:selectItems value="#{entidadesUsuario}" var="entidad"
+				itemLabel="#{entidad.nombreEntidad}"
+				itemValue="#{entidad}" />
+			<p:ajax process="@this" event="change"
+				update="@this,@widgetVar(wvMenu),@widgetVar(wvMenuR),@widgetVar(wvToolTipRoles)" />
+		     </h:selectOneMenu>
+	</h:body>
+</html>

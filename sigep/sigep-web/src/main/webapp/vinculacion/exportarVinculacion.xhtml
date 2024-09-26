@@ -1,0 +1,474 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/template/basicTemplate.xhtml"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<!--Miga de pan -->
+	<ui:param name="pageTitle" value="${titles['TTL_VINCULAR/DESVINCULAR']}" />
+	<ui:param name="pageSubtitle" value="${titles['TTL_EXPORTARAFORMATOEXCEL']}" />
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h2> <p:outputLabel value="• ${titles['TTL_EXPORTAR_EXCEL']} •" styleClass="page-subtitle" /></h2>
+			</div>
+		</div>
+		<h:form id="frExportarVinculacion">
+			<div class="col-md-12" align="center" style="margin-top: 20px !important">
+				<p:selectOneRadio id="rdbPubli" value="#{exportarExcelVinculacionesBean.lbExportaVinculaciones}">
+					<f:selectItem itemLabel="${titles['TXT_CONSULTA_VINCULACIONES']}" itemValue="true" />
+					<f:selectItem itemLabel="${titles['TXT_CONSULTA_DESVINCULACIONES']}" itemValue="false" />
+					<p:ajax event="change" listener="#{exportarExcelVinculacionesBean.changerdbVinculaciones}" 
+					update="frExportarVinculacion idPanelVincular idPanelDesVincular" />
+				</p:selectOneRadio>
+			</div>
+			<div style="background-color: #fff !important; padding: 10px !important; margin-bottom: 30px !important;">
+				<!-- Vincular -->
+				<p:panel id="idPanelVincular" style="background: transparent !important;" rendered="#{exportarExcelVinculacionesBean.lbExportaVinculaciones}">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								  <span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+								  ${titles['TXT_CONSULTA_VINCULACIONES']} </span> <br /> <br />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:outputLabel value="${titles['LBL_AREA']}:" styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu styleClass="form-control-form-act-usua" 
+								value="#{exportarExcelVinculacionesBean.dependencia}"
+							 	title="${titles['TTL_SELECT']} ${titles['LBL_AREA']}"
+							 	filter="true" filterMatchMode ="contains">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getDependenciaEntidadFilter(exportarExcelVinculacionesBean.entidadProceso)}" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:outputLabel value="${titles['LBL_CARGO']}:" for="txtCargo" styleClass="log-label form-label-formularios" />
+							<p:inputText id="txtCargo" autocomplete="true" maxlength="254" class="form-control-acti-usua" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_CARGO']}"
+								value="#{exportarExcelVinculacionesBean.cargo}">
+								<f:validator validatorId="maxByteLengthValidator" />
+							</p:inputText>
+							<p:message for="txtCargo" display="text" />
+						</div>
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:outputLabel value="${titles['LBL_PLANTA']}:" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu styleClass="form-control-form-act-usua" 
+								value="#{exportarExcelVinculacionesBean.planta}"
+								title="${titles['TTL_SELECT']} ${titles['LBL_PLANTA']}" >
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getTiposNombramiento(1956)}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 20px!important;">
+						<div class="col-md-3">
+							<p:outputLabel  value="${titles['TTL_NATURALEZA_EMPLEO']}:" styleClass="log-label form-label-formularios" />
+							<p:selectOneMenu styleClass="form-control-form-act-usua" 
+								title="${titles['TTL_SELECT']} ${titles['TTL_NATURALEZA_EMPLEO']}" 
+								value="#{exportarExcelVinculacionesBean.naturalezaEmpleo}" 
+								filter="true" filterMatchMode ="contains">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getNaturalezaEmpleo()}" />
+								<p:ajax event="change" process="@this" update="@this listTipNombra">
+								</p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel value="${titles['LBL_TIPO_NOMBRAMIENTO']}:" styleClass="log-label form-label-formularios" />
+							<h:selectOneMenu id="listTipNombra" styleClass="form-control-form-act-usua" 
+								title="${titles['TTL_SELECT']} ${titles['LBL_TIPO_NOMBRAMIENTO']}" 
+								value="#{exportarExcelVinculacionesBean.tipoNombramiento}">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getTiposNombramiento(exportarExcelVinculacionesBean.naturalezaEmpleo)}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel for="cldIni" styleClass="log-label form-label-formularios" 
+								value="${titles['LBL_FECHA_INICIO_POSESION']}:" />
+							<p:calendar id="cldIni" mask="true" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_INICIO_POSESION']}"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								maxdate="#{fechaSistema}"  mode="popup"
+								value="#{exportarExcelVinculacionesBean.fechaIni}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+								style="height:300px"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="cldIni" display="text" />
+							
+						</div>
+						<div class="col-md-3">
+							<p:outputLabel for="cldFin" styleClass="log-label form-label-formularios" 
+								value="${titles['LBL_FECHA_FINAL_POSESION']}:" />
+							<p:calendar id="cldFin" mask="true" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_FINAL_POSESION']}"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								maxdate="#{fechaSistema}" mode="popup"
+								value="#{exportarExcelVinculacionesBean.fechaFin}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								style="height:300px" icon="fa fa-calendar"
+								locale="#{lenguajeBean.localeCode}" >
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="cldFin" display="text" />
+						</div>
+					</div>
+					
+				</p:panel>
+
+				<!-- Desvincular -->
+				<p:panel id="idPanelDesVincular" style="background: transparent !important;" 
+					rendered="#{not exportarExcelVinculacionesBean.lbExportaVinculaciones}">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								  <span style="font-size: 2em; font-weight: 500; color: #245379; background-color: white; margin-left: 1em;">
+								  ${titles['TXT_CONSULTA_DESVINCULACIONES']} </span> <br /> <br />
+							</div>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 20px !important">
+						<div class="col-md-4" >
+							<p:outputLabel styleClass="log-label form-label-formularios" 
+								value="${titles['LBL_FECHA_INICIO_DESVINCULACION']}:"
+								for="desvFechaIni" />
+						</div>
+						<div class="col-md-4" >
+							<p:outputLabel styleClass="log-label form-label-formularios" 
+								value="${titles['LBL_FECHA_FINAL_DESVINCULACION']}:"
+								for="desvFechaFin" />
+						</div>
+						<div class="col-md-4" >
+							<p:outputLabel styleClass="log-label form-label-formularios" 
+								value="${titles['LBL_CAUSA_DESVINCULACION_SP']}:" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:calendar id="desvFechaIni" mask="true" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_INICIO_DESVINCULACION']}"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								maxdate="#{fechaSistema}"  mode="popup"
+								value="#{exportarExcelVinculacionesBean.fechaIni}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								locale="#{lenguajeBean.localeCode}" icon="fa fa-calendar"
+								style="height:300px"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}">
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="desvFechaIni" display="text" />
+						</div>
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<p:calendar id="desvFechaFin" mask="true" 
+								title="${titles['TTL_INGRESE']} ${titles['LBL_FECHA_FINAL_POSESION']}"
+								yearRange="#{rangoAnios}" navigator="true"
+								placeholder="${titles['LBL_FORMATO_FECHA']}"
+								maxdate="#{fechaSistema}" mode="popup"
+								value="#{exportarExcelVinculacionesBean.fechaFin}"
+								pattern="#{fechaFormato}" effect="slideDown"
+								converterMessage="#{messages.DLG_FORMATO_INVALIDO}"
+								style="height:300px" icon="fa fa-calendar"
+								locale="#{lenguajeBean.localeCode}" >
+								<f:attribute name="maxDate" value="#{fechaSistema}" />
+								<f:validator validatorId="maxDateValidator" />
+							</p:calendar>
+							<h:outputText>
+								<f:convertDateTime pattern="#{fechaFormato}" />
+							</h:outputText>
+							<p:message for="desvFechaFin" display="text" />
+						</div>
+						<div class="col-md-4" style="margin-bottom: 2%;">
+							<h:selectOneMenu styleClass="form-control-form-act-usua" 
+								value="#{exportarExcelVinculacionesBean.causal}" 
+								filter="true" filterMatchMode="startsWith">
+								<f:selectItem itemLabel="#{titles.TTL_SELECT}" itemValue="#{null}" />
+								<f:selectItems value="#{webUtils.getTiposNombramiento(1975)}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</p:panel>
+				<br />
+				<div class="row" align="center">
+				<div class="col-md-12">
+				<div class="col-md-3"></div>
+					<div class="col-md-3" style ="margin-bottom: 1%!important">
+						<p:commandButton value="${titles['TTL_CONSULT']}" 
+						                 id="cBConsultar"
+						                 styleClass="btn btn-primary"
+						                 style="padding-left:13%!important;padding-right:13%!important; font-size:1.5em!important; padding-top:0!important;"
+						                 process="@this frExportarVinculacion"
+						                 actionListener="#{exportarExcelVinculacionesBean.consultar()}"
+						                 update="frExportarVinculacion dataTableVinculaciones" >
+						</p:commandButton>
+					</div>
+					<div class="col-md-3">
+						<p:commandButton id="btnVinRegresar"
+			                 value="${titles['LBL_REGRESAR']}"
+			                 process="@this" action="#{exportarExcelVinculacionesBean.regresar}"
+			                 styleClass="btn btn-default"
+			                 style="padding-left:12.5%!important;padding-right:12.5%!important; font-size:1.5em!important; padding-top:0!important;"
+		                  />
+					</div>
+					<div class="col-md-3"></div>
+					</div>
+				</div>
+		
+			</div>
+			
+		<div  id="divScrollVinculacion">
+			<p:panel id="pnlTablaVinculaciones" rendered="true" visible="#{exportarExcelVinculacionesBean.estadoPanelTabla}">
+				<!-- Tabla de vinculaciones a exportar -->
+				<div class="col-md-12" style="padding-left: 2% !important; padding-right: 2% !important; padding-top: 20px !important;">
+					<p:scrollPanel mode="native" id="panelScroll">
+						<p:dataTable id="dataTableVinculaciones" paginator="true" reflow="true" 
+						 	currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+							var="dataTableVinculacion"
+							style="width: 3000px"
+							emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}" 
+							value="#{exportarExcelVinculacionesBean.lstVinculacionesExportar}" 
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							rendered="#{exportarExcelVinculacionesBean.lbExportaVinculaciones}" >
+							<p:column sortBy="#{dataTableVinculacion.codigoDane}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.codigoDane}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['TXT_VINCULACION_CODIGO_DANE']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.codigoDane}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreEntidad}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreEntidad}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_DESC_ENTIDAD']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreEntidad}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreDocumento}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreDocumento}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_TIPO_DOCUMENTO_SERVIDOR']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreDocumento}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.numeroIdentificacion}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.numeroIdentificacion}"  filterMatchMode="contains"> 
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_NUM_DOCUMENTO_SERVIDOR']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.numeroIdentificacion}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.primerNombre}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.primerNombre}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.primerNombre}" />
+							</p:column>
+							
+							<p:column sortBy="#{dataTableVinculacion.segundoNombre}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.segundoNombre}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.segundoNombre}" />
+							</p:column>
+							
+							<p:column sortBy="#{dataTableVinculacion.primerApellido}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.primerApellido}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.primerApellido}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.segundoApellido}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.segundoApellido}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.segundoApellido}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_CODIGO_ENTIDAD_TITULAR']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.codigoDafp}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_ENTIDAD_TITULAR']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreEntidad}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreDependencia}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreDependencia}"  filterMatchMode="contains">
+								<f:facet name="header" ><h:outputText value="${titles['TTL_VINCULACION_DEPENDENCIA_TITULAR']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreDependencia}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreCargo}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreCargo}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_CARGO_TITULAR']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreCargo}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreCodigo}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreCodigo}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_CODIGO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreCodigo}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreGrado}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreGrado}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_GRADO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreGrado}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreNaturalezaEmpleo}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreNaturalezaEmpleo}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['TTL_NATURALEZA_EMPLEO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreNaturalezaEmpleo}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombreTipoNombramiento}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombreTipoNombramiento}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TIPO_NOMBRAMIENTO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreTipoNombramiento}" />
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.fechaPosesion}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.fechaPosesion}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_FECHA_POSESION']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.fechaPosesion}" >
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+							</p:column>
+							<p:column sortBy="#{dataTableVinculacion.nombrePlanta}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableVinculacion.nombrePlanta}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_ENTIDAD_PLANTA_NOMBRE']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombrePlanta}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_ENTIDAD_ENCARGO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreEntidadEncargo}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TABLA_DEPENDENCIA']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreDependenciaEncargoSA}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['TXT_CARGO_ENCARGO_COMISION']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreDenominacionSAEncargo}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['LBL_CODIGO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreCodigoSAEncargo}" />
+							</p:column>
+							<p:column visible="false">
+								<f:facet name="header"><h:outputText value="${titles['LBL_GRADO']}" /></f:facet>
+								<h:outputText value="#{dataTableVinculacion.nombreGradoSAEncargo}" />
+							</p:column>
+							
+						</p:dataTable>
+					</p:scrollPanel>
+				</div>
+
+				<!-- Tabla de desvinculaciones a exportar -->
+				<div class="col-md-12" style="margin-bottom: 20px!important;padding-left: 2% !important; padding-right: 2% !important; padding-top: 20px !important;">
+					<p:scrollPanel mode="native" id="panelScrollDesv">
+						<p:dataTable id="dataTableDesvinculaciones" 
+							paginator="true"
+							rows="#{paginatorSize}"
+							rowsPerPageTemplate="#{paginatorsSize}"
+							reflow="true"
+							style="width: 1600px"
+							currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							var="dataTableDesVinculacion" emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}" 
+							value="#{exportarExcelVinculacionesBean.lstDesVinculacionesExportar}" 
+							rendered="#{not exportarExcelVinculacionesBean.lbExportaVinculaciones}">
+							<p:column sortBy="#{dataTableVinculacion.nombreEntidad}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.nombreEntidad}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_DESC_ENTIDAD']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.nombreEntidad}" />
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.nombreDocumento}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.nombreDocumento}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_TIPO_DOCUMENTO_SERVIDOR']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.nombreDocumento}" />
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.numeroIdentificacion}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.numeroIdentificacion}"  filterMatchMode="contains"> 
+								<f:facet name="header"><h:outputText value="${titles['TTL_VINCULACION_NUM_DOCUMENTO_SERVIDOR']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.numeroIdentificacion}" />
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.primerNombre}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.primerNombre}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_NOMBRE']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.primerNombre}" />
+							</p:column>
+							
+							<p:column sortBy="#{dataTableDesVinculacion.segundoNombre}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.segundoNombre}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_NOMBRE']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.segundoNombre}" />
+							</p:column>
+							
+							<p:column sortBy="#{dataTableDesVinculacion.primerApellido}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.primerApellido}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_PRIMER_APELLIDO']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.primerApellido}" />
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.segundoApellido}" style="word-wrap: break-word!important;"
+								filterBy="#{dataTableDesVinculacion.segundoApellido}"  filterMatchMode="contains">
+								<f:facet name="header"><h:outputText value="${titles['LBL_TRANSVERSAL_PERSONAS_SEGUNDO_APELLIDO']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.segundoApellido}" />
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.fechaPosesion}" style="word-wrap: break-word!important;">
+								<f:facet name="header"><h:outputText value="${titles['LBL_FECHA_POSESION']}" /></f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.fechaPosesion}" >
+									<f:convertDateTime pattern="#{fechaFormato}" />
+								</h:outputText>
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.fechaFinalizacion}">
+								<f:facet name="header">
+									<h:outputText value="${titles['LBL_FECHA_EFECTIVA_DESVINCULACION']}" />
+								</f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.fechaFinalizacion eq null ?
+										 messages['MSG_DATO_NO_CONFIGURADO'] : dataTableDesVinculacion.fechaFinalizacion}" >
+									<f:convertDateTime pattern="#{fechaFormato}"  />
+								</h:outputText>
+							</p:column>
+							<p:column sortBy="#{dataTableDesVinculacion.nombreCausalDesv}">
+								<f:facet name="header">
+									<h:outputText value="${titles['LBL_CAUSAL_DESVINCULACION']}" />
+								</f:facet>
+								<h:outputText value="#{dataTableDesVinculacion.nombreCausalDesv}" />
+							</p:column>
+						</p:dataTable>
+					</p:scrollPanel>
+				</div>
+				<div class="row" style="margin-top: 30px!important; margin-bottom: 20px!important;">
+					<div class="col-md-3"></div>
+					<div class="col-md-3 text-right">
+						<p:commandButton id="btnVinExportarVinculacion" styleClass="btn btn-primary"
+							 value="${titles['TTL_EXPORTAR']}" ajax="false">
+							<p:dataExporter type="xls" target="#{exportarExcelVinculacionesBean.strTargetExportar}" 
+								fileName="#{exportarExcelVinculacionesBean.strNombreArchivo}" 
+								postProcessor="#{exportarExcelVinculacionesBean.postProcessXLS}">
+							</p:dataExporter>
+						</p:commandButton>
+					</div>
+					<div class="col-md-3 text-left">
+						<div class="btn-cancelar-exp-media">
+							<p:commandButton styleClass="btn btn-default" 
+								value="${titles['TTL_CANCEL']}" 
+								action="#{exportarExcelVinculacionesBean.cancelarExportar}" 
+								update="frExportarVinculacion dataTableVinculaciones">
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</p:panel>
+		  </div>
+		</h:form>
+	</ui:define>
+</ui:composition>

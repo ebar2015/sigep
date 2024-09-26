@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/resources/template/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{plantillaBean.id}" />
+		<f:viewParam name="recursoId" value="#{plantillaBean.recursoId}" />
+		<f:viewParam name="dialog" value="#{plantillaBean.dialog}" />
+		<f:event listener="#{plantillaBean.retrieve}" type="preRenderView" />
+		<f:event listener="#{plantillaBean.showDialog}" type="preRenderView" />
+	</f:metadata>
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_GI_BREADCRUMBS']}" />
+	<ui:param name="pageSubtitle"
+		value="${titles['TTL_REPORTES_GESTIONAR']}" />
+
+	<ui:define name="main">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h:panelGroup>
+					<h2>
+						<p:outputLabel value="• ${titles['TTL_REPORTES_GESTIONAR']} •"
+							styleClass="page-subtitle" style="color: #263948!important;" />
+					</h2>
+				</h:panelGroup>
+			</div>
+		</div>
+
+		<!-- Formulario -->
+		<div class="panel-body form-horizontal">
+			<div class="row">
+				<div class="col-md-12" align="center" style="margin-top: -1%;">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<p:outputLabel for="nombreXml"
+							value="${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO']}"
+							style="color: #235379; font-size: 1.8em; font-weight: 500;" />
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+				<div class="col-md-12" align="center">
+					<div class="col-md-3"></div>
+					<div class="col-md-4" style="margin-left: 6%; margin-bottom: 2%;">
+						<p:autoComplete id="nombreXml" forceSelection="true"
+							minQueryLength="3" maxResults="#{paginatorSize}" maxlength="255"
+							class="form-contxml-acti-usua"
+							title="${titles['TTL_INGRESE']} ${titles['LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO']} ${titles['TTL_TIPO_ALFANUMERICO']}"
+							value="#{plantillaBean.xml.nombre}"
+							completeMethod="#{plantillaBean.completeText}"
+							style="border-radius: 3px 0px 0px 3px!important; background-color: #ffffff!important;" />
+						<p:message for="nombreXml" display="text" />
+					</div>
+					<div class="col-md-3 media-btn-centrar linear-btn-search">
+						<p:commandButton value="#{titles.TTL_SEARCH}" id="searchBtn"
+							actionListener="#{plantillaBean.printTable()}"
+							update="frmPrincipal" process="@this,nombreXml"
+							styleClass="btn btn-buscar"
+							style="background-color: #2a89b5!important;" />
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- DataTable  -->
+		<br />
+		<h:panelGroup>
+			<div class="row row-background-white">
+				<br />
+				<div class="col-md-12" align="right">
+					<p:commandButton id="cancelBtn" value="${titles['TTL_FINALIZE']}"
+						title="${titles['TTL_FINALIZE']}" process="@this" update="@form"
+						styleClass="btn btn-transparent" style="padding: 0% !important;"
+						action="#{cifrasEmpleoPublicoBean.cancelar()}"
+						icon="fa fa-fw fa-backward">
+					</p:commandButton>
+					<c:forEach items="#{permisosUsuarioRol}" var="crud"
+						varStatus="loop">
+						<p:commandButton value="${titles['TTL_REPORTES_CREAR']}"
+							title="${titles['TTL_REPORTES_CREAR']}" process="@this"
+							update="@form" styleClass="btn btn-transparent"
+							action="#{plantillaBean.abrirAccion(0, crud.pagina, 'recursoId='.concat(crud.controlHtml))}"
+							style="padding: 0% !important;"
+							rendered="#{crud.accion eq 'TTL_REPORTES_CREAR'}"
+							icon="fa fa-fw fa-plus-circle">
+						</p:commandButton>
+					</c:forEach>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12"
+						style="padding-left: 2% !important; padding-right: 2% !important;">
+
+						<p:panel id="panelTableXml" widgetVar="panelTableXml"
+							style="background: transparent; padding: 0px!important;">
+							<p:dataTable id="dataTableXml" lazy="true" var="dataReporte"
+								paginator="true" rows="#{paginatorSize}"
+								emptyMessage="${messages['MSG_TABLAS_SIN_REGISTROS']}"
+								currentPageReportTemplate="{currentPage} ${titles['LBL_DE']} {totalPages}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								rowsPerPageTemplate="#{paginatorsSize}"
+								value="#{plantillaBean.listaPlantillas}">
+								<p:column
+									headerText="#{titles.LBL_TRANSVERSAL_PLANTILLA_XML_NOMBRE_PROCESO}"
+									priority="2"
+									style="width:70%!important; padding: 2%!important;">
+									<h:outputText value="#{dataReporte.nombre}" />
+								</p:column>
+								<p:column headerText="${titles['LBL_TABLA_ACCIONES']}"
+									priority="1"
+									style="opacity: 1!important; width:30%!important; text-align:center; padding: 2%!important;"
+									rendered="#{permisosUsuarioRol.size() > 0}">
+									<c:forEach items="#{permisosUsuarioRol}" var="crud"
+										varStatus="loop">
+										<p:commandButton icon="#{crud.icono}" process="@this"
+											styleClass="icon-btn"
+											action="#{plantillaBean.abrirAccionValidar(dataReporte.id, crud.pagina, 'recursoId='.concat(crud.controlHtml).concat(crud.accion eq 'TTL_REPORTES_MODIFICAR' ? '2' : ''))}"
+											title="#{titles[crud.accion].concat('')}"
+											rendered="#{plantillaBean.tienePermiso(crud, dataReporte)}">
+										</p:commandButton>
+									</c:forEach>
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+			<p:defaultCommand target="searchBtn" />
+		</h:panelGroup>
+
+	</ui:define>
+</ui:composition>

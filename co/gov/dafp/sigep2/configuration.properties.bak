@@ -1,0 +1,151 @@
+#Seguridad
+CNS_KEY=92AE31A79FEEB2A3
+CNS_IV=0123456789ABCDEF
+CNS_RENDER_MENU=true
+CNS_PAGINATORS_PAGE=10,20,30,40,50
+CNS_PAGINATOR_PAGE=10
+CNS_CHARSET=utf-8
+CNS_ENCODING=utf-8
+CNS_TIMEOUT=2
+CNS_FORMATOS_FECHAS=IGNORAR;yyyyMMdd;ddMMyy;yyddMM;MMddyy;MMddyyyy;ddMMyyyy;yyyyddMM;MMdd;ddMM;yyMMdd;yyyy-MM-dd;yyyy/MM/dd;dd/MM/yyyy
+CNS_X_FRAME_OPTIONS_DENY=DENY
+CNS_X_FRAME_OPTIONS_SOME_ORIGIN=SAMEORIGIN
+CNS_PRAGMA=no-cache
+CNS_CACHE_CONTROL=no-cache, no-store, must-revalidate
+CNS_X_UA_COMPATIBLE=IE=edge
+CNS_X_XSS_PROTECTION=1; mode=block
+CNS_X_CONTENT_TYPE_OPTIONS=nosniff
+CNS_VIEWPORT=width=device-width, initial-scale=1
+IP_SERVIDOR=localhost:8080
+CNS_ALIAS_SISTEMA=sigep-web
+CNS_ALIAS_SITIO=sigep2
+PUERTO_SERVIDOR=80
+PROTOCOLO=http
+PASS_VALIDATE_LOGIN=true
+MAXIMO_INTENTOS_FALLIDOS_LOGIN=3
+PAGINA_RESTABLECER_PASSWORD=parametrizacion/usuario/restablecerPassword.xhtml
+CNS_DIAS_VENCE_CLAVE_USUARIO=0
+CNS_DIAS_VENCE_CLAVE_USUARIO_CODIGO_PARAM=DIAS_VENCE_CLAVE_USUARIO
+TIEMPO_VIGENCIA_TICKET_DIAS=1
+TIEMPO_VIGENCIA_TICKET_DIAS_CODIGO_PARAM=TIEMPO_VIGENCIA_TICKET_DIAS
+TIEMPO_VIGENCIA_TICKET_HORAS=0
+TIEMPO_VIGENCIA_TICKET_HORAS_CODIGO_PARAM=TIEMPO_VIGENCIA_TICKET_HORAS
+PASS_VALIDATE_EXPRESION_REGULAR=A-Za-z0-9PASS_VALIDATE_EXPRESION_REGULAR_SIMBOLOS]{PASS_VALIDATE_MINIMO,PASS_VALIDATE_MAXIMO}
+PASS_VALIDATE_EXPRESION_REGULAR_SIMBOLOS=*+@#$%&/=_:
+PASS_VALIDATE_MINIMO=8
+PASS_VALIDATE_MAXIMO=15
+PASS_VALIDATE_MINIMO_MAYUSCULAS=1
+PASS_VALIDATE_MINIMO_NUMEROS=1
+PASS_VALIDATE_MINIMO_SIMBOLOS=1
+PASS_EDAD_MINIMA=18
+PASS_EDAD_MAXIMA=100
+SEPARADOR_ENCRIPTADO=DECRYPT_R2P
+#General
+CNS_FECHA_HORA_FORMATO=dd/MM/yyyy HH:mm:ss
+CNS_FECHA_FORMATO=dd/MM/yyyy
+CNS_FECHA_HORA_FORMATO_VO=dd/MM/yyyy HH:mm:ss
+CNS_FECHA_FORMATO_VO=dd/MM/yyyy
+CNS_FILE_SEPARATOR=/
+CNS_EXTENSION_ZIP=.zip
+CNS_EXTENSION_7Z=.7z
+CNS_CAPTCHA=true
+CNS_TIME_OUT_CONVERSATION=1800000
+CNS_TIME_OUT_IDLE=2000
+CNS_COMPRIMIR_ARCHIVO_CARGUE=false
+CNS_COMPRIMIR_ARCHIVO_CARGUE_SQL=true
+CNS_LOGO=images/logos/gob-colombia.png
+CNS_LOGO_CORREO=resources/images/logos/gob-colombia.png
+CNS_LEMA_GOBIERNO=resources/images/logos/lema-gobierno.png
+CNS_CSS=/css/ada.css
+CNS_JOB_CARGUE_ARCHIVO_BORRAR_SCRIPTS_SQL=true
+CNS_RAIZ_SISTEMA=C
+CNS_PLANTILLAS_XML=co/gov/dafp/sigep2/plantillas/xml/
+CNS_FORMATOS_CARGUE=resources/template/download/
+CNS_ARCHIVO_SALIDA=co/gov/dafp/sigep2/salida/
+CNS_ARCHIVO_REPORTE=co/gov/dafp/sigep2/reporte/
+CNS_VISTA_REPORTE=/reporte/consult
+CNS_PALABRAS_RESERVADAS_DDBB=,=( ) update insert into select from where group by having and or order desc asc as to_date ' dd/mm/yyyy hh24:mi:ss
+CNS_METODO_TO_DATE_DDBB=CONVERT(DATE, 'FECHA_CONVERTIR')
+CNS_URL_XSD_XML=co/gov/dafp/sigep2/plantillas/xsd/default_1_0.xsd
+CNS_URL_XSD_XML_REPORTES=co/gov/dafp/sigep2/plantillas/xsd/reporte_1_0.xsd
+CNS_URL_XML_CONFIGURACION_BASE_REPORTES=configuracionMallasGestionInformacion.xml
+CNS_URL_XML_REPORTES_CATALOGO=/catalogo
+CNS_URL_XML_REPORTES_PORTAL=/portal
+CNS_URL_XML_REPORTES_CORREO=/correo
+CNS_ANIOS_ATRAS_MOSTRAR_SISTEMA=100
+CNS_ANIOS_ADELANTE_MOSTRAR_SISTEMA=100
+CNS_INITIAL_CONTEXT_FACTORY=org.jboss.naming.remote.client.InitialContextFactory
+CNS_PROVIDER_URL=remote://localhost:4447
+CNS_URL_PKG_PREFIXES=org.jboss.ejb.client.naming
+CNS_APP_NAME=ejb:sigep-ea
+CNS_MODULE_NAME=sigep-ejb-1.0/
+
+#Administrador del Sistema
+CUENTA_MAIL_SISTEMA=sistema.empleo@funcionpublica.gov.co
+CNS_ADMIN_NOMBRE=FUNCI\u00D3N P\u00DABLICA
+CNS_ADMIN_CARGO=Coordinador F\u00E1brica de Software ADA S.A.
+CNS_ADMIN_CUENTA_CORREO=sistema.empleo@funcionpublica.gov.co
+CNS_ADMIN_TELEFONO=PBX: (57+1) 739 56 56
+CNS_ACENTOS=\u00E1\u00E0\u00E4\u00E9\u00E8\u00EB\u00ED\u00EC\u00EF\u00F3\u00F2\u00F6\u00FA\u00F9u\u00F1\u00C1\u00C0\u00C4\u00C9\u00C8\u00CB\u00CD\u00CC\u00CF\u00D3\u00D2\u00D6\u00DA\u00D9\u00DC\u00D1\u00E7\u00C7,aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC
+#Correo
+MAIL_SISTEMA_BASE_CUERPO_ENCABEZADO=<html><body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:justify; font-size:1em;"><div style="width:100%; position:relative; top:0; left:0;background-color:#f0f0f0;"><img src="CNS_LOGO" height="10%" title="Funci\u00F3n P\u00FAblica" style\="margin-left\:0.4em"><img src\="CNS_LEMA_GOBIERNO" title\="Todos por un nuevo pa\u00EDs" height="10%"></div>
+MAIL_SISTEMA_FIRMA=<p>Cordialmente,</p><b style="color:#245379;font-size:1em;font-family:Helvetica,sans-serif;mso-fareast-language:ES-CO">CNS_ADMIN_NOMBRE</b><span style="font-size:12.0pt;font-family:Helvetica,sans-serif;color:black;mso-fareast-language:ES-CO"><o:p></o:p></span><br><span style="font-size:0.8em;font-family:Helvetica,sans-serif;color:#999;mso-fareast-language:ES-CO">Gobierno de Colombia - Funci\u00F3n P\u00FAblica</span><span style="font-size:12.0pt;font-family:Helvetica,sans-serif;color:black;mso-fareast-language:ES-CO"><o:p></o:p></span><br><span style="font-size:0.8em;font-family:Helvetica,sans-serif;mso-fareast-language:ES-CO"><a href="mailto:CNS_CUENTA_CORREO_ADMIN" style="text-decoration:none;color:#2a89b4">CNS_CUENTA_CORREO_ADMIN</a></span><span style="font-size:12.0pt;font-family:Helvetica,sans-serif;color:black;mso-fareast-language:ES-CO"><o:p></o:p></span><br><span style="font-size:10.0pt;font-family:Helvetica,sans-serif;color:#999999;mso-fareast-language:ES-CO">CNS_ADMIN_TELEFONO</span><p><span style="font-size:12.0pt;font-family:Helvetica,sans-serif;color:black;mso-fareast-language:ES-CO"><img style="border=0 width=168 height=71" id="logoCM" src="CNS_LOGO" alt="Logo Funci\u00F3n P\u00FAblica"></span></p>
+MAIL_SISTEMA_NOTA_PRIVACIDAD=<span style="font-weight:normal; font-size: 0.8em;">Nota: Este correo se ha generado de forma autom\u00E1tica, por favor no responder.</span><p style\="text-align\: center; font-weight\: bold; font-size\:0.7em">AVISO LEGAL\:</p><p style\="font-size\:0.7em">La informaci\u00F3n enviada en este correo y en los archivos electr\u00F3nicos adjuntos son confidenciales y reservados, conforme a lo previsto en las Pol\u00EDticas de Seguridad de DEPARTAMENTO ADMINISTRATIVO DE LA FUNCI\u00D3N P\u00DABLICA., y est\u00E1 dirigida exclusivamente a su destinatario, sin la intenci\u00F3n de que sea revelada o divulgada a otras personas. El acceso al contenido de esta comunicaci\u00F3n por cualquier otra persona diferente al destinatario no est\u00E1 autorizado por <b>DEPARTAMENTO ADMINISTRATIVO DE LA FUNCI\u00D3N P\u00DABLICA </b> y est\u00E1 sancionado de acuerdo con las normas legales aplicables. El que il\u00EDcitamente sustraiga, oculte, extrav\u00EDe, destruya, intercepte, controle y/o impida esta comunicaci\u00F3n, antes de que llegue a su destinatario, estar\u00E1 sujeto a las sanciones penales correspondientes. Igualmente, incurrir\u00E1 en sanciones penales el que, en provecho propio o ajeno o con perjuicio de otro, divulgue o emplee la informaci\u00F3n contenida en esta comunicaci\u00F3n.<br><br> Si por error recibe este mensaje, le solicitamos enviarlo de vuelta a <b>DEPARTAMENTO ADMINISTRATIVO DE LA FUNCI\u00D3N P\u00DABLICA</b> a la direcci\u00F3n de correo electr\u00F3nico que se lo envi\u00F3 y borrarlo de sus archivos electr\u00F3nicos o destruirlo. Las opiniones, conclusiones y otra informaci\u00F3n contenida en este correo no relacionadas con el negocio oficial de <b>DEPARTAMENTO ADMINISTRATIVO DE LA FUNCI\u00D3N P\u00DABLICA</b> deben entenderse como personales y de ninguna manera son avaladas por la Entidad.<br><br>El <b>DEPARTAMENTO ADMINISTRATIVO DE LA FUNCI\u00D3N P\u00DABLICA</b> no se hace responsable por la eventual transmisi\u00F3n de virus o programas da\u00F1inos por este conducto, y por lo tanto es responsabilidad del destinatario confirmar la existencia de este tipo de elementos al momento de recibirlo y abrirlo.</p>
+MAIL_SISTEMA_BASE_CUERPO_PIE=</body></html>
+#Restablecer contraseña
+MAIL_RESTABLECER_PASSWORD_ASUNTO=Restablecer contraseña en SIGEP II
+MAIL_RESTABLECER_PASSWORD_CUERPO=<br><b>Mensaje para: </b>USUARIO_RESTABLECE<hr><p style="text-align:justify">Usted ha solicitado el restablecimiento de su contrase&#241;a en SIGEP II. Se ha generado autorizaci&oacute;n con c&oacute;digo <span style="font-weight:bold">ticket</span>. Para ingresar una nueva contrase&#241;a haga click <a href="link" onmouseover="window.status='Restablecer contrase&#241;a';return true" target="_blank" style="color:#2a89b4"/>aqu&iacute;</a>.</p><p>Recuerde que:</p><ul style="text-align:justify"><li>La contrase&#241;a debe contener al menos una letra may&uacute;scula, una letra min&uacute;scula, un n&uacute;mero y un caracter especial tales como <b>PASS_VALIDATE_EXPRESION_REGULAR_SIMBOLOS</b>.</li><li>Esta no debe superar la longitud de PASS_VALIDATE_MAXIMO caracteres y debe tener una longitud m&iacute;nima de PASS_VALIDATE_MINIMO.</li><li>En enlace tiene vigencia hasta vence y puede ser utilizado solo una vez. Si dentro de este tiempo no realiza el procedimiento debe solicitar de nuevo en enlace de restablecimiento de contrase&#241;a.</li></ul>
+#Contraseña restablecida
+MAIL_PASSWORD_RESTABLECIDO_ASUNTO=Gesti\u00D3n de Usuarios del Sistema
+MAIL_PASSWORD_RESTABLECIDO_CUERPO=<font face="Arial, Verdana"><span style="font-size: 10pt;">Notificaci&oacute;n de gesti&oacute;n de usuario</span></font><div style="font-family: Arial, Verdana; font-size: 10pt; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal;"><br></div><div><font face="Arial, Verdana"><span style="font-size: 13.3333px;">La contrase&#241;a para el usuario <span style="font-weight: bold;">CUENTA_USUARIO</span> ha sido restablecida de forma exitosa.</span></font><br><div style="font-family: Arial, Verdana; font-size: 10pt; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal;"><br></div><div style="font-family: Arial, Verdana; font-size: 10pt; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal;"><div style="font-weight: normal;"><span style="color: rgb(255, 0, 0); font-weight: bold;">Nota: </span>Si sabe de un evento anormal en esta transacci&oacute;n por favor notificarlo al administrador del sistema enviando un correo a <span style="font-weight: bold;">CUENTA_ADMON</span>; o tambi&eacute;n restableciendo la contrase&#241;a en LINK_RESTABLECER.</div></div></div>
+
+#Cargas Masivas
+CM_RUTA_DESCARGA_LOG=co/gov/dafp/sigep2/cargue/cargasMasivas/
+CM_CREAR_USUARIOS=CM_CREAR_USUARIOS
+CM_ACTIVAR_USUARIOS=CM_ACTIVAR_USUARIOS
+CM_HOJA_DE_VIDA=CM_HOJA_DE_VIDA
+CNS_FILA_INICIO_INFO_CARGA_MASIVA=6
+CNS_FILA_INICIO_CM_ACTIVAR_USUARIOS=6
+CNS_FILA_INICIO_CM_CREAR_USUARIOS=6
+CNS_FILA_INICIO_CM_HV_INFORMACION_BASICA=8
+CNS_FILA_INICIO_CM_HV_EDUCACION_FORMAL=6
+CNS_FILA_INICIO_CM_HV_EDUCACION_DESA_HUMANO=6
+
+#Base de Datos
+CNS_USER_DDBB=userada
+CNS_PASSWORD_DDBB=ccm*123
+CNS_SERVER_DDBB=190.144.229.147
+CNS_TAMANIO_MAXIMO_COLUMNAS_VARCHAR_DDBB=4000
+#Internacionalizacion
+CNS_LENGUAJE_ESPANIOL=Espa\u00F1ol
+CNS_LENGUAJE_INGLES=English
+#Plantillas xml
+CNS_ARCHIVO_PLANTILLAS_ADMINISTRACION_USUARIOS=cargueActivacionUsuario.xml
+CNS_ARCHIVO_PLANTILLAS_PRESUPUESTO=
+CNS_ARCHIVO_PLANTILLAS_PRIORIZACION=
+CNS_ARCHIVO_PLANTILLAS_RECAUDO_BG=cargueAFP.xml;cargueExtractoBancario.xml;cargueLogBancario.xml;carguePilaActivos.xml;carguePilaPensionados.xml;
+CNS_ARCHIVO_PLANTILLAS_PRESUPUESTO_BG=cargueResolucionPresupuesto.xml;cargueSubsidioResolucionPresupuesto.xml;
+CNS_ARCHIVO_PLANTILLAS_PRIORIZACION_BG=carguePriorizados.xml;cargueNovedadesPriorizacion.xml;
+#Plantilals xml para reportes
+CNS_ARCHIVO_PLANTILLAS_REPORTE_RECAUDO=reporteExtractoLog.xml;reporteExtractoLogAFP.xml;reporteExtractoLogPILA.xml;reporteConsolidadoSolidaridad.xml;reporteConsolidadoSubsistencia.xml;reporteSolidaridadExtractoBancario.xml;reporteProcesoCargueArchivos.xml;reporteTercerosFaltanteConciliacion.xml;
+CNS_ARCHIVO_PLANTILLAS_REPORTE_PRESUPUESTO=consultaConsolidadaProyecto.xml;consultaGeneralEjecucionPresupuestal.xml;consultaPagoVigenciasAnteriores.xml;reporteProcesoCargueArchivos.xml
+#RUTAS CARGAR ARCHIVOS USUARIO
+CNS_RUTA_DOCUMENTO=co/gov/dafp/sigep2/cargue/documento/
+CNS_RUTA_LIBRETA_MILITAR=co/gov/dafp/sigep2/cargue/libretaMilitar/
+CNS_RUTA_DOCUMENTO_DISCAPACIDAD=co/gov/dafp/sigep2/cargue/documentoDiscapacidad/
+CNS_RUTA_FOTO_USUARIO=co/gov/dafp/sigep2/cargue/fotoUsuario/
+CNS_RUTA_DOC_EXP_DOCENTE=co/gov/dafp/sigep2/cargue/experienciaDocente/
+CNS_RUTA_TARJETA_PROFESIONAL=co/gov/dafp/sigep2/cargue/tarjetaProfesional/
+CNS_RUTA_EDUCACION_FORMAL=co/gov/dafp/sigep2/cargue/educacionFormal/
+CNS_RUTA_OTRO_CONOCIMIENTO_SOPORTE=co/gov/dafp/sigep2/cargue/otroConocimientoSoporte/
+CNS_RUTA_IDIOMA_SOPORTE=co/gov/dafp/sigep2/cargue/idiomaSoporte/
+CNS_ARCHIVO_PLANTILLAS_REPORTE_PRIORIZACION=resultadoValidacionArchivoSalidas.xml;resultadoConciliacionCifras.xml;municipiosSinPriorizacion.xml;reporteListadoPriorizacion.xml;reporteRechazos.xml;rechazosFirmaDigitadora.xml;reporteIndividualXCC.xml;reporteProcesoCargueArchivos.xml;
+CNS_RUTA_DOC_EXP_LABORAL=co/gov/dafp/sigep2/cargue/experienciaLaboral/
+CNS_RUTA_FILE_FOTO_HOJA_VIDA=co/gov/dafp/sigep2/cargue/fotoHojaVida/
+CNS_RUTA_FILE_TEMP=co/gov/dafp/sigep2/cargue/Temp/
+CNS_RUTA_BIENES_RENTAS=co/gov/dafp/sigep2/cargue/BienesRentas/
+CNS_RUTA_DOCUMENTOS_ADICIONALES = co/gov/dafp/sigep2/cargue/DocumentosAdicionales/
+PATH_SERVER_WEB_SERVICES=http://localhost:8080/SigepRestESB/
+PRINTMSGCUERPOCONHTML=N
+HABILITAR_PICO_CEDULA =N
+CNS_RUTA_CEDULAS_ADMIN= co/gov/dafp/sigep2/picoCedula/usuariosAdministradores.txt

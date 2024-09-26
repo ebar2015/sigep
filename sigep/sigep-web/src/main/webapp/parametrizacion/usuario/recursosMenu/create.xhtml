@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/template/dialogTemplate.xhtml">
+
+	<ui:param name="pageTitle"
+		value="${titles['TTL_SUB_TRANSVERSAL_RECURSO_CREAR']}" />
+
+	<f:event listener="#{recursoMenuBean.validateForm}" type="postValidate" />
+	<ui:define name="main">
+		<h:panelGroup id="agregarDetalleDialog">
+			<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid"
+				styleClass="ui-panelgrid-blank">
+				<p:outputLabel for="recursoServiceBeanPadreRegistrado"
+					value="${titles['LBL_TRANSVERSAL_RECURSO']}"
+					style="width: 100%; text-align: left;" />
+				<h:panelGroup>
+					<h:panelGroup id="recursoServiceBeanPadreRegistrado">
+						<h:outputText value="Inicio " />
+						<h:outputText
+							rendered="#{recursoMenuBean.recursoMenuVO.codigoPadre ne null and recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre ne null and recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.codigoPadre ne null and recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.codigoPadre.codigoPadre ne null}"
+							value="#{recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.codigoPadre.codigoPadre.codigoPadre.descripcion} / " />
+						<h:outputText
+							rendered="#{recursoMenuBean.recursoMenuVO.codigoPadre ne null and recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre ne null and recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.codigoPadre ne null}"
+							value="#{recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.codigoPadre.codigoPadre.descripcion} / " />
+						<h:outputText
+							rendered="#{recursoMenuBean.recursoMenuVO.codigoPadre ne null and recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre ne null}"
+							value="#{recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.codigoPadre.descripcion} / " />
+						<h:outputText
+							rendered="#{recursoMenuBean.recursoMenuVO.codigoPadre ne null}"
+							value="#{recursoMenuBean.recursoMenuVO.codigoPadre.codigoPadre.descripcion} / " />
+						<h:outputText
+							value="#{recursoMenuBean.recursoMenuVO.codigoPadre.descripcion} / " />
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:outputLabel for="recursoServiceBeanPadre"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_PADRE']}"
+					style="width: 100%; text-align: left;" />
+				<h:panelGroup>
+					<p:treeTable id="recursoServiceBeanPadre"
+						value="#{recursoMenuBean.adminPerfilesEdicionBean.arbolDeRecursos}"
+						selectionMode="single" var="recursoPerfil"
+						emptyMessage="${messages['DLG_SIN_REGISTROS']}">
+
+						<p:ajax event="select" partialSubmit="true"
+							listener="#{recursoMenuBean.onNodeSelect}" process="@this"
+							update="@this" />
+						<p:ajax event="unselect" partialSubmit="true"
+							listener="#{recursoMenuBean.onNodeUnselect}" process="@this"
+							update="@this" />
+
+						<p:column headerText="${messages['MSG_INFO_RECURSO_PADRE']}"
+							rendered="#{empty recursoPerfil.pagina}"
+							style="text-align:left!important;#{(recursoPerfil.id eq recursoMenuBean.padreRecursoMenu.id) ? 'background:#35348A;color:white' : ''}">
+							<h:outputText value="#{recursoPerfil.descripcion}" />
+						</p:column>
+					</p:treeTable>
+					<p:message for="recursoServiceBeanPadre" display="icon" />
+				</h:panelGroup>
+			</p:panelGrid>
+			<p:separator />
+			<p:panelGrid columns="6"
+				columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1"
+				layout="grid" styleClass="ui-panelgrid-blank">
+				<p:outputLabel for="recursoServiceBeanDesc"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_RECURSO']}"
+					style="width: 100%; text-align: left;" />
+				<p:inputText id="recursoServiceBeanDesc"
+					placeholder="${titles['LBL_TRANSVERSAL_RECURSO_RECURSO']}"
+					value="#{recursoMenuBean.recursoMenuVO.descripcion}"
+					maxlength="100" required="true">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="recursoServiceBeanDesc" display="icon" />
+				<p:outputLabel for="recursoServiceBeanCodVentana"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_CODIGO']}"
+					style="width: 100%; text-align: left;" />
+				<p:inputText id="recursoServiceBeanCodVentana"
+					placeholder="${titles['LBL_TRANSVERSAL_RECURSO_CODIGO']}"
+					value="#{recursoMenuBean.recursoMenuVO.codigoVentana}"
+					maxlength="100" required="true">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="recursoServiceBeanCodVentana" display="icon" />
+				<p:outputLabel for="recursoServiceBeanOrden"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_ORDEN']}"
+					style="width: 100%; text-align: left;" />
+				<p:inputNumber id="recursoServiceBeanOrden"
+					placeholder="${titles['LBL_TRANSVERSAL_RECURSO_ORDEN']}"
+					minValue="1" decimalPlaces="0" decimalSeparator=""
+					thousandSeparator="" style="text-align:right!important"
+					value="#{recursoMenuBean.recursoMenuVO.orden}" required="true">
+					<p:clientValidator />
+				</p:inputNumber>
+				<p:message for="recursoServiceBeanOrden" display="icon" />
+				<p:outputLabel for="recursoServiceBeanPagina"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_RUTA']}"
+					style="width: 100%; text-align: left;" />
+				<p:inputText id="recursoServiceBeanPagina"
+					placeholder="${titles['LBL_TRANSVERSAL_RECURSO_RUTA']}"
+					title="${messages['MSG_INFO_RECURSO_SOLO_TABS']}"
+					value="#{recursoMenuBean.recursoMenuVO.pagina}" maxlength="100">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="recursoServiceBeanPagina" display="icon" />
+				<p:outputLabel for="recursoServiceBeanTituloVentana"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_TITULO_VENTANA']}"
+					style="width: 100%; text-align: left;" />
+				<p:inputText id="recursoServiceBeanTituloVentana"
+					placeholder="${titles['LBL_TRANSVERSAL_RECURSO_TITULO_VENTANA']}"
+					value="#{recursoMenuBean.recursoMenuVO.tituloVentana}"
+					maxlength="100" required="true">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="recursoServiceBeanTituloVentana" display="icon" />
+				<p:outputLabel for="recursoServiceBeanIcono"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_ICONO']}"
+					style="width: 100%; text-align: left;" />
+				<p:inputText id="recursoServiceBeanIcono"
+					placeholder="${titles['LBL_TRANSVERSAL_RECURSO_ICONO']}"
+					value="#{recursoMenuBean.recursoMenuVO.iconoMenu}" maxlength="100">
+					<p:clientValidator />
+				</p:inputText>
+				<p:message for="recursoServiceBeanIcono" display="icon" />
+				<p:outputLabel for="recursoServiceBeanActivo"
+					value="${titles['LBL_TRANSVERSAL_RECURSO_ESTADO']}"
+					style="width: 100%; text-align: left;" />
+				<p:selectBooleanCheckbox id="recursoServiceBeanActivo"
+					title="${titles['LBL_TRANSVERSAL_RECURSO_ESTADO']}"
+					value="#{recursoMenuBean.recursoMenuVO.estado}" maxlength="100"
+					required="true">
+					<p:clientValidator />
+				</p:selectBooleanCheckbox>
+				<p:message for="recursoServiceBeanActivo" display="icon" />
+			</p:panelGrid>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="botones">
+		<p:commandButton icon="ui-icon-plus" title="${titles['TTL_OK']}"
+			value="${titles['TTL_OK']}" process="@this agregarDetalleDialog"
+			update="agregarDetalleDialog"
+			actionListener="#{recursoMenuBean.seleccionarRecursoDialogo}" />
+	</ui:define>
+</ui:composition>
